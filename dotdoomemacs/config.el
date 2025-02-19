@@ -53,53 +53,53 @@
 ;;;; org reloading
 
 (after! org
-        (message "after org - config")
+  (message "after org - config")
 
-        (require 'org-funcs)
-        (require 'org-config)
-        ;; (load-file (concat user-dotemacs-dir "lisp/org-funcs.el"))
-        ;; (load-file (concat user-dotemacs-dir "lisp/org-config.el"))
-        (setq org-id-locations-file (file-name-concat org-directory (concat "." system-name "-orgids"))) ; ".org-id-locations"))
-        ;; (+org-init-keybinds-h) -> 2024-06-01 여기 키바인딩 관련 부분 뒤에서 다시 잡아줌
+  (require 'org-funcs)
+  (require 'org-config)
+  ;; (load-file (concat user-dotemacs-dir "lisp/org-funcs.el"))
+  ;; (load-file (concat user-dotemacs-dir "lisp/org-config.el"))
+  (setq org-id-locations-file (file-name-concat org-directory (concat "." system-name "-orgids"))) ; ".org-id-locations"))
+  ;; (+org-init-keybinds-h) -> 2024-06-01 여기 키바인딩 관련 부분 뒤에서 다시 잡아줌
 
-        ;; (setq org-attach-use-inheritance nil) ; selective
+  ;; (setq org-attach-use-inheritance nil) ; selective
 
-        ;; overide here! important
-        (setq org-insert-heading-respect-content nil) ; doom t
+  ;; overide here! important
+  (setq org-insert-heading-respect-content nil) ; doom t
 
-        ;; (progn
-        ;;   ;; 2024-06-04 file - id - http/https
-        ;;   (org-link-set-parameters "file" :face `(:inherit link :weight semibold :slant italic :underline t)) ;; italic
-        ;;   (org-link-set-parameters "http" :face `(:inherit warning :weight semibold :underline t))
-        ;;   (org-link-set-parameters "info" :face `(:inherit info-file :weight semibold :underline t))
-        ;;   (org-link-set-parameters "https" :face `(:inherit warning :weight semibold :underline t))
-        ;;   )
-        (org-link-set-parameters "denote" :face `(:inherit success :weight semibold :underline t)) ; id
+  ;; (progn
+  ;;   ;; 2024-06-04 file - id - http/https
+  ;;   (org-link-set-parameters "file" :face `(:inherit link :weight semibold :slant italic :underline t)) ;; italic
+  ;;   (org-link-set-parameters "http" :face `(:inherit warning :weight semibold :underline t))
+  ;;   (org-link-set-parameters "info" :face `(:inherit info-file :weight semibold :underline t))
+  ;;   (org-link-set-parameters "https" :face `(:inherit warning :weight semibold :underline t))
+  ;;   )
+  (org-link-set-parameters "denote" :face `(:inherit success :weight semibold :underline t)) ; id
 
-        ;; 2024-06-24 performance issue
-        ;; (remove-hook 'org-mode-hook 'org-eldoc-load)
+  ;; 2024-06-24 performance issue
+  ;; (remove-hook 'org-mode-hook 'org-eldoc-load)
 
-        ;; 2024-09-15 TODO
-        ;; (progn
-        ;;   ;; Those advice were designed when using a bottom modeline. Since we are using
-        ;;   ;; a header line, we must remove them.
-        ;;   (advice-remove 'org-fast-tag-selection #'+popup--org-fix-popup-window-shrinking-a)
-        ;;   (advice-remove 'org-fast-todo-selection #'+popup--org-fix-popup-window-shrinking-a)
+  ;; 2024-09-15 TODO
+  ;; (progn
+  ;;   ;; Those advice were designed when using a bottom modeline. Since we are using
+  ;;   ;; a header line, we must remove them.
+  ;;   (advice-remove 'org-fast-tag-selection #'+popup--org-fix-popup-window-shrinking-a)
+  ;;   (advice-remove 'org-fast-todo-selection #'+popup--org-fix-popup-window-shrinking-a)
 
-        ;;   ;; (defadvice! +popup--suppress-delete-other-windows-a (fn &rest args)
-        ;;   ;; Courtesy: doom emacs (popup/+hacks.el)
-        ;;   (defun +popup--supress-delete-other-windows-a (origin-fn &rest args)
-        ;;     (if +popup-mode
-        ;;         (cl-letf (((symbol-function #'delete-other-windows) #'ignore)
-        ;;                   ((symbol-function #'delete-window)        #'ignore))
-        ;;           (apply origin-fn args))
-        ;;       (apply origin-fn args)))
+  ;;   ;; (defadvice! +popup--suppress-delete-other-windows-a (fn &rest args)
+  ;;   ;; Courtesy: doom emacs (popup/+hacks.el)
+  ;;   (defun +popup--supress-delete-other-windows-a (origin-fn &rest args)
+  ;;     (if +popup-mode
+  ;;         (cl-letf (((symbol-function #'delete-other-windows) #'ignore)
+  ;;                   ((symbol-function #'delete-window)        #'ignore))
+  ;;           (apply origin-fn args))
+  ;;       (apply origin-fn args)))
 
-        ;;   (advice-add #'org-fast-tag-selection :around #'+popup--supress-delete-other-windows-a)
-        ;;   (advice-add #'org-fast-todo-selection :around #'+popup--supress-delete-other-windows-a)
-        ;;   )
+  ;;   (advice-add #'org-fast-tag-selection :around #'+popup--supress-delete-other-windows-a)
+  ;;   (advice-add #'org-fast-todo-selection :around #'+popup--supress-delete-other-windows-a)
+  ;;   )
 
-        )
+  )
 
 ;;;; TODO org-src-mode-map
 
@@ -118,37 +118,37 @@
 ;;;;; org-contacts
 
 (after! org
-        (require 'org-contacts)
-        (add-to-list
-         'org-capture-templates
-         `("c" "Contacts" entry (file ,(my/org-contacts-file))
-           "* %(org-contacts-template-name)\n:PROPERTIES:\n:GITHUB:\n:EMAIL: a@a.com\n:URL:\n:NOTE:\n:END:\n%U\n%T\n%a\n")) ;; :CUSTOM_ID: %(prot-org--id-get)\n
-        )
+  (require 'org-contacts)
+  (add-to-list
+   'org-capture-templates
+   `("c" "Contacts" entry (file ,(my/org-contacts-file))
+     "* %(org-contacts-template-name)\n:PROPERTIES:\n:GITHUB:\n:EMAIL: a@a.com\n:URL:\n:NOTE:\n:END:\n%U\n%T\n%a\n")) ;; :CUSTOM_ID: %(prot-org--id-get)\n
+  )
 
 ;;;;; org-bookmarks
 
 (after! org
-        (require 'org-bookmarks)
-        (add-to-list 'org-capture-templates
-                     `("b" ,(format "%s\tAdd a new bookmark to %s"
-                                    (when (fboundp 'nerd-icons-mdicon)
-                                      (nerd-icons-mdicon
-                                       "nf-md-bookmark_plus_outline"
-                                       :face 'nerd-icons-blue))
-                                    (file-name-nondirectory org-bookmarks-file))
-                       entry (file ,(expand-file-name org-bookmarks-file))
-                       ,(concat
-                         "* %^{bookmark title}\t\t\t\t"
-                         (format ":%s:" org-bookmarks-tag)
-                         "
+  (require 'org-bookmarks)
+  (add-to-list 'org-capture-templates
+               `("b" ,(format "%s\tAdd a new bookmark to %s"
+                              (when (fboundp 'nerd-icons-mdicon)
+                                (nerd-icons-mdicon
+                                 "nf-md-bookmark_plus_outline"
+                                 :face 'nerd-icons-blue))
+                              (file-name-nondirectory org-bookmarks-file))
+                 entry (file ,(expand-file-name org-bookmarks-file))
+                 ,(concat
+                   "* %^{bookmark title}\t\t\t\t"
+                   (format ":%s:" org-bookmarks-tag)
+                   "
 :PROPERTIES:
 :URL:  %^C
 :DATE: %t
 :END:")
-                       :empty-lines 1
-                       :jump-to-captured t
-                       :refile-targets ((,org-bookmarks-file :maxlevel 3)))
-                     :append))
+                 :empty-lines 1
+                 :jump-to-captured t
+                 :refile-targets ((,org-bookmarks-file :maxlevel 3)))
+               :append))
 
 ;;;; org-journal
 
@@ -216,268 +216,268 @@
 ;;;; custom diff-hl
 
 (use-package! diff-hl
-              :config
-              (setq diff-hl-disable-on-remote t) ; default nil
-              (setq diff-hl-flydiff-delay 0.8)  ; doom 0.5, default: 0.3
-              ;; (remove-hook 'diff-hl-mode-hook #'diff-hl-flydiff-mode)
-              ;; (remove-hook 'diff-hl-flydiff-mode-hook #'+vc-gutter-init-flydiff-mode-h)
-              )
+  :config
+  (setq diff-hl-disable-on-remote t) ; default nil
+  (setq diff-hl-flydiff-delay 0.8)  ; doom 0.5, default: 0.3
+  ;; (remove-hook 'diff-hl-mode-hook #'diff-hl-flydiff-mode)
+  ;; (remove-hook 'diff-hl-flydiff-mode-hook #'+vc-gutter-init-flydiff-mode-h)
+  )
 
 ;;;; modus-themes
 
 (use-package! modus-themes
-              :commands (modus-themes-toggle)
-              :init
-              (setq modus-themes-to-toggle '(modus-operandi modus-vivendi-tinted))
-              ;; (setq modus-themes-to-toggle
-              ;;       (let ((hr (nth 2 (decode-time))))
-              ;;         (if (or (< hr 6) (< 19 hr)) ; between 8 PM and 7 AM
-              ;;             '(modus-operandi-tinted modus-operandi) ; load dark theme first
-              ;;           '(modus-operandi modus-operandi-tinted))))
-              :config
-              (setq modus-themes-italic-constructs nil
-                    modus-themes-bold-constructs t
-                    modus-themes-custom-auto-reload t
+  :commands (modus-themes-toggle)
+  :init
+  (setq modus-themes-to-toggle '(modus-operandi modus-vivendi-tinted))
+  ;; (setq modus-themes-to-toggle
+  ;;       (let ((hr (nth 2 (decode-time))))
+  ;;         (if (or (< hr 6) (< 19 hr)) ; between 8 PM and 7 AM
+  ;;             '(modus-operandi-tinted modus-operandi) ; load dark theme first
+  ;;           '(modus-operandi modus-operandi-tinted))))
+  :config
+  (setq modus-themes-italic-constructs nil
+        modus-themes-bold-constructs t
+        modus-themes-custom-auto-reload t
 
-                    ;; Options for `modus-themes-prompts' are either nil (the
-                    ;; default), or a list of properties that may include any of those
-                    ;; symbols: `italic', `WEIGHT'
-                    ;; modus-themes-prompts '(bold)
+        ;; Options for `modus-themes-prompts' are either nil (the
+        ;; default), or a list of properties that may include any of those
+        ;; symbols: `italic', `WEIGHT'
+        ;; modus-themes-prompts '(bold)
 
-                    ;; The `modus-themes-completions' is an alist that reads two
-                    ;; keys: `matches', `selection'.  Each accepts a nil value (or
-                    ;; empty list) or a list of properties that can include any of
-                    ;; the following (for WEIGHT read further below):
-                    ;; `matches'   :: `underline', `italic', `WEIGHT'
-                    ;; `selection' :: `underline', `italic', `WEIGHT'
-                    ;; modus-themes-completions
-                    ;; '((matches   . (semibold))
-                    ;;   (selection . (semibold text-also)))
+        ;; The `modus-themes-completions' is an alist that reads two
+        ;; keys: `matches', `selection'.  Each accepts a nil value (or
+        ;; empty list) or a list of properties that can include any of
+        ;; the following (for WEIGHT read further below):
+        ;; `matches'   :: `underline', `italic', `WEIGHT'
+        ;; `selection' :: `underline', `italic', `WEIGHT'
+        ;; modus-themes-completions
+        ;; '((matches   . (semibold))
+        ;;   (selection . (semibold text-also)))
 
-                    modus-themes-common-palette-overrides
-                    `(
-                      ;; (fg-mode-line-active fg-main) ; Black
+        modus-themes-common-palette-overrides
+        `(
+          ;; (fg-mode-line-active fg-main) ; Black
 
-                      ;;   ;; Comments are yellow, strings are green
-                      ;;   (comment yellow-cooler)
-                      ;;   (string green-warmer)
+          ;;   ;; Comments are yellow, strings are green
+          ;;   (comment yellow-cooler)
+          ;;   (string green-warmer)
 
-                      ;;   ;; "Make the mode line borderless"
-                      ;;   (border-mode-line-active unspecified)
-                      ;;   (border-mode-line-inactive unspecified)
+          ;;   ;; "Make the mode line borderless"
+          ;;   (border-mode-line-active unspecified)
+          ;;   (border-mode-line-inactive unspecified)
 
-                      ;;   ;; "Make matching parenthesis more or less intense"
-                      ;;   (bg-paren-match bg-magenta-intense)
-                      ;;   (underline-paren-match unspecified)
+          ;;   ;; "Make matching parenthesis more or less intense"
+          ;;   (bg-paren-match bg-magenta-intense)
+          ;;   (underline-paren-match unspecified)
 
-                      ;;   ;; Intense magenta background combined with the main foreground
-                      ;;   ;; (bg-region bg-magenta-subtle)
-                      ;;   ;; (fg-region fg-main)
+          ;;   ;; Intense magenta background combined with the main foreground
+          ;;   ;; (bg-region bg-magenta-subtle)
+          ;;   ;; (fg-region fg-main)
 
-                      ;;   ;; Links
-                      ;;   ;; (underline-link border)
-                      ;;   ;; (underline-link-visited border)
-                      ;;   ;; (underline-link-symbolic border)
+          ;;   ;; Links
+          ;;   ;; (underline-link border)
+          ;;   ;; (underline-link-visited border)
+          ;;   ;; (underline-link-symbolic border)
 
-                      (bg-heading-0 bg-cyan-nuanced)
-                      (bg-heading-1 bg-inactive)
-                      (bg-heading-2 bg-yellow-nuanced)
-                      (bg-heading-3 bg-blue-nuanced) ; blue
+          (bg-heading-0 bg-cyan-nuanced)
+          (bg-heading-1 bg-inactive)
+          (bg-heading-2 bg-yellow-nuanced)
+          (bg-heading-3 bg-blue-nuanced) ; blue
 
-                      ;; (overline-heading-0 unspecified)
-                      (overline-heading-1 magenta-cooler)
-                      ;; (overline-heading-2 magenta-warmer)
+          ;; (overline-heading-0 unspecified)
+          (overline-heading-1 magenta-cooler)
+          ;; (overline-heading-2 magenta-warmer)
 
-                      ;; ,@modus-themes-preset-overrides-faint
-                      ;; ,@modus-themes-preset-overrides-intense
-                      )
-                    )
+          ;; ,@modus-themes-preset-overrides-faint
+          ;; ,@modus-themes-preset-overrides-intense
+          )
+        )
 
-              (when (display-graphic-p) ; gui
-                ;; (setq modus-themes-variable-pitch-ui t)
-                ;; The `modus-themes-headings' is an alist: read the manual's
-                ;; node about it or its doc string. Basically, it supports
-                ;; per-level configurations for the optional use of
-                ;; `variable-pitch' typography, a height value as a multiple of
-                ;; the base font size (e.g. 1.5), and a `WEIGHT'.
-                (setq modus-themes-headings
-                      '(
-                        (0                . (bold 1.2)) ;; variable-pitch
-                        (1                . (bold  1.1))
-                        (2                . (bold 1.05))
-                        (3                . (semibold 1.0))
-                        (4                . (medium 1.0))
-                        (5                . (medium 1.0))
-                        (6                . (medium 1.0))
-                        (7                . (medium 1.0))
-                        (agenda-date      . (semibold 1.0))
-                        (agenda-structure . (bold 1.1))
-                        (t                . (medium 1.0)))
-                      )
-                )
+  (when (display-graphic-p) ; gui
+    ;; (setq modus-themes-variable-pitch-ui t)
+    ;; The `modus-themes-headings' is an alist: read the manual's
+    ;; node about it or its doc string. Basically, it supports
+    ;; per-level configurations for the optional use of
+    ;; `variable-pitch' typography, a height value as a multiple of
+    ;; the base font size (e.g. 1.5), and a `WEIGHT'.
+    (setq modus-themes-headings
+          '(
+            (0                . (bold 1.2)) ;; variable-pitch
+            (1                . (bold  1.1))
+            (2                . (bold 1.05))
+            (3                . (semibold 1.0))
+            (4                . (medium 1.0))
+            (5                . (medium 1.0))
+            (6                . (medium 1.0))
+            (7                . (medium 1.0))
+            (agenda-date      . (semibold 1.0))
+            (agenda-structure . (bold 1.1))
+            (t                . (medium 1.0)))
+          )
+    )
 
-              (defun my/modus-themes-custom-faces ()
-                (interactive)
-                ;; (message "modus-themes-after-hook : my-modus-themes-custom-faces")
-                (modus-themes-with-colors
-                  (custom-set-faces
-                   `(consult-separator ((,c :inherit default :foreground ,yellow-intense)))
-                   `(consult-notes-time ((,c :inherit default :foreground ,cyan-intense)))
+  (defun my/modus-themes-custom-faces ()
+    (interactive)
+    ;; (message "modus-themes-after-hook : my-modus-themes-custom-faces")
+    (modus-themes-with-colors
+      (custom-set-faces
+       `(consult-separator ((,c :inherit default :foreground ,yellow-intense)))
+       `(consult-notes-time ((,c :inherit default :foreground ,cyan-intense)))
 
-                   ;; `(ekg-notes-mode-title ((,c :inherit outline-1 :weight bold :height 1.0)))
-                   ;; `(ekg-title ((,c :inherit outline-2 :weight semibold :height 1.0 :underline t)))
-                   ;; `(ekg-tag ((,c :background ,bg-yellow-nuanced :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
-                   ;; `(ekg-resource ((,c :inherit outline-7 :weight regular :height 1.0 :underline t)))
-                   ;; `(ekg-metadata ((,c :inherit outline-1 :weight regular :height 1.0)))
+       ;; `(ekg-notes-mode-title ((,c :inherit outline-1 :weight bold :height 1.0)))
+       ;; `(ekg-title ((,c :inherit outline-2 :weight semibold :height 1.0 :underline t)))
+       ;; `(ekg-tag ((,c :background ,bg-yellow-nuanced :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
+       ;; `(ekg-resource ((,c :inherit outline-7 :weight regular :height 1.0 :underline t)))
+       ;; `(ekg-metadata ((,c :inherit outline-1 :weight regular :height 1.0)))
 
-                   `(org-list-dt ((,c :foreground ,fg-main :weight bold))) ;; 2025-01-14
-                   ;; `(org-tag ((,c :background ,bg-yellow-nuanced :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
+       `(org-list-dt ((,c :foreground ,fg-main :weight bold))) ;; 2025-01-14
+       ;; `(org-tag ((,c :background ,bg-yellow-nuanced :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
 
-                   `(diredp-file-name ((,c :foreground ,fg-main)))
-                   ;; `(org-agenda-diary ((,c :inherit org-agenda-calendar-sexp :foreground ,fg-main :weight semibold)))
+       `(diredp-file-name ((,c :foreground ,fg-main)))
+       ;; `(org-agenda-diary ((,c :inherit org-agenda-calendar-sexp :foreground ,fg-main :weight semibold)))
 
-                   ;; `(org-link ((,c :inherit link :weight bold)))
-                   ;; `(denote-faces-link ((,c :inherit link :weight bold :slant italic)))
+       ;; `(org-link ((,c :inherit link :weight bold)))
+       ;; `(denote-faces-link ((,c :inherit link :weight bold :slant italic)))
 
-                   ;; `(org-drawer ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata :height 0.8)))
-                   ;; `(org-special-keyword ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata)))
+       ;; `(org-drawer ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata :height 0.8)))
+       ;; `(org-special-keyword ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata)))
 
-                   ;; 2024-07-03 spacious-padding
-                   `(tab-bar ((,c :background ,bg-tab-bar)))
-                   `(tab-bar-tab-group-current ((,c :inherit bold :background ,bg-tab-current :box (:line-width -2 :color ,bg-tab-current) :foreground ,fg-alt)))
-                   `(tab-bar-tab-group-inactive ((,c :background ,bg-tab-bar :box (:line-width -2 :color ,bg-tab-bar) :foreground ,fg-alt)))
-                   `(tab-bar-tab ((,c :inherit bold :box (:line-width -2 :color ,bg-tab-current) :background ,bg-tab-current)))
-                   `(tab-bar-tab-inactive ((,c :box (:line-width -2 :color ,bg-tab-other) :background ,bg-tab-other)))
-                   `(tab-bar-tab-ungrouped ((,c :inherit tab-bar-tab-inactive)))
-                   `(fringe ((,c :background ,bg-dim)))
+       ;; 2024-07-03 spacious-padding
+       `(tab-bar ((,c :background ,bg-tab-bar)))
+       `(tab-bar-tab-group-current ((,c :inherit bold :background ,bg-tab-current :box (:line-width -2 :color ,bg-tab-current) :foreground ,fg-alt)))
+       `(tab-bar-tab-group-inactive ((,c :background ,bg-tab-bar :box (:line-width -2 :color ,bg-tab-bar) :foreground ,fg-alt)))
+       `(tab-bar-tab ((,c :inherit bold :box (:line-width -2 :color ,bg-tab-current) :background ,bg-tab-current)))
+       `(tab-bar-tab-inactive ((,c :box (:line-width -2 :color ,bg-tab-other) :background ,bg-tab-other)))
+       `(tab-bar-tab-ungrouped ((,c :inherit tab-bar-tab-inactive)))
+       `(fringe ((,c :background ,bg-dim)))
 
-                   `(vterm-color-black ((,c :background "gray25" :foreground "gray25")))
-                   `(vterm-color-yellow ((,c :background ,yellow-intense :foreground ,yellow-intense)))
-                   `(org-mode-line-clock ((,c :inherit bold :foreground ,modeline-info)))
-                   `(org-mode-line-clock-overrun ((,c :inherit bold :foreground ,modeline-err)))
-                   `(jinx-misspelled ((,c :underline (:style wave :color ,magenta-cooler))))
-                   ;; `(ten-id-face ((,c :inherit font-lock-keyword-face :underline (:style double-line :color ,cyan))))
+       `(vterm-color-black ((,c :background "gray25" :foreground "gray25")))
+       `(vterm-color-yellow ((,c :background ,yellow-intense :foreground ,yellow-intense)))
+       `(org-mode-line-clock ((,c :inherit bold :foreground ,modeline-info)))
+       `(org-mode-line-clock-overrun ((,c :inherit bold :foreground ,modeline-err)))
+       `(jinx-misspelled ((,c :underline (:style wave :color ,magenta-cooler))))
+       ;; `(ten-id-face ((,c :inherit font-lock-keyword-face :underline (:style double-line :color ,cyan))))
 
-                   ;; `(keycast-command ((,c :inherit default :height 0.9)))
-                   )
-                  )
-                (when (display-graphic-p) ; gui
-                  (when (locate-library "spacious-padding")
-                    (spacious-padding-mode +1)))
-                )
-              (add-hook 'modus-themes-post-load-hook #'my/modus-themes-custom-faces)
-              )
+       ;; `(keycast-command ((,c :inherit default :height 0.9)))
+       )
+      )
+    (when (display-graphic-p) ; gui
+      (when (locate-library "spacious-padding")
+        (spacious-padding-mode +1)))
+    )
+  (add-hook 'modus-themes-post-load-hook #'my/modus-themes-custom-faces)
+  )
 
 ;;;; ef-themes
 
 (use-package! ef-themes
-              :defer t
-              :init
-              (setq ef-themes-to-toggle '(ef-owl ef-eagle))
-              (defun ef-themes-load-random-light ()
-                (interactive) (ef-themes-load-random 'light))
-              (defun ef-themes-load-random-dark ()
-                (interactive) (ef-themes-load-random 'dark))
-              :config
-              (setq ef-themes-light-themes
-                    '(ef-maris-light ; blue
-                      ef-eagle ; yellow
-                      ef-kassio ; pink
-                      ef-frost ; green
-                      ef-reverie))
-              (setq ef-themes-dark-themes
-                    '(ef-melissa-dark ;; Like solarized but much nicer colors.
-                      ef-dream ; 보라 - 드라큘라
-                      ef-rosa ; 자주
-                      ef-maris-dark
-                      ef-elea-dark
-                      ef-owl ; 2024-08-19 new
-                      ))
+  :defer t
+  :init
+  (setq ef-themes-to-toggle '(ef-owl ef-eagle))
+  (defun ef-themes-load-random-light ()
+    (interactive) (ef-themes-load-random 'light))
+  (defun ef-themes-load-random-dark ()
+    (interactive) (ef-themes-load-random 'dark))
+  :config
+  (setq ef-themes-light-themes
+        '(ef-maris-light ; blue
+          ef-eagle ; yellow
+          ef-kassio ; pink
+          ef-frost ; green
+          ef-reverie))
+  (setq ef-themes-dark-themes
+        '(ef-melissa-dark ;; Like solarized but much nicer colors.
+          ef-dream ; 보라 - 드라큘라
+          ef-rosa ; 자주
+          ef-maris-dark
+          ef-elea-dark
+          ef-owl ; 2024-08-19 new
+          ))
 
-              ;; Read the doc string or manual for this one.  The symbols can be combined in any order.
-              (setq ef-themes-region '(intense no-extend neutral))
+  ;; Read the doc string or manual for this one.  The symbols can be combined in any order.
+  (setq ef-themes-region '(intense no-extend neutral))
 
-              (when (display-graphic-p) ; gui
-                ;; (setq ef-themes-variable-pitch-ui t)
-                (setq ef-themes-headings
-                      '(
-                        (0                . (bold 1.2)) ;; variable-pitch
-                        (1                . (bold  1.1))
-                        (2                . (bold 1.05))
-                        (3                . (semibold 1.0))
-                        (4                . (medium 1.0))
-                        (5                . (medium 1.0))
-                        (6                . (medium 1.0))
-                        (7                . (medium 1.0))
-                        (agenda-date      . (semibold 1.0))
-                        (agenda-structure . (bold 1.1))
-                        (t                . (medium 1.0)))
-                      ))
+  (when (display-graphic-p) ; gui
+    ;; (setq ef-themes-variable-pitch-ui t)
+    (setq ef-themes-headings
+          '(
+            (0                . (bold 1.2)) ;; variable-pitch
+            (1                . (bold  1.1))
+            (2                . (bold 1.05))
+            (3                . (semibold 1.0))
+            (4                . (medium 1.0))
+            (5                . (medium 1.0))
+            (6                . (medium 1.0))
+            (7                . (medium 1.0))
+            (agenda-date      . (semibold 1.0))
+            (agenda-structure . (bold 1.1))
+            (t                . (medium 1.0)))
+          ))
 
-              (defun my/ef-themes-custom-faces ()
-                "Configure `hl-todo-keyword-faces' with Ef themes colors.
+  (defun my/ef-themes-custom-faces ()
+    "Configure `hl-todo-keyword-faces' with Ef themes colors.
   The exact color values are taken from the active Ef theme."
-                (interactive)
-                ;; (message "ef-themes-post-load-hook : my-ef-themes-custom-faces")
-                (ef-themes-with-colors
-                 (custom-set-faces
-                  `(consult-separator ((,c :inherit default :foreground ,yellow)))
-                  `(consult-notes-time ((,c :inherit default :foreground ,cyan)))
+    (interactive)
+    ;; (message "ef-themes-post-load-hook : my-ef-themes-custom-faces")
+    (ef-themes-with-colors
+     (custom-set-faces
+      `(consult-separator ((,c :inherit default :foreground ,yellow)))
+      `(consult-notes-time ((,c :inherit default :foreground ,cyan)))
 
-                  ;; `(ekg-notes-mode-title ((,c :inherit outline-1 :weight bold :height 1.0)))
-                  ;; `(ekg-title ((,c :inherit outline-2 :weight semibold :height 1.0 :underline t)))
-                  ;; `(ekg-tag ((,c :background ,bg-yellow-subtle :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
-                  ;; `(ekg-resource ((,c :inherit outline-7 :weight regular :height 1.0 :underline t)))
-                  ;; `(ekg-metadata ((,c :inherit outline-1 :weight regular :height 1.0)))
+      ;; `(ekg-notes-mode-title ((,c :inherit outline-1 :weight bold :height 1.0)))
+      ;; `(ekg-title ((,c :inherit outline-2 :weight semibold :height 1.0 :underline t)))
+      ;; `(ekg-tag ((,c :background ,bg-yellow-subtle :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
+      ;; `(ekg-resource ((,c :inherit outline-7 :weight regular :height 1.0 :underline t)))
+      ;; `(ekg-metadata ((,c :inherit outline-1 :weight regular :height 1.0)))
 
-                  ;; `(org-link ((,c :inherit link :weight bold)))
-                  ;; `(denote-faces-link ((,c :inherit link :weight bold :slant italic)))
-                  ;; `(org-agenda-diary ((,c :inherit org-agenda-calendar-sexp :foreground ,fg-main :weight semibold)))
+      ;; `(org-link ((,c :inherit link :weight bold)))
+      ;; `(denote-faces-link ((,c :inherit link :weight bold :slant italic)))
+      ;; `(org-agenda-diary ((,c :inherit org-agenda-calendar-sexp :foreground ,fg-main :weight semibold)))
 
-                  `(org-list-dt ((,c :foreground ,fg-main :weight bold))) ;; 2025-01-14
-                  ;; `(org-tag ((,c :background ,bg-yellow-subtle :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
-                  `(diredp-file-name ((,c :foreground ,fg-main)))
+      `(org-list-dt ((,c :foreground ,fg-main :weight bold))) ;; 2025-01-14
+      ;; `(org-tag ((,c :background ,bg-yellow-subtle :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
+      `(diredp-file-name ((,c :foreground ,fg-main)))
 
-                  `(tab-bar ((,c :background ,bg-tab-bar)))
-                  `(tab-bar-tab-group-current ((,c :inherit bold :background ,bg-tab-current :box (:line-width -2 :color ,bg-tab-current) :foreground ,fg-alt)))
-                  `(tab-bar-tab-group-inactive ((,c :background ,bg-tab-bar :box (:line-width -2 :color ,bg-tab-bar) :foreground ,fg-alt)))
-                  `(tab-bar-tab ((,c :inherit bold :box (:line-width -2 :color ,bg-tab-current) :background ,bg-tab-current)))
-                  `(tab-bar-tab-inactive ((,c :box (:line-width -2 :color ,bg-tab-other) :background ,bg-tab-other)))
-                  `(tab-bar-tab-ungrouped ((,c :inherit tab-bar-tab-inactive)))
+      `(tab-bar ((,c :background ,bg-tab-bar)))
+      `(tab-bar-tab-group-current ((,c :inherit bold :background ,bg-tab-current :box (:line-width -2 :color ,bg-tab-current) :foreground ,fg-alt)))
+      `(tab-bar-tab-group-inactive ((,c :background ,bg-tab-bar :box (:line-width -2 :color ,bg-tab-bar) :foreground ,fg-alt)))
+      `(tab-bar-tab ((,c :inherit bold :box (:line-width -2 :color ,bg-tab-current) :background ,bg-tab-current)))
+      `(tab-bar-tab-inactive ((,c :box (:line-width -2 :color ,bg-tab-other) :background ,bg-tab-other)))
+      `(tab-bar-tab-ungrouped ((,c :inherit tab-bar-tab-inactive)))
 
-                  ;; `(keycast-command ((,c :inherit ef-themes-ui-variable-pitch :background ,bg-main :foreground ,fg-main :weight semibold)))
-                  ;; `(keycast-command ((,c :inherit default :height 0.9)))
-                  `(fringe ((,c :background ,bg-dim)))
-                  `(org-mode-line-clock ((,c :inherit bold :foreground ,modeline-info)))
-                  `(org-mode-line-clock-overrun ((,c :inherit bold :foreground ,modeline-err)))
-                  `(jinx-misspelled ((,c :underline (:style wave :color ,magenta-cooler))))
-                  ;; `(ten-id-face ((,c :inherit font-lock-keyword-face :underline (:style double-line :color ,cyan))))
-                  )
-                 (setq hl-todo-keyword-faces
-                       `(("HOLD" . ,yellow)
-                         ("TODO" . ,red)
-                         ("NEXT" . ,blue)
-                         ("THEM" . ,magenta)
-                         ("PROG" . ,cyan-warmer)
-                         ("OKAY" . ,green-warmer)
-                         ("DONT" . ,yellow-warmer)
-                         ("FAIL" . ,red-warmer)
-                         ("BUG" . ,red-warmer)
-                         ("DONE" . ,green)
-                         ("NOTE" . ,blue-warmer)
-                         ("KLUDGE" . ,cyan)
-                         ("HACK" . ,cyan)
-                         ("TEMP" . ,red)
-                         ("FIXME" . ,red-warmer)
-                         ("XXX+" . ,red-warmer)
-                         ("REVIEW" . ,red)
-                         ("DEPRECATED" . ,yellow))))
+      ;; `(keycast-command ((,c :inherit ef-themes-ui-variable-pitch :background ,bg-main :foreground ,fg-main :weight semibold)))
+      ;; `(keycast-command ((,c :inherit default :height 0.9)))
+      `(fringe ((,c :background ,bg-dim)))
+      `(org-mode-line-clock ((,c :inherit bold :foreground ,modeline-info)))
+      `(org-mode-line-clock-overrun ((,c :inherit bold :foreground ,modeline-err)))
+      `(jinx-misspelled ((,c :underline (:style wave :color ,magenta-cooler))))
+      ;; `(ten-id-face ((,c :inherit font-lock-keyword-face :underline (:style double-line :color ,cyan))))
+      )
+     (setq hl-todo-keyword-faces
+           `(("HOLD" . ,yellow)
+             ("TODO" . ,red)
+             ("NEXT" . ,blue)
+             ("THEM" . ,magenta)
+             ("PROG" . ,cyan-warmer)
+             ("OKAY" . ,green-warmer)
+             ("DONT" . ,yellow-warmer)
+             ("FAIL" . ,red-warmer)
+             ("BUG" . ,red-warmer)
+             ("DONE" . ,green)
+             ("NOTE" . ,blue-warmer)
+             ("KLUDGE" . ,cyan)
+             ("HACK" . ,cyan)
+             ("TEMP" . ,red)
+             ("FIXME" . ,red-warmer)
+             ("XXX+" . ,red-warmer)
+             ("REVIEW" . ,red)
+             ("DEPRECATED" . ,yellow))))
 
-                (when (display-graphic-p) ; gui
-                  (when (locate-library "spacious-padding")
-                    (spacious-padding-mode +1)))
-                )
-              (add-hook 'ef-themes-post-load-hook #'my/ef-themes-custom-faces))
+    (when (display-graphic-p) ; gui
+      (when (locate-library "spacious-padding")
+        (spacious-padding-mode +1)))
+    )
+  (add-hook 'ef-themes-post-load-hook #'my/ef-themes-custom-faces))
 
 ;;;; DONT custom themes loader for doom-themes
 
@@ -487,80 +487,52 @@
 ;;;; spacious-padding
 
 (use-package! spacious-padding
-              :if window-system ; important
-              :hook (server-after-make-frame . spacious-padding-mode)
-              :init
-              ;; Read the doc string of `spacious-padding-subtle-mode-line' as it is very flexible.
-              (setq spacious-padding-subtle-mode-line
-                    '( :mode-line-active spacious-padding-subtle-mode-line-active
-                       :mode-line-inactive spacious-padding-subtle-mode-line-inactive))
-              (setq spacious-padding-widths
-                    '(:header-line-width 4
-                                         :mode-line-width 4 ; 6
-                                         :tab-width 4 ; sync mode-line-width for keycast-tab-bar
-                                         :internal-border-width 20 ; 15
-                                         :right-divider-width 30 ; 30
-                                         :scroll-bar-width 8
-                                         :fringe-width 8
-                                         ))
-              (add-hook 'doom-load-theme-hook #'spacious-padding-mode)
-              :config
-              ;; (remove-hook 'doom-init-ui-hook #'window-divider-mode)
-              ;; (blink-cursor-mode t)
-              ;; (when (fboundp 'tooltip-mode) (tooltip-mode 1))
-              ;; (when (fboundp 'tool-bar-mode) (tool-bar-mode 1))
-              ;; (when (display-graphic-p) ; gui
-              ;;   (menu-bar-mode +1))
-              (spacious-padding-mode +1)
-              )
+  :if window-system ; important
+  :hook (server-after-make-frame . spacious-padding-mode)
+  :init
+  ;; Read the doc string of `spacious-padding-subtle-mode-line' as it is very flexible.
+  (setq spacious-padding-subtle-mode-line
+        '( :mode-line-active spacious-padding-subtle-mode-line-active
+           :mode-line-inactive spacious-padding-subtle-mode-line-inactive))
+  (setq spacious-padding-widths
+        '(:header-line-width 4
+          :mode-line-width 4 ; 6
+          :tab-width 4 ; sync mode-line-width for keycast-tab-bar
+          :internal-border-width 20 ; 15
+          :right-divider-width 30 ; 30
+          :scroll-bar-width 8
+          :fringe-width 8
+          ))
+  (add-hook 'doom-load-theme-hook #'spacious-padding-mode)
+  :config
+  ;; (remove-hook 'doom-init-ui-hook #'window-divider-mode)
+  ;; (blink-cursor-mode t)
+  ;; (when (fboundp 'tooltip-mode) (tooltip-mode 1))
+  ;; (when (fboundp 'tool-bar-mode) (tool-bar-mode 1))
+  ;; (when (display-graphic-p) ; gui
+  ;;   (menu-bar-mode +1))
+  (spacious-padding-mode +1)
+  )
 
 ;;;; list-unicode-display
 
 (use-package! list-unicode-display :defer t)
 
-;;;; DONT pulse : built-in - visual feedback
+;;;; pulse : built-in - visual feedback
 
-;; (progn
-;;   ;; add visual pulse when changing focus, like beacon but built-in
-;;   ;; from from https://karthinks.com/software/batteries-included-with-emacs/
-;;   (require 'pulse)
-;;   (defun pulse-line (&rest _)
-;;     "Pulse the current line."
-;;     (pulse-momentary-highlight-one-line (point)))
-;;   (dolist (command
-;;            '(scroll-up-command scroll-down-command recenter-top-bottom other-window))
-;;     (advice-add command :after #'pulse-line))
-;;   )
+(progn
+  ;; add visual pulse when changing focus, like beacon but built-in
+  ;; from from https://karthinks.com/software/batteries-included-with-emacs/
+  (require 'pulse)
+  (defun pulse-line (&rest _)
+    "Pulse the current line."
+    (pulse-momentary-highlight-one-line (point)))
+  (dolist (command
+           '(scroll-up-command scroll-down-command recenter-top-bottom other-window))
+    (advice-add command :after #'pulse-line))
+  )
 
 ;;;; DONT pulsar - performance issue
-
-(use-package! pulsar
-              ;; A little bit of visual feedback.  See
-              ;; https://protesilaos.com/codelog/2022-03-14-emacs-pulsar-demo/
-              :hook
-              (consult-after-jump . pulsar-recenter-top)
-              (consult-after-jump . pulsar-reveal-entry)
-              ;; integration with the built-in `imenu':
-              (imenu-after-jump . pulsar-recenter-top)
-              (imenu-after-jump . pulsar-reveal-entry)
-              :config
-              (pulsar-global-mode 1)
-              (setq pulsar-face 'pulsar-generic)
-              ;; (setq pulsar-face 'evil-ex-lazy-highlight)
-              (setq pulsar-delay 0.025)
-              (setq pulsar-iterations 10)
-              :bind (("C-c C-l" . jf/pulse)))
-
-(defun jf/pulse (&optional parg)
-  "Pulse the current line.
-  When PARG pulse between `point' and `mark'."
-  (interactive "P")
-  (if (car parg)
-      (pulsar--pulse nil nil (point) (mark))
-    (pulsar-pulse-line)))
-
-;; Silence that bell by pulsing the line instead
-(setq ring-bell-function 'jf/pulse)
 
 ;; LionyxML-lemacs/lemacs-init.org
 ;; The `pulsar' package enhances the user experience in Emacs by providing
@@ -644,12 +616,12 @@
 ;;;; after denotes : Load custom denote
 
 (after! denote
-        (message "Load: custom denote")
-        (require 'denote-funcs)
-        (require 'denote-config)
-        (require 'denote-hugo) ; for publish
-        ;; (add-hook 'doom-first-input-hook #'my/refresh-agenda-files)
-        )
+  (message "Load: custom denote")
+  (require 'denote-funcs)
+  (require 'denote-config)
+  (require 'denote-hugo) ; for publish
+  ;; (add-hook 'doom-first-input-hook #'my/refresh-agenda-files)
+  )
 
 ;;;; check consult-denotes
 
@@ -660,112 +632,112 @@
 ;;;; DONT consult-notes-file-dir-sources
 
 (after! consult-notes
-        (setq consult-notes-file-dir-sources
-              '(
-                ;; ("root"  ?r  "~/sync/org")
-                ("meta/Hub" ?h "~/sync/org/meta")
-                ;; ("bib/Literature" ?b "~/sync/org/bib")
-                ;; ("notes/Fleeting" ?n "~/sync/org/notes")
-                ;; ("posts/Permanent" ?p "~/sync/org/posts")
-                ;; ("llmlog/AI" ?l "~/sync/org/llmlog")
-                ;; ("docs/Zettels" ?d "~/sync/org/docs")
-                ;; ("07.Journal" ?j "~/sync/org/journal")
-                ;; ("09.Ekg" ?e "~/sync/org/ekg")
-                ;; ("10.MD" ?m "~/sync/org/md")
-                ;; ("11.Import" ?i "~/sync/org/import")
-                ;; ("12.Talks" ?t  "~/sync/org/talks")
-                )))
+  (setq consult-notes-file-dir-sources
+        '(
+          ;; ("root"  ?r  "~/sync/org")
+          ("meta/Hub" ?h "~/sync/org/meta")
+          ;; ("bib/Literature" ?b "~/sync/org/bib")
+          ;; ("notes/Fleeting" ?n "~/sync/org/notes")
+          ;; ("posts/Permanent" ?p "~/sync/org/posts")
+          ;; ("llmlog/AI" ?l "~/sync/org/llmlog")
+          ;; ("docs/Zettels" ?d "~/sync/org/docs")
+          ;; ("07.Journal" ?j "~/sync/org/journal")
+          ;; ("09.Ekg" ?e "~/sync/org/ekg")
+          ;; ("10.MD" ?m "~/sync/org/md")
+          ;; ("11.Import" ?i "~/sync/org/import")
+          ;; ("12.Talks" ?t  "~/sync/org/talks")
+          )))
 
 ;;; Waiting
 
 ;;;; atomic-chrome
 
 (use-package! atomic-chrome
-              :if window-system
-              :defer 4
-              :commands (atomic-chrome-start-server)
-              :config
-              (atomic-chrome-start-server))
+  :if window-system
+  :defer 4
+  :commands (atomic-chrome-start-server)
+  :config
+  (atomic-chrome-start-server))
 
 ;;;; google-translte
 
 (use-package! google-translate
-              :defer 3
-              :init
-              (require 'google-translate)
-              :init
-              (autoload 'google-translate-translate "google-translate-core-ui" "google-translate-translate" nil nil)
+  :defer 3
+  :init
+  (require 'google-translate)
+  :init
+  (autoload 'google-translate-translate "google-translate-core-ui" "google-translate-translate" nil nil)
 
-              :config
-              ;; load +google-translate
-              (load! "+google-translate")
+  :config
+  ;; load +google-translate
+  (load! "+google-translate")
 
-              (defadvice! google-translate-at-point--set-lang-auto (fn &optional override-p)
-                          :around #'google-translate-at-point
-                          (pcase-let ((`(,src ,tgt)
-                                       (alist-get current-input-method
-                                                  '((nil . (en ko))
-                                                    ("korean-hangul" . (ko en)))
-                                                  nil nil #'string-equal)))
-                            (let ((google-translate-default-source-language (symbol-name src))
-                                  (google-translate-default-target-language (symbol-name tgt)))
-                              (funcall-interactively fn override-p))))
+  (defadvice! google-translate-at-point--set-lang-auto (fn &optional override-p)
+    :around #'google-translate-at-point
+    (pcase-let ((`(,src ,tgt)
+                 (alist-get current-input-method
+                            '((nil . (en ko))
+                              ("korean-hangul" . (ko en)))
+                            nil nil #'string-equal)))
+      (let ((google-translate-default-source-language (symbol-name src))
+            (google-translate-default-target-language (symbol-name tgt)))
+        (funcall-interactively fn override-p))))
 
-              (defun google-translate-to-korean (&optional str)
-                "Translate given string automatically without language selection prompt."
-                (let ((lang
-                       (cond
-                        ((string-match "[가-힣]" str)
-                         "ko")
-                        ((or (string-match "[ァ-ヶー]" str)
-                             (string-match "[ぁ-んー]" str)
-                             ;; (string-match "[亜-瑤]" str)
-                             )
-                         "ja")
-                        ((string-match "[一-龥]" str)
-                         "zh-CN")
-                        (t
-                         "en"))))
-                  (google-translate-translate
-                   lang
-                   (if (string= "ko" lang)
-                       "en"
-                     "ko")
-                   str)))
+  (defun google-translate-to-korean (&optional str)
+    "Translate given string automatically without language selection prompt."
+    (let ((lang
+           (cond
+            ((string-match "[가-힣]" str)
+             "ko")
+            ((or (string-match "[ァ-ヶー]" str)
+                 (string-match "[ぁ-んー]" str)
+                 ;; (string-match "[亜-瑤]" str)
+                 )
+             "ja")
+            ((string-match "[一-龥]" str)
+             "zh-CN")
+            (t
+             "en"))))
+      (google-translate-translate
+       lang
+       (if (string= "ko" lang)
+           "en"
+         "ko")
+       str)))
 
-              (setq google-translate-input-method-auto-toggling t
-                    google-translate-preferable-input-methods-alist
-                    '((nil . ("en"))
-                      (korean-hangul . ("ko"))))
+  (setq google-translate-input-method-auto-toggling t
+        google-translate-preferable-input-methods-alist
+        '((nil . ("en"))
+          (korean-hangul . ("ko"))))
 
-              (setq google-translate-show-phonetic t)
-              (setq google-translate-pop-up-buffer-set-focus t)
-              (setq google-translate-default-source-language "auto"
-                    google-translate-default-target-language "ko")
+  (setq google-translate-show-phonetic t)
+  (setq google-translate-pop-up-buffer-set-focus t)
+  (setq google-translate-default-source-language "auto"
+        google-translate-default-target-language "ko")
 
-              ;; it doesn't pop to the buffer automatically
-              (defun google-translate--find-buffer (x)
-                (pop-to-buffer "*Google Translate*"))
+  ;; it doesn't pop to the buffer automatically
+  (defun google-translate--find-buffer (x)
+    (pop-to-buffer "*Google Translate*"))
 
-              (advice-add 'google-translate-buffer-output-translation :after #'google-translate--find-buffer)
+  (advice-add 'google-translate-buffer-output-translation :after #'google-translate--find-buffer)
 
-              (add-to-list
-               'display-buffer-alist
-               '("\\*Google Translate\\*"
-                 (display-buffer-reuse-window
-                  display-buffer-in-direction)
-                 (direction . right)
-                 (window . root)
-                 (window-width . 0.25)))
-              )
+  (add-to-list
+   'display-buffer-alist
+   '("\\*Google Translate\\*"
+     (display-buffer-reuse-window
+      display-buffer-in-direction)
+     (direction . right)
+     (window . root)
+     (window-width . 0.25)))
+  )
 
 
 ;;;; TODO translate-mode
 
 (use-package! translate-mode
-              :defer 5
-              ;; :hook (translate-mode . translate//set-translate-mode-paragraph-functions)
-              )
+  :defer 5
+  ;; :hook (translate-mode . translate//set-translate-mode-paragraph-functions)
+  )
 
 ;; (progn
 ;;   (defun translate/translate-current-reference-paragraph ()
@@ -794,27 +766,27 @@
 ;;;; browse-hist
 
 (use-package! browser-hist
-              :init
-              (require 'embark) ; load Embark before the command (if you're using it)
-              :config
-              (setq browser-hist-db-paths
-                    '((edge . "/home/junghan/.config/microsoft-edge/Default/History")
-                      (whale . "/home/junghan/.config/naver-whale/Default/History")
-                      (chrome . "$HOME/.config/google-chrome/Default/History")
-                      (brave . "$HOME/.config/BraveSoftware/Brave-Browser/Default/History")
-                      (firefox . "$HOME/.mozilla/firefox/*.default-release-*/places.sqlite")
-                      (qutebrowser . "$HOME/.local/share/qutebrowser/history.sqlite")))
-              (setq browser-hist--db-fields
-                    '((chrome      "title"    "url"    "urls"          "ORDER BY last_visit_time desc")
-                      (edge    "title"    "url"    "urls"          "ORDER BY last_visit_time desc")
-                      (whale    "title"    "url"    "urls"          "ORDER BY last_visit_time desc")
-                      (qutebrowser "title"    "url"    "History"       "ORDER BY atime           desc")
-                      (brave       "title"    "url"    "urls"          "ORDER BY last_visit_time desc")
-                      (firefox     "title"    "url"    "moz_places"    "ORDER BY last_visit_date desc")
-                      ))
-              (setq browser-hist-default-browser 'edge)
-              :commands (browser-hist-search)
-              )
+  :init
+  (require 'embark) ; load Embark before the command (if you're using it)
+  :config
+  (setq browser-hist-db-paths
+        '((edge . "/home/junghan/.config/microsoft-edge/Default/History")
+          (whale . "/home/junghan/.config/naver-whale/Default/History")
+          (chrome . "$HOME/.config/google-chrome/Default/History")
+          (brave . "$HOME/.config/BraveSoftware/Brave-Browser/Default/History")
+          (firefox . "$HOME/.mozilla/firefox/*.default-release-*/places.sqlite")
+          (qutebrowser . "$HOME/.local/share/qutebrowser/history.sqlite")))
+  (setq browser-hist--db-fields
+        '((chrome      "title"    "url"    "urls"          "ORDER BY last_visit_time desc")
+          (edge    "title"    "url"    "urls"          "ORDER BY last_visit_time desc")
+          (whale    "title"    "url"    "urls"          "ORDER BY last_visit_time desc")
+          (qutebrowser "title"    "url"    "History"       "ORDER BY atime           desc")
+          (brave       "title"    "url"    "urls"          "ORDER BY last_visit_time desc")
+          (firefox     "title"    "url"    "moz_places"    "ORDER BY last_visit_date desc")
+          ))
+  (setq browser-hist-default-browser 'edge)
+  :commands (browser-hist-search)
+  )
 
 ;;;; DONT dictionary-overlay
 
@@ -869,12 +841,12 @@
 ;;;; pylookup
 
 (use-package! pylookup
-              :commands (pylookup-lookup pylookup-update pylookup-update-all)
-              :config
-              (setq pylookup-dir (concat user-dotemacs-dir "local/pylookup/")
-                    pylookup-program (concat pylookup-dir "pylookup.py")
-                    pylookup-db-file (concat pylookup-dir "pylookup.db"))
-              (setq pylookup-html-locations '("http://docs.python.org/ko/3.12")))
+  :commands (pylookup-lookup pylookup-update pylookup-update-all)
+  :config
+  (setq pylookup-dir (concat user-dotemacs-dir "local/pylookup/")
+        pylookup-program (concat pylookup-dir "pylookup.py")
+        pylookup-db-file (concat pylookup-dir "pylookup.db"))
+  (setq pylookup-html-locations '("http://docs.python.org/ko/3.12")))
 
 ;;;; prot-dired-grep-marked-files
 
@@ -901,12 +873,12 @@
 ;;; persp-mode with tab-bar for open-workspaces
 
 (after! persp-mode
-        ;; shares a common set of buffers between perspectives
-        (defvar persp-shared-buffers
-          '("*scratch*" "*Org Agenda(n)*" "*Messages*" "*doom:scratch*"))
+  ;; shares a common set of buffers between perspectives
+  (defvar persp-shared-buffers
+    '("*scratch*" "*Org Agenda(n)*" "*Messages*" "*doom:scratch*"))
 
-        (add-hook 'persp-activated-functions
-                  (lambda (_) (persp-add-buffer persp-shared-buffers))))
+  (add-hook 'persp-activated-functions
+            (lambda (_) (persp-add-buffer persp-shared-buffers))))
 
 ;;;; custom tab-bar global-mode-string
 
@@ -993,19 +965,19 @@
 
 (when (eq emacs-major-version 30)
   (use-package! tab-line
-                :if window-system
-                :demand t
-                :config
-                (setq tab-line-exclude-modes '(completion-list-mode reb-mode reb-lisp-mode calc-mode calc-trail-mode)) ; 2025-02-09
-                (global-tab-line-mode 1)
-                (setq tab-line-close-tab-function #'kill-buffer)
-                (setq tab-line-tab-name-truncated-max 26) ; default 20
-                (setq tab-line-tab-name-ellipsis "…")
-                (setq tab-line-tab-name-function
-                      #'tab-line-tab-name-truncated-buffer)
-                (setq
-                 tab-line-new-button-show nil
-                 tab-line-close-button-show nil))
+    :if window-system
+    :demand t
+    :config
+    (setq tab-line-exclude-modes '(completion-list-mode reb-mode reb-lisp-mode calc-mode calc-trail-mode)) ; 2025-02-09
+    (global-tab-line-mode 1)
+    (setq tab-line-close-tab-function #'kill-buffer)
+    (setq tab-line-tab-name-truncated-max 26) ; default 20
+    (setq tab-line-tab-name-ellipsis "…")
+    (setq tab-line-tab-name-function
+          #'tab-line-tab-name-truncated-buffer)
+    (setq
+     tab-line-new-button-show nil
+     tab-line-close-button-show nil))
   )
 
 ;;; Ten with etags
@@ -1030,19 +1002,19 @@
 ;; ;; eww-mode nov-mode -- conflict face 켜면 안된다.
 
 (use-package! ten
-              :after consult
-              :defer 2
-              ;; :bind (("M-c t" . complete-tag)
-              ;;        ("C-c M-." . my/goto-etags))
-              ;; :hook ((org-mode Info-mode) . ten-font-lock-mode) ;; text-mode
-              :init
-              (setq ten-file-extensions '("org" "md" "txt"))
-              (setq ten-exclude-regexps '("/\\."))
-              :config
-              (set-popup-rule! "^\\ten-TAGS" :ignore t)
-              (require 'consult-ten)
-              (add-to-list 'consult-buffer-sources 'consult-ten-glossary 'append) ; g
-              )
+  :after consult
+  :defer 2
+  ;; :bind (("M-c t" . complete-tag)
+  ;;        ("C-c M-." . my/goto-etags))
+  ;; :hook ((org-mode Info-mode) . ten-font-lock-mode) ;; text-mode
+  :init
+  (setq ten-file-extensions '("org" "md" "txt"))
+  (setq ten-exclude-regexps '("/\\."))
+  :config
+  (set-popup-rule! "^\\ten-TAGS" :ignore t)
+  (require 'consult-ten)
+  (add-to-list 'consult-buffer-sources 'consult-ten-glossary 'append) ; g
+  )
 
 ;;; copy-screenshot-markdown
 
@@ -1076,8 +1048,8 @@
     (diredp-do-apply/eval-marked 'org-hugo-export-wim-to-md '(4)))
 
   (after! org
-          (define-key dired-mode-map (kbd "M-p") #'my/dired-hugo-export-wim-to-md)
-          ))
+    (define-key dired-mode-map (kbd "M-p") #'my/dired-hugo-export-wim-to-md)
+    ))
 
 ;; (with-eval-after-load 'dired
 ;;   (define-key dired-mode-map (kbd "M-p")
@@ -1095,25 +1067,25 @@
 
 ;; Automatically toggle Org mode LaTeX fragment previews as the cursor enters and exits them
 (use-package! org-fragtog
-              :after org
-              :hook (org-mode . org-fragtog-mode)
-              ;; :hook (markdown-mode . org-fragtog-mode)
-              :init
-              (progn ;; for org-fragtog-mode for markdown-mode
-                ;; 2025-01-24 disable for markdown-mode, 2024-06-27 안쓰는게 나은듯
-                ;; The new org-data element provides properties from top-level property drawer,
-                (setq org-element-use-cache nil) ; default t
-                ;; Element cache persists across Emacs sessions
-                (setq org-element-cache-persistent nil) ; default t
-                ;; org-element-with-disabled-cache
-                (add-to-list 'warning-suppress-types '(org-element))
-                )
+  :after org
+  :hook (org-mode . org-fragtog-mode)
+  ;; :hook (markdown-mode . org-fragtog-mode)
+  :init
+  (progn ;; for org-fragtog-mode for markdown-mode
+    ;; 2025-01-24 disable for markdown-mode, 2024-06-27 안쓰는게 나은듯
+    ;; The new org-data element provides properties from top-level property drawer,
+    (setq org-element-use-cache nil) ; default t
+    ;; Element cache persists across Emacs sessions
+    (setq org-element-cache-persistent nil) ; default t
+    ;; org-element-with-disabled-cache
+    (add-to-list 'warning-suppress-types '(org-element))
+    )
 
-              ;; (setq org-fragtog-preview-delay 0.2)
-              ;; (setq org-startup-with-latex-preview t) ; doom nil
-              ;; (setq org-highlight-latex-and-related '(native)) ; doom nil
-              ;; (setq org-highlight-latex-and-related '(native script entities)) ; doom org +pretty
-              )
+  ;; (setq org-fragtog-preview-delay 0.2)
+  ;; (setq org-startup-with-latex-preview t) ; doom nil
+  ;; (setq org-highlight-latex-and-related '(native)) ; doom nil
+  ;; (setq org-highlight-latex-and-related '(native script entities)) ; doom org +pretty
+  )
 
 ;;;; DONT xelatex and dvisvgm
 
@@ -1244,8 +1216,8 @@
 ;; (browse-url-emacs "https://raw.githubusercontent.com/tecosaur/LaTeX-auto-activating-snippets/master/README.org")
 
 (use-package! laas
-              :hook ((LaTeX-mode . laas-mode)
-	                 (org-mode . laas-mode)))
+  :hook ((LaTeX-mode . laas-mode)
+	 (org-mode . laas-mode)))
 
 ;;   (defun laas-tex-fold-maybe ()
 ;;     (unless (equal "/" aas-transient-snippet-key)
@@ -1260,9 +1232,9 @@
 
 ;; Setup export processor; default csl/citeproc-el, with biblatex for latex
 (after! oc
-        (require 'citar-citeproc)
-        (setq org-cite-csl-link-cites nil) ; default t
-        (setq org-cite-export-processors '((latex biblatex) (t csl))))
+  (require 'citar-citeproc)
+  (setq org-cite-csl-link-cites nil) ; default t
+  (setq org-cite-export-processors '((latex biblatex) (t csl))))
 
 ;;; NOTE consult-omni with extra
 
@@ -1323,122 +1295,122 @@
   )
 
 (use-package! consult-omni
-              :after consult
-              :commands (consult-omni-transient consult-omni-multi)
-              :custom
-              (consult-omni-show-preview t) ;;; show previews
-              (consult-omni-preview-key "M-m") ;;; set the preview key to M-m
-              (consult-omni-default-page 0) ;;; set the default page (default is 0 for the first page)
-              :bind (:map consult-omni-embark-general-actions-map
-                          ("I l" .  #'my-consult-omni-embark-insert-link)
-                          ("I u" .  #'my-consult-omni-embark-insert-url)
-                          ("I t" .  #'my-consult-omni-embark-insert-title)
-                          ("W u" . #'my-consult-omni-embark-copy-url-as-kill)
-                          ("W t" . #'my-consult-omni-embark-copy-title-as-kill))
-              :config
-              (require 'consult-omni-sources)
-              (require 'consult-omni-embark)
+  :after consult
+  :commands (consult-omni-transient consult-omni-multi)
+  :custom
+  (consult-omni-show-preview t) ;;; show previews
+  (consult-omni-preview-key "M-m") ;;; set the preview key to M-m
+  (consult-omni-default-page 0) ;;; set the default page (default is 0 for the first page)
+  :bind (:map consult-omni-embark-general-actions-map
+              ("I l" .  #'my-consult-omni-embark-insert-link)
+              ("I u" .  #'my-consult-omni-embark-insert-url)
+              ("I t" .  #'my-consult-omni-embark-insert-title)
+              ("W u" . #'my-consult-omni-embark-copy-url-as-kill)
+              ("W t" . #'my-consult-omni-embark-copy-title-as-kill))
+  :config
+  (require 'consult-omni-sources)
+  (require 'consult-omni-embark)
 
-              (progn
-                ;; (require 'consult-omni-apps)
-                ;; (require 'consult-omni-bing)
-                ;; (require 'consult-omni-brave-autosuggest)
-                (require 'consult-omni-brave)
-                (require 'consult-omni-browser-history)
-                (require 'consult-omni-buffer)
-                (require 'consult-omni-calc)
-                ;; (require 'consult-omni-chatgpt)
-                (require 'consult-omni-consult-notes)
-                ;; (require 'consult-omni-dict)
-                ;; (require 'consult-omni-doi)
-                (require 'consult-omni-duckduckgo)
-                (require 'consult-omni-elfeed)
-                (require 'consult-omni-fd)
-                ;; (require 'consult-omni-find)
-                (require 'consult-omni-gh)
-                (require 'consult-omni-git-grep)
-                (require 'consult-omni-google)
-                ;; (require 'consult-omni-google-autosuggest)
-                (require 'consult-omni-gptel)
-                ;; (require 'consult-omni-grep)
-                (require 'consult-omni-invidious)
-                ;; (require 'consult-omni-line-multi)
-                ;; (require 'consult-omni-locate)
-                ;; (require 'consult-omni-man)
-                ;; (require 'consult-omni-mdfind)
-                ;; (require 'consult-omni-mu4e)
-                (require 'consult-omni-notes)
-                (require 'consult-omni-notmuch)
-                ;; (require 'consult-omni-numi)
-                ;; (require 'consult-omni-org-agenda)
-                ;; (require 'consult-omni-pubmed)
-                (require 'consult-omni-projects)
-                (require 'consult-omni-ripgrep)
-                ;; (require 'consult-omni-ripgrep-all)
-                ;; (require 'consult-omni-scopus)
-                ;; (require 'consult-omni-stackoverflow)
-                (require 'consult-omni-wikipedia)
-                (require 'consult-omni-youtube)
-                )
+  (progn
+    ;; (require 'consult-omni-apps)
+    ;; (require 'consult-omni-bing)
+    ;; (require 'consult-omni-brave-autosuggest)
+    (require 'consult-omni-brave)
+    (require 'consult-omni-browser-history)
+    (require 'consult-omni-buffer)
+    (require 'consult-omni-calc)
+    ;; (require 'consult-omni-chatgpt)
+    (require 'consult-omni-consult-notes)
+    ;; (require 'consult-omni-dict)
+    ;; (require 'consult-omni-doi)
+    (require 'consult-omni-duckduckgo)
+    (require 'consult-omni-elfeed)
+    (require 'consult-omni-fd)
+    ;; (require 'consult-omni-find)
+    (require 'consult-omni-gh)
+    (require 'consult-omni-git-grep)
+    (require 'consult-omni-google)
+    ;; (require 'consult-omni-google-autosuggest)
+    (require 'consult-omni-gptel)
+    ;; (require 'consult-omni-grep)
+    (require 'consult-omni-invidious)
+    ;; (require 'consult-omni-line-multi)
+    ;; (require 'consult-omni-locate)
+    ;; (require 'consult-omni-man)
+    ;; (require 'consult-omni-mdfind)
+    ;; (require 'consult-omni-mu4e)
+    (require 'consult-omni-notes)
+    (require 'consult-omni-notmuch)
+    ;; (require 'consult-omni-numi)
+    ;; (require 'consult-omni-org-agenda)
+    ;; (require 'consult-omni-pubmed)
+    (require 'consult-omni-projects)
+    (require 'consult-omni-ripgrep)
+    ;; (require 'consult-omni-ripgrep-all)
+    ;; (require 'consult-omni-scopus)
+    ;; (require 'consult-omni-stackoverflow)
+    (require 'consult-omni-wikipedia)
+    (require 'consult-omni-youtube)
+    )
 
-              ;; load agzam
-              (require 'my-consult-omni)
+  ;; load agzam
+  (require 'my-consult-omni)
 
-              (setq consult-omni-multi-sources '(
-                                                 ;; "DuckDuckGo AP/"
-                                                 "Google"
-                                                 "Brave"
-                                                 "Wikipedia"
-                                                 ;; "Browser History"
-                                                 "gptel"
-                                                 "GitHub"
-                                                 "elfeed"
-                                                 ;; "notmuch"
-                                                 "YouTube"))
-              ;; (setq consult-omni-default-preview-function #'eww-browse-url)
+  (setq consult-omni-multi-sources '(
+                                     ;; "DuckDuckGo AP/"
+                                     "Google"
+                                     "Brave"
+                                     "Wikipedia"
+                                     ;; "Browser History"
+                                     "gptel"
+                                     "GitHub"
+                                     "elfeed"
+                                     ;; "notmuch"
+                                     "YouTube"))
+  ;; (setq consult-omni-default-preview-function #'eww-browse-url)
 
-              ;; ;; Set API KEYs. It is recommended to use a function that returns the string for better security.
-              (setq consult-omni-openai-api-key user-openai-api-key)
-              (setq consult-omni-brave-api-key user-brave-api-key)
-              ;; Set API KEYs. It is recommended to use a function that returns the string for better security.
-              ;; (setq consult-omni-google-customsearch-key "YOUR-GOOGLE-API-KEY-OR-FUNCTION")
-              ;; (setq consult-omni-google-customsearch-cx "YOUR-GOOGLE-CX-NUMBER-OR-FUNCTION")
+  ;; ;; Set API KEYs. It is recommended to use a function that returns the string for better security.
+  (setq consult-omni-openai-api-key user-openai-api-key)
+  (setq consult-omni-brave-api-key user-brave-api-key)
+  ;; Set API KEYs. It is recommended to use a function that returns the string for better security.
+  ;; (setq consult-omni-google-customsearch-key "YOUR-GOOGLE-API-KEY-OR-FUNCTION")
+  ;; (setq consult-omni-google-customsearch-cx "YOUR-GOOGLE-CX-NUMBER-OR-FUNCTION")
 
-              ;; (consult-omni--set-api-keys) ; agzam
+  ;; (consult-omni--set-api-keys) ; agzam
 
-              (setq consult-omni-default-count 30
-                    consult-omni-dynamic-input-debounce 0.7
-                    consult-omni-dynamic-refresh-delay 0.5)
+  (setq consult-omni-default-count 30
+        consult-omni-dynamic-input-debounce 0.7
+        consult-omni-dynamic-refresh-delay 0.5)
 
-              (defadvice! consult-omni-use-thing-at-point-a
-                          (fn &optional initial no-cb &rest args)
-                          :around #'consult-omni-multi
-                          :around #'consult-omni-google
-                          :around #'consult-omni-wikipedia
-                          :around #'consult-omni-youtube
-                          :around #'consult-omni-github
-                          :around #'consult-omni-gptel
-                          :around #'consult-omni-browser-history
-                          :around #'consult-omni-notmuch
-                          :around #'consult-omni-elfeed
-                          (let ((init (or initial
-                                          (if (use-region-p)
-                                              (buffer-substring (region-beginning) (region-end))
-                                            (thing-at-point 'symbol :no-props)))))
-                            (apply fn init no-cb args)))
+  (defadvice! consult-omni-use-thing-at-point-a
+    (fn &optional initial no-cb &rest args)
+    :around #'consult-omni-multi
+    :around #'consult-omni-google
+    :around #'consult-omni-wikipedia
+    :around #'consult-omni-youtube
+    :around #'consult-omni-github
+    :around #'consult-omni-gptel
+    :around #'consult-omni-browser-history
+    :around #'consult-omni-notmuch
+    :around #'consult-omni-elfeed
+    (let ((init (or initial
+                    (if (use-region-p)
+                        (buffer-substring (region-beginning) (region-end))
+                      (thing-at-point 'symbol :no-props)))))
+      (apply fn init no-cb args)))
 
-              (defadvice! consult-omni--multi-dynamic-no-match-a (orig-fn &rest args)
-                          "Require no match for omni searches."
-                          :around #'consult-omni--multi-dynamic
-                          (apply orig-fn (plist-put args :require-match nil)))
+  (defadvice! consult-omni--multi-dynamic-no-match-a (orig-fn &rest args)
+    "Require no match for omni searches."
+    :around #'consult-omni--multi-dynamic
+    (apply orig-fn (plist-put args :require-match nil)))
 
-              (defun consult-omni-embark-video-process (cand)
-                (if-let* ((url (and (stringp cand) (get-text-property 0 :url cand))))
-                    (+process-external-url url)))
+  (defun consult-omni-embark-video-process (cand)
+    (if-let* ((url (and (stringp cand) (get-text-property 0 :url cand))))
+        (+process-external-url url)))
 
-              (map! :map consult-omni-embark-video-actions-map
-                    "e" #'consult-omni-embark-video-process)
-              )
+  (map! :map consult-omni-embark-video-actions-map
+        "e" #'consult-omni-embark-video-process)
+  )
 
 ;;; TODO Load +llm summarize-buffer
 
@@ -1450,15 +1422,15 @@
 ;;;; scheme with geiser-mit
 
 (use-package! geiser-mit
-              :config
-              (setenv "MITSCHEME_HEAP_SIZE" "100000") ; 16384
-              (setenv "MITSCHEME_LIBRARY_PATH" "/usr/lib/x86_64-linux-gnu/mit-scheme")
-              (setenv "MITSCHEME_BAND" "mechanics.com")
+  :config
+  (setenv "MITSCHEME_HEAP_SIZE" "100000") ; 16384
+  (setenv "MITSCHEME_LIBRARY_PATH" "/usr/lib/x86_64-linux-gnu/mit-scheme")
+  (setenv "MITSCHEME_BAND" "mechanics.com")
 
-              ;; (setenv "DISPLAY" ":0")
-              (setq geiser-active-implementations '(mit))
-              (setq geiser-mit-binary "/usr/bin/mit-scheme")
-              )
+  ;; (setenv "DISPLAY" ":0")
+  (setq geiser-active-implementations '(mit))
+  (setq geiser-mit-binary "/usr/bin/mit-scheme")
+  )
 
 ;;;; DONT built-in scheme not geiser
 
@@ -1579,102 +1551,102 @@
   (add-hook 'clojure-mode-hook (lambda () (setq-local comment-column 0)))
 
   (after! clojure-mode
-          (define-key clojure-mode-map (kbd "<M-return>") 'clerk-show)
-          (define-key clojure-mode-map (kbd "C-c v") 'vega-view)
-          )
+    (define-key clojure-mode-map (kbd "<M-return>") 'clerk-show)
+    (define-key clojure-mode-map (kbd "C-c v") 'vega-view)
+    )
 
 ;;;;; cider
 
   (after! cider
-          ;; In recent versions, an option has been introduced that attempts to improve
-          ;; the experience of CIDER by accessing java source & javadocs, though this
-          ;; option is still currently considered beta.
-          (setq cider-enrich-classpath t)
+    ;; In recent versions, an option has been introduced that attempts to improve
+    ;; the experience of CIDER by accessing java source & javadocs, though this
+    ;; option is still currently considered beta.
+    (setq cider-enrich-classpath t)
 
-          (if (package-installed-p 'corfu)
-              (evil-define-key 'insert cider-repl-mode-map
-                (kbd "C-j") 'corfu-next
-                (kbd "C-k") 'corfu-previous))
+    (if (package-installed-p 'corfu)
+        (evil-define-key 'insert cider-repl-mode-map
+          (kbd "C-j") 'corfu-next
+          (kbd "C-k") 'corfu-previous))
 
-          ;; (add-to-list 'auto-mode-alist '("\\.clj_kondo\\'" . clojure-mode))
-          ;; (add-to-list 'auto-mode-alist '("\\.endl$" . clojure-mode))
-          ;; (add-to-list 'magic-mode-alist '("^#![^\n]*/\\(clj\\|clojure\\|bb\\|lumo\\)" . clojure-mode))
+    ;; (add-to-list 'auto-mode-alist '("\\.clj_kondo\\'" . clojure-mode))
+    ;; (add-to-list 'auto-mode-alist '("\\.endl$" . clojure-mode))
+    ;; (add-to-list 'magic-mode-alist '("^#![^\n]*/\\(clj\\|clojure\\|bb\\|lumo\\)" . clojure-mode))
 
-          ;; Because of CIDER's insistence to send forms to all linked REPLs, we
-          ;; *have* to be able to switch cljc buffer to clj/cljs mode without
-          ;; cider complaining.
-          ;; (setq clojure-verify-major-mode nil) ; 나중에 해보고
-          ;; (setq clojure-indent-style 'align-arguments)
+    ;; Because of CIDER's insistence to send forms to all linked REPLs, we
+    ;; *have* to be able to switch cljc buffer to clj/cljs mode without
+    ;; cider complaining.
+    ;; (setq clojure-verify-major-mode nil) ; 나중에 해보고
+    ;; (setq clojure-indent-style 'align-arguments)
 
-          ;; Vertically align s-expressions
-          ;; https://github.com/clojure-emacs/clojure-mode#vertical-alignment
-          ;; (setq clojure-align-forms-automatically t)
+    ;; Vertically align s-expressions
+    ;; https://github.com/clojure-emacs/clojure-mode#vertical-alignment
+    ;; (setq clojure-align-forms-automatically t)
 
-          ;; manually use on lsp mode
-          (defun my/cider-repl-prompt (namespace)
-            "Return a prompt string that mentions NAMESPACE."
-            (format "%s🦄 " (cider-abbreviate-ns namespace)))
+    ;; manually use on lsp mode
+    (defun my/cider-repl-prompt (namespace)
+      "Return a prompt string that mentions NAMESPACE."
+      (format "%s🦄 " (cider-abbreviate-ns namespace)))
 
-          ;; NOTE 2022-11-21: for the linter (clj-kondo), refer to the Flymake
-          ;; NOTE 2022-11-23: This is not final.  I will iterate on it over
-          ;; time as I become more familiar with the requirements.
-          (setq cider-repl-result-prefix ";; => "
-                cider-eval-result-prefix ""
-                cider-connection-message-fn t ; cute, but no!
-                cider-repl-prompt-function #'my/cider-repl-prompt
-                ;; cider-use-overlays nil ; echo area is fine
-                )
-
-          ;; (setq cider-preferred-build-tool 'clojure-cli)
-          ;; (setq
-          ;;  cider-prompt-for-symbol nil
-          ;;  cider-repl-display-help-banner t ;; enable help banner
-          ;;  ;; cider-print-fn 'puget                   ;; pretty printing with sorted keys / set values
-          ;;  ;; clojure-toplevel-inside-comment-form t
-          ;;  ;; cider-result-overlay-position 'at-point   ; results shown right after expression
-          ;;  ;; cider-overlays-use-font-lock t
-          ;;  cider-repl-buffer-size-limit 100          ; limit lines shown in REPL buffer
-          ;;  nrepl-use-ssh-fallback-for-remote-hosts t ; connect via ssh to remote hosts
-          ;;  )
+    ;; NOTE 2022-11-21: for the linter (clj-kondo), refer to the Flymake
+    ;; NOTE 2022-11-23: This is not final.  I will iterate on it over
+    ;; time as I become more familiar with the requirements.
+    (setq cider-repl-result-prefix ";; => "
+          cider-eval-result-prefix ""
+          cider-connection-message-fn t ; cute, but no!
+          cider-repl-prompt-function #'my/cider-repl-prompt
+          ;; cider-use-overlays nil ; echo area is fine
           )
+
+    ;; (setq cider-preferred-build-tool 'clojure-cli)
+    ;; (setq
+    ;;  cider-prompt-for-symbol nil
+    ;;  cider-repl-display-help-banner t ;; enable help banner
+    ;;  ;; cider-print-fn 'puget                   ;; pretty printing with sorted keys / set values
+    ;;  ;; clojure-toplevel-inside-comment-form t
+    ;;  ;; cider-result-overlay-position 'at-point   ; results shown right after expression
+    ;;  ;; cider-overlays-use-font-lock t
+    ;;  cider-repl-buffer-size-limit 100          ; limit lines shown in REPL buffer
+    ;;  nrepl-use-ssh-fallback-for-remote-hosts t ; connect via ssh to remote hosts
+    ;;  )
+    )
 
 ;;;;; clj-deps-new
 
   (use-package! clj-deps-new
-                :defer 5
-                :commands clj-deps-new)
+    :defer 5
+    :commands clj-deps-new)
 
 ;;;;; clay
 
   (use-package! clay
-                :after cider
-                :config
-                (require 'clay))
+    :after cider
+    :config
+    (require 'clay))
 
 ;;;;; DONT kaocha-runner
 
   ;; Kaocha test runner from Emacs
   ;; - provides rich test reports
   (use-package! kaocha-runner
-                :after cider
-                ;; :config
-                ;; enable Kaocha test runner
-                ;; (setq clojure-enable-kaocha-runner t)
-                )
+    :after cider
+    ;; :config
+    ;; enable Kaocha test runner
+    ;; (setq clojure-enable-kaocha-runner t)
+    )
 
 ;;;;; cloure-essential-ref-nov
 
   ;; https://github.com/p3r7/clojure-essential-ref
   (use-package! clojure-essential-ref-nov
-                :after cider
-                :init
-                (setq clojure-essential-ref-default-browse-fn #'clojure-essential-ref-nov-browse)
-                (setq clojure-essential-ref-nov-epub-path "~/git/default/clj-essential-ref-v31.epub")
-                :config
-                (with-eval-after-load 'cider
-                  (evil-define-key '(insert normal) cider-mode-map (kbd "M-9") 'clojure-essential-ref)
-                  (evil-define-key '(insert normal) cider-repl-mode-map (kbd "M-9") 'clojure-essential-ref))
-                )
+    :after cider
+    :init
+    (setq clojure-essential-ref-default-browse-fn #'clojure-essential-ref-nov-browse)
+    (setq clojure-essential-ref-nov-epub-path "~/git/default/clj-essential-ref-v31.epub")
+    :config
+    (with-eval-after-load 'cider
+      (evil-define-key '(insert normal) cider-mode-map (kbd "M-9") 'clojure-essential-ref)
+      (evil-define-key '(insert normal) cider-repl-mode-map (kbd "M-9") 'clojure-essential-ref))
+    )
 
 ;;;;; TODO Clojure helper functions
 
@@ -1788,9 +1760,9 @@
 ;;   (setq google-this-location-suffix "co.kr"))
 
 (use-package! webpaste
-              :bind (("C-c C-p C-b" . webpaste-paste-buffer)
-                     ("C-c C-p C-r" . webpaste-paste-region)
-                     ("C-c C-p C-p" . webpaste-paste-buffer-or-region)))
+  :bind (("C-c C-p C-b" . webpaste-paste-buffer)
+         ("C-c C-p C-r" . webpaste-paste-region)
+         ("C-c C-p C-p" . webpaste-paste-buffer-or-region)))
 
 ;; (use-package! fireplace :defer t)
 ;; (use-package! snow :defer t)
@@ -1826,8 +1798,8 @@
 
 ;; $ recent-rgrep -f '*.org' 'happy to see you'
 (use-package! recent-rgrep
-              :defer t
-              :commands (recent-rgrep))
+  :defer t
+  :commands (recent-rgrep))
 
 ;;;; emacs-everywhere
 
@@ -1842,11 +1814,11 @@
 ;; - [[https://gitlab.com/screenkey/screenkey][screenkey]]: "A screencast tool to display your keys inspired by Screenflick"
 
 (use-package! command-log-mode
-              :config
-              (setq
-               command-log-mode-open-log-turns-on-mode t
-               command-log-mode-window-size 80
-               command-log-mode-is-global t))
+  :config
+  (setq
+   command-log-mode-open-log-turns-on-mode t
+   command-log-mode-window-size 80
+   command-log-mode-is-global t))
 
 ;;;; code-cells for python jupyter
 
@@ -1910,7 +1882,7 @@
 ;; 종빈님 버전을 바로 사용.
 ;; M-x org-export-dispatch 함수를 호출하면 moderncv 메뉴가 보인다.
 (use-package! ox-moderncv
-              :init (require 'ox-moderncv)
-              )
+  :init (require 'ox-moderncv)
+  )
 
 ;;; left blank on purpose
