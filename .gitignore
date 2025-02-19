@@ -1,3 +1,85 @@
+# Created by https://www.toptal.com/developers/gitignore/api/emacs
+# Edit at https://www.toptal.com/developers/gitignore?templates=emacs
+
+### Emacs ###
+# -*- mode: gitignore; -*-
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Org-mode
+.org-id-locations
+*_archive
+
+# flymake-mode
+*_flymake.*
+
+# eshell files
+/eshell/history
+/eshell/lastdir
+
+# elpa packages
+/elpa/
+
+# reftex files
+*.rel
+
+# AUCTeX auto folder
+/auto/
+
+# cask packages
+.cask/
+dist/
+
+# Flycheck
+flycheck_*.el
+
+# server auth directory
+/server/
+
+# projectiles files
+.projectile
+
+# directory configuration
+.dir-locals.el
+
+# network security
+/network-security.data
+
+
+# End of https://www.toptal.com/developers/gitignore/api/emacs
+
+# Git Ignore patterns for Spacemacs configuration
+# elpa
+# eln-cache
+# Environment variables are automatically generated
+.spacemacs.env
+fortunes/*.txt
+.orgid
+*.elc
+*.pyc
+.elfeed
+bak
+.evc
+
+# no-littering
+var/dired-history
+var/places
+var/recentf
+var/savehist
+var/treemacs-persist
+var/projects
+var/projectile-bookmarks.eld
+var/fontaine-latest-state.eld
+
+.extension
+emacs-custom.el
+
 .DS_Store
 .idea
 *.log
@@ -11,3 +93,4 @@ local/*
 ccmenu
 modules
 user-keys.el
+

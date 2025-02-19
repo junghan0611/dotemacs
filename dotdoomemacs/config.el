@@ -958,8 +958,8 @@
   ;; (tab-bar-select-tab 1)
   )
 
-(when (display-graphic-p) ; gui
-  (add-hook 'doom-first-input-hook #'my/open-workspaces))
+;; (when (display-graphic-p) ; gui
+;;   (add-hook 'doom-first-input-hook #'my/open-workspaces))
 
 ;;; tab-line-mode on emacs-30
 
