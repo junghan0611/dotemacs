@@ -1455,9 +1455,9 @@
 
 (defun dotspacemacs/user-config ()
 
-;;;; 'Fix' spacemacs's layer
+;;;; DONT 'Fix' spacemacs's layer
 
-  (load (file-truename (concat dotspacemacs-directory "fixed.el")))
+  ;; (load (file-truename (concat dotspacemacs-directory "fixed.el")))
 
 ;;;; Basics
   ;; Ridiculous path view is vanilla emacs. change truename!
@@ -2397,6 +2397,36 @@
            ("M-P w" . cape-dict)
            ("M-P :" . cape-emoji)
            )
+    )
+
+
+;;;;; jh-completion > my/compleseus-search-dir
+
+  (with-eval-after-load 'consult
+    (defun my/compleseus-search-dir ()
+      "Search current folder with no initial input"
+      (interactive)
+      (spacemacs/compleseus-search nil default-directory))
+
+    (defun my/compleseus-search-auto-hidden ()
+      "Search folder with hiddens files"
+      (interactive)
+      (let*
+          ((initial-directory (read-directory-name "Start from directory: "))
+           (consult-ripgrep-args
+            (concat "rg "
+                    "--null "
+                    "-. "  ;; for dotfiles e.g. .spacemacs.el
+                    "--line-buffered "
+                    "--color=never "
+                    "--line-number "
+                    "--smart-case "
+                    "--no-heading "
+                    "--max-columns=1000 "
+                    "--max-columns-preview "
+                    "--with-filename "
+                    (shell-quote-argument initial-directory))))
+        (consult-ripgrep)))
     )
 
 ;;;;; DONT jh-completion > consult
@@ -4473,11 +4503,23 @@ For instance pass En as source for English."
 
 ;;;;; jh-coding > apheleia for formatting
 
+;;;###autoload
+  (defun my/format-buffer ()
+    "Format a buffer."
+    (interactive)
+    (cond
+     ((eq major-mode 'emacs-lisp-mode)
+      (indent-region (point-min) (point-max)))
+     ((eq major-mode 'ledger-mode)
+      (ledger-mode-clean-buffer))
+     (t (call-interactively 'apheleia-format-buffer))))
+
   (use-package apheleia
     :after evil
     :commands (apheleia-format-buffer my/format-buffer)
     :config
     ;; (add-hook 'markdown-ts-mode-hook 'apheleia-mode)
+
     (add-hook 'yaml-ts-mode-hook 'apheleia-mode)
     )
 
