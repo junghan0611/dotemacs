@@ -394,7 +394,7 @@ Also see `prot-window-delete-popup-frame'." command)
         . "${shorttitle:25} ${=type=:10} ${namea:16} ${url:20} ${tags keywords:*}") ; 2024-11-17 add url
        (preview
         .
-        "${title} ${year issued date:4}\n- ${shorttitle}\n- ${author} ${translator} ${namea}\n- ${abstract}") ; citar-copy-reference
+        "${title}\n- ${shorttitle}\n- ${author} ${translator} ${namea}\n- ${abstract}\n- ${year issued date:4}") ; citar-copy-reference
        (note . "#+title: ${author translator:10}, ${title}")))
     ;; (note . "Notes on ${author:10 editor:%etal}, ${title}")
 

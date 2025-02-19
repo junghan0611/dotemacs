@@ -914,8 +914,8 @@
 
     (tab-bar-mode +1)
 
-    (when (string= (system-name) "jhnuc")
-      (keycast-tab-bar-mode +1))
+    ;; (when (string= (system-name) "jhnuc")
+    ;;   (keycast-tab-bar-mode +1))
 
     ;; load modus-themes
     (modus-themes-toggle)

@@ -4079,41 +4079,41 @@ Called with a PREFIX, resets the context buffer list before opening"
 
 ;;;; lsp-mode - lsp-ui-mode - lsp-treemacs
 
-(progn
-  (after! lsp-mode
-    ;; lsp 관련 설정 메뉴들. 느리게 만드는 범인중 십중팔구 LSP가 관련되어져 있다고 함.
-    ;; 해당 튜닝도 구글링을 통해서 찾았다.
-    (setq lsp-file-watch-threshold (* 1024 1024))
-    (setq read-process-output-max (* 1024 1024))
+;; lsp 관련 설정 메뉴들. 느리게 만드는 범인중 십중팔구 LSP가 관련되어져 있다고 함.
+;; 해당 튜닝도 구글링을 통해서 찾았다.
+(setq lsp-file-watch-threshold (* 1024 1024))
+(setq read-process-output-max (* 1024 1024))
 
-    (setq
-     ;; lsp-keymap-prefix "M-c l"
-     lsp-headerline-breadcrumb-enable t ; Breadcrumb trail
-     lsp-headerline-breadcrumb-icons-enable nil
-     ;; lsp-headerline-breadcrumb-segments '(symbols) ; namespace & symbols, no file path
+;; (progn
+;;   (after! lsp-mode
+;;     (setq
+;;      ;; lsp-keymap-prefix "M-c l"
+;;      lsp-headerline-breadcrumb-enable t ; Breadcrumb trail
+;;      lsp-headerline-breadcrumb-icons-enable nil
+;;      ;; lsp-headerline-breadcrumb-segments '(symbols) ; namespace & symbols, no file path
 
-     lsp-lens-enable nil ; default t
-     ;; lsp-semantic-tokens-enable t ; enhance syntax highlight
+;;      lsp-lens-enable nil ; default t
+;;      ;; lsp-semantic-tokens-enable t ; enhance syntax highlight
 
-     ;; lsp-idle-delay 0.2  ; smooth LSP features response
-     lsp-eldoc-enable-hover nil ; disable all hover actions
-     ;; lsp-modeline-code-actions-segments '(count icon)
-     ;; lsp-navigation 'both ; default 'both ; 'simple or 'peek
-     ;; lsp-modeline-diagnostics-enable nil
-     ;; lsp-modeline-code-actions-enable nil
-     )
-    ;; (add-hook 'lsp-after-apply-edits-hook (lambda (&rest _) (save-buffer)))
-    )
+;;      ;; lsp-idle-delay 0.2  ; smooth LSP features response
+;;      lsp-eldoc-enable-hover nil ; disable all hover actions
+;;      ;; lsp-modeline-code-actions-segments '(count icon)
+;;      ;; lsp-navigation 'both ; default 'both ; 'simple or 'peek
+;;      ;; lsp-modeline-diagnostics-enable nil
+;;      ;; lsp-modeline-code-actions-enable nil
+;;      )
+;;     ;; (add-hook 'lsp-after-apply-edits-hook (lambda (&rest _) (save-buffer)))
+;;     )
 
-  (after! lsp-ui
-    (setq lsp-ui-doc-enable nil       ;; disable all doc popups
-          lsp-ui-sideline-enable nil  ;; disable sideline bar for less distraction
-          treemacs-space-between-root-nodes nil  ;; no spacing in treemacs views
-          lsp-ui-peek-enable t))
+;;   ;; (after! lsp-ui
+;;   ;;   (setq lsp-ui-doc-enable nil       ;; disable all doc popups
+;;   ;;         lsp-ui-sideline-enable nil  ;; disable sideline bar for less distraction
+;;   ;;         treemacs-space-between-root-nodes nil  ;; no spacing in treemacs views
+;;   ;;         lsp-ui-peek-enable t))
 
-  (after! lsp-treemacs
-    (setq lsp-treemacs-error-list-current-project-only t))
-  )
+;;   (after! lsp-treemacs
+;;     (setq lsp-treemacs-error-list-current-project-only t))
+;;   )
 
 ;;;; devdocs-browser
 
@@ -4236,25 +4236,37 @@ Called with a PREFIX, resets the context buffer list before opening"
 
 ;;;; :lang python
 
-;;;;; TODO emacs-jupyter/jupyter ob-jupyter
+;;;;; pyright - basedpyright
+
+;; pipx install basedpyright
+(when (modulep! :lang python +pyright)
+  (after! lsp-pyright
+    (setq lsp-pyright-langserver-command "basedpyright")))
+
+;;;;; enable rainbow-delimiters-mode
+
+(add-hook 'python-mode-hook #'rainbow-delimiters-mode)
+
+;;;;; emacs-jupyter/jupyter ob-jupyter
 
 (require 'my-python-jupyter)
 
-;;;;; TODO ob-jupyter - override python and  hy
+;;;;;; ob-jupyter - override python and  hy
 
 ;; sqrt-dotfiles-elfeed/.emacs.d/init.el
-;; (with-eval-after-load 'ob-jupyter
-;;   (org-babel-jupyter-override-src-block "python")
-;;   (org-babel-jupyter-override-src-block "hy"))
+(with-eval-after-load 'ob-jupyter
+  (org-babel-jupyter-override-src-block "python")
+  ;; (org-babel-jupyter-override-src-block "hy")
+  )
 
-;;;;; ipython jupyter
+;;;;;; ipython jupyter
 
 ;; The arguments passed to the [[https://ipython.org/][ipython]] or [[https://jupyter.org/][jupyter]] shells can be altered through
 ;; these two variables:
 ;; (setq +python-ipython-repl-args '("-i" "--simple-prompt" "--no-color-info"))
 ;; (setq +python-jupyter-repl-args '("--simple-prompt"))
 
-;;;;; uv-mode uv-menu
+;;;;; uv : uv-mode and uv-menu
 
 ;; .venv
 ;; (use-package! uv-mode
@@ -4284,30 +4296,12 @@ Called with a PREFIX, resets the context buffer list before opening"
 ;; (add-to-list 'pytest-project-root-files "pytest.ini")
 ;; )
 
-;;;;; DONT python-ts-mode
-
-;; (use-package! python
-;;   :bind
-;;   (:map
-;;    python-ts-mode-map ("<f5>" . recompile) ("<f6>" . eglot-format)
-;;    :map python-mode-map ("<f5>" . recompile) ("<f6>" . eglot-format))
-;;   :hook ((python-ts-mode . eglot-ensure))
-;;   ;; :mode (("\\.py\\'" . python-ts-mode))
-;;   )
-
-;; (use-package! py-isort
-;;   :defer t
-;;   :after python-mode
-;;   :mode ("[./]flake8\\'" . conf-mode)
-;;   :config
-;;   (add-hook 'before-save-hook 'py-isort-before-save))
-
 ;;;;; DONT disable +format-with-lsp
 
 ;; use apheleia
 ;; (setq-hook! 'python-mode-hook +format-with-lsp nil)
 
-;;;; hy : hylang
+;;;; DONT hy : hylang
 
 ;; (use-package! hy-mode
 ;;   :mode "\\.hy\\'"

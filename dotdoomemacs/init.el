@@ -86,7 +86,7 @@
  doom-dashboard    ; a nifty splash screen for Emacs
  ;; doom-quit         ; DOOM quit-message prompts when you quit Emacs
  hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW/XXX/BUG
- ;; indent-guides ; highlighted indent columns
+ indent-guides ; highlighted indent columns
  ;; (ligatures +extra)         ; ligatures and symbols to make your code pretty again
  modeline ; snazzy, Atom-inspired modeline, plus API
  neotree ; a project drawer, like NERDTree for vim
@@ -220,7 +220,7 @@
  ;; plantuml ; diagrams for confusing people more
  graphviz
  ;;purescript        ; javascript, but functional
- (python +lsp) ; +conda beautiful is better than ugly
+ (python +lsp +pyright) ; +conda beautiful is better than ugly
  ;;qt                ; the 'cutest' gui framework ever
  racket ; a DSL for DSLs
  ;;raku              ; the artist formerly known as perl6
