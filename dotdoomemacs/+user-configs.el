@@ -3359,10 +3359,10 @@ ${content}"))
         (insert (format "#+date: %s\n" (format-time-string "[%Y-%m-%d %a %H:%M]")))
         (insert (format "#+identifier: %s\n" suffix))
         (insert (format "#+export_file_name: %s.md\n" suffix))
-        (insert (format "#+hugo_tags: notes \n\n"))
+        (insert (format "#+hugo_tags: bib notes\n\n"))
 
         ;; add bib and history
-        (insert (format "#+print_bibliography:\n* History\n- %s\n" (format-time-string "[%Y-%m-%d %a %H:%M]")))
+        (insert (format "#+print_bibliography:\n* Related Notes\n* History\n- %s\n" (format-time-string "[%Y-%m-%d %a %H:%M]")))
 
         ;; heading-1 add backlink to today
         (insert (format "* [[denote:%s][%s]]\n"
@@ -4084,36 +4084,33 @@ Called with a PREFIX, resets the context buffer list before opening"
 (setq lsp-file-watch-threshold (* 1024 1024))
 (setq read-process-output-max (* 1024 1024))
 
-;; (progn
-;;   (after! lsp-mode
-;;     (setq
-;;      ;; lsp-keymap-prefix "M-c l"
-;;      lsp-headerline-breadcrumb-enable t ; Breadcrumb trail
-;;      lsp-headerline-breadcrumb-icons-enable nil
-;;      ;; lsp-headerline-breadcrumb-segments '(symbols) ; namespace & symbols, no file path
+(progn
+  (after! lsp-mode
+    (setq
+     lsp-headerline-breadcrumb-enable t ; doom nil
+     lsp-headerline-breadcrumb-icons-enable nil
+     ;; lsp-headerline-breadcrumb-segments '(symbols) ; namespace & symbols, no file path
 
-;;      lsp-lens-enable nil ; default t
-;;      ;; lsp-semantic-tokens-enable t ; enhance syntax highlight
+     ;; lsp-idle-delay 0.2  ; smooth LSP features response
+     ;; lsp-eldoc-enable-hover nil ; default t - disable all hover actions
+     ;; lsp-modeline-code-actions-segments '(count icon)
+     ;; lsp-navigation 'both ; default 'both ; 'simple or 'peek
+     ;; lsp-modeline-diagnostics-enable nil
+     ;; lsp-modeline-code-actions-enable nil
+     )
+    )
 
-;;      ;; lsp-idle-delay 0.2  ; smooth LSP features response
-;;      lsp-eldoc-enable-hover nil ; disable all hover actions
-;;      ;; lsp-modeline-code-actions-segments '(count icon)
-;;      ;; lsp-navigation 'both ; default 'both ; 'simple or 'peek
-;;      ;; lsp-modeline-diagnostics-enable nil
-;;      ;; lsp-modeline-code-actions-enable nil
-;;      )
-;;     ;; (add-hook 'lsp-after-apply-edits-hook (lambda (&rest _) (save-buffer)))
-;;     )
+  (after! lsp-ui
+    (setq
+     lsp-ui-sideline-enable nil ; doom t - disable sideline for less distraction
+     ;; lsp-ui-doc-enable nil ;; doom t - disable all doc popups
+     treemacs-space-between-root-nodes nil  ;; doom nil
+     ;; lsp-ui-peek-enable t ; doom t
+     ))
 
-;;   ;; (after! lsp-ui
-;;   ;;   (setq lsp-ui-doc-enable nil       ;; disable all doc popups
-;;   ;;         lsp-ui-sideline-enable nil  ;; disable sideline bar for less distraction
-;;   ;;         treemacs-space-between-root-nodes nil  ;; no spacing in treemacs views
-;;   ;;         lsp-ui-peek-enable t))
-
-;;   (after! lsp-treemacs
-;;     (setq lsp-treemacs-error-list-current-project-only t))
-;;   )
+  (after! lsp-treemacs
+    (setq lsp-treemacs-error-list-current-project-only t))
+  )
 
 ;;;; devdocs-browser
 
@@ -4236,35 +4233,22 @@ Called with a PREFIX, resets the context buffer list before opening"
 
 ;;;; :lang python
 
-;;;;; pyright - basedpyright
+;;;;; DONT ipython default
 
-;; pipx install basedpyright
-(when (modulep! :lang python +pyright)
-  (after! lsp-pyright
-    (setq lsp-pyright-langserver-command "basedpyright")))
+;; (after! python
+;;   ;; use ipython for interpreter if it exists
+;;   (if (executable-find "ipython")
+;;       (progn (setq python-shell-interpreter "ipython")
+;;              (setq python-shell-interpreter-args "-i --simple-prompt")))
+;;   )
 
-;;;;; enable rainbow-delimiters-mode
+;;;;; rainbow-delimiters-mode
 
 (add-hook 'python-mode-hook #'rainbow-delimiters-mode)
 
-;;;;; emacs-jupyter/jupyter ob-jupyter
+;;;;; custom emacs-jupyter/jupyter ob-jupyter
 
 (require 'my-python-jupyter)
-
-;;;;;; ob-jupyter - override python and  hy
-
-;; sqrt-dotfiles-elfeed/.emacs.d/init.el
-(with-eval-after-load 'ob-jupyter
-  (org-babel-jupyter-override-src-block "python")
-  ;; (org-babel-jupyter-override-src-block "hy")
-  )
-
-;;;;;; ipython jupyter
-
-;; The arguments passed to the [[https://ipython.org/][ipython]] or [[https://jupyter.org/][jupyter]] shells can be altered through
-;; these two variables:
-;; (setq +python-ipython-repl-args '("-i" "--simple-prompt" "--no-color-info"))
-;; (setq +python-jupyter-repl-args '("--simple-prompt"))
 
 ;;;;; uv : uv-mode and uv-menu
 

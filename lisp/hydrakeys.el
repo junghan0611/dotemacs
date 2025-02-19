@@ -580,13 +580,21 @@
 
 ;;;; Major-Mode-Hydra > python-mode
 
+;; /home/junghan/sync/man/dotsamples/vanilla/hamacs-evil/ha-programming-python.org
+
 (major-mode-hydra-define python-mode
   (:title "Python-mode" :color pink :separator "=" :quit-key "<escape>")
-  ("Movement" (
+  ("Eval" (
+           ("<f2>" python-shell-send-string "expression")
+           ("f" python-shell-send-defun "send defun")
+           )
+   "Movement" (
                ("h" consult-history "history" :exit t)
                ("q" nil "Quit" :color red :exit t)
                ("M-c" nil "Quit" :color red :exit t)
-               )))
+               )
+   )
+  )
 
 ;;;; Major-Mode-Hydra > eshell-mode
 

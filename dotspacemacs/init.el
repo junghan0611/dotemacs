@@ -457,6 +457,13 @@
      ;; https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/
      (lsp
       :packages (not helm-lsp lsp-ivy) ; lsp-treemacs lsp-origami
+      :variables
+      ;; lsp-idle-delay 0.2  ; smooth LSP features response
+      lsp-headerline-breadcrumb-enable t ; spacemacs t
+      lsp-headerline-breadcrumb-icons-enable nil
+      lsp-ui-sideline-enable nil ; default t - nil for less distraction
+      ;; lsp-ui-doc-enable nil ;; default t - disable all doc popups
+      lsp-treemacs-error-list-current-project-only t
       )
 
      dap
@@ -467,7 +474,8 @@
                      lsp-python-ms
                      anaconda-mode
                      company-anaconda
-                     ;; semantic lsp-pyright
+                     ;; lsp-pyright
+                     ;; semantic
                      ;; cython-mode pip-requirements
                      ;; py-isort
                      ;; blacken
@@ -477,7 +485,8 @@
       :variables
       python-backend 'lsp
       python-indent-guess-indent-offset-verbose nil
-      python-lsp-server 'pylsp ; 'pyright
+      python-lsp-server 'pyright ; 'pylsp
+      lsp-pyright-langserver-command "basedpyright" ;; pipx install basedpyright
       python-indent-offset 4 ; use editorconfig
       ;; python-formatter 'lsp
       python-test-runner 'pytest
@@ -1685,9 +1694,6 @@
   ;; automatically revert buffers for changed files
   (setq auto-revert-interval 5) ; default 5
 
-  ;; 시간 표시 형식은 영어로 표시해서 호환성을 높입니다.
-  (setq system-time-locale "C")
-
   ;; Disable .# lock files
   (setq create-lockfiles nil)
 
@@ -2773,6 +2779,14 @@
 
     (setq input-method-verbose-flag nil
           input-method-highlight-flag nil)
+
+    ;; (global-set-key (kbd "<Alt_R>") 'toggle-input-method)
+    (global-set-key (kbd "<S-SPC>") 'toggle-input-method)
+    (global-set-key (kbd "<Hangul>") 'toggle-input-method)
+    (global-set-key (kbd "<menu>") 'toggle-input-method) ;; caps lock as <menu>
+    (add-hook 'context-menu-mode-hook '(lambda () (define-key context-menu-mode-map (kbd "<menu>") #'toggle-input-method)))
+    ;; (global-unset-key (kbd "S-SPC"))
+
     )
 
 ;;;;;; jh-visual > fonts > fontaine
@@ -3376,7 +3390,7 @@
 
 ;;;;; jh-checker > jinx
 
-  ;; 한글 제외 : 영어 검사
+  ;; 한글만 검사
   (use-package jinx
     :if (not (or my/remote-server IS-TERMUX))
     :init
@@ -3384,55 +3398,27 @@
     (spacemacs/set-leader-keys "Sj" 'jinx-correct)
     (spacemacs/set-leader-keys "SJ" 'jinx-mode)
     :config
-    (setq jinx-delay 1.0) ; default 0.2
-
     ;; (dolist (hook '(text-mode-hook conf-mode-hook)) ; prog-mode-hook
     ;;   (add-hook hook #'jinx-mode))
     ;; (add-hook 'prog-mode-hook #'jinx-mode) ; 주석
-
-    (setenv "LANG" "en_US.UTF-8")
-    (setq jinx-languages "en")
-    (add-hook 'jinx-mode-hook (lambda () (setq-local jinx-languages "en")))
-    (setq jinx-exclude-regexps
-          '((emacs-lisp-mode "Package-Requires:.*$")
-            (t "[가-힣]" "[A-Z]+\\>" "-+\\>" "\\w*?[0-9]\\w*\\>" "[a-z]+://\\S-+" "<?[-+_.~a-zA-Z][-+_.~:a-zA-Z0-9]*@[-.a-zA-Z0-9]+>?" "\\(?:Local Variables\\|End\\):\\s-*$" "jinx-\\(?:languages\\|local-words\\):\\s-+.*$")))
-
-    ;; 1) 개인사전 연결해줄 것
-    ;; ~/.config/enchant/en.dic -> /home/junghan/.aspell_en_personal
-    ;; ko.dic -> /home/junghan/.aspell_en_personal 뭐지? 이렇게 들어가네?!
-    ;; 되는데로 하자
-    ;; 2) enchant.ordering aspell 로 변경할 것
-    ;; 	*:nuspell,aspell,hunspell
-    ;; en_AU:aspell,hunspell,nuspell
-    ;; en_CA:aspell,hunspell,nuspell
-    ;; en_GB:aspell,hunspell,nuspell
-    ;; en_US:aspell,hunspell,nuspell
-    ;; en:aspell,hunspell,nuspell
-
-    ;; 영어 제외 : 한글만 검사
-    ;; (setq jinx-languages "ko")
+    ;; 1) 영어 제외 : 한글만 검사
+    ;; 2) 한글 영어 선택하도록 제공
+    (setq jinx-languages "ko")
     ;; (setq jinx-exclude-regexps
     ;;       '((t "[A-Za-z]" "[']")))
-
-    ;; 아래는 기본인데 일단 해보면서 보자.
-    ;; "[A-Z]+\\>"         ;; Uppercase words
-    ;; "\\w*?[0-9]\\w*\\>" ;; Words with numbers, hex codes
-    ;; "[a-z]+://\\S-+"    ;; URI
-    ;; "<?[-+_.~a-zA-Z][-+_.~:a-zA-Z0-9]*@[-.a-zA-Z0-9]+>?" ;; Email
-    ;; "\\(?:Local Variables\\|End\\):\\s-*$" ;; Local variable indicator
-    ;; "jinx-\\(?:languages\\|local-words\\):\\s-+.*$")) ;; Local variables
+    (setq jinx-exclude-regexps
+          '((emacs-lisp-mode "Package-Requires:.*$")
+            (t "[A-Za-z]" "[']" "[A-Z]+\\>" "-+\\>" "\\w*?[0-9]\\w*\\>" "[a-z]+://\\S-+" "<?[-+_.~a-zA-Z][-+_.~:a-zA-Z0-9]*@[-.a-zA-Z0-9]+>?" "\\(?:Local Variables\\|End\\):\\s-*$" "jinx-\\(?:languages\\|local-words\\):\\s-+.*$")))
 
     ;; M-$점 앞의 철자가 틀린 단어에 대한 수정을 트리거합니다.
     ;; C-u M-$전체 버퍼에 대한 수정을 트리거합니다.
     (keymap-global-set "M-$" #'jinx-correct)
-    (keymap-global-set "C-M-$" #'jinx-languages))
+    (keymap-global-set "C-M-$" #'jinx-languages)
 
-  (defun my/add-word-to-personal-dict-flyspell ()
-    (interactive)
-    (let ((current-location (point))
-          (word (flyspell-get-word)))
-      (when (consp word)
-        (flyspell-do-correct 'save nil (car word) current-location (cadr word) (caddr word) current-location))))
+    ;; /tecosaur-dot-doom/config.org
+    (push 'org-inline-src-block
+          (alist-get 'org-mode jinx-exclude-faces))
+    )
 
 ;;;; jh-writing
 
@@ -4426,6 +4412,23 @@ For instance pass En as source for English."
   ;; (ws-butler-keep-whitespace-before-point nil)
   ;; (ws-butler-global-exempt-modes '(special-mode comint-mode term-mode eshell-mode diff-mode markdown-mode))
   (add-hook 'prog-mode-hook 'ws-butler-mode)
+
+;;;;; jh-coding > lsp-mode with corfu
+
+  (with-eval-after-load 'lsp-mode
+    (setq lsp-completion-provider :none) ;; we use Corfu!
+
+    ;; https://github.com/minad/corfu/wiki#basic-example-configuration-with-orderless
+    ;; (defun my/lsp-mode-setup-completion ()
+    ;;   (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+    ;;         '(flex))) ;; Configure flex
+    (defun my/lsp-mode-setup-completion ()
+      (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+            '(orderless))) ;; Configure orderless
+
+    (add-hook 'lsp-mode-hook #'lsp-completion-mode) ;; important
+    (add-hook 'lsp-completion-mode-hook #'my/lsp-mode-setup-completion)
+    )
 
 ;;;;; DONT jh-coding > language server > eglot
 
