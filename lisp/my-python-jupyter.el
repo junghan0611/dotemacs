@@ -71,6 +71,8 @@ Use the `company-doc-buffer' to insert the results."
   (define-key jupyter-org-interaction-mode-map (kbd "C-c h") nil)
   (define-key jupyter-org-interaction-mode-map (kbd "<f2>") 'jupyter-org-hydra/body)
 
+  (setq org-babel-jupyter-resource-directory (concat user-emacs-directory "ob-jupyter"))
+
   ;; (setq org-babel-default-header-args:jupyter-python
   ;;       '((:async . "yes") (:session . "py") (:kernel . "python3")
   ;;         ;; (:tangle . "jupyter-python/tangled.py")
