@@ -670,7 +670,7 @@
 ;;;;; Packages: jh-coding
 
      jupyter
-     ob-async
+     ;; ob-async
 
      ;; > tools
      apheleia
@@ -706,8 +706,8 @@
      pipenv
      pytest
 
-     hy-mode
-     ob-hy
+     ;; hy-mode
+     ;; ob-hy
 
      ;; > document
      devdocs-browser ; with EWW
@@ -4612,21 +4612,21 @@ For instance pass En as source for English."
   ;;   (add-to-list 'pytest-project-root-files "setup.cfg")
   ;;   (add-to-list 'pytest-project-root-files "pytest.ini"))
 
-;;;;;; jh-coding > languages > python | hy-mode
+;;;;;; DONT jh-coding > languages > python | hy-mode
 
   ;; pipx install hy
   ;; pipx install hyuga
-  (use-package hy-mode
-    :mode "\\.hy\\'"
-    :if (not (or *is-windows* my/remote-server IS-TERMUX))
-    :config
-    (add-hook 'hy-mode-hook #'aggressive-indent-mode))
+  ;; (use-package hy-mode
+  ;;   :mode "\\.hy\\'"
+  ;;   :if (not (or *is-windows* my/remote-server IS-TERMUX))
+  ;;   :config
+  ;;   (add-hook 'hy-mode-hook #'aggressive-indent-mode))
 
-  (use-package ob-hy
-    :if (not (or *is-windows* my/remote-server IS-TERMUX))
-    :config
-    (org-babel-do-load-languages 'org-babel-load-languages
-                                 (append org-babel-load-languages '((hy . t)))))
+  ;; (use-package ob-hy
+  ;;   :if (not (or *is-windows* my/remote-server IS-TERMUX))
+  ;;   :config
+  ;;   (org-babel-do-load-languages 'org-babel-load-languages
+  ;;                                (append org-babel-load-languages '((hy . t)))))
 
 ;;;;;; DONT jh-coding > languages > elixir
 
@@ -4885,20 +4885,21 @@ For instance pass En as source for English."
 
 ;;;;; jh-org > packages
 
-;;;;;; ob-async and jupyter / ob-jupyter
+;;;;;;  jupyter / ob-jupyter
 
-  (use-package ob-async
-    :after org
-    :config
-    (setq org-confirm-babel-evaluate nil)
-    (setq ob-async-no-async-languages-alist '("python" "hy" "jupyter-python")))
+  ;; use jupyter built-in async
+  ;; (use-package ob-async
+  ;;   :after org
+  ;;   :config
+  ;;   (setq ob-async-no-async-languages-alist '("python" "hy" "jupyter-python")))
 
   (use-package jupyter
     :config
     (require 'ob-jupyter)
+    (setq org-confirm-babel-evaluate nil)
 
-    (org-babel-jupyter-override-src-block "python")
-    (org-babel-jupyter-override-src-block "hy")
+    ;; (org-babel-jupyter-override-src-block "python")
+    ;; (org-babel-jupyter-override-src-block "hy")
     (org-babel-do-load-languages 'org-babel-load-languages
                                  (append org-babel-load-languages '(
                                                                     ;; (jupyter-python . t)

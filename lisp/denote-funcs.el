@@ -408,24 +408,24 @@ CUSTOM_ID of the entry is returned."
 ;;; Sort
 
 (progn
-;; (denote-explore-random-note)
+  ;; (denote-explore-random-note)
 
-(defun denote-random-notes ()
-  (interactive)
-  (my/denote-random-note-from-directory (concat denote-directory "notes"))
+  (defun denote-random-notes ()
+    (interactive)
+    (my/denote-random-note-from-directory (concat denote-directory "notes"))
+    )
+
+  (defun denote-random-bib ()
+    (interactive)
+    (my/denote-random-note-from-directory (concat denote-directory "bib"))
+    )
+
+  (defun denote-random-meta ()
+    (interactive)
+    (my/denote-random-note-from-directory (concat denote-directory "meta"))
+    )
+
   )
-
-(defun denote-random-bib ()
-  (interactive)
-  (my/denote-random-note-from-directory (concat denote-directory "bib"))
-  )
-
-(defun denote-random-meta ()
-  (interactive)
-  (my/denote-random-note-from-directory (concat denote-directory "meta"))
-  )
-
-)
 
 ;;;; DONT denote-dired - sort
 
