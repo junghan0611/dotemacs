@@ -640,7 +640,7 @@
     (find-file (concat org-directory "fortunes/")))
   (defun my/open-tempel-templates ()
     (interactive)
-    (find-file (concat user-dotemacs-dir "tempel-templates.eld")))
+    (find-file tempel-path)) ;; (concat user-dotemacs-dir "var/tempel-templates.eld")))
   (defun my/open-hunspell-personal ()
     (interactive)
     (find-file "~/.hunspell_personal"))
