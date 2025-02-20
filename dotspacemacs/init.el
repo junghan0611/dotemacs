@@ -670,7 +670,6 @@
 ;;;;; Packages: jh-coding
 
      jupyter
-     ;; ob-async
 
      ;; > tools
      apheleia
@@ -4850,8 +4849,8 @@ For instance pass En as source for English."
                 ("M-9" . clojure-essential-ref))
     :init
     (setq clojure-essential-ref-default-browse-fn #'clojure-essential-ref-nov-browse)
-    (setq clojure-essential-ref-nov-epub-path
-          "~/sync/code/default/clj-essential-ref-v31.epub"))
+    (setq clojure-essential-ref-nov-epub-path "~/git/default/clj-essential-ref-v31.epub")
+    )
 
   (use-package clay :after cider :config (require 'clay))
 
@@ -4885,25 +4884,16 @@ For instance pass En as source for English."
 
 ;;;;; jh-org > packages
 
-;;;;;;  jupyter / ob-jupyter
+;;;;;;  DONT jupyter / ob-jupyter
 
-  ;; use jupyter built-in async
-  ;; (use-package ob-async
-  ;;   :after org
+  ;; (setq org-confirm-babel-evaluate nil)
+  ;; (use-package jupyter
   ;;   :config
-  ;;   (setq ob-async-no-async-languages-alist '("python" "hy" "jupyter-python")))
-
-  (use-package jupyter
-    :config
-    (require 'ob-jupyter)
-    (setq org-confirm-babel-evaluate nil)
-
-    ;; (org-babel-jupyter-override-src-block "python")
-    ;; (org-babel-jupyter-override-src-block "hy")
-    (org-babel-do-load-languages 'org-babel-load-languages
-                                 (append org-babel-load-languages '(
-                                                                    ;; (jupyter-python . t)
-                                                                    (jupyter . t)))))
+  ;;   (require 'ob-jupyter)
+  ;;   ;; (org-babel-jupyter-override-src-block "python")
+  ;;   (org-babel-do-load-languages 'org-babel-load-languages
+  ;;                                (append org-babel-load-languages '((jupyter . t)))))
+  ;; (load-file (concat user-dotemacs-dir "lisp/my-python-jupyter.el"))
 
 ;;;;;; jh-org > packages > remember
 
@@ -5775,8 +5765,6 @@ For instance pass En as source for English."
   (load-file (concat user-dotemacs-dir "lisp/uniconfig.el"))
   (load-file (concat user-dotemacs-dir "lisp/keys.el"))
   (load-file (concat user-dotemacs-dir "lisp/hydrakeys.el"))
-
-  (load-file (concat user-dotemacs-dir "lisp/my-python-jupyter.el"))
 
 ;;;; Load spacemacs-keys
 
