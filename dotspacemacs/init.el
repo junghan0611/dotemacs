@@ -2315,9 +2315,10 @@
     :demand t
     :bind (("M-+" . tempel-complete) ;; Alternative tempel-expand
            ("M-*" . tempel-insert))
+    :init
+    (setq tempel-path (expand-file-name "var/tempel-templates.eld" user-dotemacs-dir))
     :config
     ;; (setq tempel-trigger-prefix "<") ; conflits with evil-shift
-    (setq tempel-path (expand-file-name "var/tempel-templates.eld" user-dotemacs-dir))
     ;; Use concrete keys because of org mode
     ;; "M-RET" #'tempel-done
     ;; "M-{" #'tempel-previous
@@ -5765,6 +5766,9 @@ For instance pass En as source for English."
   (load-file (concat user-dotemacs-dir "lisp/uniconfig.el"))
   (load-file (concat user-dotemacs-dir "lisp/keys.el"))
   (load-file (concat user-dotemacs-dir "lisp/hydrakeys.el"))
+
+  (with-eval-after-load 'ob
+    (load-file (concat user-dotemacs-dir "lisp/my-org-literate.el")))
 
 ;;;; Load spacemacs-keys
 

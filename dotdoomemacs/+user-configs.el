@@ -1268,10 +1268,11 @@ work computers.")
    ("M-*" . tempel-insert))
   :bind (:map tempel-map (([backtab] . tempel-previous)
                           ("TAB" . tempel-next)))
+  :init
+  (setq tempel-path (expand-file-name "var/tempel-templates.eld" user-dotemacs-dir))
   :config
   ;; (global-tempel-abbrev-mode)
   ;; (setq tempel-trigger-prefix "<") ; conflits with evil-shift
-  (setq tempel-path (expand-file-name "var/tempel-templates.eld" user-dotemacs-dir))
 
   ;; Setup completion at point
   ;; (defun tempel-setup-capf ()

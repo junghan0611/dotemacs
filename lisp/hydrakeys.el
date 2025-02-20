@@ -478,12 +478,10 @@
   (
    "Agenda" (
              ("c" org-capture "org-capture")
-             ("a" org-agenda-file-to-front "org-agenda-file-to-front")
+             ("a" org-agenda-file-to-front "agenda-file-to-front")
              ("A" org-remove-file "org-remove-file")
              ("t" org-time-stamp "+ date")
-             ("T" (lambda ()
-                    (interactive)
-                    (org-time-stamp '(4))) "+ date/time")
+             ("T" (lambda () (interactive) (org-time-stamp '(4))) "+ date/time")
              ("d" org-deadline "+ deadline")
              ("s" org-schedule "schedule")
              ;; ("d" my/denote-find-file "denote-find")
@@ -492,14 +490,14 @@
              )
    "Movement" (
                ("u" org-up-element "up" :exit nil)
-               ("j" org-forward-heading-same-level "forward heading same level" :exit nil)
-               ("k" org-backward-heading-same-level "backward heading same level" :exit nil)
-               ("n" org-next-visible-heading "next visible heading" :exit nil)
-               ("p" org-previous-visible-heading "previous visible heading" :exit nil)
+               ("j" org-forward-heading-same-level "forward heading" :exit nil)
+               ("k" org-backward-heading-same-level "backward heading" :exit nil)
+               ("n" org-next-visible-heading "next heading" :exit nil)
+               ("p" org-previous-visible-heading "prev heading" :exit nil)
                ("M-n" org-next-link "next link" :exit nil)
-               ("M-p" org-previous-link "previous link" :exit nil)
-               ("M-f" org-next-block "next block" :exit nil)
-               ("M-b" org-previous-block "previous block" :exit nil)
+               ("M-p" org-previous-link "prev link" :exit nil)
+               ("M-j" org-next-block "next block" :exit nil)
+               ("M-k" org-previous-block "prev block" :exit nil)
                ;; ("o" org-open-at-point "open at point" :exit t)
                ("g" org-mark-ring-goto "pop mark" :exit t))
    "Subtrees" (
@@ -513,36 +511,25 @@
    "Inserting" (
                 ("b" org-cite-insert "org-site-insert")
                 ("B" citar-insert-citation "insert citation")
-                ("e" org-expiry-insert-expiry "insert expiry property")
-                ("8" org-insert-heading-respect-content "insert heading")
-                ("9" bh/insert-inactive-timestamp "insert inactive timestamp" :exit nil)
+                ("e" org-expiry-insert-expiry "expiry property")
+                ;; ("8" org-insert-heading-respect-content "insert heading")
+                ("9" bh/insert-inactive-timestamp "in-act timestamp" :exit nil)
                 ("C-n" next-line "next-line" :exit nil)
                 ("C-p" previous-line "previous-line" :exit nil)
                 ;; ("y" ash/org-paste-link "yank link" :exit t)
                 )
-   "Denote" (("-" denote-show-backlinks-buffer "Backlinks" :toggle t)
-             ("i" denote "add link"))
-   ;; "Roam" (("-" org-roam-buffer-toggle "Backlinks" :toggle t)
-   ;;         ("i" org-roam-node-insert "add link")
-   ;;         ("/" consult-org-roam-file-find "consult-org-roam")
-   ;;         ("M-/" org-roam-node-find "node find")
-   ;;         (":" ash/org-roam-node-insert-immediate "add link immediately")
-   ;;         ("#" org-roam-tag-add "add tag")
-   ;;         ("r" org-roam-alias-add "add alias")
-   ;;         ("R" org-roam-ref-add "add ref")
-   ;;         ;; ("?" org-roam-node-random "random note")
-   ;;         ("?" ash/org-roam-node-random-no-dates "random note, no dates" :exit t)
-   ;;         ("G" my/org-roam-get-all-tags :exit t))
-   ;; "Daily"(
-   ;;         ("SPC" ash/org-roam-dailies-find-today "today")
-   ;;         ("C" org-roam-dailies-capture-today "capture today" :exit t)
-   ;;         ("[" org-roam-dailies-find-yesterday "yesterday")
-   ;;         ("]" org-roam-dailies-find-tomorrow "tomorrow")
-   ;;         ("{" org-roam-dailies-goto-previous-note "daily previous")
-   ;;         ("}" org-roam-dailies-find-next-note "daily next")
-   ;;         ("D" ash/org-roam-dailies-find-date "date" )
-   ;;         ("N" ash/org-roam-node-find-now)
-   ;;         )
+   ;; "Denote" (("-" denote-show-backlinks-buffer "Backlinks" :toggle t)
+   ;;           ("i" denote "add link"))
+   "Babel" (("M-g" avy-jump-org-block "Goto ")
+            ("M-o" avy-org-babel-execute-src-block "Block ")
+            ("M-h" org-babel-execute-subtree "Section")
+            ("M-b" org-babel-execute-buffer "Buffer")
+            ("M-t" org-babel-tangle "to Default")
+            ("M-f" org-babel-tangle-file "choose File")
+            ("M-T" org-babel-detangle "from File")
+            ("M-e" avy-org-babel-edit-src-block "Edit Block ")
+            ("M-s" org-babel-pop-to-session-maybe "Session REPL")
+            ("M-v" ha-org-babel-tangle-visit-file "Visit Tangled"))
    "Clock" (
             ;; ("P" org-pomodoro "Start pomodoro")
             ;; ("Q" ash/org-pomodoro-til-meeting "Start pomodoro til half hour")
@@ -584,15 +571,14 @@
 
 (major-mode-hydra-define python-mode
   (:title "Python-mode" :color pink :separator "=" :quit-key "<escape>")
-  ("Eval" (
-           ("<f2>" python-shell-send-string "expression")
-           ("f" python-shell-send-defun "send defun")
-           )
-   "Movement" (
-               ("h" consult-history "history" :exit t)
-               ("q" nil "Quit" :color red :exit t)
-               ("M-c" nil "Quit" :color red :exit t)
-               )
+  (
+   "Eval"
+   (("<f2>" python-shell-send-string "expression")
+    ("f" python-shell-send-defun "send defun"))
+   "Movement"
+   (("h" consult-history "history" :exit t)
+    ("q" nil "Quit" :color red :exit t)
+    ("M-c" nil "Quit" :color red :exit t))
    )
   )
 
@@ -605,6 +591,7 @@
                ("q" nil "Quit" :color red :exit t)
                ("M-c" nil "Quit" :color red :exit t)
                )))
+
 
 ;;;; Major-Mode-Hydra > Elfeed
 
@@ -644,6 +631,7 @@
     (elfeed-search-untag-all 'unread)
     (elfeed-search-update))
   )
+
 
 ;;; provide
 

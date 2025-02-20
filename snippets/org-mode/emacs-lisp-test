@@ -1,0 +1,7 @@
+# name: emacs-lisp-test
+# key: <slt
+# --
+#+BEGIN_SRC emacs-lisp :tangle no
+  (ert-deftest $1-test ()
+    (should (= $0)))
+#+END_SRC

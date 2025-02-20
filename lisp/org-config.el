@@ -296,7 +296,7 @@
                            ;; (push '(":union" . "∪") prettify-symbols-alist)
                            ;; (push '(":intersect" . "∩") prettify-symbols-alist)
                            ;; (push '(":star" . "★") prettify-symbols-alist)
-                           (prettify-symbols-mode)))
+                           (prettify-symbols-mode +1)))
 
 ;;;; visual-line-mode and DONT auto-fill
 

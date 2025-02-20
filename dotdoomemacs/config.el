@@ -194,6 +194,11 @@
 ;;   (require 'parse-csv)
 ;;   )
 
+;;;; my-org-literate
+
+(after! ob
+  (require 'my-org-literate))
+
 ;;; :ui
 
 ;;;; jit-lock-defer-time

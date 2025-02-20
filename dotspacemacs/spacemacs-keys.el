@@ -470,15 +470,6 @@
   (evil-define-key 'normal 'evil-org-mode "X" 'delete-backward-char)
   )
 
-;;;; yasnippet Navigation M-n/M-p
-
-(when (locate-library "yasnippet")
-  ;; use Meta-n and Meta-p to jump between fields
-  (with-eval-after-load 'yasnippet
-    (define-key yas-keymap (kbd "M-n") 'yas-next-field-or-maybe-expand)
-    (define-key yas-keymap (kbd "M-p") 'yas-prev-field))
-  )
-
 ;;;; corfu
 
 ;; move to keys.el

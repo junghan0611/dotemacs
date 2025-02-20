@@ -571,6 +571,16 @@
     (define-key map (kbd "C-c C-d R") #'denote-dired-rename-marked-files-using-front-matter))
   )
 
+
+;;;; yasnippet Navigation M-n/M-p
+
+(when (locate-library "yasnippet")
+  ;; use Meta-n and Meta-p to jump between fields
+  (with-eval-after-load 'yasnippet
+    (define-key yas-keymap (kbd "M-n") 'yas-next-field-or-maybe-expand)
+    (define-key yas-keymap (kbd "M-p") 'yas-prev-field))
+  )
+
 ;;;; outli
 
 (when (locate-library "outli")
@@ -640,7 +650,8 @@
     (find-file (concat org-directory "fortunes/")))
   (defun my/open-tempel-templates ()
     (interactive)
-    (find-file tempel-path)) ;; (concat user-dotemacs-dir "var/tempel-templates.eld")))
+    (find-file tempel-path))
+  ;; (concat user-dotemacs-dir "var/tempel-templates.eld")))
   (defun my/open-hunspell-personal ()
     (interactive)
     (find-file "~/.hunspell_personal"))
@@ -1499,6 +1510,7 @@ window."
 ;;   ;;   )
 ;;   ;; (keymap-set anddo-mode-map "<f2>" #'casual-anddo-tmenu)
 ;;   )
+
 
 ;;; EWS Map : 'M-c n', 'C-c n' and 'SPC RET'
 
