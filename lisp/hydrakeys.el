@@ -471,78 +471,82 @@
 
 ;;;; Major-Mode-Hydra > org-mode
 
-;; (defvar hydra-org-mode--title (concat (nerd-icons-sucicon "nf-custom-orgmode" :height 1.0) "Org-mode :"))
+(progn
+  (defvar hydra-org-mode-title
+    (concat (nerd-icons-sucicon "nf-custom-orgmode") " Org-mode"))
 
-(major-mode-hydra-define org-mode
-  (:title "Org-mode" :color amaranth :separator "=" :quit-key "<escape>")
-  (
-   "Agenda" (
-             ("c" org-capture "org-capture")
-             ("a" org-agenda-file-to-front "agenda-file-to-front")
-             ("A" org-remove-file "org-remove-file")
-             ("t" org-time-stamp "+ date")
-             ("T" (lambda () (interactive) (org-time-stamp '(4))) "+ date/time")
-             ("d" org-deadline "+ deadline")
-             ("s" org-schedule "schedule")
-             ;; ("d" my/denote-find-file "denote-find")
-             ("f" +default/find-in-notes "+default/find-in-notes")
-             ("F" +default/org-notes-search "+default/org-notes-search")
-             )
-   "Movement" (
-               ("u" org-up-element "up" :exit nil)
-               ("j" org-forward-heading-same-level "forward heading" :exit nil)
-               ("k" org-backward-heading-same-level "backward heading" :exit nil)
-               ("n" org-next-visible-heading "next heading" :exit nil)
-               ("p" org-previous-visible-heading "prev heading" :exit nil)
-               ("M-n" org-next-link "next link" :exit nil)
-               ("M-p" org-previous-link "prev link" :exit nil)
-               ("M-j" org-next-block "next block" :exit nil)
-               ("M-k" org-previous-block "prev block" :exit nil)
-               ;; ("o" org-open-at-point "open at point" :exit t)
-               ("g" org-mark-ring-goto "pop mark" :exit t))
-   "Subtrees" (
-               (">" org-demote-subtree "demote" :exit nil)
-               ("<" org-promote-subtree "promote" :exit nil)
-               ("N" org-narrow-to-subtree "narrow")
-               ("r" org-refile "refile")
-               ("K" org-cut-subtree "kill")
-               ("." org-tree-to-indirect-buffer "indirect buffer")
-               ("I" org-id-get-create "create id"))
-   "Inserting" (
-                ("b" org-cite-insert "org-site-insert")
-                ("B" citar-insert-citation "insert citation")
-                ("e" org-expiry-insert-expiry "expiry property")
-                ;; ("8" org-insert-heading-respect-content "insert heading")
-                ("9" bh/insert-inactive-timestamp "in-act timestamp" :exit nil)
-                ("C-n" next-line "next-line" :exit nil)
-                ("C-p" previous-line "previous-line" :exit nil)
-                ;; ("y" ash/org-paste-link "yank link" :exit t)
-                )
-   ;; "Denote" (("-" denote-show-backlinks-buffer "Backlinks" :toggle t)
-   ;;           ("i" denote "add link"))
-   "Babel" (("M-g" avy-jump-org-block "Goto ")
-            ("M-o" avy-org-babel-execute-src-block "Block ")
-            ("M-h" org-babel-execute-subtree "Section")
-            ("M-b" org-babel-execute-buffer "Buffer")
-            ("M-t" org-babel-tangle "to Default")
-            ("M-f" org-babel-tangle-file "choose File")
-            ("M-T" org-babel-detangle "from File")
-            ("M-e" avy-org-babel-edit-src-block "Edit Block ")
-            ("M-s" org-babel-pop-to-session-maybe "Session REPL")
-            ("M-v" ha-org-babel-tangle-visit-file "Visit Tangled"))
-   "Clock" (
-            ;; ("P" org-pomodoro "Start pomodoro")
-            ;; ("Q" ash/org-pomodoro-til-meeting "Start pomodoro til half hour")
-            ("<f2>" org-clock-goto "org-clock-goto" :color blue :exit t)
-            ("M-c" nil "Quit" :color red :exit t)
-            ("q" nil "Quit" :color red :exit t))
-   )
+  (major-mode-hydra-define org-mode
+    (:title hydra-org-mode-title ;; "Org-mode"
+     :color amaranth :separator "-" :quit-key "<escape>")
+    (
+     "Agenda" (
+               ("c" org-capture "org-capture")
+               ("a" org-agenda-file-to-front "agenda-file-to-front")
+               ("A" org-remove-file "org-remove-file")
+               ("t" org-time-stamp "+ date")
+               ("T" (lambda () (interactive) (org-time-stamp '(4))) "+ date/time")
+               ("d" org-deadline "+ deadline")
+               ("s" org-schedule "schedule")
+               ;; ("d" my/denote-find-file "denote-find")
+               ("f" +default/find-in-notes "+default/find-in-notes")
+               ("F" +default/org-notes-search "+default/org-notes-search")
+               )
+     "Movement" (
+                 ("u" org-up-element "up" :exit nil)
+                 ("j" org-forward-heading-same-level "forward heading" :exit nil)
+                 ("k" org-backward-heading-same-level "backward heading" :exit nil)
+                 ("n" org-next-visible-heading "next heading" :exit nil)
+                 ("p" org-previous-visible-heading "prev heading" :exit nil)
+                 ("M-n" org-next-link "next link" :exit nil)
+                 ("M-p" org-previous-link "prev link" :exit nil)
+                 ("M-j" org-next-block "next block" :exit nil)
+                 ("M-k" org-previous-block "prev block" :exit nil)
+                 ("g" org-mark-ring-goto "pop mark" :exit t))
+     "Subtrees" (
+                 (">" org-demote-subtree "demote" :exit nil)
+                 ("<" org-promote-subtree "promote" :exit nil)
+                 ("N" org-narrow-to-subtree "narrow")
+                 ("r" org-refile "refile")
+                 ("K" org-cut-subtree "kill")
+                 ("." org-tree-to-indirect-buffer "indirect buffer")
+                 ("I" org-id-get-create "create id"))
+     "Inserting" (
+                  ("ib" org-cite-insert "org-site-insert")
+                  ("B" citar-insert-citation "insert citation")
+                  ("e" org-expiry-insert-expiry "expiry property")
+                  ;; ("8" org-insert-heading-respect-content "insert heading")
+                  ("9" bh/insert-inactive-timestamp "in-act timestamp" :exit nil)
+                  ("C-n" next-line "next-line" :exit nil)
+                  ("C-p" previous-line "previous-line" :exit nil)
+                  ;; ("y" ash/org-paste-link "yank link" :exit t)
+                  )
+     ;; "Denote" (("-" denote-show-backlinks-buffer "Backlinks" :toggle t)
+     ;;           ("i" denote "add link"))
+     "Babel" (("M-g" avy-jump-org-block "Goto ")
+              ("M-o" avy-org-babel-execute-src-block "Block ")
+              ("M-h" org-babel-execute-subtree "Section")
+              ("M-b" org-babel-execute-buffer "Buffer")
+              ("M-t" org-babel-tangle "to Default")
+              ("M-f" org-babel-tangle-file "choose File")
+              ("M-T" org-babel-detangle "from File")
+              ;; ("M-e" avy-org-babel-edit-src-block "Edit Block ")
+              ;; ("M-s" org-babel-pop-to-session-maybe "Session REPL")
+              ;; ("M-v" ha-org-babel-tangle-visit-file "Visit Tangled")
+              )
+     "Clock" (
+              ;; ("P" org-pomodoro "Start pomodoro")
+              ;; ("Q" ash/org-pomodoro-til-meeting "Start pomodoro til half hour")
+              ("<f2>" org-clock-goto "org-clock-goto" :color blue :exit t)
+              ("M-c" nil "Quit" :color red :exit t)
+              ("q" nil "Quit" :color red :exit t))
+     )
+    )
   )
 
 ;;;; Major-Mode-Hydra > emacs-lisp-mode
 
 (major-mode-hydra-define emacs-lisp-mode
-  (:title "Emacs-Lisp-mode" :color blue :separator "=" :quit-key "<escape>")
+  (:title "Emacs-Lisp-mode" :color blue :separator "-" :quit-key "<escape>")
   ("Eval" (
            ("b" eval-buffer "eval buffer")
            (";" eval-expression "eval expression")
@@ -570,15 +574,50 @@
 ;; /home/junghan/sync/man/dotsamples/vanilla/hamacs-evil/ha-programming-python.org
 
 (major-mode-hydra-define python-mode
-  (:title "Python-mode" :color pink :separator "=" :quit-key "<escape>")
+  (:title "Python-mode" :color pink :separator "-" :quit-key "<escape>")
   (
-   "Eval"
-   (("<f2>" python-shell-send-string "expression")
-    ("f" python-shell-send-defun "send defun"))
-   "Movement"
-   (("h" consult-history "history" :exit t)
+   "Basic"
+   (
+    ("'" python-shell-switch-to-shell)
+    ("m" python-mark-defun)
+    ("v" python-check)
+    ("s" python-describe-at-point)
+    ("R" run-python "run-python-repl")
+    )
+   "Eval/Repl"
+   (
+    ("ee" python-shell-send-region "send-region")
+    ("ed" python-shell-send-defun "send-defun")
+    ("eb" python-shell-send-buffer)
+    ("ef" python-shell-send-file)
+    ("er" python-shell-send-region)
+    ("ep" python-shell-send-string)
+    ("es" python-shell-send-statement)
+    ("<f2>" python-shell-send-statement)
+    )
+   "Navigate"
+   (
+    ("nh" python-nav-backward-statement)
+    ("nj" python-nav-forward-block)
+    ("nk" python-nav-backward-block)
+    ("nl" python-nav-forward-statement)
+    ("n[" python-nav-backward-up-list)
+    ("n]" python-nav-up-list)
+    ("na" python-nav-beginning-of-block)
+    ("ne" python-nav-end-of-block)
+    ("nm" python-nav-if-name-main)
+    )
+   "Imports"
+   (
+    ("ii" pyimport-remove-unused)
+    ("iu" pyimport-insert-missing)
+    )
+   "Help/Misc"
+   (
+    ("hh" consult-history "history" :exit t)
+    ("hp" python-eldoc-at-point)
     ("q" nil "Quit" :color red :exit t)
-    ("M-c" nil "Quit" :color red :exit t))
+    )
    )
   )
 
