@@ -83,8 +83,8 @@
  org-fancy-priorities
  solaire-mode
  ace-window
- flycheck-popup-tip ; conflict
- )
+ flycheck-popup-tip) ; conflict
+
 
 ;; (package! paredit :disable t) ; clojure module
 ;; (package! flycheck-plantuml :disable t)
@@ -318,8 +318,8 @@
 (package! ob-chatgpt-shell)
 (package! pcsv)
 
-;; (package! gptel)
-(package! gptel :recipe (:host github :repo "karthink/gptel" :branch "master"))
+(package! gptel)
+;; (package! gptel :recipe (:host github :repo "karthink/gptel" :branch "master"))
 ;; (package! gptel :recipe (:host github :repo "karthink/gptel" :branch "feature-tool-use"))
 (package! gptel-quick :recipe (:host github :repo "karthink/gptel-quick"))
 
@@ -378,9 +378,9 @@
 (package! bats-mode)
 
 (when (modulep! :lang python)
-  (package! pydoc)
-  ;; (package! code-cells)
-  )
+  (package! pydoc))
+;; (package! code-cells)
+
 
 ;; Use the latest available packages for Clojure
 ;; - cider, clojure-mode

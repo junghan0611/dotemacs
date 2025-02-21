@@ -511,7 +511,7 @@
                  ("." org-tree-to-indirect-buffer "indirect buffer")
                  ("I" org-id-get-create "create id"))
      "Inserting" (
-                  ("ib" org-cite-insert "org-site-insert")
+                  ("ib" org-cite-insert "org-site-insert" :exit t)
                   ("B" citar-insert-citation "insert citation")
                   ("e" org-expiry-insert-expiry "expiry property")
                   ;; ("8" org-insert-heading-respect-content "insert heading")

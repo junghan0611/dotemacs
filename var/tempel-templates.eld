@@ -156,33 +156,33 @@ org-mode
 
 ;; :regexp "2023.*_emacs"
 (d-notes-only
- "#+BEGIN: denote-links :regexp \"202..*" p
- "\" :excluded-dirs-regexp \"\\\\(meta\\\\|bib\\\\|docs\\\\|posts\\\\|ekg\\\\)\" :sort-by-component identifier :reverse-sort t :include-date t" n
+ "#+BEGIN: denote-links :regexp \"202502..T*" p
+ "\" :excluded-dirs-regexp \"\\\\(meta\\\\|screenshot\\\\|journal\\\\|bib\\\\|docs\\\\|posts\\\\|ekg\\\\)\" :sort-by-component identifier :reverse-sort t :include-date t" n
  "#+END:" n)
 
 (d-bib-only
- "#+BEGIN: denote-links :regexp \"202..*" p
- "\" :excluded-dirs-regexp \"\\\\(meta\\\\|notes\\\\|docs\\\\|posts\\\\|ekg\\\\)\" :sort-by-component identifier :reverse-sort t :include-date t" n
+ "#+BEGIN: denote-links :regexp \"202502..T*" p
+ "\" :excluded-dirs-regexp \"\\\\(meta\\\\|screenshot\\\\|journal\\\\|notes\\\\|docs\\\\|posts\\\\|ekg\\\\)\" :sort-by-component identifier :reverse-sort t :include-date t" n
  "#+END:" n)
 
 (d-meta-only
- "#+BEGIN: denote-links :regexp \"202..*" p
- "\" :excluded-dirs-regexp \"\\\\(notes\\\\|bib\\\\|docs\\\\|posts\\\\|ekg\\\\)\" :sort-by-component identifier :reverse-sort t :include-date t" n
+ "#+BEGIN: denote-links :regexp \"202502..T*" p
+ "\" :excluded-dirs-regexp \"\\\\(bib\\\\|screenshot\\\\|journal\\\\|notes\\\\|docs\\\\|posts\\\\|ekg\\\\)\" :sort-by-component identifier :reverse-sort t :include-date t" n
  "#+END:" n)
 
 (d-docs-only
  "#+BEGIN: denote-links :regexp \"202..*" p
- "\" :excluded-dirs-regexp \"\\\\(notes\\\\|bib\\\\|meta\\\\|posts\\\\|ekg\\\\)\" :sort-by-component identifier :reverse-sort t :include-date t" n
+ "\" :excluded-dirs-regexp \"\\\\(bib\\\\|screenshot\\\\|journal\\\\|notes\\\\|meta\\\\|posts\\\\|ekg\\\\)\" :sort-by-component identifier :reverse-sort t :include-date t" n
  "#+END:" n)
 
 (d-posts-only
  "#+BEGIN: denote-links :regexp \"202..*" p
- "\" :excluded-dirs-regexp \"\\\\(notes\\\\|bib\\\\|meta\\\\|docs\\\\|ekg\\\\)\" :sort-by-component identifier :reverse-sort t :include-date t" n
+ "\" :excluded-dirs-regexp \"\\\\(bib\\\\|screenshot\\\\|journal\\\\|notes\\\\|docs\\\\|meta\\\\|ekg\\\\)\" :sort-by-component identifier :reverse-sort t :include-date t" n
  "#+END:" n)
 
 (d-ekg-only
  "#+BEGIN: denote-links :regexp \"202..*" p
- "\" :excluded-dirs-regexp \"\\\\(notes\\\\|bib\\\\|meta\\\\|docs\\\\|posts\\\\)\" :sort-by-component identifier :reverse-sort t :include-date t" n
+ "\" :excluded-dirs-regexp \"\\\\(bib\\\\|screenshot\\\\|journal\\\\|notes\\\\|meta\\\\|docs\\\\|posts\\\\)\" :sort-by-component identifier :reverse-sort t :include-date t" n
  "#+END:" n)
 
 ;;;; Export Org-roam to Jecklle Markdown

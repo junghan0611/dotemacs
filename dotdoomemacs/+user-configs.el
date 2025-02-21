@@ -3109,13 +3109,13 @@ ${content}"))
     ;; (add-hook 'context-menu-functions #'denote-context-menu)
     ) ;; end-of progn from vedang's custom
 
-;;;;; add denote-file-types for quarto - qmd
+;;;;; DONT add denote-file-types for quarto - qmd
 
-  (after! denote
-    (let ((quarto (cdr (assoc 'markdown-yaml denote-file-types))))
-      (setf (plist-get quarto :extension) ".qmd")
-      (add-to-list 'denote-file-types (cons 'quarto quarto)))
-    )
+  ;; (after! denote
+  ;;   (let ((quarto (cdr (assoc 'markdown-yaml denote-file-types))))
+  ;;     (setf (plist-get quarto :extension) ".qmd")
+  ;;     (add-to-list 'denote-file-types (cons 'quarto quarto)))
+  ;;   )
 
 ;;;;; docsim
 
@@ -3259,22 +3259,22 @@ ${content}"))
                                       (t . find-file)))
 
     ;; FIXME for denote-obsidian
-    (setq citar-denote-file-types
-          `((org
-             :reference-format "#+reference:  %s\n"
-             :reference-regex "^#\\+reference\\s-*:")
-            (markdown-obsidian ;; 2025-02-03
-             :reference-format "reference:  %s\n"
-             :reference-regex "^reference\\s-*:")
-            (markdown-yaml
-             :reference-format "reference:  %s\n"
-             :reference-regex "^reference\\s-*:")
-            (markdown-toml
-             :reference-format "reference  = %s\n"
-             :reference-regex "^reference\\s-*=")
-            (text
-             :reference-format "reference:  %s\n"
-             :reference-regex "^reference\\s-*:")))
+    ;; (setq citar-denote-file-types
+    ;;       `((org
+    ;;          :reference-format "#+reference:  %s\n"
+    ;;          :reference-regex "^#\\+reference\\s-*:")
+    ;;         (markdown-obsidian ;; 2025-02-03
+    ;;          :reference-format "reference:  %s\n"
+    ;;          :reference-regex "^reference\\s-*:")
+    ;;         (markdown-yaml
+    ;;          :reference-format "reference:  %s\n"
+    ;;          :reference-regex "^reference\\s-*:")
+    ;;         (markdown-toml
+    ;;          :reference-format "reference  = %s\n"
+    ;;          :reference-regex "^reference\\s-*=")
+    ;;         (text
+    ;;          :reference-format "reference:  %s\n"
+    ;;          :reference-regex "^reference\\s-*:")))
     (citar-denote-mode))
 
 ;;;;; end-of denote
