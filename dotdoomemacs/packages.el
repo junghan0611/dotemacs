@@ -377,9 +377,13 @@
 (package! exercism)
 (package! bats-mode)
 
+(unpin! jupyter)
+(package! jupyter :recipe (:host github :repo "junghan0611/emacs-jupyter" :branch "ko"))
+
 (when (modulep! :lang python)
   (package! pydoc)
-  (package! code-cells))
+  (package! code-cells)
+  )
 
 ;; Use the latest available packages for Clojure
 ;; - cider, clojure-mode

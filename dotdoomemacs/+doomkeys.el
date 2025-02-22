@@ -1380,6 +1380,19 @@
 
 ;;;; DONT python-mode-map
 
+;; jupyter-repl-associate-buffer
+
+(after! python
+  (map! :after python
+        :localleader
+        :map python-mode-map
+        "'" #'jupyter-repl-associate-buffer
+        (:prefix ("h" . "help")
+                 "l" #'pylookup-lookup
+                 "h" #'pylookup-lookup-at-point)
+        )
+  )
+
 ;; (after! python
 ;;   (map! :after python
 ;;         :localleader
@@ -1392,9 +1405,6 @@
 ;;                  "T" #'python-pytest-function
 ;;                  "r" #'python-pytest-repeat
 ;;                  "p" #'python-pytest-dispatch)
-;;         (:prefix ("h" . "help")
-;;                  "l" #'pylookup-lookup
-;;                  "h" #'pylookup-lookup-at-point)
 ;;         (:prefix ("e" . "pipenv")
 ;;          :desc "activate"    "a" #'pipenv-activate
 ;;          :desc "deactivate"  "d" #'pipenv-deactivate

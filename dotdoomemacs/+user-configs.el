@@ -4248,14 +4248,14 @@ Called with a PREFIX, resets the context buffer list before opening"
   ;; (add-hook 'after-save-hook 'eglot-format)
   )
 
-;;;;; DONT ipython default
+;;;;; ipython default
 
-;; (after! python
-;;   ;; use ipython for interpreter if it exists
-;;   (if (executable-find "ipython")
-;;       (progn (setq python-shell-interpreter "ipython")
-;;              (setq python-shell-interpreter-args "-i --simple-prompt")))
-;;   )
+(after! python
+  ;; use ipython for interpreter if it exists
+  (if (executable-find "ipython")
+      (progn (setq python-shell-interpreter "ipython")
+             (setq python-shell-interpreter-args "-i --simple-prompt")))
+  )
 
 ;;;;; rainbow-delimiters-mode
 
@@ -4264,6 +4264,7 @@ Called with a PREFIX, resets the context buffer list before opening"
 ;;;;; custom emacs-jupyter/jupyter ob-jupyter
 
 (require 'my-python-jupyter)
+;; (setq jupyter-eval-use-overlays t)
 
 ;;;;; uv : uv-mode and uv-menu
 
