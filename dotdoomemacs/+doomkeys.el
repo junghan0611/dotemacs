@@ -172,11 +172,15 @@
 
 ;;;; 'f' file
 
-;; (map! :leader
-;;       (:prefix "f"
-;;        :desc "Org-save-all-org-buffers" "S" #'org-save-all-org-buffers
-;;        )
-;;       )
+(map! :leader
+      (:prefix "f"
+       :desc "" "d" nil  ; remove existing binding
+       (:prefix ("d" . "diff")
+        :desc "3 files" "3" #'ediff3
+        :desc "ediff" "d" #'diff
+        :desc "ediff" "e" #'ediff
+        :desc "version" "r" #'vc-root-diff
+        :desc "version" "v" #'vc-ediff)))
 
 ;;;; 'p' project
 
@@ -291,49 +295,6 @@
          :desc "Copy sexp" "y" #'sp-copy-sexp))
   )
 
-;; (when (locate-library "puni")
-;;   (map! :leader
-;;         (:prefix ("k". "paredit")
-;;          :desc "Delete Pair" "D" #'delete-pair
-;;          :desc "Slurp forward" "s" #'puni-slurp-forward
-;;          :desc "Slurp backward" "S" #'puni-slurp-backward
-;;          :desc "" "$"   #'puni-end-of-sexp
-;;          (:prefix ("d" . "Delete")
-;;           :desc "Delete Pair" "d" #'delete-pair
-;;           ;; :desc "Symbol" "s" #'sp-kill-symbol
-;;           ;; :desc "Symbol Backward" "S" #'sp-backward-kill-symbol
-;;           ;; :desc "Word" "w" #'sp-kill-word
-;;           ;; :desc "Word Backward" "W" #'sp-backward-kill-word
-;;           :desc "Kill" "x" #'puni-kill-sexp
-;;           ;; :desc "Kill Backward" "X" #'sp-backward-kill-sexp
-;;           )
-;;          :desc "Splice" "e" #'puni-splice-killing-forward
-;;          :desc "Splice Backward" "E" #'sp-splice-killing-backward
-;;          ;; :desc "Symbol Backward" "h" #'sp-backward-symbol
-;;          :desc "Sexp Backward" "H" #'puni-backward-sexp
-;;          ;; :desc "Join" "j" #'sp-join-sexp
-;;          :desc "Sexp Forward" "l" #'puni-forward-sexp
-;;          ;; :desc "Sexp Forward" "L" #'puni-forward-sexp
-
-;;          ;; :desc "Raise" "r" #'sp-raise-sexp
-
-;;          :desc "Slurp" "s" #'puni-forward-sexp
-;;          ;; :desc "Slurp Backward" "S" #'puni-backward-sexp
-;;          ;; :desc "Transpose" "t" #'puni-transpose-sexp
-;;          ;; :desc "Up Backward" "U" #'sp-backward-up-sexp
-;;          (:prefix ("w" . "Wrap")
-;;           :desc "()" "(" #'puni-wrap-round
-;;           :desc "{}" "{" #'puni-wrap-curly
-;;           :desc "[]" "[" #'puni-wrap-square
-;;           ;; :desc "Round" "w" #'puni-wrap-round
-;;           ;; :desc "Curly" "c" #'puni-wrap-curly
-;;           ;; :desc "Square" "s" #'puni-wrap-square
-;;           :desc "Unwrap" "u" #'puni-splice)
-;;          ;; :desc "Copy sexp" "y" #'sp-copy-sexp
-;;          )
-;;         )
-;;   )
-
 ;;;; 'C' Capture
 
 ;; Add C for Capture
@@ -360,14 +321,15 @@
 
 ;; 둠에 어디 있는지 모르겠다만 참고해서 넣어놓고 사용하라
 ;; Diff of files
-(map! :leader
-      (:prefix ("D" . "Diff/Compare")
-               (:prefix ("d" . "diff")
-                :desc "3 files" "3" #'ediff3
-                :desc "ediff" "d" #'diff
-                :desc "ediff" "e" #'ediff
-                :desc "version" "r" #'vc-root-diff
-                :desc "version" "v" #'vc-ediff)))
+;; (map! :leader
+;;       (:prefix ("D" . "Diff/Compare")
+;;                (:prefix ("d" . "diff")
+;;                 :desc "3 files" "3" #'ediff3
+;;                 :desc "ediff" "d" #'diff
+;;                 :desc "ediff" "e" #'ediff
+;;                 :desc "version" "r" #'vc-root-diff
+;;                 :desc "version" "v" #'vc-ediff)))
+
 
 ;; spacemacs : layers/+spacemacs/spacemacs-defaults/keybindings.el
 ;; ("D" "Diff/Compare"
@@ -653,8 +615,8 @@
 ;;; Custom EVIL Keys
 
 ;; agzam : /agzam-dot-doom/config.el
-(map! :i "M-l" #'sp-forward-slurp-sexp ; downcase-word
-      :i "M-h" #'sp-forward-barf-sexp  ; mark-paragraph
+(map! :i "M-l" 'evil-forward-char ;; #'sp-forward-slurp-sexp ; downcase-word
+      :i "M-h" 'evil-backward-char ;; #'sp-forward-barf-sexp  ; mark-paragraph
       ;; :v "s" #'evil-surround-region
       ;; "s-b" #'consult-buffer
       ;; "s-=" #'text-scale-increase
@@ -1635,6 +1597,16 @@
   ;; Compile Vterm without asking.
   (setq vterm-always-compile-module t)
   (map! :map vterm-mode-map "M-y" #'vterm-yank-pop))
+
+;;;; Experiments
+
+;; Use `,,` to close a commit message and `,k' to cancel
+;; Doom maps `ZZ` to commit, `ZQ' to quit
+(map! :after magit
+      :map text-mode-map
+      :localleader
+      "," #'with-editor-finish
+      "k" #'with-editor-cancel)
 
 ;;; TODO ctl-x maps
 

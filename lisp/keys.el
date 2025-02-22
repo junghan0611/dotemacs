@@ -167,10 +167,10 @@
     (evil-define-key '(insert) prog-mode-map (kbd "C-9") 'jump-backward-pair)
 
     ;; 기본 설정을 건들지 말자 왠만하면
-    ;;   ;; (evil-define-key '(insert) prog-mode-map (kbd "<tab>") 'jump-out-of-pair)
-    ;;   ;; (evil-define-key '(insert) prog-mode-map (kbd "TAB") 'jump-out-of-pair)
-    ;;   ;; (evil-define-key '(insert) prog-mode-map (kbd "<backtab>") 'jump-backward-pair)
-    ;;   ;; (evil-define-key '(insert) prog-mode-map (kbd "S-<iso-lefttab>") 'jump-backward-pair)
+    (evil-define-key '(insert) prog-mode-map (kbd "<tab>") 'jump-out-of-pair)
+    (evil-define-key '(insert) prog-mode-map (kbd "TAB") 'jump-out-of-pair)
+    (evil-define-key '(insert) prog-mode-map (kbd "<backtab>") 'jump-backward-pair)
+    (evil-define-key '(insert) prog-mode-map (kbd "S-<iso-lefttab>") 'jump-backward-pair)
     ;;   ;; 엔터는 컴플리션 되거나 뉴라인 인덴트 되어야 한다.
     ;;   ;; (evil-define-key '(insert) corfu-map (kbd "<return>") 'corfu-insert)
     ;;   ;; (evil-define-key '(insert) prog-mode-map (kbd "<return>") 'newline-and-indent) ;; <return>

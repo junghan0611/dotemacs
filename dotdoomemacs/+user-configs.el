@@ -969,11 +969,11 @@
 
 ;;;; OKAY Flycheck
 
-(after! flycheck
-  (setq flycheck-global-modes '(not emacs-lisp-mode org-mode markdown-mode gfm-mode))
-  (setq flycheck-checker-error-threshold 1000) ; need more than default of 400
-  (global-flycheck-mode +1)
-  )
+;; (after! flycheck
+;;   (setq flycheck-global-modes '(not emacs-lisp-mode org-mode markdown-mode gfm-mode))
+;;   (setq flycheck-checker-error-threshold 1000) ; need more than default of 400
+;;   (global-flycheck-mode +1)
+;;   )
 
 ;; (progn
 ;;   (setq flycheck-help-echo-function nil ; default 'flycheck-help-echo-all-error-messages
@@ -997,11 +997,11 @@
 ;;         (flycheck-mode -1))))
 ;;   )
 
-;;;; DEPRECATED Flymake
+;;;; OKAY Flymake
 
-;;;;; DONT disable flymake-mode default
+;;;;; disable flymake-mode default
 
-;; (remove-hook! (prog-mode text-mode) #'flymake-mode)
+(remove-hook! (prog-mode text-mode) #'flymake-mode)
 
 ;;;;; DONT flymake-vale
 
@@ -4074,44 +4074,49 @@ Called with a PREFIX, resets the context buffer list before opening"
 ;;      (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
 ;;   (setq codeium/document/text 'my-codeium/document/text)
 ;;   (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset)
-;;   )
+;;
 
 ;;; :lang coding
+
+;;;; indent-bars
+
+; (remove-hook 'text-mode-hook #'+indent-guides-init-maybe-h)
 
 ;;;; lsp-mode - lsp-ui-mode - lsp-treemacs
 
 ;; lsp 관련 설정 메뉴들. 느리게 만드는 범인중 십중팔구 LSP가 관련되어져 있다고 함.
 ;; 해당 튜닝도 구글링을 통해서 찾았다.
-(setq lsp-file-watch-threshold (* 1024 1024))
-(setq read-process-output-max (* 1024 1024))
+;; (setq lsp-file-watch-threshold (* 1024 1024))
+;; (setq read-process-output-max (* 1024 1024))
 
-(progn
-  (after! lsp-mode
-    (setq
-     lsp-headerline-breadcrumb-enable t ; doom nil
-     lsp-headerline-breadcrumb-icons-enable nil
-     ;; lsp-headerline-breadcrumb-segments '(symbols) ; namespace & symbols, no file path
+;; (progn
+;;   (after! lsp-mode
+;;     (setq
+;;      lsp-headerline-breadcrumb-enable t ; doom nil
+;;      lsp-headerline-breadcrumb-icons-enable nil
+;;      ;; lsp-headerline-breadcrumb-segments '(symbols) ; namespace & symbols, no file path
 
-     ;; lsp-idle-delay 0.2  ; smooth LSP features response
-     ;; lsp-eldoc-enable-hover nil ; default t - disable all hover actions
-     ;; lsp-modeline-code-actions-segments '(count icon)
-     ;; lsp-navigation 'both ; default 'both ; 'simple or 'peek
-     ;; lsp-modeline-diagnostics-enable nil
-     ;; lsp-modeline-code-actions-enable nil
-     )
-    )
+;;      ;; lsp-idle-delay 0.2  ; smooth LSP features response
+;;      ;; lsp-eldoc-enable-hover nil ; default t - disable all hover actions
+;;      ;; lsp-modeline-code-actions-segments '(count icon)
+;;      ;; lsp-navigation 'both ; default 'both ; 'simple or 'peek
+;;      ;; lsp-modeline-diagnostics-enable nil
+;;      ;; lsp-modeline-code-actions-enable nil
+;;      )
+;;     )
 
-  (after! lsp-ui
-    (setq
-     lsp-ui-sideline-enable nil ; doom t - disable sideline for less distraction
-     ;; lsp-ui-doc-enable nil ;; doom t - disable all doc popups
-     treemacs-space-between-root-nodes nil  ;; doom nil
-     ;; lsp-ui-peek-enable t ; doom t
-     ))
+;;   (after! lsp-ui
+;;     (setq
+;;      lsp-ui-sideline-enable nil ; doom t - disable sideline for less distraction
+;;      ;; lsp-ui-doc-enable nil ;; doom t - disable all doc popups
+;;      treemacs-space-between-root-nodes nil  ;; doom nil
+;;      ;; lsp-log-io t  ; default nil - Log client-server json communication
+;;      ;; lsp-ui-peek-enable t ; doom t
+;;      ))
 
-  (after! lsp-treemacs
-    (setq lsp-treemacs-error-list-current-project-only t))
-  )
+;;   (after! lsp-treemacs
+;;     (setq lsp-treemacs-error-list-current-project-only t))
+;;   )
 
 ;;;; devdocs-browser
 
@@ -4233,6 +4238,15 @@ Called with a PREFIX, resets the context buffer list before opening"
 (use-package! bats-mode :defer t)
 
 ;;;; :lang python
+
+(with-eval-after-load 'eglot
+  (add-to-list
+   'eglot-server-programs
+   `(python-mode .
+     ,(eglot-alternatives
+       '(("basedpyright-langserver" "--stdio")))))
+  ;; (add-hook 'after-save-hook 'eglot-format)
+  )
 
 ;;;;; DONT ipython default
 

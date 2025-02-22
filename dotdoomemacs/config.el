@@ -1827,6 +1827,15 @@
 
 ;;;; code-cells for python jupyter
 
+(use-package! code-cells
+  :commands (code-cells-mode)
+  ;; :init (add-hook 'python-mode-hook 'code-cells-mode)
+  ;; "gB" 'code-cells-backward-cell
+  ;; "gF" 'code-cells-forward-cell
+  ;; "sc" 'code-cells-eval
+  ;; "sa" 'code-cells-eval-above)
+  )
+
 ;; (progn
 ;;   (use-package! code-cells
 ;;     :config

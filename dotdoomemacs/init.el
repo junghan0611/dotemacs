@@ -86,14 +86,14 @@
  doom-dashboard    ; a nifty splash screen for Emacs
  ;; doom-quit         ; DOOM quit-message prompts when you quit Emacs
  hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW/XXX/BUG
- ;; indent-guides ; highlighted indent columns
+ indent-guides ; highlighted indent columns
  ;; (ligatures +extra)         ; ligatures and symbols to make your code pretty again
  modeline ; snazzy, Atom-inspired modeline, plus API
  neotree ; a project drawer, like NERDTree for vim
  ophints           ; highlight the region an operation acts on
  popup    ; tame sudden yet inevitable temporary windows
 
- (treemacs +lsp) ;  a project drawer, like neotree but cooler
+ treemacs ; (treemacs +lsp) ;  a project drawer, like neotree but cooler
  vc-gutter ;; +pretty
  (window-select +numbers) ; visually switch windows
  workspaces        ; tab emulation, persistence & separate workspaces
@@ -122,7 +122,7 @@
  (:if (not (memq system-type '(cygwin windows-nt ms-dos))) vterm) ; the best terminal emulation in Emacs
 
  :checkers
- (syntax -flymake) ;;  tasing you for every semicolon you forget
+ (syntax +flymake) ;;  tasing you for every semicolon you forget
 
  (:unless IS-TERMUX (spell +flyspell)) ; +hunspell - tasing you for misspelling mispelling
  ;; grammar           ; tasing grammar mistake every you make
@@ -138,7 +138,7 @@
 
  (eval +overlay)     ; run code, run (also, repls)
  lookup ; only dumb-jump
- (lsp +peek)
+ (lsp +eglot) ;; +peek
 
  (magit +forge) ; a git porcelain for Emacs
 

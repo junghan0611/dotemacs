@@ -463,7 +463,6 @@
   ;; evil macro
   (define-key evil-normal-state-map (kbd "q") 'nil) ; evil macro disable
   (define-key evil-normal-state-map (kbd "Q") 'evil-record-macro)
-
   (define-key evil-normal-state-map "x" 'delete-forward-char)
   (define-key evil-normal-state-map "X" 'delete-backward-char)
   (evil-define-key 'normal 'evil-org-mode "x" 'delete-forward-char)
@@ -497,4 +496,9 @@
   (define-key magit-section-mode-map (kbd "M-<tab>") 'other-window)
   (define-key magit-section-mode-map (kbd "C-<tab>") 'tab-next)
   )
+
+;;;; evil
+
+(define-key evil-normal-state-map (kbd "DEL") 'evil-switch-to-windows-last-buffer)
+
 ;;; user-keybindings.el ends here

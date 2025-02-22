@@ -330,7 +330,8 @@
                        multiple-cursors-backend 'mc
                        mc/cmds-to-run-once '(upcase-region))
 
-     (spacemacs-editing :packages (not password-generator drag-stuff undo-tree smartparens)
+     (spacemacs-editing :packages (not
+                                   hungry-delete password-generator drag-stuff undo-tree smartparens)
                         :variables dotspacemacs-undo-system 'undo-fu)
 
      (spacemacs-editing-visual :packages (hide-comnt rainbow-delimiters volatile-highlights term-cursor writeroom-mode))
@@ -379,7 +380,8 @@
       :variables
       elfeed-enable-goodies nil
       elfeed-search-filter "" ; "@3-months-ago"
-      rmh-elfeed-org-files (list (concat org-directory "/elfeed.org"))
+      rmh-elfeed-org-files (list (concat org-directory
+                                         "20220706T160000--elfeed.org"))
       elfeed-enable-web-interface nil
       url-queue-timeout 30)
 
@@ -1929,43 +1931,28 @@
   ;; 뒤의 줄도 줄 바꿈합니다. 이 옵션은 한중일 문자 뒤에 줄 바꿈을 허용하는 데
   ;; 유용하며 라틴 텍스트와 혼합된 한중일 텍스트의 단어 줄 바꿈을 개선합니다.
 
-;;;;; hungry-delete-backward and forward
-
-  ;; layers/+emacs/better-defaults/keybindings.el
-  (defun spacemacs/backward-kill-word-or-region (&optional arg)
-    "Calls `kill-region' when a region is active and
-`backward-kill-word' otherwise. ARG is passed to
-`backward-kill-word' if no region is active."
-    (interactive "p")
-    (if (region-active-p)
-        ;; call interactively so kill-region handles rectangular selection
-        ;; correctly (see https://github.com/syl20bnr/spacemacs/issues/3278)
-        (call-interactively #'kill-region)
-      (backward-kill-word arg)))
-
-  ;; 익숙한 키 바인딩이라. 그냥 두자.
-  (global-set-key (kbd "M-<backspace>") 'spacemacs/backward-kill-word-or-region)
+;;;;; DONT hungry-delete-backward and forward
 
   ;; [x] 모드와 상관 없이 backsapce 는 delete-backward-char 안된다. : conflict
   ;; 모드와 상관 없이 Delete 키는 delete-forward-char : default
 
-  (with-eval-after-load 'hungry-delete
-    (define-key hungry-delete-mode-map (kbd "S-<backspace>") 'hungry-delete-backward)
-    (define-key hungry-delete-mode-map (kbd "S-<delete>") 'hungry-delete-forward)
-    (define-key hungry-delete-mode-map (kbd "S-DEL") 'hungry-delete-forward)
-    )
+  ;; (with-eval-after-load 'hungry-delete
+  ;;   (define-key hungry-delete-mode-map (kbd "S-<backspace>") 'hungry-delete-backward)
+  ;;   (define-key hungry-delete-mode-map (kbd "S-<delete>") 'hungry-delete-forward)
+  ;;   (define-key hungry-delete-mode-map (kbd "S-DEL") 'hungry-delete-forward)
+  ;;   )
 
   ;; 기본 스타일 바인딩을 사용하자.
-  (global-set-key (kbd "S-<backspace>") 'hungry-delete-backward) ; default bindings
-  (global-set-key (kbd "S-<delete>") 'hungry-delete-forward)
-  (global-set-key (kbd "S-DEL") 'hungry-delete-forward)
+  ;; (global-set-key (kbd "S-<backspace>") 'hungry-delete-backward)
+; default bindings
+  ;; (global-set-key (kbd "S-<delete>") 'hungry-delete-forward)
+  ;; (global-set-key (kbd "S-DEL") 'hungry-delete-forward)
 
   ;; C 로 하려다가 기본이 S 더라. 기본으로 가자.
   ;; (global-set-key (kbd "C-<backspace>") 'hungry-delete-backward)
   ;; (global-set-key (kbd "C-<delete>") 'hungry-delete-forward)
   ;; (global-set-key (kbd "C-DEL") 'hungry-delete-forward)
-
-  (global-hungry-delete-mode t)
+  ;;  (global-hungry-delete-mode t)
 
 ;;;;; winner-mode
 
