@@ -857,24 +857,6 @@
 
 (require 'prot-dired)
 
-;;; Load Unified Configuration
-
-;; unified config for spacemacs and doom emacs
-(require 'uniconfig)
-
-;;; Load Transient & Hydra Menu
-
-(require 'hydrakeys)
-
-;;; Load Keys
-
-(require 'keys)
-
-;;; Load 'Doom' Keybindings
-
-;; override and add doom keybindings
-(load! "+doomkeys")
-
 ;;; persp-mode with tab-bar for open-workspaces
 
 (after! persp-mode
@@ -887,48 +869,48 @@
 
 ;;;; custom tab-bar global-mode-string
 
-(progn
-  (require 'tab-bar)
+;; (progn
+;;   (require 'tab-bar)
 
-  ;; 2025-01-26
-  (setq tab-bar-close-button-show nil)
-  (setq tab-bar-new-button-show nil)
+;;   ;; 2025-01-26
+;;   (setq tab-bar-close-button-show nil)
+;;   (setq tab-bar-new-button-show nil)
 
-  (setq tab-bar-format
-        '( ;; tab-bar-format-history
-          tab-bar-format-tabs
-          tab-bar-separator
-          tab-bar-format-add-tab
-          tab-bar-format-align-right
-          tab-bar-format-global
-          ))
+;;   (setq tab-bar-format
+;;         '( ;; tab-bar-format-history
+;;           tab-bar-format-tabs
+;;           tab-bar-separator
+;;           tab-bar-format-add-tab
+;;           tab-bar-format-align-right
+;;           tab-bar-format-global
+;;           ))
 
-;;;###autoload
-  (defun my/load-global-mode-string ()
-    (interactive)
+;; ;;;###autoload
+;;   (defun my/load-global-mode-string ()
+;;     (interactive)
 
-    ;; (message "my/load-global-mode-string")
-    (when (not (bound-and-true-p display-time-mode))
-      (display-time-mode t))
+;;     ;; (message "my/load-global-mode-string")
+;;     (when (not (bound-and-true-p display-time-mode))
+;;       (display-time-mode t))
 
-    ;; (when (fboundp 'display-time-mode)
-    ;;   (display-time-mode t))
+;;     ;; (when (fboundp 'display-time-mode)
+;;     ;;   (display-time-mode t))
 
-    (setq global-mode-string (remove 'display-time-string global-mode-string))
-    (setq global-mode-string '("" celestial-mode-line-string display-time-string))
+;;     (setq global-mode-string (remove 'display-time-string global-mode-string))
+;;     (setq global-mode-string '("" celestial-mode-line-string display-time-string))
 
-    (tab-bar-mode +1)
+;;     (tab-bar-mode +1)
 
-    ;; (when (string= (system-name) "jhnuc")
-    ;;   (keycast-tab-bar-mode +1))
+;;     ;; (when (string= (system-name) "jhnuc")
+;;     ;;   (keycast-tab-bar-mode +1))
 
-    ;; load modus-themes
-    (modus-themes-toggle)
-    )
+;;     ;; load modus-themes
+;;     ;; (modus-themes-toggle)
+;;     )
 
-  (add-hook 'doom-after-init-hook #'my/load-global-mode-string 80)
-  (add-hook 'doom-after-reload-hook #'my/load-global-mode-string)
-  )
+;;   (add-hook 'doom-after-init-hook #'my/load-global-mode-string 80)
+;;   (add-hook 'doom-after-reload-hook #'my/load-global-mode-string)
+;;   )
 
 ;;;; my/workspaces
 
@@ -1898,5 +1880,23 @@
 (use-package! ox-moderncv
   :init (require 'ox-moderncv)
   )
+
+;;; Load Unified Configuration
+
+;; unified config for spacemacs and doom emacs
+(require 'uniconfig)
+
+;;; Load Transient & Hydra Menu
+
+(require 'hydrakeys)
+
+;;; Load Keys
+
+(require 'keys)
+
+;;; Load 'Doom' Keybindings
+
+;; override and add doom keybindings
+(load! "+doomkeys")
 
 ;;; left blank on purpose

@@ -367,9 +367,9 @@
   (package! clojure-essential-ref-nov)
   (package! clay))
 
-(unpin! lsp-mode)
-(unpin! lsp-ui)
-(unpin! consult-lsp)
+;(unpin! lsp-mode)
+;(unpin! lsp-ui)
+;(unpin! consult-lsp)
 
 (unpin! elisp-demos)
 (package! elisp-demos :recipe (:host github :repo "junghan0611/elisp-demos" :branch "ko")) ;; https://github.com/junghan0611/elisp-demos
@@ -382,8 +382,8 @@
 
 (when (modulep! :lang python)
   (package! pydoc)
-  (package! code-cells)
-  )
+  (package! code-cells))
+
 
 ;; Use the latest available packages for Clojure
 ;; - cider, clojure-mode

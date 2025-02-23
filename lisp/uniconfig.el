@@ -370,6 +370,101 @@ Also see `prot-window-delete-popup-frame'." command)
     ))
 
 ;;; Packages with functions
+;;;; consult - swiper style check wiki
+
+;; https://github.com/minad/consult/wiki
+;; (progn
+;;   (defcustom my/consult-ripgrep-or-line-limit 300000
+;;     "Buffer size threshold for `my/consult-ripgrep-or-line'.
+;; When the number of characters in a buffer exceeds this threshold,
+;; `consult-ripgrep' will be used instead of `consult-line'."
+;;     :type 'integer)
+
+;;   (defun my/consult-ripgrep-or-line ()
+;;     "Call `consult-line' for small buffers or `consult-ripgrep' for large files."
+;;     (interactive)
+;;     (if (or (not buffer-file-name)
+;;             (buffer-narrowed-p)
+;;             (ignore-errors
+;;               (file-remote-p buffer-file-name))
+;;             (jka-compr-get-compression-info buffer-file-name)
+;;             (<= (buffer-size)
+;;                 (/ my/consult-ripgrep-or-line-limit
+;;                    (if (eq major-mode 'org-mode) 4 1))))
+;;         (consult-line)
+;;       (when (file-writable-p buffer-file-name)
+;;         (save-buffer))
+;;       (let ((consult-ripgrep-args
+;;              (concat consult-ripgrep-args
+;;                      ;; filter to desired filename
+;;                      " -g "
+;;                      (shell-quote-argument (file-name-nondirectory buffer-file-name))
+;;                      " ")))
+;;         (consult-ripgrep))))
+;;   )
+
+
+;;;; fontaine
+
+;; ;; This is defined in Emacs C code: it belongs to font settings.
+;; (setq x-underline-at-descent-line t)
+;; ;; And this is for Emacs28.
+;; (setq-default text-scale-remap-header-line t)
+
+;; Weights :: Thin ExtraLight Light Regular Medium SemiBold Bold ExtraBold Heavy
+;; Slopes :: Upright Oblique Italic
+;; Width :: Normal Extended
+
+(when (locate-library "fontaine")
+  (when (display-graphic-p) ; gui
+    ;; (setq fontaine-latest-state-file
+    ;;       (locate-user-emacs-file "fontaine-latest-state.eld"))
+    (setq fontaine-presets
+          ;; 80 120, 136, 151, 180, 211 ; sarasa mono / term
+          ;; 120, 140, 170, 190, 210, 230 ; monoplex kr nerd
+          '(
+            (small12 :default-height 120)
+            (regular14 :default-height 140)
+            (regular17 :default-height 170)
+            (large19 :default-height 190)
+            (large21 :default-height 210)
+            (present23
+             :default-height 230
+             ;; :fixed-pitch-family "Sarasa Term Slab K"
+             ;; :fixed-pitch-serif-family "Sarasa Term Slab K"
+             :bold-weight extrabold)
+            (t
+             ;; Following Prot’s example, keeping these for for didactic purposes.
+             :line-spacing 3
+             ;; :default-family "Sarasa Term K Nerd Font"
+             ;; :default-height 151
+             :default-family "Monoplex KR Nerd"
+             :default-height 140
+             :default-weight regular
+             ;; :fixed-pitch-family "Sarasa Term K Nerd Font"
+             ;; :fixed-pitch-height 151
+             ;; :fixed-pitch-weight nil
+             ;; :fixed-piath-serif-family nil
+             ;; :fixed-pitch-serif-weight nil
+             ;; :fixed-pitch-serif-height nil
+             :variable-pitch-family "Pretendard Variable"
+             ;; :variable-pitch-height 1.0
+             ;; :variable-pitch-family nil
+             ;; :variable-pitch-weight nil
+             :bold-family nil
+             :bold-weight bold
+             ;; :bold-width extended
+             :italic-family nil
+             :italic-slant italic)))
+
+    (fontaine-set-preset (or (fontaine-restore-latest-preset) 'regular14))
+    (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family)))
+    ;; Persist the latest font preset when closing/starting Emacs and
+    ;; while switching between themes.
+    (fontaine-mode 1)
+    )
+  )
+
 ;;;; goto-last-change
 
 (when (locate-library "goto-last-change")

@@ -1970,7 +1970,7 @@
     :ensure nil
     :init
     (setq whitespace-style '(face tabs trailing ;; lines-tail
-                                  empty  missing-newline-at-eof)
+                             empty  missing-newline-at-eof)
           whitespace-line-column 80)
     :hook (prog-mode . whitespace-mode)
     :diminish)
@@ -2178,7 +2178,7 @@
           calendar-location-name user-calendar-location-name
           calendar-time-display-form
           '(24-hours ":" minutes
-                     (if time-zone " (") time-zone (if time-zone ")")))
+            (if time-zone " (") time-zone (if time-zone ")")))
     )
 
 ;;;;; time
@@ -2793,105 +2793,119 @@
 
   ;; terminal-mode is nil
   ;; A narrow focus package for naming font configurations and then selecting them.
-  (use-package fontaine
-    :if window-system
-    :demand t
-    :init
-    ;; This is defined in Emacs C code: it belongs to font settings.
-    (setq x-underline-at-descent-line t)
-    ;; And this is for Emacs28.
-    (setq-default text-scale-remap-header-line t)
+  ;; (use-package fontaine
+  ;;   :if window-system
+  ;;   :demand t
+  ;;   :init
+  ;;   ;; This is defined in Emacs C code: it belongs to font settings.
+  ;;   (setq x-underline-at-descent-line t)
+  ;;   ;; And this is for Emacs28.
+  ;;   (setq-default text-scale-remap-header-line t)
 
-    ;; Weights :: Thin ExtraLight Light Regular Medium SemiBold Bold ExtraBold Heavy
-    ;; Slopes :: Upright Oblique Italic
-    ;; Width :: Normal Extended
+  ;;   ;; Weights :: Thin ExtraLight Light Regular Medium SemiBold Bold ExtraBold Heavy
+  ;;   ;; Slopes :: Upright Oblique Italic
+  ;;   ;; Width :: Normal Extended
 
-    :config
-    (unless *is-android*
-      (setq fontaine-presets
-            ;; 80 120, 136, 151, 180, 211
-            '(
-              (birdview
-               :default-height 80)
-              (small
-               :default-height 120)
-              (regular
-               :default-height 140)
-              (medium
-               :default-height 151)
-              (large
-               :default-height 180)
-              (presentation
-               :default-height 211
-               ;; :fixed-pitch-family "Sarasa Mono Slab K"
-               ;; :fixed-pitch-serif-family "Sarasa Mono Slab K"
-               :default-width extended
-               :bold-weight extrabold)
-              (t
-               ;; Following Prot’s example, keeping these for for didactic purposes.
-               :line-spacing 2
-               ;; :default-family "Sarasa Mono K"
-               ;; :default-height 136
-               :default-family "Monoplex KR Nerd"
-               :default-height 140
-               :default-weight regular
-               :fixed-pitch-family nil ;; "Monoplex KR Nerd"
-               :fixed-pitch-weight nil
-               :fixed-pitch-height nil
-               ;; :fixed-pitch-serif-family "Sarasa Mono Slab K" ; nil falls back to :default-family
-               :fixed-piath-serif-family nil
-               :fixed-pitch-serif-weight nil
-               :fixed-pitch-serif-height nil
-               :variable-pitch-family "Pretendard Variable"
-               ;; :variable-pitch-height 140
-               ;; "IBM Plex Sans KR"
-               ;; "Noto Sans KR"
-               ;; :variable-pitch-family nil
-               ;; :variable-pitch-weight nil
-               :bold-family nil
-               :bold-weight bold
-               ;; :bold-width extended
-               :italic-family nil
-               :italic-slant italic)))
+  ;;   :config
+  ;;   (unless *is-android*
+  ;;     (setq fontaine-presets
+  ;;           ;; 80 120, 136, 151, 180, 211
+  ;;           '(
+  ;;             (birdview
+  ;;              :default-height 80)
+  ;;             (small
+  ;;              :default-height 120)
+  ;;             (regular
+  ;;              :default-height 140)
+  ;;             (medium
+  ;;              :default-height 151)
+  ;;             (large
+  ;;              :default-height 180)
+  ;;             (presentation
+  ;;              :default-height 211
+  ;;              ;; :fixed-pitch-family "Sarasa Mono Slab K"
+  ;;              ;; :fixed-pitch-serif-family "Sarasa Mono Slab K"
+  ;;              :default-width extended
+  ;;              :bold-weight extrabold)
+  ;;             (t
+  ;;              ;; Following Prot’s example, keeping these for for didactic purposes.
+  ;;              :line-spacing 2
+  ;;              ;; :default-family "Sarasa Mono K"
+  ;;              ;; :default-height 136
+  ;;              :default-family "Monoplex KR Nerd"
+  ;;              :default-height 140
+  ;;              :default-weight regular
+  ;;              :fixed-pitch-family nil ;; "Monoplex KR Nerd"
+  ;;              :fixed-pitch-weight nil
+  ;;              :fixed-pitch-height nil
+  ;;              ;; :fixed-pitch-serif-family "Sarasa Mono Slab K" ; nil falls back to :default-family
+  ;;              :fixed-piath-serif-family nil
+  ;;              :fixed-pitch-serif-weight nil
+  ;;              :fixed-pitch-serif-height nil
+  ;;              :variable-pitch-family "Pretendard Variable"
+  ;;              ;; :variable-pitch-height 140
+  ;;              ;; "IBM Plex Sans KR"
+  ;;              ;; "Noto Sans KR"
+  ;;              ;; :variable-pitch-family nil
+  ;;              ;; :variable-pitch-weight nil
+  ;;              :bold-family nil
+  ;;              :bold-weight bold
+  ;;              ;; :bold-width extended
+  ;;              :italic-family nil
+  ;;              :italic-slant italic)))
 
-      ;; Set last preset or fall back to desired style from `fontaine-presets'.
-      ;; (fontaine-set-preset (or (fontaine-restore-latest-preset) 'regular))
-      ;; (fontaine-set-preset 'regular)
-      ;; (set-fontset-font t 'hangul (font-spec :family (face-attribute 'default :family))) ; t or nil ?
+  ;;     (setq fontaine-latest-state-file
+  ;;           (locate-user-emacs-file "fontaine-latest-state.eld"))
 
-      ;; store current preset
-      (defun my/fontaine-store-preset ()
-        (interactive)
-        (fontaine-store-latest-preset)
-        ;; (message "my/fontaine-store-preset")
-        )
+  ;;     ;; store current preset
+  ;;     ;; (defun my/fontaine-store-preset ()
+  ;;     ;;   (interactive)
+  ;;     ;;   (fontaine-store-latest-preset)
+  ;;     ;;   ;; (message "my/fontaine-store-preset")
+  ;;     ;;   )
 
-      ;; load @ start-up
-      (defun my/fontaine-load-preset ()
-        (interactive)
-        ;; The other side of `fontaine-restore-latest-preset'.
-        ;; (add-hook 'kill-emacs-hook #'fontaine-store-latest-preset)
-        (fontaine-set-preset 'regular) ; regular
-        ;; 1) go default spacemacs themes
-        (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family)))
-        )
-      (add-hook 'spacemacs-post-user-config-hook #'my/fontaine-load-preset 90)
+  ;;     ;; load @ start-up
+  ;;     ;; (defun my/fontaine-load-preset ()
+  ;;     ;;   (interactive)
 
-      ;; load @ theme change
-      (defun my/fontaine-apply-current-preset ()
-        (interactive)
-        (fontaine-apply-current-preset)
-        (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family))) ; default face
-        ;; (custom-set-faces
-        ;;  `(ekg-notes-mode-title ((t (:inherit outline-7 :weight semibold :height 1.3))))
-        ;;  `(ekg-title ((t (:inherit outline-0 :weight semibold :height 1.0 :underline t))))
-        ;;  `(denote-faces-link ((t (:inherit link :weight bold :slant italic))))
-        ;;  ;; `(org-special-keyword ((t (:inherit org-drawer :weight semibold))))
-        ;;  )
-        )
-      (add-hook 'spacemacs-post-theme-change-hook 'my/fontaine-apply-current-preset)
-      )
-    )
+  ;;     ;;   (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family)))
+  ;;     ;;   ;; Set the last preset or fall back to desired style from `fontaine-presets'
+
+  ;;     ;;   (fontaine-set-preset (or (fontaine-restore-latest-preset) 'regular))
+
+  ;;     ;;   ;; Persist the latest font preset when closing/starting Emacs and
+  ;;     ;;   ;; while switching between themes.
+  ;;     ;;   (fontaine-mode 1)
+  ;;     ;;   )
+  ;;     ;; (add-hook 'spacemacs-post-user-config-hook #'my/fontaine-load-preset 90)
+
+  ;;     ;; load @ theme change
+  ;;     ;; (defun my/fontaine-apply-current-preset ()
+  ;;     ;;   (interactive)
+  ;;     ;;   (fontaine-apply-current-preset)
+  ;;     ;;   (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family))) ; default face
+  ;;     ;;   ;; (custom-set-faces
+  ;;     ;;   ;;  `(ekg-notes-mode-title ((t (:inherit outline-7 :weight semibold :height 1.3))))
+  ;;     ;;   ;;  `(ekg-title ((t (:inherit outline-0 :weight semibold :height 1.0 :underline t))))
+  ;;     ;;   ;;  `(denote-faces-link ((t (:inherit link :weight bold :slant italic))))
+  ;;     ;;   ;;  ;; `(org-special-keyword ((t (:inherit org-drawer :weight semibold))))
+  ;;     ;;   ;;  )
+  ;;     ;;   )
+  ;;     ;; (add-hook 'spacemacs-post-theme-change-hook 'my/fontaine-apply-current-preset)
+
+  ;;     (progn
+  ;;       (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family)))
+  ;;       ;;   ;; Set the last preset or fall back to desired style from `fontaine-presets'
+
+  ;;       (fontaine-set-preset (or (fontaine-restore-latest-preset) 'regular))
+
+  ;;       ;;   ;; Persist the latest font preset when closing/starting Emacs and
+  ;;       ;;   ;; while switching between themes.
+  ;;       (fontaine-mode 1)
+  ;;       )
+
+  ;;     )
+  ;;   )
 
 ;;;;;; jh-visual > fonts > emoji
 
@@ -3005,13 +3019,13 @@
              :mode-line-inactive spacious-padding-subtle-mode-line-inactive))
     (setq spacious-padding-widths
           '(:header-line-width 4
-                               :mode-line-width 4 ; 6
-                               :tab-width 4 ; sync mode-line-width for keycast-tab-bar
-                               :internal-border-width 20 ; 15
-                               :right-divider-width 30 ; 30
-                               :scroll-bar-width 8
-                               :fringe-width 8
-                               ))
+            :mode-line-width 4 ; 6
+            :tab-width 4 ; sync mode-line-width for keycast-tab-bar
+            :internal-border-width 20 ; 15
+            :right-divider-width 30 ; 30
+            :scroll-bar-width 8
+            :fringe-width 8
+            ))
     :config
     (spacious-padding-mode +1)
     )
@@ -3083,7 +3097,7 @@
     (setq dired-guess-shell-alist-user ; those are the suggestions for ! and & in Dired
           '(("\\.\\(png\\|jpe?g\\|tiff\\)" "feh" "xdg-open")
             ("\\.\\(mp[34]\\|m4a\\|ogg\\|flac\\|webm\\|mkv\\)" "mpv" "xdg-open")
-	        (".*" "xdg-open")))
+	    (".*" "xdg-open")))
 
     ;; (setq dired-recursive-deletes 'always)
     (setq copy-directory-create-symlink t)
@@ -3145,9 +3159,9 @@
       )
 
     (spacemacs/set-leader-keys-for-major-mode 'dired-mode
-      "h" 'dired-hide-details-mode
-      "/" 'dired-narrow-regexp
-      "o" 'dired-omit-mode)
+                                              "h" 'dired-hide-details-mode
+                                              "/" 'dired-narrow-regexp
+                                              "o" 'dired-omit-mode)
     ;; (global-set-key (kbd "C-x /") #'dired-narrow-regexp)
     )
 
@@ -4005,11 +4019,11 @@
       ;; Key binding for modes you want edit
       ;; or simply bind ?global-map? for all.
       :bind (:map prog-mode-map
-                  ("C-c '" . separedit)
-                  :map minibuffer-local-map
-                  ("C-c '" . separedit)
-                  :map help-mode-map
-                  ("C-c '" . separedit))
+             ("C-c '" . separedit)
+             :map minibuffer-local-map
+             ("C-c '" . separedit)
+             :map help-mode-map
+             ("C-c '" . separedit))
       :init
       ;; Default major-mode for edit buffer
       ;; can also be other mode e.g. ?org-mode?.
@@ -4187,12 +4201,12 @@ Suitable for `imenu-create-index-function'."
     (spacemacs/set-leader-keys-for-major-mode 'eww-mode "y" 'eww-copy-page-url)
 
     (spacemacs|add-toggle eww-as-default-browser
-      :documentation "Eww as default browser."
-      :status (equal browse-url-browser-function 'eww-browse-url)
-      :on (setq browse-url-browser-function 'eww-browse-url)
-      ;; should have a var to store the original one
-      :off (setq browse-url-browser-function 'browse-url-default-browser)
-      :evil-leader "t e")
+                          :documentation "Eww as default browser."
+                          :status (equal browse-url-browser-function 'eww-browse-url)
+                          :on (setq browse-url-browser-function 'eww-browse-url)
+                          ;; should have a var to store the original one
+                          :off (setq browse-url-browser-function 'browse-url-default-browser)
+                          :evil-leader "t e")
 
     ;; https://github.com/alphapapa/unpackaged.el
     (add-hook 'eww-mode-hook (lambda () (setq-local imenu-create-index-function #'spacemacs/imenu-eww-headings)))
@@ -4832,9 +4846,9 @@ For instance pass En as source for English."
   (use-package clojure-essential-ref-nov
     :defer 8
     :bind (:map cider-mode-map
-                ("M-9" . clojure-essential-ref)
-                :map cider-repl-mode-map
-                ("M-9" . clojure-essential-ref))
+           ("M-9" . clojure-essential-ref)
+           :map cider-repl-mode-map
+           ("M-9" . clojure-essential-ref))
     :init
     (setq clojure-essential-ref-default-browse-fn #'clojure-essential-ref-nov-browse)
     (setq clojure-essential-ref-nov-epub-path "~/git/default/clj-essential-ref-v31.epub")

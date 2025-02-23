@@ -3345,7 +3345,7 @@ ${content}"))
     (interactive)
     (unless (buffer-file-name (current-buffer))
       (let* ((suffix (format-time-string "%Y%m%dT%H%M%S"))
-             (chat-dir (concat org-directory "/notes"))
+             (chat-dir (concat org-directory "/temp"))
              (ext (replace-regexp-in-string "-mode$" "" (symbol-name gptel-default-mode)))
              (filename (concat suffix "__llmlog" "." ext))
              (full-path (expand-file-name filename chat-dir)))
@@ -3360,7 +3360,7 @@ ${content}"))
         (insert (format "#+date: %s\n" (format-time-string "[%Y-%m-%d %a %H:%M]")))
         (insert (format "#+identifier: %s\n" suffix))
         (insert (format "#+export_file_name: %s.md\n" suffix))
-        (insert (format "#+hugo_tags: bib notes\n\n"))
+        (insert (format "#+hugo_tags: llmlog\n\n"))
 
         ;; add bib and history
         (insert (format "#+print_bibliography:\n* Related Notes\n* History\n- %s\n" (format-time-string "[%Y-%m-%d %a %H:%M]")))
@@ -4521,103 +4521,103 @@ Called with a PREFIX, resets the context buffer list before opening"
 
 ;; terminal-mode is nil
 ;; A narrow focus package for naming font configurations and then selecting them.
-(use-package! fontaine
-  :if window-system
-  :init
-  ;; This is defined in Emacs C code: it belongs to font settings.
-  ;; (setq x-underline-at-descent-line nil)
-  ;; And this is for Emacs28.
-  (setq-default text-scale-remap-header-line t)
+;; (use-package! fontaine
+;;   :if window-system
+;;   :init
+;;   ;; This is defined in Emacs C code: it belongs to font settings.
+;;   ;; (setq x-underline-at-descent-line nil)
+;;   ;; And this is for Emacs28.
+;;   (setq-default text-scale-remap-header-line t)
 
-  ;; Weights :: Thin ExtraLight Light Regular Medium SemiBold Bold ExtraBold Heavy
-  ;; Slopes :: Upright Oblique Italic
-  ;; Width :: Normal Extended
+;;   ;; Weights :: Thin ExtraLight Light Regular Medium SemiBold Bold ExtraBold Heavy
+;;   ;; Slopes :: Upright Oblique Italic
+;;   ;; Width :: Normal Extended
 
-  :config
-  (setq
-   fontaine-presets
-   ;; 80 120, 136, 151, 180, 211 ; sarasa mono / term
-   ;; 120, 140, 170, 190, 210, 230 ; monoplex kr nerd
-   '(
-     (small12 :default-height 120)
-     (regular14 :default-height 140)
-     (regular17 :default-height 170)
-     (large19 :default-height 190)
-     (large21 :default-height 210)
-     (present23
-      :default-height 230
-      ;; :fixed-pitch-family "Sarasa Term Slab K"
-      ;; :fixed-pitch-serif-family "Sarasa Term Slab K"
-      :bold-weight extrabold)
-     (t
-      ;; Following Prot’s example, keeping these for for didactic purposes.
-      :line-spacing 3
-      ;; :default-family "Sarasa Term K Nerd Font"
-      ;; :default-height 151
-      :default-family "Monoplex KR Nerd"
-      :default-height 140
-      :default-weight regular
-      ;; :fixed-pitch-family "Sarasa Term K Nerd Font"
-      ;; :fixed-pitch-height 151
-      ;; :fixed-pitch-weight nil
-      ;; :fixed-piath-serif-family nil
-      ;; :fixed-pitch-serif-weight nil
-      ;; :fixed-pitch-serif-height nil
-      :variable-pitch-family "Pretendard Variable"
-      ;; :variable-pitch-height 1.0
-      ;; :variable-pitch-family nil
-      ;; :variable-pitch-weight nil
-      :bold-family nil
-      :bold-weight bold
-      ;; :bold-width extended
-      :italic-family nil
-      :italic-slant italic)))
+;;   :config
+;;   (setq
+;;    fontaine-presets
+;;    ;; 80 120, 136, 151, 180, 211 ; sarasa mono / term
+;;    ;; 120, 140, 170, 190, 210, 230 ; monoplex kr nerd
+;;    '(
+;;      (small12 :default-height 120)
+;;      (regular14 :default-height 140)
+;;      (regular17 :default-height 170)
+;;      (large19 :default-height 190)
+;;      (large21 :default-height 210)
+;;      (present23
+;;       :default-height 230
+;;       ;; :fixed-pitch-family "Sarasa Term Slab K"
+;;       ;; :fixed-pitch-serif-family "Sarasa Term Slab K"
+;;       :bold-weight extrabold)
+;;      (t
+;;       ;; Following Prot’s example, keeping these for for didactic purposes.
+;;       :line-spacing 3
+;;       ;; :default-family "Sarasa Term K Nerd Font"
+;;       ;; :default-height 151
+;;       :default-family "Monoplex KR Nerd"
+;;       :default-height 140
+;;       :default-weight regular
+;;       ;; :fixed-pitch-family "Sarasa Term K Nerd Font"
+;;       ;; :fixed-pitch-height 151
+;;       ;; :fixed-pitch-weight nil
+;;       ;; :fixed-piath-serif-family nil
+;;       ;; :fixed-pitch-serif-weight nil
+;;       ;; :fixed-pitch-serif-height nil
+;;       :variable-pitch-family "Pretendard Variable"
+;;       ;; :variable-pitch-height 1.0
+;;       ;; :variable-pitch-family nil
+;;       ;; :variable-pitch-weight nil
+;;       :bold-family nil
+;;       :bold-weight bold
+;;       ;; :bold-width extended
+;;       :italic-family nil
+;;       :italic-slant italic)))
 
-  ;; Set last preset or fall back to desired style from `fontaine-presets'.
-  ;; (fontaine-set-preset (or (fontaine-restore-latest-preset) 'regular))
-  ;; (fontaine-set-preset 'regular)
-  ;; (set-fontset-font t 'hangul (font-spec :family (face-attribute 'default :family))) ; t or nil ?
+;;   ;; Set last preset or fall back to desired style from `fontaine-presets'.
+;;   ;; (fontaine-set-preset (or (fontaine-restore-latest-preset) 'regular))
+;;   ;; (fontaine-set-preset 'regular)
+;;   ;; (set-fontset-font t 'hangul (font-spec :family (face-attribute 'default :family))) ; t or nil ?
 
-  ;; store current preset
-  (defun my/fontaine-store-preset ()
-    (interactive)
-    ;; (message "my/fontaine-store-preset")
-    (fontaine-store-latest-preset))
+;;   ;; store current preset
+;;   (defun my/fontaine-store-preset ()
+;;     (interactive)
+;;     ;; (message "my/fontaine-store-preset")
+;;     (fontaine-store-latest-preset))
 
-  ;; 한글 사용 위해서 필수!
-  (defun my/load-font-cjk ()
-    (interactive)
-    (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family))) ; default face
-    ;; (set-fontset-font "fontset-default" 'hangul (font-spec :family "Monoplex KR Nerd")) ;  "Sarasa Term K"
-    ;; (set-fontset-font "fontset-default" 'cjk-misc (font-spec :family "Sarasa Term SC" )) ; default face
-    ;; (set-fontset-font "fontset-default" 'bopomofo (font-spec :family "Sarasa Term SC" )) ; default face
-    ;; (set-fontset-font "fontset-default" 'kana (font-spec :family "Sarasa Term J")) ; default face
-    ;; (set-fontset-font "fontset-default" 'han (font-spec :family "Sarasa Term SC")) ; default face
-    )
+;;   ;; 한글 사용 위해서 필수!
+;;   (defun my/load-font-cjk ()
+;;     (interactive)
+;;     (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family))) ; default face
+;;     ;; (set-fontset-font "fontset-default" 'hangul (font-spec :family "Monoplex KR Nerd")) ;  "Sarasa Term K"
+;;     ;; (set-fontset-font "fontset-default" 'cjk-misc (font-spec :family "Sarasa Term SC" )) ; default face
+;;     ;; (set-fontset-font "fontset-default" 'bopomofo (font-spec :family "Sarasa Term SC" )) ; default face
+;;     ;; (set-fontset-font "fontset-default" 'kana (font-spec :family "Sarasa Term J")) ; default face
+;;     ;; (set-fontset-font "fontset-default" 'han (font-spec :family "Sarasa Term SC")) ; default face
+;;     )
 
-  ;; load @ start-up
-  (defun my/fontaine-load-preset ()
-    (interactive)
+;;   ;; load @ start-up
+;;   (defun my/fontaine-load-preset ()
+;;     (interactive)
 
-    ;; The other side of `fontaine-restore-latest-preset'.
-    ;; (add-hook 'kill-emacs-hook #'fontaine-store-latest-preset)
+;;     ;; The other side of `fontaine-restore-latest-preset'.
+;;     ;; (add-hook 'kill-emacs-hook #'fontaine-store-latest-preset)
 
-    (if (string= (system-name) "jhnuc")
-        (fontaine-set-preset 'regular17)
-      (fontaine-set-preset 'regular14))
+;;     (if (string= (system-name) "jhnuc")
+;;         (fontaine-set-preset 'regular17)
+;;       (fontaine-set-preset 'regular14))
 
-    ;; 1) go default spacemacs themes
-    (my/load-font-cjk))
-  (add-hook 'after-setting-font-hook #'my/fontaine-load-preset 90)
+;;     ;; 1) go default spacemacs themes
+;;     (my/load-font-cjk))
+;;   (add-hook 'after-setting-font-hook #'my/fontaine-load-preset 90)
 
-  ;; load @ theme change
-  ;; (set-fontset-font "fontset-default" 'hangul (font-spec :family "BHGoo") nil 'append) ; 구본형체 테스트
-  ;; (defun my/fontaine-apply-current-preset ()
-  ;;   (interactive)
-  ;;   ;; (fontaine-apply-current-preset)
-  ;;   (my/load-font-cjk))
-  ;; (add-hook 'doom-load-theme-hook 'my/fontaine-apply-current-preset 80)
-  )
+;;   ;; load @ theme change
+;;   ;; (set-fontset-font "fontset-default" 'hangul (font-spec :family "BHGoo") nil 'append) ; 구본형체 테스트
+;;   ;; (defun my/fontaine-apply-current-preset ()
+;;   ;;   (interactive)
+;;   ;;   ;; (fontaine-apply-current-preset)
+;;   ;;   (my/load-font-cjk))
+;;   ;; (add-hook 'doom-load-theme-hook 'my/fontaine-apply-current-preset 80)
+;;   )
 
 ;;;; Show Font (preview fonts)
 

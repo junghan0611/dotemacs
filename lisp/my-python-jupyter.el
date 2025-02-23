@@ -75,6 +75,11 @@ Use the `company-doc-buffer' to insert the results."
 
   (setq org-babel-jupyter-resource-directory (concat user-emacs-directory "ob-jupyter"))
 
+  ;; (defun my/final-command ()
+  ;;   (interactive)
+  ;;   (jupyter-org-with-src-block-client
+  ;;    (call-interactively #'jupyter-eval-line-or-region)))
+
   ;; (setq org-babel-default-header-args:jupyter-python
   ;;       '((:async . "yes") (:session . "py") (:kernel . "python3")
   ;;         ;; (:tangle . "jupyter-python/tangled.py")
