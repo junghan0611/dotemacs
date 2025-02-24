@@ -5025,17 +5025,6 @@ For instance pass En as source for English."
     )
 
 
-;;;;;; jh-org > packages > org-rainbow-tags
-
-  (use-package org-rainbow-tags
-    :after org
-    :init
-    (setq org-rainbow-tags-hash-start-index 0)
-    (setq org-rainbow-tags-extra-face-attributes
-          '(:inverse-video t :box nil :weight 'bold))
-    ;; :hook (org-mode . org-rainbow-tags-mode)
-    )
-
 ;;;;;; DONT jh-org > packages > org-ql
 
   ;; ;; isamert-dotfiles-imdb/emacs/init.el

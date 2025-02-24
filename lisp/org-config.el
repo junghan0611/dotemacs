@@ -614,9 +614,12 @@
                             ("HOLD" . ?h)
                             (:endgroup)
                             ("IMPORTANT" . ?i) ; 별도 처리
+                            ;; ("Up" . ?u) ;;
+                            ("SUBNOTE" . ?s) ;; subtree -> subnote
                             ;; ("crypt" . ?E)
                             ;; ("NOTE" . ?o)
                             ("noexport" . ?x)
+                            ("video" . ?v)
                             ("fulltext" . ?f)
                             ;; ("CODE" . ?c)
                             ("nonum" . ?u)
@@ -624,8 +627,8 @@
                             ;; ("LATEST" . ?t) ;; latest version
                             ("LLMLOG" . ?m)
                             ("WORKLOG" . ?o)
-                            ("DEPRECATED" . ?d)
-                            ("KLUDGE" . ?k)
+                            ("DEPRECATED" . ?D)
+                            ("KLUDGE" . ?K)
                             ("2022" . ?2) ;; 2022
                             ("2023" . ?3) ;; 2023
                             ("2024" . ?4) ;; 2024

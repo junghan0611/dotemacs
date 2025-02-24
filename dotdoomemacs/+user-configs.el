@@ -2855,17 +2855,6 @@ ${content}"))
   ;; (org-bookmarks-add-org-capture-template)
   )
 
-;;;;; org-rainbow-tags
-
-(use-package! org-rainbow-tags
-  :after org
-  :init
-  (setq org-rainbow-tags-hash-start-index 0)
-  (setq org-rainbow-tags-extra-face-attributes
-        '(:inverse-video t :box nil :weight 'bold))
-  ;; :hook (org-mode . org-rainbow-tags-mode)
-  )
-
 ;;;;; org-ql
 
 (use-package! org-ql

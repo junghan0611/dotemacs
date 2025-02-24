@@ -138,7 +138,7 @@ Delete the original subtree."
         (insert text))
     (user-error "No subtree to extract; aborting")))
 
-;;; TODO Signature - denote-sequence
+;;; TODO signature - replaced with 'denote-sequence'
 ;;;; DONT efls/denote-signature-buffer
 
 ;; (defun efls/denote-signature-buffer ()

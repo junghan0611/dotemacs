@@ -1653,7 +1653,7 @@ depending on which one is appropriate based on the context."
     ;; (visual-line-mode -1)
 
     (when (fboundp 'fontaine-set-preset)
-      (fontaine-set-preset 'presenting))
+      (fontaine-set-preset 'logosfocus))
     (when (fboundp 'vi-tilde-fringe-mode)
       (vi-tilde-fringe-mode -1))
 

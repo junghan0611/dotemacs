@@ -424,8 +424,10 @@ Also see `prot-window-delete-popup-frame'." command)
           ;; 120, 140, 170, 190, 210, 230 ; monoplex kr nerd
           '(
             (small12 :default-height 120)
+            (default :default-height 140)
             (regular14 :default-height 140)
             (regular17 :default-height 170)
+            (logosfocus :default-height 170)
             (large19 :default-height 190)
             (large21 :default-height 210)
             (present23
@@ -462,6 +464,18 @@ Also see `prot-window-delete-popup-frame'." command)
     ;; Persist the latest font preset when closing/starting Emacs and
     ;; while switching between themes.
     (fontaine-mode 1)
+    )
+  )
+
+;;;; org-rainbow-tags
+
+(when (locate-library "org-rainbow-tags")
+  (with-eval-after-load 'org
+    (require 'org-rainbow-tags)
+    (setq org-rainbow-tags-hash-start-index 0)
+    (setq org-rainbow-tags-extra-face-attributes
+          '(:inverse-video t :box nil :weight 'bold))
+    (add-hook 'org-mode-hook #'org-rainbow-tags-mode)
     )
   )
 

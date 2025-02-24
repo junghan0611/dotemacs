@@ -2,11 +2,12 @@
 
 ;; https://github.com/emacs-jupyter/jupyter/pull/573/files
 
-;;;; jupyter code completion with corfu
+;;;; custom jupyter
+
+;;;;; jupyter code completion with corfu
 
 ;; dotsamples/vanilla/karthink-dotfiles-popper/lisp/setup-python.el
 (with-eval-after-load 'jupyter
-
   ;; :bind (:map jupyter-repl-interaction-mode-map
   ;;             ("M-i"   . nil)
   ;;             ("C-h ." . jupyter-inspect-at-point))
@@ -42,58 +43,11 @@ Use the `company-doc-buffer' to insert the results."
             (current-buffer))))))
   )
 
-;;;; ob-jupyter - ansi block
-
-(with-eval-after-load 'ob-jupyter
-  ;; :bind (:map jupyter-org-interaction-mode-map
-  ;;             ("M-i"   . nil)
-  ;;             ("C-h ." . jupyter-inspect-at-point))
-  ;; Clean up ob-jupyter source block output
-  ;; From Henrik Lissner
-  (defun my/org-babel-jupyter-strip-ansi-escapes-block ()
-    (when (string-match-p "^jupyter-"
-                          (nth 0 (org-babel-get-src-block-info)))
-      (unless (or
-               ;; ...but not while Emacs is exporting an org buffer (where
-               ;; `org-display-inline-images' can be awfully slow).
-               (bound-and-true-p org-export-current-backend)
-               ;; ...and not while tangling org buffers (which happens in a temp
-               ;; buffer where `buffer-file-name' is nil).
-               (string-match-p "^ \\*temp" (buffer-name)))
-        (save-excursion
-          (when-let* ((beg (org-babel-where-is-src-block-result))
-                      (end (progn (goto-char beg)
-                                  (forward-line)
-                                  (org-babel-result-end))))
-            (ansi-color-apply-on-region (min beg end) (max beg end)))))))
-
-  (add-hook 'org-babel-after-execute-hook
-            #'my/org-babel-jupyter-strip-ansi-escapes-block)
-
-  (define-key jupyter-org-interaction-mode-map (kbd "C-c h") nil)
-  (define-key jupyter-org-interaction-mode-map (kbd "<f2>") 'jupyter-org-hydra/body)
-
-  (setq org-babel-jupyter-resource-directory (concat user-emacs-directory "ob-jupyter"))
-
-  ;; (defun my/final-command ()
-  ;;   (interactive)
-  ;;   (jupyter-org-with-src-block-client
-  ;;    (call-interactively #'jupyter-eval-line-or-region)))
-
-  ;; (setq org-babel-default-header-args:jupyter-python
-  ;;       '((:async . "yes") (:session . "py") (:kernel . "python3")
-  ;;         ;; (:tangle . "jupyter-python/tangled.py")
-  ;;         ;; (:exports . "both")
-  ;;         ))
-  )
-
-;;;; jupyter - repl interaction
+;;;;; jupyter - repl interaction
 
 ;; starterkit/snakemacs-python/main.el
 ;; sqrt-dotfiles-elfeed/Emacs.org
-
 (progn
-
   (setq jupyter-repl-echo-eval-p t) ; default nil
 
   ;; When this minor mode is enabled you may evaluate code from the current
@@ -167,6 +121,76 @@ Use the `company-doc-buffer' to insert the results."
                   (format "Delete %d files?" (length to-delete))))
         (dolist (file to-delete)
           (delete-file (car file))))))
+  )
+
+;;;;; DONT code-cell with jupyter
+
+;; https://github.com/emacs-jupyter/jupyter/pull/573#issuecomment-2677444974
+;; My config uses the awesome doom emacs, which I highly recommend (note that emacs-jupyter is shipped as part of the org module in doom, so you can choose between enabling that and installing manually). Other than that, I like to use (setq jupyter-repl-echo-eval-p t), which conveniently echoes the code you have run in the REPL, and I also define the following function for sending code chunks from my python files to the REPL (which I borrowed from Hank Greenburg):
+
+;; (when (locate-library "code-cells")
+;;   (with-eval-after-load 'code-cells
+;;     (defun my/jupyter-eval-region (beg end)
+;;       "Evaluate the region between BEG and END."
+;;       (interactive "r")
+;;       (let* ((string (buffer-substring beg end))
+;;              (string (replace-regexp-in-string "\\`[\n]*" "" string)) ; Remove leading empty lines
+;;              (indent-length (string-match "[^ \t]" string)) ; Find indent length of the first line
+;;              (unindented-string (replace-regexp-in-string (format "^%s" (make-string indent-length ?\ ))
+;;                                                           "" string t t))) ; Remove exactly that amount of indentation
+;;         (jupyter-eval-string unindented-string)))
+;;     (add-to-list 'code-cells-eval-region-commands '(jupyter-repl-interaction-mode . gm/jupyter-eval-region))
+;;     (let ((map code-cells-mode-map))
+;;       (define-key map [remap evil-search-next] (code-cells-speed-key 'code-cells-forward-cell)) ;; n
+;;       (define-key map [remap evil-paste-after] (code-cells-speed-key 'code-cells-backward-cell)) ;; p
+;;       (define-key map [remap evil-backward-word-begin] (code-cells-speed-key 'code-cells-eval-above)) ;; b
+;;       (define-key map [remap evil-forward-word-end] (code-cells-speed-key 'code-cells-eval)) ;; e
+;;       (define-key map [remap evil-jump-forward] (code-cells-speed-key 'outline-cycle))))
+;;   )
+
+;;;; ob-jupyter - ansi block bugfix
+
+(with-eval-after-load 'ob-jupyter
+  ;; :bind (:map jupyter-org-interaction-mode-map
+  ;;             ("M-i"   . nil)
+  ;;             ("C-h ." . jupyter-inspect-at-point))
+  ;; Clean up ob-jupyter source block output
+  ;; From Henrik Lissner
+  (defun my/org-babel-jupyter-strip-ansi-escapes-block ()
+    (when (string-match-p "^jupyter-"
+                          (nth 0 (org-babel-get-src-block-info)))
+      (unless (or
+               ;; ...but not while Emacs is exporting an org buffer (where
+               ;; `org-display-inline-images' can be awfully slow).
+               (bound-and-true-p org-export-current-backend)
+               ;; ...and not while tangling org buffers (which happens in a temp
+               ;; buffer where `buffer-file-name' is nil).
+               (string-match-p "^ \\*temp" (buffer-name)))
+        (save-excursion
+          (when-let* ((beg (org-babel-where-is-src-block-result))
+                      (end (progn (goto-char beg)
+                                  (forward-line)
+                                  (org-babel-result-end))))
+            (ansi-color-apply-on-region (min beg end) (max beg end)))))))
+
+  (add-hook 'org-babel-after-execute-hook
+            #'my/org-babel-jupyter-strip-ansi-escapes-block)
+
+  (define-key jupyter-org-interaction-mode-map (kbd "C-c h") nil)
+  (define-key jupyter-org-interaction-mode-map (kbd "<f2>") 'jupyter-org-hydra/body)
+
+  (setq org-babel-jupyter-resource-directory (concat user-emacs-directory "ob-jupyter"))
+
+  (defun my/org-src-block-jupyter-eval-line-or-region ()
+    (interactive)
+    (jupyter-org-with-src-block-client
+     (call-interactively #'jupyter-eval-line-or-region)))
+
+  ;; (setq org-babel-default-header-args:jupyter-python
+  ;;       '((:async . "yes") (:session . "py") (:kernel . "python3")
+  ;;         ;; (:tangle . "jupyter-python/tangled.py")
+  ;;         ;; (:exports . "both")
+  ;;         ))
   )
 
 ;;; provide
