@@ -15,8 +15,6 @@
 
 ;;; User Profile
 
-(defconst user-emacs-version "30.0.93")
-
 ;; (defconst user-data-dir (file-name-as-directory (getenv "DATA_DIR")))
 
 ;; 나의 공개키는 다음 에서 확인 할수 있다.
@@ -234,7 +232,7 @@
         "~/sync/org/dict/20241110T051844--it-terms__glossary.txt"
         ;;,(concat org-directory "dict/20240913T145640--general__glossary.txt")
         ))
-;; (setq ten-tags-file-default (concat user-org-directory "dict/ten-TAGS"))
+(setq user-ten-tags-file (concat user-org-directory "dict/ten-TAGS"))
 
 ;;; cc/url-bookmarks
 

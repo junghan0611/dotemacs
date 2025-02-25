@@ -969,39 +969,39 @@
 
 ;;;; OKAY Flycheck
 
-;; (after! flycheck
-;;   (setq flycheck-global-modes '(not emacs-lisp-mode org-mode markdown-mode gfm-mode))
-;;   (setq flycheck-checker-error-threshold 1000) ; need more than default of 400
-;;   (global-flycheck-mode +1)
-;;   )
+(after! flycheck
+  (setq flycheck-global-modes '(not emacs-lisp-mode org-mode markdown-mode gfm-mode))
+  (setq flycheck-checker-error-threshold 1000) ; need more than default of 400
+  (global-flycheck-mode +1)
+  )
 
-;; (progn
-;;   (setq flycheck-help-echo-function nil ; default 'flycheck-help-echo-all-error-messages
-;;         flycheck-display-errors-function nil ; default 'flycheck-display-error-messages
-;;         )
+(progn
+  (setq flycheck-help-echo-function nil ; default 'flycheck-help-echo-all-error-messages
+        flycheck-display-errors-function nil ; default 'flycheck-display-error-messages
+        )
 
-;;   (after! flycheck
-;;     (ignore-errors
-;;       (define-key flycheck-mode-map flycheck-keymap-prefix nil))
-;;     (setq flycheck-keymap-prefix nil)
+  (after! flycheck
+    (ignore-errors
+      (define-key flycheck-mode-map flycheck-keymap-prefix nil))
+    (setq flycheck-keymap-prefix nil)
 
-;;     (add-hook! flycheck-mode
-;;       (defun disable-flycheck-popup-buffer ()
-;;         (setq flycheck-display-errors-function #'ignore)))
-;;     (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-package)
-;;     )
+    (add-hook! flycheck-mode
+      (defun disable-flycheck-popup-buffer ()
+        (setq flycheck-display-errors-function #'ignore)))
+    (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-package)
+    )
 
-;;   (after! elisp-mode
-;;     (add-hook! 'doom-scratch-buffer-created-hook
-;;       (defun flycheck-off ()
-;;         (flycheck-mode -1))))
-;;   )
+  (after! elisp-mode
+    (add-hook! 'doom-scratch-buffer-created-hook
+      (defun flycheck-off ()
+        (flycheck-mode -1))))
+  )
 
-;;;; OKAY Flymake
+;;;; DONT Flymake
 
 ;;;;; disable flymake-mode default
 
-(remove-hook! (prog-mode text-mode) #'flymake-mode)
+;; (remove-hook! (prog-mode text-mode) #'flymake-mode)
 
 ;;;;; DONT flymake-vale
 
@@ -4075,7 +4075,7 @@ Called with a PREFIX, resets the context buffer list before opening"
 
 ;;;; indent-bars
 
-; (remove-hook 'text-mode-hook #'+indent-guides-init-maybe-h)
+;; (remove-hook 'text-mode-hook #'+indent-guides-init-maybe-h)
 
 ;;;; lsp-mode - lsp-ui-mode - lsp-treemacs
 
@@ -4084,34 +4084,34 @@ Called with a PREFIX, resets the context buffer list before opening"
 ;; (setq lsp-file-watch-threshold (* 1024 1024))
 ;; (setq read-process-output-max (* 1024 1024))
 
-;; (progn
-;;   (after! lsp-mode
-;;     (setq
-;;      lsp-headerline-breadcrumb-enable t ; doom nil
-;;      lsp-headerline-breadcrumb-icons-enable nil
-;;      ;; lsp-headerline-breadcrumb-segments '(symbols) ; namespace & symbols, no file path
+(progn
+  (after! lsp-mode
+    (setq
+     lsp-headerline-breadcrumb-enable t ; doom nil
+     lsp-headerline-breadcrumb-icons-enable nil
+     ;; lsp-headerline-breadcrumb-segments '(symbols) ; namespace & symbols, no file path
 
-;;      ;; lsp-idle-delay 0.2  ; smooth LSP features response
-;;      ;; lsp-eldoc-enable-hover nil ; default t - disable all hover actions
-;;      ;; lsp-modeline-code-actions-segments '(count icon)
-;;      ;; lsp-navigation 'both ; default 'both ; 'simple or 'peek
-;;      ;; lsp-modeline-diagnostics-enable nil
-;;      ;; lsp-modeline-code-actions-enable nil
-;;      )
-;;     )
+     ;; lsp-idle-delay 0.2  ; smooth LSP features response
+     ;; lsp-eldoc-enable-hover nil ; default t - disable all hover actions
+     ;; lsp-modeline-code-actions-segments '(count icon)
+     ;; lsp-navigation 'both ; default 'both ; 'simple or 'peek
+     ;; lsp-modeline-diagnostics-enable nil
+     ;; lsp-modeline-code-actions-enable nil
+     )
+    )
 
-;;   (after! lsp-ui
-;;     (setq
-;;      lsp-ui-sideline-enable nil ; doom t - disable sideline for less distraction
-;;      ;; lsp-ui-doc-enable nil ;; doom t - disable all doc popups
-;;      treemacs-space-between-root-nodes nil  ;; doom nil
-;;      ;; lsp-log-io t  ; default nil - Log client-server json communication
-;;      ;; lsp-ui-peek-enable t ; doom t
-;;      ))
+  (after! lsp-ui
+    (setq
+     lsp-ui-sideline-enable nil ; doom t - disable sideline for less distraction
+     ;; lsp-ui-doc-enable nil ;; doom t - disable all doc popups
+     treemacs-space-between-root-nodes nil  ;; doom nil
+     ;; lsp-log-io t  ; default nil - Log client-server json communication
+     ;; lsp-ui-peek-enable t ; doom t
+     ))
 
-;;   (after! lsp-treemacs
-;;     (setq lsp-treemacs-error-list-current-project-only t))
-;;   )
+  (after! lsp-treemacs
+    (setq lsp-treemacs-error-list-current-project-only t))
+  )
 
 ;;;; devdocs-browser
 
@@ -4234,23 +4234,14 @@ Called with a PREFIX, resets the context buffer list before opening"
 
 ;;;; :lang python
 
-(with-eval-after-load 'eglot
-  (add-to-list
-   'eglot-server-programs
-   `(python-mode .
-     ,(eglot-alternatives
-       '(("basedpyright-langserver" "--stdio")))))
-  ;; (add-hook 'after-save-hook 'eglot-format)
-  )
-
 ;;;;; ipython default
 
-(after! python
-  ;; use ipython for interpreter if it exists
-  (if (executable-find "ipython")
-      (progn (setq python-shell-interpreter "ipython")
-             (setq python-shell-interpreter-args "-i --simple-prompt")))
-  )
+;; (after! python
+;;   ;; use ipython for interpreter if it exists
+;;   (if (executable-find "ipython")
+;;       (progn (setq python-shell-interpreter "ipython")
+;;              (setq python-shell-interpreter-args "-i --simple-prompt")))
+;;   )
 
 ;;;;; rainbow-delimiters-mode
 
@@ -4278,6 +4269,17 @@ Called with a PREFIX, resets the context buffer list before opening"
 
 ;; (when (modulep! :tools lsp -eglot)
 ;;   (remove-hook 'python-mode-local-vars-hook 'lsp!))
+
+;;;;; DONT python with eglot
+
+;; (with-eval-after-load 'eglot
+;;   (add-to-list
+;;    'eglot-server-programs
+;;    `(python-mode .
+;;      ,(eglot-alternatives
+;;        '(("basedpyright-langserver" "--stdio")))))
+;;   ;; (add-hook 'after-save-hook 'eglot-format)
+;;   )
 
 ;;;;; TODO python-pytest
 
@@ -5097,7 +5099,7 @@ Suitable for `imenu-create-index-function'."
 ;;   (setq ahs-idle-interval 1.0) ; default 1.0
 ;;   (add-hook 'prog-mode-hook #'auto-highlight-symbol-mode))
 
-;;;; DONT breadcrumb
+;;;; DONT breadcrumb - with eglot
 
 ;; (use-package! breadcrumb
 ;;   :defer 2
@@ -5107,7 +5109,7 @@ Suitable for `imenu-create-index-function'."
 ;; (use-package! breadcrumb
 ;;   :defer 1
 ;;   :init
-;;   ;; (add-hook 'prog-mode-hook 'breadcrumb-local-mode) ; work well with eglot - conflict with lsp-mode
+;;   ;; (add-hook 'prog-mode-hook 'breadcrumb-local-mode)
 ;;   (add-hook 'emacs-lisp-mode-hook 'breadcrumb-local-mode)
 ;;   (add-hook 'markdown-mode-hook 'breadcrumb-local-mode)
 ;;   ;; (add-hook 'org-mode-hook 'breadcrumb-local-mode)

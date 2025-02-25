@@ -56,18 +56,20 @@
 (package! consult-omni :recipe (:host github :repo "armindarvish/consult-omni" :files (:defaults "sources/*.el")) :pin "f0c5f07b9ffe25d0deca42b650f6e0c1c85e9759") ;; Jan 4, 2025
 (package! consult-gh :recipe (:host github :repo "armindarvish/consult-gh" :files ("*.el")) :pin "1acaf7b2a5fe8a8be19f83f5b20bb2bc377d1fc8") ; 2.0
 
-;;; DONT use built-in on emacs-30
+;;; use built-in on emacs 30
 
-;; (when (eq emacs-major-version 30)
-;;   (package! use-package :built-in t)
-;;   (package! eglot :built-in t)
-;;   (package! flymake :built-in t)
-;;   (package! which-key :built-in t))
+(when (eq emacs-major-version 30)
+  (package! eldoc :built-in t) ; 2025-02-25 with flycheck
+  (package! use-package :built-in t)
+  (package! which-key :built-in t)
+  ;; (package! eglot :built-in t)
+  ;; (package! flymake :built-in t)
+  )
 
 ;;; doom-disabled-packages
 
 (disable-packages!
- anaconda-mode
+ ;; anaconda-mode
  ;; lsp-mode
  ;; consult-lsp
  diredfl ; conflict denote
@@ -84,7 +86,6 @@
  solaire-mode
  ace-window
  flycheck-popup-tip) ; conflict
-
 
 ;; (package! paredit :disable t) ; clojure module
 ;; (package! flycheck-plantuml :disable t)
@@ -166,7 +167,7 @@
 
 (package! keycast)
 (package! outli :recipe (:host github :repo "jdtsmith/outli" :files ("*.el")))
-(package! fontaine)
+;; (package! fontaine)
 (package! golden-ratio)
 (package! mode-minder :recipe (:host github :repo "jdtsmith/mode-minder"))
 ;; (package! breadcrumb)
@@ -203,7 +204,7 @@
 
 ;;;; :lang org-mode
 
-(package! org-fragtog)          ;; interactive toggling of inline latex formulas
+(package! org-fragtog) ;; interactive toggling of inline latex formulas
 (package! org-appear)
 (package! orgabilize :recipe (:host github :repo "akirak/orgabilize.el"))
 (package! org-cv :recipe (:host github :repo "ohyecloudy/org-cv"))
@@ -233,11 +234,16 @@
 (package! org-ql)
 (package! org-kanban)
 
-;; (package! org-modern)
-;; (package! org-modern-indent :recipe (:host github :repo "jdtsmith/org-modern-indent"))
+(package! org-sliced-images)
+;; (package! image-slicing :recipe (:host github :repo "ginqi7/image-slicing"))
+
+(package! org-linenote) ; require lsp-mode
 
 (package! parse-csv :recipe (:host github :repo "junghan0611/el-csv")) ; for om-dash
 (package! om-dash :recipe (:host github :repo "gavv/om-dash" :files ("*.el" "*.org"))) ; org-based dashboards
+
+;; (package! org-modern)
+;; (package! org-modern-indent :recipe (:host github :repo "jdtsmith/org-modern-indent"))
 
 ;; (package! org-bookmark-heading)
 ;; (package! d2-mode)
@@ -521,9 +527,6 @@
 (package! webpaste)
 ;; (package! password-store-menu)
 
-(package! org-linenote) ; require lsp-mode
-(package! org-sliced-images)
-;; (package! image-slicing :recipe (:host github :repo "ginqi7/image-slicing"))
 
 ;;;;; misc
 

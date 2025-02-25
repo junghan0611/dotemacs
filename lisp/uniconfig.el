@@ -29,9 +29,9 @@
           "\\.\\(?:pdf\\|jpe?g\\|png\\)\\'"
           "\\(?:\\(?:[EG]?\\|GR\\)TAGS\\|e?tags\\|GPATH\\)\\(<[0-9]+>\\)?"))
   (setq dabbrev-abbrev-skip-leading-regexp "[$*/=~']")
-  (setq dabbrev-upcase-means-case-search nil) ; default t
+  (setq dabbrev-upcase-means-case-search nil)) ; default t
   ;; (setq dabbrev-check-all-buffers t) ;; default t
-  )
+
 
 ;;;; visual-line-mode
 
@@ -102,8 +102,8 @@
               (looking-back "''" 2) (looking-back "==" 2))
           (backward-char))
          (t
-          (backward-char 0))))))
-  )
+          (backward-char 0)))))))
+
 
 
 ;;;; my/backward-kill-word-or-region
@@ -175,8 +175,8 @@
       (with-current-buffer (find-file-noselect file)
         (funcall process-func)
         (save-buffer)
-        (kill-buffer))))
-  )
+        (kill-buffer)))))
+
 
 ;;;; my/replace-latex-delimiters-with-dollar
 
@@ -246,10 +246,10 @@
   (when (fboundp 'tooltip-mode)
     (tooltip-mode 1))
   (menu-bar-mode -1)
-  (menu-bar-mode 1)
+  (menu-bar-mode 1))
   ;; (when (fboundp 'tool-bar-mode)
   ;;   (tool-bar-mode 1))
-  )
+
 
 ;;;; goto-addr
 
@@ -264,8 +264,8 @@
   ;;  (shell-mode . goto-address-mode))
   ;; :bind (:map goto-address-highlight-keymap ("C-c C-o" . goto-address-at-point))
   ;; :config
-  (global-goto-address-mode +1)
-  )
+  (global-goto-address-mode +1))
+
 
 ;;;; Eldoc
 
@@ -274,10 +274,10 @@
   (setq eldoc-idle-delay 0)
   (setq eldoc-echo-area-use-multiline-p nil) ;  important - default 'truncate-sym-name-if-fit
   (setq eldoc-echo-area-display-truncation-message nil)
-  (setq eldoc-echo-area-prefer-doc-buffer t) ; default nil - alway show echo-area
+  (setq eldoc-echo-area-prefer-doc-buffer t)) ; default nil - alway show echo-area
 
   ;; eldoc-display-functions '(eldoc-display-in-echo-area eldoc-display-in-buffer)
-  )
+
 
 ;;;###autoload
 (defun eldoc-toggle ()
@@ -359,15 +359,15 @@ Also see `prot-window-delete-popup-frame'." command)
                                      (left . ,frame-left)
                                      (width . (text-pixels . ,frame-width))
                                      (heigth . (text-pixels . ,frame-height))
-                                     (minibuffer . t)
-                                     ))))
-      (select-frame chat-frame)
-      )
+                                     (minibuffer . t)))))
+
+      (select-frame chat-frame))
+
     (gptel "My:AI Chat" gptel-api-key nil)
     (switch-to-buffer "My:AI Chat")
-    (delete-other-windows)
-    ;; (tab-line-mode -1)
-    ))
+    (delete-other-windows)))
+;; (tab-line-mode -1)
+
 
 ;;; Packages with functions
 ;;;; consult - swiper style check wiki
@@ -404,7 +404,7 @@ Also see `prot-window-delete-popup-frame'." command)
 ;;   )
 
 
-;;;; fontaine
+;;;; DONT fontaine
 
 ;; ;; This is defined in Emacs C code: it belongs to font settings.
 ;; (setq x-underline-at-descent-line t)
@@ -415,57 +415,56 @@ Also see `prot-window-delete-popup-frame'." command)
 ;; Slopes :: Upright Oblique Italic
 ;; Width :: Normal Extended
 
-(when (locate-library "fontaine")
-  (when (display-graphic-p) ; gui
-    ;; (setq fontaine-latest-state-file
-    ;;       (locate-user-emacs-file "fontaine-latest-state.eld"))
-    (setq fontaine-presets
-          ;; 80 120, 136, 151, 180, 211 ; sarasa mono / term
-          ;; 120, 140, 170, 190, 210, 230 ; monoplex kr nerd
-          '(
-            (small12 :default-height 120)
-            (default :default-height 140)
-            (regular14 :default-height 140)
-            (regular17 :default-height 170)
-            (logosfocus :default-height 170)
-            (large19 :default-height 190)
-            (large21 :default-height 210)
-            (present23
-             :default-height 230
-             ;; :fixed-pitch-family "Sarasa Term Slab K"
-             ;; :fixed-pitch-serif-family "Sarasa Term Slab K"
-             :bold-weight extrabold)
-            (t
-             ;; Following Prot’s example, keeping these for for didactic purposes.
-             :line-spacing 3
-             ;; :default-family "Sarasa Term K Nerd Font"
-             ;; :default-height 151
-             :default-family "Monoplex KR Nerd"
-             :default-height 140
-             :default-weight regular
-             ;; :fixed-pitch-family "Sarasa Term K Nerd Font"
-             ;; :fixed-pitch-height 151
-             ;; :fixed-pitch-weight nil
-             ;; :fixed-piath-serif-family nil
-             ;; :fixed-pitch-serif-weight nil
-             ;; :fixed-pitch-serif-height nil
-             :variable-pitch-family "Pretendard Variable"
-             ;; :variable-pitch-height 1.0
-             ;; :variable-pitch-family nil
-             ;; :variable-pitch-weight nil
-             :bold-family nil
-             :bold-weight bold
-             ;; :bold-width extended
-             :italic-family nil
-             :italic-slant italic)))
+;; (when (locate-library "fontaine")
+;;   (when (display-graphic-p) ; gui
+;;     ;; (setq fontaine-latest-state-file
+;;     ;;       (locate-user-emacs-file "fontaine-latest-state.eld"))
+;;     (setq fontaine-presets
+;;           ;; 80 120, 136, 151, 180, 211 ; sarasa mono / term
+;;           ;; 120, 140, 170, 190, 210, 230 ; monoplex kr nerd
+;;           '(
+;;             (small12 :default-height 120)
+;;             (regular :default-height 140)
+;;             (regular14 :default-height 140)
+;;             (regular17 :default-height 170)
+;;             (logosfocus :default-height 170)
+;;             (large19 :default-height 190)
+;;             (large21 :default-height 210)
+;;             (present23
+;;              :default-height 230
+;;              ;; :fixed-pitch-family "Sarasa Term Slab K"
+;;              ;; :fixed-pitch-serif-family "Sarasa Term Slab K"
+;;              :bold-weight extrabold)
+;;             (t
+;;              ;; Following Prot’s example, keeping these for for didactic purposes.
+;;              :line-spacing 3
+;;              ;; :default-family "Sarasa Term K Nerd Font"
+;;              ;; :default-height 151
+;;              :default-family "Monoplex KR Nerd"
+;;              :default-height 140
+;;              :default-weight regular
+;;              ;; :fixed-pitch-family "Sarasa Term K Nerd Font"
+;;              ;; :fixed-pitch-height 151
+;;              ;; :fixed-pitch-weight nil
+;;              ;; :fixed-piath-serif-family nil
+;;              ;; :fixed-pitch-serif-weight nil
+;;              ;; :fixed-pitch-serif-height nil
+;;              :variable-pitch-family "Pretendard Variable"
+;;              ;; :variable-pitch-height 1.0
+;;              ;; :variable-pitch-family nil
+;;              ;; :variable-pitch-weight nil
+;;              :bold-family nil
+;;              :bold-weight bold
+;;              ;; :bold-width extended
+;;              :italic-family nil
+;;              :italic-slant italic)))
 
-    (fontaine-set-preset (or (fontaine-restore-latest-preset) 'regular14))
-    (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family)))
-    ;; Persist the latest font preset when closing/starting Emacs and
-    ;; while switching between themes.
-    (fontaine-mode 1)
-    )
-  )
+;;     ;; (fontaine-set-preset (or (fontaine-restore-latest-preset) 'regular14))
+;;     (fontaine-set-preset 'regular)
+;;     (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family))))
+;;   ;; Persist the latest font preset when closing/starting Emacs and while switching between themes.
+;;   ;; (fontaine-mode 1)
+;;   )
 
 ;;;; org-rainbow-tags
 
@@ -475,9 +474,9 @@ Also see `prot-window-delete-popup-frame'." command)
     (setq org-rainbow-tags-hash-start-index 0)
     (setq org-rainbow-tags-extra-face-attributes
           '(:inverse-video t :box nil :weight 'bold))
-    (add-hook 'org-mode-hook #'org-rainbow-tags-mode)
-    )
-  )
+    (add-hook 'org-mode-hook #'org-rainbow-tags-mode)))
+
+
 
 ;;;; goto-last-change
 
@@ -548,8 +547,8 @@ Also see `prot-window-delete-popup-frame'." command)
             (list citar-indicator-files-icons
                   citar-indicator-links-icons
                   citar-indicator-notes-icons
-                  citar-indicator-cited-icons)))
-    ))
+                  citar-indicator-cited-icons)))))
+
 
 ;;;; ox-hugo
 
@@ -571,8 +570,8 @@ Also see `prot-window-delete-popup-frame'." command)
     (setq time-stamp-active t
           time-stamp-start "#\\+hugo_lastmod:[ \t]*"
           time-stamp-end "$"
-          time-stamp-format "\[%Y-%m-%d\]")
-    )
+          time-stamp-format "\[%Y-%m-%d\]"))
+
 
   (setq org-hugo-front-matter-format 'yaml)
 
@@ -632,9 +631,9 @@ Also see `prot-window-delete-popup-frame'." command)
     "Remove zero width spaces from TEXT."
     (unless (org-export-derived-backend-p 'org)
       (replace-regexp-in-string " " "" text)))
-  (add-to-list 'org-export-filter-final-output-functions #'+org-export-remove-white-space t)
+  (add-to-list 'org-export-filter-final-output-functions #'+org-export-remove-white-space t))
 
-  )
+
 
 ;;;; insert unicode for notetaking
 
@@ -644,7 +643,7 @@ Also see `prot-window-delete-popup-frame'." command)
     (insert " "))
 
   ;; "⊢" prove, "⊨" entail , "∉" notin
-  (setq my/unicode-notetaking '( " " "§" "¶" "†" "‡" "№" "↔" "←" "→" "⊢" "⊨" "∉" ))
+  (setq my/unicode-notetaking '( " " "§" "¶" "†" "‡" "№" "↔" "←" "→" "⊢" "⊨" "∉"))
 
   (defun my/insert-unicode-notetaking ()
     "Insert Unicode for NoteTaking."
@@ -652,8 +651,8 @@ Also see `prot-window-delete-popup-frame'." command)
     (insert (completing-read "Select unicode: " my/unicode-notetaking)))
 
   (evil-define-key '(insert normal) text-mode-map (kbd "M-M") #'my/insert-unicode-notetaking)
-  (evil-define-key '(insert normal) text-mode-map (kbd "M-m") #'my/insert-white-space)
-  )
+  (evil-define-key '(insert normal) text-mode-map (kbd "M-m") #'my/insert-white-space))
+
 
 ;;;; TODO Org-Hugo Links
 

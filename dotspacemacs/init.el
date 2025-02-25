@@ -4140,6 +4140,7 @@
     :config
     (require 'consult-ten)
     (add-to-list 'consult-buffer-sources 'consult-ten-glossary 'append) ; g
+    (setq ten-tags-file-default user-ten-tags-file)
     )
 
 ;;;;; jh-writing > keybindings
