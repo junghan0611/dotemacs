@@ -595,7 +595,7 @@
      nerd-icons-corfu
      ;; treemacs-nerd-icons
      hl-todo
-     fontaine
+     ;; fontaine
      list-unicode-display
      spacious-padding
      ;; (doom-themes :location (recipe :fetcher github :repo "junghan0611/doom-themes" :branch "ko" :files ("*.el" "extensions/*.el" "themes/*.el")))
@@ -1465,10 +1465,6 @@
 
 (defun dotspacemacs/user-config ()
 
-;;;; DONT 'Fix' spacemacs's layer
-
-  ;; (load (file-truename (concat dotspacemacs-directory "fixed.el")))
-
 ;;;; Basics
   ;; Ridiculous path view is vanilla emacs. change truename!
   ;; truename 을 원하지 않는다. 심볼링링크대로 쓰고 싶다면 nil
@@ -1970,7 +1966,7 @@
     :ensure nil
     :init
     (setq whitespace-style '(face tabs trailing ;; lines-tail
-                             empty  missing-newline-at-eof)
+                                  empty  missing-newline-at-eof)
           whitespace-line-column 80)
     :hook (prog-mode . whitespace-mode)
     :diminish)
@@ -2178,7 +2174,7 @@
           calendar-location-name user-calendar-location-name
           calendar-time-display-form
           '(24-hours ":" minutes
-            (if time-zone " (") time-zone (if time-zone ")")))
+                     (if time-zone " (") time-zone (if time-zone ")")))
     )
 
 ;;;;; time
@@ -2734,201 +2730,6 @@
     )
 
 ;;;;; jh-visual > fonts
-;;;;;; jh-visual > fonts > base
-
-  (progn
-    (defvar show-keyboard-layout nil
-      "If non nil, show keyboard layout in special buffer.")
-
-    (setq default-input-method "korean-hangul")
-    (setq default-transient-input-method "TeX")
-    (set-language-environment "Korean")
-    (set-keyboard-coding-system 'utf-8)
-    (setq locale-coding-system  'utf-8)
-    (prefer-coding-system 'utf-8)
-    (set-charset-priority 'unicode)
-    (set-default-coding-systems 'utf-8)
-    (set-terminal-coding-system 'utf-8)
-    (setq-default buffer-file-coding-system 'utf-8-unix)
-    ;; (unless (spacemacs/system-is-mswindows)
-    ;;   (set-selection-coding-system 'utf-8))
-    (set-selection-coding-system 'utf-8)
-    (setq coding-system-for-read 'utf-8)
-    (setq coding-system-for-write 'utf-8)
-
-    ;; Treat clipboard input as UTF-8 string first; compound text next, etc.
-    (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
-
-    ;; 날짜 표시를 영어로한다. org mode 에서 time stamp 날짜에 영향을 준다.
-    (setq system-time-locale "C")
-    ;; (setenv "LANG" "en_US.UTF-8")
-    ;; (setenv "LC_ALL" "en_US.UTF-8")
-
-    (setq input-method-verbose-flag nil
-          input-method-highlight-flag nil)
-
-    ;; (global-set-key (kbd "<Alt_R>") 'toggle-input-method)
-    (global-set-key (kbd "<S-SPC>") 'toggle-input-method)
-    (global-set-key (kbd "<Hangul>") 'toggle-input-method)
-    (global-set-key (kbd "<menu>") 'toggle-input-method) ;; caps lock as <menu>
-    (add-hook 'context-menu-mode-hook '(lambda () (define-key context-menu-mode-map (kbd "<menu>") #'toggle-input-method)))
-    ;; (global-unset-key (kbd "S-SPC"))
-
-    )
-
-;;;;;; jh-visual > fonts > fontaine
-
-  ;; Read the manual: <https://protesilaos.com/emacs/fontaine>
-
-  ;; +------------+------------+
-  ;; | 일이삼사오 | 일이삼사오 |
-  ;; +------------+------------+
-  ;; | ABCDEFGHIJ | ABCDEFGHIJ |
-  ;; +------------+------------+
-  ;; | 1234567890 | 1234567890 |
-  ;; +------------+------------+
-  ;; | 일이삼사오 | 일이삼사오 |
-  ;; | abcdefghij | abcdefghij |
-  ;; +------------+------------+
-
-  ;; terminal-mode is nil
-  ;; A narrow focus package for naming font configurations and then selecting them.
-  ;; (use-package fontaine
-  ;;   :if window-system
-  ;;   :demand t
-  ;;   :init
-  ;;   ;; This is defined in Emacs C code: it belongs to font settings.
-  ;;   (setq x-underline-at-descent-line t)
-  ;;   ;; And this is for Emacs28.
-  ;;   (setq-default text-scale-remap-header-line t)
-
-  ;;   ;; Weights :: Thin ExtraLight Light Regular Medium SemiBold Bold ExtraBold Heavy
-  ;;   ;; Slopes :: Upright Oblique Italic
-  ;;   ;; Width :: Normal Extended
-
-  ;;   :config
-  ;;   (unless *is-android*
-  ;;     (setq fontaine-presets
-  ;;           ;; 80 120, 136, 151, 180, 211
-  ;;           '(
-  ;;             (birdview
-  ;;              :default-height 80)
-  ;;             (small
-  ;;              :default-height 120)
-  ;;             (regular
-  ;;              :default-height 140)
-  ;;             (medium
-  ;;              :default-height 151)
-  ;;             (large
-  ;;              :default-height 180)
-  ;;             (presentation
-  ;;              :default-height 211
-  ;;              ;; :fixed-pitch-family "Sarasa Mono Slab K"
-  ;;              ;; :fixed-pitch-serif-family "Sarasa Mono Slab K"
-  ;;              :default-width extended
-  ;;              :bold-weight extrabold)
-  ;;             (t
-  ;;              ;; Following Prot’s example, keeping these for for didactic purposes.
-  ;;              :line-spacing 2
-  ;;              ;; :default-family "Sarasa Mono K"
-  ;;              ;; :default-height 136
-  ;;              :default-family "Monoplex KR Nerd"
-  ;;              :default-height 140
-  ;;              :default-weight regular
-  ;;              :fixed-pitch-family nil ;; "Monoplex KR Nerd"
-  ;;              :fixed-pitch-weight nil
-  ;;              :fixed-pitch-height nil
-  ;;              ;; :fixed-pitch-serif-family "Sarasa Mono Slab K" ; nil falls back to :default-family
-  ;;              :fixed-piath-serif-family nil
-  ;;              :fixed-pitch-serif-weight nil
-  ;;              :fixed-pitch-serif-height nil
-  ;;              :variable-pitch-family "Pretendard Variable"
-  ;;              ;; :variable-pitch-height 140
-  ;;              ;; "IBM Plex Sans KR"
-  ;;              ;; "Noto Sans KR"
-  ;;              ;; :variable-pitch-family nil
-  ;;              ;; :variable-pitch-weight nil
-  ;;              :bold-family nil
-  ;;              :bold-weight bold
-  ;;              ;; :bold-width extended
-  ;;              :italic-family nil
-  ;;              :italic-slant italic)))
-
-  ;;     (setq fontaine-latest-state-file
-  ;;           (locate-user-emacs-file "fontaine-latest-state.eld"))
-
-  ;;     ;; store current preset
-  ;;     ;; (defun my/fontaine-store-preset ()
-  ;;     ;;   (interactive)
-  ;;     ;;   (fontaine-store-latest-preset)
-  ;;     ;;   ;; (message "my/fontaine-store-preset")
-  ;;     ;;   )
-
-  ;;     ;; load @ start-up
-  ;;     ;; (defun my/fontaine-load-preset ()
-  ;;     ;;   (interactive)
-
-  ;;     ;;   (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family)))
-  ;;     ;;   ;; Set the last preset or fall back to desired style from `fontaine-presets'
-
-  ;;     ;;   (fontaine-set-preset (or (fontaine-restore-latest-preset) 'regular))
-
-  ;;     ;;   ;; Persist the latest font preset when closing/starting Emacs and
-  ;;     ;;   ;; while switching between themes.
-  ;;     ;;   (fontaine-mode 1)
-  ;;     ;;   )
-  ;;     ;; (add-hook 'spacemacs-post-user-config-hook #'my/fontaine-load-preset 90)
-
-  ;;     ;; load @ theme change
-  ;;     ;; (defun my/fontaine-apply-current-preset ()
-  ;;     ;;   (interactive)
-  ;;     ;;   (fontaine-apply-current-preset)
-  ;;     ;;   (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family))) ; default face
-  ;;     ;;   ;; (custom-set-faces
-  ;;     ;;   ;;  `(ekg-notes-mode-title ((t (:inherit outline-7 :weight semibold :height 1.3))))
-  ;;     ;;   ;;  `(ekg-title ((t (:inherit outline-0 :weight semibold :height 1.0 :underline t))))
-  ;;     ;;   ;;  `(denote-faces-link ((t (:inherit link :weight bold :slant italic))))
-  ;;     ;;   ;;  ;; `(org-special-keyword ((t (:inherit org-drawer :weight semibold))))
-  ;;     ;;   ;;  )
-  ;;     ;;   )
-  ;;     ;; (add-hook 'spacemacs-post-theme-change-hook 'my/fontaine-apply-current-preset)
-
-  ;;     (progn
-  ;;       (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family)))
-  ;;       ;;   ;; Set the last preset or fall back to desired style from `fontaine-presets'
-
-  ;;       (fontaine-set-preset (or (fontaine-restore-latest-preset) 'regular))
-
-  ;;       ;;   ;; Persist the latest font preset when closing/starting Emacs and
-  ;;       ;;   ;; while switching between themes.
-  ;;       (fontaine-mode 1)
-  ;;       )
-
-  ;;     )
-  ;;   )
-
-;;;;;; jh-visual > fonts > emoji
-
-  ;; emoji
-  (defun my/emoji-set-font ()
-    (interactive)
-    (when (display-graphic-p) ; gui
-      ;; (set-fontset-font t 'emoji (font-spec :family "Apple Color Emoji") nil 'prepend)
-      (set-fontset-font t 'emoji (font-spec :family "Noto Color Emoji") nil)
-      (set-fontset-font t 'emoji (font-spec :family "Noto Emoji") nil 'prepend) ; Top
-      )
-    (unless (display-graphic-p) ; terminal
-      (set-fontset-font "fontset-default" 'emoji (font-spec :family "Noto Emoji") nil 'prepend) ; default face
-      )
-
-    (set-fontset-font t 'symbol (font-spec :family "Symbola") nil 'prepend)
-    (set-fontset-font t 'symbol (font-spec :family "Noto Sans Symbols 2") nil 'prepend)
-    (set-fontset-font t 'symbol (font-spec :family "Noto Sans Symbols") nil 'prepend)
-    )
-
-  (unless IS-TERMUX (add-hook 'spacemacs-post-user-config-hook #'my/emoji-set-font))
-
-;;;;;; jh-visual > fonts > global-mode-string
 
   ;; (defun my/load-global-mode-string ()
   ;;   (interactive)
@@ -2956,11 +2757,6 @@
     (spacemacs/set-leader-keys "z+" 'my/text-font-scale-up)
     (spacemacs/set-leader-keys "z_" 'my/text-font-scale-down))
 
-
-;;;;;; jh-visual-> fonts > list-unicode-display
-
-  (use-package list-unicode-display :defer 10)
-
 ;;;;; jh-visual > themes
 
 ;;;;;; jh-visual > themes > load-theme
@@ -2971,17 +2767,6 @@
 
   (setq pos-tip-internal-border-width 6
         pos-tip-border-width 1)
-
-;;;;;; DONT jh-visual > themes > treemacs-nerd-icons
-
-  ;; (use-package treemacs-nerd-icons
-  ;;   :after treemacs
-  ;;   :init
-  ;;   (require 'treemacs-nerd-icons)
-  ;;   :config
-  ;;   (treemacs-load-theme "nerd-icons"))
-
-;;;;;; jh-visual > themes > modus-themes - built-in
 
   (progn
     (setq modus-themes-bold-constructs t
@@ -3000,7 +2785,7 @@
                   (t . (monochrome)))))
     )
 
-;;;;;; DONT jit-lock-defer
+;;;;; DONT jit-lock-defer
 
   ;; NOTE: setting this to `0' like it was recommended in the article above seems
   ;; to cause fontification to happen in real time, which can be pretty slow in
@@ -3019,13 +2804,13 @@
              :mode-line-inactive spacious-padding-subtle-mode-line-inactive))
     (setq spacious-padding-widths
           '(:header-line-width 4
-            :mode-line-width 4 ; 6
-            :tab-width 4 ; sync mode-line-width for keycast-tab-bar
-            :internal-border-width 20 ; 15
-            :right-divider-width 30 ; 30
-            :scroll-bar-width 8
-            :fringe-width 8
-            ))
+                               :mode-line-width 4 ; 6
+                               :tab-width 4 ; sync mode-line-width for keycast-tab-bar
+                               :internal-border-width 20 ; 15
+                               :right-divider-width 30 ; 30
+                               :scroll-bar-width 8
+                               :fringe-width 8
+                               ))
     :config
     (spacious-padding-mode +1)
     )
@@ -3097,7 +2882,7 @@
     (setq dired-guess-shell-alist-user ; those are the suggestions for ! and & in Dired
           '(("\\.\\(png\\|jpe?g\\|tiff\\)" "feh" "xdg-open")
             ("\\.\\(mp[34]\\|m4a\\|ogg\\|flac\\|webm\\|mkv\\)" "mpv" "xdg-open")
-	    (".*" "xdg-open")))
+	        (".*" "xdg-open")))
 
     ;; (setq dired-recursive-deletes 'always)
     (setq copy-directory-create-symlink t)
@@ -3159,9 +2944,9 @@
       )
 
     (spacemacs/set-leader-keys-for-major-mode 'dired-mode
-                                              "h" 'dired-hide-details-mode
-                                              "/" 'dired-narrow-regexp
-                                              "o" 'dired-omit-mode)
+      "h" 'dired-hide-details-mode
+      "/" 'dired-narrow-regexp
+      "o" 'dired-omit-mode)
     ;; (global-set-key (kbd "C-x /") #'dired-narrow-regexp)
     )
 
@@ -4019,11 +3804,11 @@
       ;; Key binding for modes you want edit
       ;; or simply bind ?global-map? for all.
       :bind (:map prog-mode-map
-             ("C-c '" . separedit)
-             :map minibuffer-local-map
-             ("C-c '" . separedit)
-             :map help-mode-map
-             ("C-c '" . separedit))
+                  ("C-c '" . separedit)
+                  :map minibuffer-local-map
+                  ("C-c '" . separedit)
+                  :map help-mode-map
+                  ("C-c '" . separedit))
       :init
       ;; Default major-mode for edit buffer
       ;; can also be other mode e.g. ?org-mode?.
@@ -4108,41 +3893,6 @@
       )
     ) ;; end-of progn
 
-
-
-;;;;;; jh-writing > writing-tools > ten
-
-  (use-package ten
-    :after consult
-    :defer 2
-    ;; :bind (("M-c t" . complete-tag)
-    ;;        ("C-c M-." . my/goto-etags))
-    ;; :hook ((text-mode eww-mode nov-mode Info-mode) . ten-font-lock-mode)
-    :init
-    (setq ten-file-extensions '("org" "md" "txt"))
-    (setq ten-exclude-regexps '("/\\."))
-    ;; I am listing two specific dictionary files in the `test/`
-    ;; subdirectory as an example below. You can list the
-    ;; `~/src/ten/test/' directory to let Ten to search files recursively
-    ;; in the directory and subdirectories in it. There are about 5,000
-    ;; terms in total and I don't experience any perfomance issue on my
-    ;; old Lenovo Thinkpad laptop. Ten looks for files with an extension
-    ;; listed in `ten-file-extensions' and excludes files and those in
-    ;; directories that match the list of regexps `ten-exclude-regexps'.
-    ;; (setq ten-files-and-directories
-    ;;       '( "~/sync/emacs/git/default/ten/test/Glossary-philosophy.txt"
-    ;;          "~/sync/emacs/git/default/ten/test/Glossary-of-graph-theory.txt"))
-    ;; The dictionary file (only one at a time can be active through
-    ;; `etags', but you can switch between more than one of them if you
-    ;; need to. The switching experience is not intuitive and it's a TODO
-    ;; to improve it.)
-    ;; (setq ten-tags-file-default "~/sync/emacs/git/default/ten/ten-TAGS")
-    :config
-    (require 'consult-ten)
-    (add-to-list 'consult-buffer-sources 'consult-ten-glossary 'append) ; g
-    (setq ten-tags-file-default user-ten-tags-file)
-    )
-
 ;;;;; jh-writing > keybindings
 
   (global-set-key (kbd "M-g 0") 'txl-translate-insert)
@@ -4202,12 +3952,12 @@ Suitable for `imenu-create-index-function'."
     (spacemacs/set-leader-keys-for-major-mode 'eww-mode "y" 'eww-copy-page-url)
 
     (spacemacs|add-toggle eww-as-default-browser
-                          :documentation "Eww as default browser."
-                          :status (equal browse-url-browser-function 'eww-browse-url)
-                          :on (setq browse-url-browser-function 'eww-browse-url)
-                          ;; should have a var to store the original one
-                          :off (setq browse-url-browser-function 'browse-url-default-browser)
-                          :evil-leader "t e")
+      :documentation "Eww as default browser."
+      :status (equal browse-url-browser-function 'eww-browse-url)
+      :on (setq browse-url-browser-function 'eww-browse-url)
+      ;; should have a var to store the original one
+      :off (setq browse-url-browser-function 'browse-url-default-browser)
+      :evil-leader "t e")
 
     ;; https://github.com/alphapapa/unpackaged.el
     (add-hook 'eww-mode-hook (lambda () (setq-local imenu-create-index-function #'spacemacs/imenu-eww-headings)))
@@ -4847,9 +4597,9 @@ For instance pass En as source for English."
   (use-package clojure-essential-ref-nov
     :defer 8
     :bind (:map cider-mode-map
-           ("M-9" . clojure-essential-ref)
-           :map cider-repl-mode-map
-           ("M-9" . clojure-essential-ref))
+                ("M-9" . clojure-essential-ref)
+                :map cider-repl-mode-map
+                ("M-9" . clojure-essential-ref))
     :init
     (setq clojure-essential-ref-default-browse-fn #'clojure-essential-ref-nov-browse)
     (setq clojure-essential-ref-nov-epub-path "~/git/default/clj-essential-ref-v31.epub")
@@ -4887,16 +4637,15 @@ For instance pass En as source for English."
 
 ;;;;; jh-org > packages
 
-;;;;;;  DONT jupyter / ob-jupyter
+;;;;;;  jupyter / ob-jupyter
 
-  ;; (setq org-confirm-babel-evaluate nil)
-  ;; (use-package jupyter
-  ;;   :config
-  ;;   (require 'ob-jupyter)
-  ;;   ;; (org-babel-jupyter-override-src-block "python")
-  ;;   (org-babel-do-load-languages 'org-babel-load-languages
-  ;;                                (append org-babel-load-languages '((jupyter . t)))))
-  ;; (load-file (concat user-dotemacs-dir "lisp/my-python-jupyter.el"))
+  (setq org-confirm-babel-evaluate nil)
+  (use-package jupyter
+    :config
+    (require 'ob-jupyter)
+    ;; (org-babel-jupyter-override-src-block "python")
+    (org-babel-do-load-languages 'org-babel-load-languages
+                                 (append org-babel-load-languages '((jupyter . t)))))
 
 ;;;;;; jh-org > packages > remember
 
@@ -5758,8 +5507,8 @@ For instance pass En as source for English."
   (load-file (concat user-dotemacs-dir "lisp/keys.el"))
   (load-file (concat user-dotemacs-dir "lisp/hydrakeys.el"))
 
-  (with-eval-after-load 'ob
-    (load-file (concat user-dotemacs-dir "lisp/my-org-literate.el")))
+  (load-file (concat user-dotemacs-dir "lisp/my-python-jupyter.el"))
+  (load-file (concat user-dotemacs-dir "lisp/my-org-literate.el"))
 
 ;;;; Load spacemacs-keys
 

@@ -81,58 +81,9 @@
 
 (unless (display-graphic-p) ; terminal
   (setq doom-font (font-spec :family "Sarasa Term K Nerd Font" :size 15.1)))
+;;;; Doom's snippets-dir
 
-;;;; Hangul Korean
-
-(setq default-input-method "korean-hangul")
-(set-language-environment "Korean")
-;; (setq default-transient-input-method "TeX") ; C-u set-input-method
-
-(set-keyboard-coding-system 'utf-8)
-(setq locale-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-(set-charset-priority 'unicode)
-(set-default-coding-systems 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(setq-default buffer-file-coding-system 'utf-8-unix)
-
-(set-selection-coding-system 'utf-8) ;; important
-(setq coding-system-for-read 'utf-8)
-(setq coding-system-for-write 'utf-8)
-
-;; Treat clipboard input as UTF-8 string first; compound text next, etc.
-(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
-
-(setq-default line-spacing 3) ; use fontaine
-
-;; (setenv "LANG" "en_US.UTF-8")
-;; (setenv "LC_ALL" "en_US.UTF-8")
-;; (setenv "LANG" "ko_KR.UTF-8")
-
-;; 날짜 표시를 영어로한다. org mode에서 time stamp 날짜에 영향을 준다.
-(setq system-time-locale "C")
-
-(setq
- input-method-verbose-flag nil
- input-method-highlight-flag nil)
-
-;; (global-set-key (kbd "<Alt_R>") 'toggle-input-method)
-(global-set-key (kbd "<S-SPC>") 'toggle-input-method)
-(global-set-key (kbd "<Hangul>") 'toggle-input-method)
-(global-set-key (kbd "<menu>") 'toggle-input-method) ;; caps lock as <menu>
-(add-hook 'context-menu-mode-hook '(lambda () (define-key context-menu-mode-map (kbd "<menu>") #'toggle-input-method)))
-;; (global-unset-key (kbd "S-SPC"))
-
-;; +------------+------------+
-;; | 일이삼사오 | 일이삼사오 |
-;; +------------+------------+
-;; | ABCDEFGHIJ | ABCDEFGHIJ |
-;; +------------+------------+
-;; | 1234567890 | 1234567890 |
-;; +------------+------------+
-;; | 일이삼사오 | 일이삼사오 |
-;; | abcdefghij | abcdefghij |
-;; +------------+------------+
+(setq +snippets-dir (expand-file-name "snippets/" user-dotemacs-dir))
 
 ;;;; Basics
 
@@ -154,11 +105,6 @@
 ;;;; initial-scratch-message
 
 (setq initial-scratch-message user-initial-scratch-message)
-
-
-;;;; snippets-dir
-
-(setq +snippets-dir (expand-file-name "snippets/" user-dotemacs-dir))
 
 ;;;; Tab-width
 
@@ -4250,6 +4196,7 @@ Called with a PREFIX, resets the context buffer list before opening"
 ;;;;; custom emacs-jupyter/jupyter ob-jupyter
 
 (require 'my-python-jupyter)
+(require 'my-org-literate)
 ;; (setq jupyter-eval-use-overlays t)
 
 ;;;;; uv : uv-mode and uv-menu
@@ -4412,94 +4359,6 @@ Called with a PREFIX, resets the context buffer list before opening"
 ;;  As of 2024, Emacs 30 on Windows does not support color emojis, just black & white.
 ;;  To set or adjust text scale: C-x C-= to enlarge, C-x C-- to shrink, C-x C-0 to reset.
 ;;    To modify interactively, S-0 followed by +, -, 0, etc.
-
-;;;; Emoji and Fonts
-
-;; +------------+------------+
-;; | 일이삼사오 | 일이삼사오 |
-;; +------------+------------+
-;; | ABCDEFGHIJ | ABCDEFGHIJ |
-;; +------------+------------+
-;; | 1234567890 | 1234567890 |
-;; +------------+------------+
-;; | 일이삼사오 | 일이삼사오 |
-;; | abcdefghij | abcdefghij |
-;; +------------+------------+
-
-(defun my/set-fonts-scale (
-                           ;; default-font-name
-                           ;; default-font-height
-                           ;; cjk-font-name
-                           ;; cjk-font-scale
-                           unicode-font-name
-                           unicode-font-scale
-                           emoji-font-name
-                           emoji-font-scale
-                           )
-  "Helper function to set the default, CJK and Emoji fonts."
-  ;; Set the default font
-  ;; (when (member default-font-name (font-family-list))
-  ;;   (set-face-attribute 'default nil
-  ;;                       :family default-font-name
-  ;;                       :height default-font-height)
-  ;;   (set-frame-font default-font-name nil t))
-
-  ;; Set the CJK font in the default fontset.
-  ;; (when (member cjk-font-name (font-family-list))
-  ;;   (dolist (script (list 'han 'kana 'cjk-misc))
-  ;;     (set-fontset-font t script cjk-font-name)))
-
-  (when (member unicode-font-name (font-family-list))
-    (set-fontset-font t 'unicode unicode-font-name nil 'prepend)
-    (set-fontset-font t 'mathematical unicode-font-name nil 'prepend)
-    (set-fontset-font t 'symbol unicode-font-name nil 'prepend)
-    )
-
-  ;; Set the Emoji font in the default fontset.
-  (when (member emoji-font-name (font-family-list))
-    (set-fontset-font t 'emoji emoji-font-name nil 'prepend))
-
-  ;; Rescale the CJK and emoji fonts.
-  (setq face-font-rescale-alist
-        `(;; (,(format ".*%s.*" cjk-font-name) . ,cjk-font-scale)
-          (,(format ".*%s.*" unicode-font-name) . ,unicode-font-scale)
-          (,(format ".*%s.*" emoji-font-name) . ,emoji-font-scale)
-          )))
-
-;;;###autoload
-(defun my/emoji-set-font ()
-  (interactive)
-
-  (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family)))
-
-  (when (display-graphic-p) ; gui
-    ;; (set-fontset-font t 'unicode (font-spec :family "Symbola") nil 'prepend) ;; 2024-09-16 테스트 -- 𝑀＜1
-    ;; (set-fontset-font t 'mathematical (font-spec :family "Symbola") nil 'prepend) ; best
-    ;; ;; https://fonts.google.com/noto/specimen/Noto+Sans+Math
-    ;; ;; (set-fontset-font t 'mathematical (font-spec :family "Noto Sans Math") nil 'prepend) ;; 2024-10-26 테스트 DONT
-    ;; ;; (set-fontset-font t 'mathematical "DejaVu Math TeX Gyre" nil 'prepend) ; DONT for test
-    ;; (set-fontset-font t 'emoji (font-spec :family "Noto Color Emoji") nil)
-    ;; (set-fontset-font t 'emoji (font-spec :family "Noto Emoji") nil 'prepend) ; Top - my choice
-
-    ;; Noto Emoji, Noto Color Emoji,
-    ;; Different computers might need different scaling factors with the same fonts.
-    (my/set-fonts-scale
-     "Symbola" 0.90 ; unicode
-     "Noto Color Emoji" 0.95)
-    )
-
-  (unless (display-graphic-p) ; terminal
-    ;; (set-fontset-font t 'unicode (font-spec :family "Symbola") nil 'prepend) ;; 2024-09-16 테스트 -- 𝑀＜1
-    (set-fontset-font "fontset-default" 'emoji (font-spec :family "Noto Emoji") nil 'prepend) ; default face
-    )
-
-  ;; (set-fontset-font t 'symbol (font-spec :family "Symbola") nil 'prepend)
-  ;; (set-fontset-font t 'symbol (font-spec :family "Noto Sans Symbols 2") nil 'prepend)
-  ;; (set-fontset-font t 'symbol (font-spec :family "Noto Sans Symbols") nil 'prepend)
-  )
-
-(unless IS-TERMUX
-  (add-hook 'after-setting-font-hook #'my/emoji-set-font))
 
 ;;;; Fontaine
 

@@ -199,11 +199,6 @@
 ;;   (require 'parse-csv)
 ;;   )
 
-;;;; my-org-literate
-
-(after! ob
-  (require 'my-org-literate))
-
 ;;; :ui
 
 ;;;; jit-lock-defer-time
@@ -526,10 +521,6 @@
   ;;   (menu-bar-mode +1))
   (spacious-padding-mode +1)
   )
-
-;;;; list-unicode-display
-
-(use-package! list-unicode-display :defer t)
 
 ;;;; pulse : built-in - visual feedback
 
@@ -973,43 +964,6 @@
     (setq
      tab-line-new-button-show nil
      tab-line-close-button-show nil))
-  )
-
-;;; Ten with etags
-
-;; gavinok-dotfiles/init.el
-;; Getting added in emacs 30 https://debbugs.gnu.org/cgi/bugreport.cgi?bug=67687
-;; (use-package etags-regen
-;;   :when (executable-find "etags")
-;;   :custom (etags-regen-tags-file "/tmp/TAGS")
-;;   :commands etags-regen-mode
-;;   :bind (("C-c t" . complete-tag)
-;;          ("C-c M-." . my/goto-etags))
-;;   :init
-;;   (defvar etags-regen-mode-map (make-sparse-keymap))
-;;   (add-to-list 'minor-mode-map-alist (cons 'etags-regen-mode etags-regen-mode-map)))
-
-;; (defun my/goto-etags ()
-;;   (interactive)
-;;   (let ((xref-backend-functions '(etags--xref-backend t)))
-;;     (call-interactively 'xref-find-definitions)))
-
-;; ;; eww-mode nov-mode -- conflict face 켜면 안된다.
-
-(use-package! ten
-  :after consult
-  :defer 2
-  ;; :bind (("M-c t" . complete-tag)
-  ;;        ("C-c M-." . my/goto-etags))
-  ;; :hook ((org-mode Info-mode) . ten-font-lock-mode) ;; text-mode
-  :init
-  (setq ten-file-extensions '("org" "md" "txt"))
-  (setq ten-exclude-regexps '("/\\."))
-  :config
-  (set-popup-rule! "^\\ten-TAGS" :ignore t)
-  (require 'consult-ten)
-  (add-to-list 'consult-buffer-sources 'consult-ten-glossary 'append) ; g
-  (setq ten-tags-file-default user-ten-tags-file)
   )
 
 ;;; copy-screenshot-markdown
