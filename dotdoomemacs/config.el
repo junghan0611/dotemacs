@@ -44,6 +44,11 @@
   (when (file-exists-p user-keys-filename)
     (load-file user-keys-filename)))
 
+;;; straight-use-package org
+
+(straight-use-package 'org)
+(require 'org)
+
 ;;; Load 'user-configs'
 
 (load! "+user-configs")
@@ -233,12 +238,12 @@
 (use-package! modus-themes
   :commands (modus-themes-toggle)
   :init
-  (setq modus-themes-to-toggle '(modus-operandi modus-vivendi-tinted))
-  ;; (setq modus-themes-to-toggle
-  ;;       (let ((hr (nth 2 (decode-time))))
-  ;;         (if (or (< hr 6) (< 19 hr)) ; between 8 PM and 7 AM
-  ;;             '(modus-operandi-tinted modus-operandi) ; load dark theme first
-  ;;           '(modus-operandi modus-operandi-tinted))))
+  ;; (setq modus-themes-to-toggle '(modus-operandi modus-vivendi-tinted))
+  (setq modus-themes-to-toggle
+        (let ((hr (nth 2 (decode-time))))
+          (if (or (< hr 6) (< 19 hr)) ; between 8 PM and 7 AM
+              '(modus-vivendi modus-operandi) ; load dark theme first
+            '(modus-operandi modus-vivendi))))
   :config
   (setq modus-themes-italic-constructs nil
         modus-themes-bold-constructs t
@@ -258,45 +263,48 @@
         ;; modus-themes-completions
         ;; '((matches   . (semibold))
         ;;   (selection . (semibold text-also)))
-
-        modus-themes-common-palette-overrides
-        `(
-          ;; (fg-mode-line-active fg-main) ; Black
-
-          ;;   ;; Comments are yellow, strings are green
-          ;;   (comment yellow-cooler)
-          ;;   (string green-warmer)
-
-          ;;   ;; "Make the mode line borderless"
-          ;;   (border-mode-line-active unspecified)
-          ;;   (border-mode-line-inactive unspecified)
-
-          ;;   ;; "Make matching parenthesis more or less intense"
-          ;;   (bg-paren-match bg-magenta-intense)
-          ;;   (underline-paren-match unspecified)
-
-          ;;   ;; Intense magenta background combined with the main foreground
-          ;;   ;; (bg-region bg-magenta-subtle)
-          ;;   ;; (fg-region fg-main)
-
-          ;;   ;; Links
-          ;;   ;; (underline-link border)
-          ;;   ;; (underline-link-visited border)
-          ;;   ;; (underline-link-symbolic border)
-
-          (bg-heading-0 bg-cyan-nuanced)
-          (bg-heading-1 bg-inactive)
-          (bg-heading-2 bg-yellow-nuanced)
-          (bg-heading-3 bg-blue-nuanced) ; blue
-
-          ;; (overline-heading-0 unspecified)
-          (overline-heading-1 magenta-cooler)
-          ;; (overline-heading-2 magenta-warmer)
-
-          ;; ,@modus-themes-preset-overrides-faint
-          ;; ,@modus-themes-preset-overrides-intense
-          )
         )
+  ;; (setq modus-themes-common-palette-overrides
+  ;;       `(
+  ;;         ;; (fg-mode-line-active fg-main) ; Black
+
+  ;;         ;;   ;; Comments are yellow, strings are green
+  ;;         ;;   (comment yellow-cooler)
+  ;;         ;;   (string green-warmer)
+
+  ;;         ;;   ;; "Make the mode line borderless"
+  ;;         ;;   (border-mode-line-active unspecified)
+  ;;         ;;   (border-mode-line-inactive unspecified)
+
+  ;;         ;;   ;; "Make matching parenthesis more or less intense"
+  ;;         ;; (bg-paren-match bg-magenta-intense)
+  ;;         ;; (underline-paren-match unspecified)
+
+  ;;         ;; Intense magenta background combined with the main foreground
+  ;;         ;; (bg-region bg-magenta-subtle)
+  ;;         ;; (fg-region fg-main)
+
+  ;;         ;;   ;; Links
+  ;;         ;;   ;; (underline-link border)
+  ;;         ;;   ;; (underline-link-visited border)
+  ;;         ;;   ;; (underline-link-symbolic border)
+
+  ;;         ;; (fg-heading-0 blue-cooler)
+  ;;         ;; (fg-heading-1 magenta-cooler)
+  ;;         ;; (fg-heading-2 magenta-warmer)
+  ;;         ;; (fg-heading-3 blue)
+
+  ;;         ;; (bg-heading-0 bg-inactive)
+  ;;         (bg-heading-1  bg-blue-nuanced)
+
+  ;;         ;; (overline-heading-0 unspecified)
+  ;;         ;; (overline-heading-1 magenta-cooler)
+  ;;         ;; (overline-heading-2 magenta-warmer)
+
+  ;;         ;; ,@modus-themes-preset-overrides-faint
+  ;;         ;; ,@modus-themes-preset-overrides-intense
+  ;;         )
+  ;;       )
 
   (when (display-graphic-p) ; gui
     ;; (setq modus-themes-variable-pitch-ui t)

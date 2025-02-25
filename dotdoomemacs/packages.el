@@ -227,14 +227,14 @@
 
 (package! ox-leanpub) ;; https://github.com/junghan0611/ox-leanpub
 
-(package! mermaid-mode)
 (package! ob-mermaid)
+;; (package! mermaid-mode)
 
 (package! org-ql)
 (package! org-kanban)
 
-(package! org-modern)
-(package! org-modern-indent :recipe (:host github :repo "jdtsmith/org-modern-indent"))
+;; (package! org-modern)
+;; (package! org-modern-indent :recipe (:host github :repo "jdtsmith/org-modern-indent"))
 
 (package! parse-csv :recipe (:host github :repo "junghan0611/el-csv")) ; for om-dash
 (package! om-dash :recipe (:host github :repo "gavv/om-dash" :files ("*.el" "*.org"))) ; org-based dashboards

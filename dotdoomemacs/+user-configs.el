@@ -1304,13 +1304,19 @@ work computers.")
 
 ;;;; imenu-list
 
+;;;###autoload
+(defun prot-common-truncate-lines-silently ()
+  "Toggle line truncation without printing messages."
+  (let ((inhibit-message t))
+    (toggle-truncate-lines t)))
+
 ;; Show an outline summary of the current buffer.
 (use-package! imenu-list
   :init
-  (add-hook 'imenu-list-major-mode-hook #'toggle-truncate-lines)
   (setq imenu-list-focus-after-activation nil)
   (setq imenu-list-auto-resize nil)
   (setq imenu-list-position 'left)
+  (add-hook 'imenu-list-major-mode-hook #'prot-common-truncate-lines-silently)
   ;; (setq imenu-list-idle-update-delay 2.0) ; default 1.0
   ;; (setq imenu-list-size 45) ; default 0.3
   :config
@@ -1840,16 +1846,16 @@ only those in the selected frame."
 ;; - npm install -g @mermaid-js/mermaid-cli
 ;; - mmdc -i input.mmd -o output.svg
 
-(use-package! mermaid-mode
-  :config
-  (map! :localleader
-        :map (mermaid-mode-map)
-        "c" 'mermaid-compile
-        "f" 'mermaid-compile-file
-        "b" 'mermaid-compile-buffer
-        "r" 'mermaid-compile-region
-        "b" 'mermaid-open-browser
-        "d" 'mermaid-open-doc))
+;; (use-package! mermaid-mode
+;;   :config
+;;   (map! :localleader
+;;         :map (mermaid-mode-map)
+;;         "c" 'mermaid-compile
+;;         "f" 'mermaid-compile-file
+;;         "b" 'mermaid-compile-buffer
+;;         "r" 'mermaid-compile-region
+;;         "b" 'mermaid-open-browser
+;;         "d" 'mermaid-open-doc))
 
 ;; (use-package! d2-mode
 ;;   :mode "\\.d2\\'"

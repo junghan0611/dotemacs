@@ -123,30 +123,30 @@ Use the `company-doc-buffer' to insert the results."
           (delete-file (car file))))))
   )
 
-;;;;; DONT code-cell with jupyter
+;;;;; code-cell with python with jupyter
 
 ;; https://github.com/emacs-jupyter/jupyter/pull/573#issuecomment-2677444974
 ;; My config uses the awesome doom emacs, which I highly recommend (note that emacs-jupyter is shipped as part of the org module in doom, so you can choose between enabling that and installing manually). Other than that, I like to use (setq jupyter-repl-echo-eval-p t), which conveniently echoes the code you have run in the REPL, and I also define the following function for sending code chunks from my python files to the REPL (which I borrowed from Hank Greenburg):
 
-;; (when (locate-library "code-cells")
-;;   (with-eval-after-load 'code-cells
-;;     (defun my/jupyter-eval-region (beg end)
-;;       "Evaluate the region between BEG and END."
-;;       (interactive "r")
-;;       (let* ((string (buffer-substring beg end))
-;;              (string (replace-regexp-in-string "\\`[\n]*" "" string)) ; Remove leading empty lines
-;;              (indent-length (string-match "[^ \t]" string)) ; Find indent length of the first line
-;;              (unindented-string (replace-regexp-in-string (format "^%s" (make-string indent-length ?\ ))
-;;                                                           "" string t t))) ; Remove exactly that amount of indentation
-;;         (jupyter-eval-string unindented-string)))
-;;     (add-to-list 'code-cells-eval-region-commands '(jupyter-repl-interaction-mode . gm/jupyter-eval-region))
-;;     (let ((map code-cells-mode-map))
-;;       (define-key map [remap evil-search-next] (code-cells-speed-key 'code-cells-forward-cell)) ;; n
-;;       (define-key map [remap evil-paste-after] (code-cells-speed-key 'code-cells-backward-cell)) ;; p
-;;       (define-key map [remap evil-backward-word-begin] (code-cells-speed-key 'code-cells-eval-above)) ;; b
-;;       (define-key map [remap evil-forward-word-end] (code-cells-speed-key 'code-cells-eval)) ;; e
-;;       (define-key map [remap evil-jump-forward] (code-cells-speed-key 'outline-cycle))))
-;;   )
+(when (locate-library "code-cells")
+  (with-eval-after-load 'code-cells
+    (defun my/jupyter-eval-region (beg end)
+      "Evaluate the region between BEG and END."
+      (interactive "r")
+      (let* ((string (buffer-substring beg end))
+             (string (replace-regexp-in-string "\\`[\n]*" "" string)) ; Remove leading empty lines
+             (indent-length (string-match "[^ \t]" string)) ; Find indent length of the first line
+             (unindented-string (replace-regexp-in-string (format "^%s" (make-string indent-length ?\ ))
+                                                          "" string t t))) ; Remove exactly that amount of indentation
+        (jupyter-eval-string unindented-string)))
+    (add-to-list 'code-cells-eval-region-commands '(jupyter-repl-interaction-mode . gm/jupyter-eval-region))
+    (let ((map code-cells-mode-map))
+      (define-key map [remap evil-search-next] (code-cells-speed-key 'code-cells-forward-cell)) ;; n
+      (define-key map [remap evil-paste-after] (code-cells-speed-key 'code-cells-backward-cell)) ;; p
+      (define-key map [remap evil-backward-word-begin] (code-cells-speed-key 'code-cells-eval-above)) ;; b
+      (define-key map [remap evil-forward-word-end] (code-cells-speed-key 'code-cells-eval)) ;; e
+      (define-key map [remap evil-jump-forward] (code-cells-speed-key 'outline-cycle))))
+  )
 
 ;;;; ob-jupyter - ansi block bugfix
 
@@ -193,6 +193,6 @@ Use the `company-doc-buffer' to insert the results."
   ;;         ))
   )
 
-;;; provide
+;;;; provide
 
 (provide 'my-python-jupyter)
