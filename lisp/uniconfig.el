@@ -671,6 +671,12 @@ Also see `prot-window-delete-popup-frame'." command)
     (goto-last-change))
   (global-set-key (kbd "C-x ,") 'my/goto-last-change))
 
+;;;; side-notes
+
+(when (locate-library "side-notes")
+  (require 'side-notes)
+  (add-hook 'side-notes-hook #'visual-line-mode))
+
 ;;;; citar templates and nerd-icons
 
 (when (locate-library "citar")

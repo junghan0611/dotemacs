@@ -1899,13 +1899,6 @@ only those in the selected frame."
 
 ;; ("C" org-pandoc-import-csv-as-org "Import CSV")
 
-;;;;; side-notes
-
-(use-package! side-notes
-  :init
-  (add-hook 'side-notes-hook #'visual-line-mode) ; Good
-  )
-
 ;;;;; immersive-translate
 
 (use-package! immersive-translate

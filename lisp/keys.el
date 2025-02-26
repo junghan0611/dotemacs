@@ -319,7 +319,6 @@
 ;;;; side-notes
 
 ;; add devdocs-browser
-
 (when (locate-library "side-notes")
   (global-set-key (kbd "M-g M-s") 'side-notes-toggle-notes))
 
