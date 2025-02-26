@@ -162,9 +162,9 @@ Use the `company-doc-buffer' to insert the results."
       )
 
     ;; convert to org-mode it's very useful
-    ;; (setq code-cells-convert-ipynb-style '(("pandoc" "--to" "ipynb" "--from" "org")
-    ;;     				   ("pandoc" "--to" "org" "--from" "ipynb")
-    ;;     				   org-mode))
+    (setq code-cells-convert-ipynb-style '(("pandoc" "--to" "ipynb" "--from" "org")
+        				   ("pandoc" "--to" "org" "--from" "ipynb")
+        				   org-mode))
 
     (defun my/new-notebook (notebook-name &optional kernel)
       "Creates an empty notebook in the current directory with an associated kernel."

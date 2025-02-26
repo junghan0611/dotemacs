@@ -2360,9 +2360,6 @@
     :after corfu
     :demand t
     :init
-    ;; /gopar-dotfiles-youtuber/README.org:1371
-    (setq cape-dabbrev-min-length 4) ; default 4
-    (setq cape-dabbrev-check-other-buffers 'some)
     (defun corfu-enable-in-minibuffer ()
       "Enable Corfu in the minibuffer if `completion-at-point' is bound."
       (when (where-is-internal #'completion-at-point (list (current-local-map)))

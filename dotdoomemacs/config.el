@@ -924,11 +924,6 @@
 ;; ;; OR, but note the different call signature
 ;; (add-hook 'some-mode-hook (lambda () (add-hook 'completion-at-point-functions #'some-capf depth t)))
 
-;; (after! cape
-;;   (setq cape-dabbrev-min-length 5) ; default 4
-;;   (setq cape-dabbrev-check-other-buffers #'cape--buffers-major-mode) ; 'some
-;;   )
-
 ;; ;; 2023-07-08 순서 때문에 따로 확실하게 점검한다.
 ;; (defun cape-markdown-mode-setup ()
 ;;   (interactive)

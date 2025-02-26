@@ -32,6 +32,11 @@
   (setq dabbrev-upcase-means-case-search nil)) ; default t
 ;; (setq dabbrev-check-all-buffers t) ;; default t
 
+(with-eval-after-load 'cape
+  ;; /gopar-dotfiles-youtuber/README.org:1371
+  (setq cape-dabbrev-min-length 5) ; default 4
+  ;; (setq cape-dabbrev-check-other-buffers 'some)
+  )
 
 ;;;; visual-line-mode
 
