@@ -161,6 +161,7 @@ Use the `company-doc-buffer' to insert the results."
       (define-key map [remap jupyter-eval-line-or-region] 'code-cells-eval)
       )
 
+    ;; convert to org-mode it's very useful
     ;; (setq code-cells-convert-ipynb-style '(("pandoc" "--to" "ipynb" "--from" "org")
     ;;     				   ("pandoc" "--to" "org" "--from" "ipynb")
     ;;     				   org-mode))

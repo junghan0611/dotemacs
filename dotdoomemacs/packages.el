@@ -52,9 +52,8 @@
 
 ;;; consult - consult-omni consult-gh
 
-(package! consult :pin "93cf368a676da1072f141e298908be05e2968f60") ; 1.9 stable
-(package! consult-omni :recipe (:host github :repo "armindarvish/consult-omni" :files (:defaults "sources/*.el")) :pin "f0c5f07b9ffe25d0deca42b650f6e0c1c85e9759") ;; Jan 4, 2025
-(package! consult-gh :recipe (:host github :repo "armindarvish/consult-gh" :files ("*.el")) :pin "1acaf7b2a5fe8a8be19f83f5b20bb2bc377d1fc8") ; 2.0
+(package! consult-omni :recipe (:host github :repo "armindarvish/consult-omni" :files (:defaults "sources/*.el")) :pin "d0a24058bf0dda823e5f1efcae5da7dc0efe6bda") ;; Feb 19, 2025
+(package! consult-gh)
 
 ;;; use built-in on emacs 30
 
