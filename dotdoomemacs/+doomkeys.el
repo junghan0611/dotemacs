@@ -1378,7 +1378,7 @@
       ;;          )
       )
 
-;;;; DONT python-mode-map
+;;;; python-mode-map
 
 ;; jupyter-repl-associate-buffer
 
@@ -1390,6 +1390,11 @@
         (:prefix ("h" . "help")
                  "l" #'pylookup-lookup
                  "h" #'pylookup-lookup-at-point)
+        (:prefix ("c" . "code-cells")
+                 "a" #'code-cells-eval-above
+                 "c" #'code-cells-eval
+                 "b" #'code-cells-backward-cell
+                 "f" #'code-cells-forward-cell)
         )
   )
 

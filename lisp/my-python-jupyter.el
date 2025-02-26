@@ -139,13 +139,53 @@ Use the `company-doc-buffer' to insert the results."
              (unindented-string (replace-regexp-in-string (format "^%s" (make-string indent-length ?\ ))
                                                           "" string t t))) ; Remove exactly that amount of indentation
         (jupyter-eval-string unindented-string)))
-    (add-to-list 'code-cells-eval-region-commands '(jupyter-repl-interaction-mode . gm/jupyter-eval-region))
+    (add-to-list 'code-cells-eval-region-commands '(jupyter-repl-interaction-mode . my/jupyter-eval-region))
+    ;; see https://github.com/astoff/code-cells.el/issues/22
+    ;; (defun gm/jupyter-eval-region (beg end)
+    ;;   (jupyter-eval-region nil beg end))
+    ;; (add-to-list 'code-cells-eval-region-commands '(jupyter-repl-interaction-mode . gm/jupyter-eval-region))
+
     (let ((map code-cells-mode-map))
       (define-key map [remap evil-search-next] (code-cells-speed-key 'code-cells-forward-cell)) ;; n
       (define-key map [remap evil-paste-after] (code-cells-speed-key 'code-cells-backward-cell)) ;; p
       (define-key map [remap evil-backward-word-begin] (code-cells-speed-key 'code-cells-eval-above)) ;; b
       (define-key map [remap evil-forward-word-end] (code-cells-speed-key 'code-cells-eval)) ;; e
-      (define-key map [remap evil-jump-forward] (code-cells-speed-key 'outline-cycle))))
+      (define-key map [remap evil-jump-forward] (code-cells-speed-key 'outline-cycle))
+
+      (define-key map (kbd "C-c <up>") 'code-cells-backward-cell)
+      (define-key map (kbd "C-c <down>") 'code-cells-forward-cell)
+      ;; (define-key map (kbd "M-<up>") 'code-cells-move-cell-up)
+      ;; (define-key map (kbd "M-<down>") 'code-cells-move-cell-down)
+      (define-key map (kbd "C-c C-c") 'code-cells-eval)
+      ;; Overriding other minor mode bindings requires some insistence...
+      (define-key map [remap jupyter-eval-line-or-region] 'code-cells-eval)
+      )
+
+    ;; (setq code-cells-convert-ipynb-style '(("pandoc" "--to" "ipynb" "--from" "org")
+    ;;     				   ("pandoc" "--to" "org" "--from" "ipynb")
+    ;;     				   org-mode))
+
+    (defun my/new-notebook (notebook-name &optional kernel)
+      "Creates an empty notebook in the current directory with an associated kernel."
+      (interactive "sEnter the notebook name: ")
+      (when (file-name-extension notebook-name)
+        (setq notebook-name (file-name-sans-extension notebook-name)))
+      (unless kernel
+        (setq kernel
+              (jupyter-kernelspec-name
+               (jupyter-completing-read-kernelspec))))
+      (unless (executable-find "jupytext")
+        (error "Can't find \"jupytext\""))
+      (let ((notebook-py (concat notebook-name ".py")))
+        (shell-command (concat "touch " notebook-py))
+        (shell-command
+         (concat "jupytext --set-kernel " kernel " " notebook-py))
+        (shell-command (concat "jupytext --to notebook " notebook-py))
+        (shell-command (concat "rm " notebook-py))
+        (message
+         (concat
+          "Notebook successfully created at " notebook-name ".ipynb"))))
+    )
   )
 
 ;;;; ob-jupyter - ansi block bugfix
