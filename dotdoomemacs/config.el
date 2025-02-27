@@ -1320,6 +1320,20 @@ only those in the selected frame."
     (if (get-buffer-window imenu-list-buffer-name t)
         (imenu-list-show)
       (imenu-list-smart-toggle)))
+
+  (progn
+; imenu-list--set-mode-line
+    (setq imenu-list-mode-line-format
+          (eval
+           '(progn
+              (require 'doom-modeline)
+              (doom-modeline-def-segment imenu-workspace-name
+                "Display imenu"
+                (propertize (format "%s" (buffer-name imenu-list--displayed-buffer))
+                            'face (doom-modeline-face 'doom-modeline-buffer-minor-mode)))
+              (doom-modeline-def-modeline 'imenu '(bar window-number " " major-mode) '(imenu-workspace-name))
+              (doom-modeline 'imenu))))
+    )
   )
 
 (global-set-key (kbd "<f8>") 'imenu-list-smart-toggle)
@@ -2112,33 +2126,53 @@ only those in the selected frame."
 
 (after! treemacs
   ;; (setq treemacs-follow-mode t)
+  ;; (setq treemacs-git-mode nil)
+  ;; (setq treemacs-move-files-by-mouse-dragging nil)
   (setq
    treemacs-position 'left
    treemacs-width 45
    treemacs-imenu-scope 'current-project
    treemacs-indentation 1
    treemacs-space-between-root-nodes nil ; spacing in treemacs views
-   ;; treemacs-fringe-indicator-mode nil ; default t
+   treemacs-fringe-indicator-mode nil ; default t
+   treemacs-show-cursor nil ; default nil
    )
 
-  ;; (after! winum
-  ;;   ;; `0', `M-0' and `C-x w 0' are bound to `winum-select-window-0-or-10'
-  ;;   ;; (define-key winum-keymap [remap winum-select-window-0-or-10] #'treemacs-select-window)
-  ;;   (define-key winum-keymap
-  ;;               [remap winum-select-window-9] #'treemacs-select-window) ; spacemacs/switch-to-minibuffer-window
+  ;; check treemacs-compatibility.el
+  (progn
+    (setq treemacs-follow-after-init t
+          ;; treemacs-is-never-other-window t
+          treemacs-sorting 'alphabetic-case-insensitive-asc
+          ;; treemacs-persist-file (concat doom-cache-dir "treemacs-persist")
+          ;; treemacs-last-error-persist-file (concat doom-cache-dir "treemacs-last-error-persist")
+          )
 
-  ;;   ;; replace the which-key name
-  ;;   (push '((nil . "winum-select-window-9") ; winum-select-window-0-or-10
-  ;;           .
-  ;;           (nil . "treemacs-select-window"))
-  ;;         which-key-replacement-alist)
+    (after! dired (treemacs-resize-icons 16))
+    ;; (treemacs-follow-mode 1)
 
-  ;;   (dolist (n (number-sequence 1 5))
-  ;;     (add-to-list
-  ;;      'winum-ignored-buffers
-  ;;      (format "%sFramebuffer-%s*" treemacs--buffer-name-prefix n)))
-  ;;   (winum-mode +1)
-  ;;   )
+    (add-hook! 'treemacs-mode-hook #'hl-line-mode
+      (defun treemacs--dont-ignore-winum-h ()
+        (setq winum-ignored-buffers-regexp
+              (remove (regexp-quote
+                       (format "%sScoped-Buffer-"
+                               treemacs--buffer-name-prefix))
+                      winum-ignored-buffers-regexp))))
+
+    (after! winum
+      (setq winum-ignored-buffers-regexp
+            (remove ".*Treemacs.*" winum-ignored-buffers-regexp)))
+
+    (setq treemacs-user-mode-line-format
+          (eval
+           '(progn
+              (require 'doom-modeline)
+              (doom-modeline-def-segment treemacs-workspace-name
+                "Display treemacs."
+                (propertize (format "%s" (treemacs-workspace->name (treemacs-current-workspace)))
+                            'face (doom-modeline-face 'doom-modeline-buffer-minor-mode)))
+              (doom-modeline-def-modeline 'treemacs '(bar window-number " " major-mode) '(treemacs-workspace-name))
+              (doom-modeline 'treemacs))))
+    )
   )
 
 ;;;;; tabgo
@@ -4099,6 +4133,8 @@ Called with a PREFIX, resets the context buffer list before opening"
 
   (after! lsp-ui
     (setq
+     ;; lsp-ui-doc-use-webkit nil
+     ;; lsp-ui-doc-winum-ignore t
      lsp-ui-sideline-enable nil ; doom t - disable sideline for less distraction
      ;; lsp-ui-doc-enable nil ;; doom t - disable all doc popups
      treemacs-space-between-root-nodes nil  ;; doom nil
@@ -4555,43 +4591,43 @@ x×X .,·°;:¡!¿?`'‘’   ÄAÃÀ TODO
 ;;;;; doom-modeline
 
 (after! doom-modeline
-  (doom-modeline-def-modeline
-    'main
-    '(eldoc
-      bar
-      persp-name
-      ;; workspace-name - conflict tab-bar
-      window-number
-      modals
-      input-method
-      matches
-      follow
-      buffer-info
-      remote-host
-      buffer-position
-      word-count
-      parrot
-      selection-info)
-    '(compilation
-      objed-state
-      misc-info
-      battery
-      grip
-      irc
-      mu4e
-      gnus
-      github
-      debug
-      repl
-      lsp
-      minor-modes
-      indent-info
-      buffer-encoding
-      major-mode
-      process
-      vcs
-      check
-      time))
+  ;; (doom-modeline-def-modeline
+  ;;   'main
+  ;;   '(eldoc
+  ;;     bar
+  ;;     persp-name
+  ;;     ;; workspace-name - conflict tab-bar
+  ;;     window-number
+  ;;     modals
+  ;;     input-method
+  ;;     matches
+  ;;     follow
+  ;;     buffer-info
+  ;;     remote-host
+  ;;     buffer-position
+  ;;     word-count
+  ;;     parrot
+  ;;     selection-info)
+  ;;   '(compilation
+  ;;     objed-state
+  ;;     misc-info
+  ;;     battery
+  ;;     grip
+  ;;     irc
+  ;;     mu4e
+  ;;     gnus
+  ;;     github
+  ;;     debug
+  ;;     repl
+  ;;     lsp
+  ;;     minor-modes
+  ;;     indent-info
+  ;;     buffer-encoding
+  ;;     major-mode
+  ;;     process
+  ;;     vcs
+  ;;     check
+  ;;     time))
 
   (setq doom-modeline-time nil)
   (setq doom-modeline-time-icon nil)
