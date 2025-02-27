@@ -688,11 +688,10 @@
 
         ;; :niv "M-j" #'org-meta-down ; M-<up>
         ;; :niv "M-k" #'org-meta-up ; M-<down>
-        :niv "M-j" #'org-forward-heading-same-level
-        :niv "M-k" #'org-backward-heading-same-level
-
-        :niv "M-n" #'org-next-visible-heading
-        :niv "M-p" #'org-previous-visible-heading
+        :nv "M-j" #'org-forward-heading-same-level
+        :nv "M-k" #'org-backward-heading-same-level
+        :nv "M-n" #'org-next-visible-heading
+        :nv "M-p" #'org-previous-visible-heading
 
         ;; :ni [C-return]   #'org-insert-heading-respect-content
         ;; :ni [C-S-return] #'org-insert-todo-heading-respect-content
@@ -1624,6 +1623,28 @@
   (setq vterm-always-compile-module t)
   (map! :map vterm-mode-map "M-y" #'vterm-yank-pop))
 
+;;;; outli-mode-map / markdown-mode-map
+
+(after! outli
+  (map! :map outli-mode-map
+        :nv "M-j" #'outline-forward-same-level
+        :nv "M-k" #'outline-backward-same-level
+        :nv "M-n" #'outline-next-heading
+        :nv "M-p" #'outline-previous-heading
+        :nv "C-S-p" #'outline-up-heading
+        ;; default-indent-new-lie
+        ))
+
+;;;; evil-markdown-mode-map
+
+(after! evil-markdown
+  (map! :map evil-markdown-mode-map
+        :nv "M-j" #'markdown-outline-next-same-level
+        :nv "M-k" #'markdown-outline-previous-same-level
+        :nv "M-n" #'markdown-outline-next
+        :nv "M-p" #'markdown-outline-previous
+        ))
+
 ;;;; imenu-list-mode-map
 
 (after! imenu-list
@@ -1634,7 +1655,7 @@
         :n "d"      #'imenu-list-display-dwim
         :n "RET"    #'imenu-list-ret-dwim
         :n "u"      #'imenu-list-up-level
-        :n "z u"      #'imenu-list-up-level ; outline-up-heading
+        :n "z u"    #'imenu-list-up-level ; outline-up-heading
         :n "^"      #'imenu-list-up-level  ; dired style
         :n "C-S-p"  #'imenu-list-up-level  ; sync org-mode markdown-mode
         :n "M-j"    #'imenu-list-next-entry-same-level
