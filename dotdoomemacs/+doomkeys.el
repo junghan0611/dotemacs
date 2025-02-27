@@ -688,6 +688,7 @@
 
         ;; :niv "M-j" #'org-meta-down ; M-<up>
         ;; :niv "M-k" #'org-meta-up ; M-<down>
+        :nv "M-S-p" #'outline-up-heading
         :nv "M-j" #'org-forward-heading-same-level
         :nv "M-k" #'org-backward-heading-same-level
         :nv "M-n" #'org-next-visible-heading
@@ -1636,7 +1637,8 @@
         :nv "M-n" #'outline-next-heading
         :nv "M-p" #'outline-previous-heading
         :nv "C-S-p" #'outline-up-heading
-        ;; default-indent-new-lie
+        :nv "z u"   #'outline-up-heading
+        ;; :i M-j default-indent-new-line
         ))
 
 ;;;; evil-markdown-mode-map
@@ -1647,6 +1649,8 @@
         :nv "M-k" #'markdown-outline-previous-same-level
         :nv "M-n" #'markdown-outline-next
         :nv "M-p" #'markdown-outline-previous
+        :nv "C-S-p" #'outline-up-heading
+        :nv "z u"   #'outline-up-heading
         ))
 
 ;;;; imenu-list-mode-map
