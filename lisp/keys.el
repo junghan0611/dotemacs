@@ -613,6 +613,9 @@
       (evil-define-key '(normal visual) outli-mode-map (kbd "C-n") 'outline-next-heading)
       (evil-define-key '(normal visual) outli-mode-map (kbd "C-p") 'outline-previous-heading)
 
+      (evil-define-key '(normal visual) outli-mode-map (kbd "M-n") 'outline-next-heading)
+      (evil-define-key '(normal visual) outli-mode-map (kbd "M-p") 'outline-previous-heading)
+
       (evil-define-key '(insert) outli-mode-map (kbd "C-n") 'next-line)
       (evil-define-key '(insert) outli-mode-map (kbd "C-p") 'previous-line)
 

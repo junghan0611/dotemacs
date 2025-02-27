@@ -188,7 +188,8 @@
 (package! evil-owl) ;; register
 (package! tempel)
 (package! tempel-collection)
-(package! imenu-list)
+(package! imenu-list :recipe (:host github :repo "junghan0611/imenu-list" :branch "master"))
+
 ;; (package! titlecase)
 (package! deadgrep)
 (package! rg) ; ripgrep

@@ -327,12 +327,6 @@
     ;; evil-delete-char -> delete-forward-char
     (define-key evil-normal-state-map "x" 'delete-forward-char)
     (define-key evil-normal-state-map "X" 'delete-backward-char))
-
-  ;; evil-org
-  (with-eval-after-load 'evil-org
-    ;; (evil-define-key 'insert 'evil-org-mode-map (kbd "C-d") 'delete-forward-char)
-    (evil-define-key 'normal 'evil-org-mode-map "x" 'delete-forward-char)
-    (evil-define-key 'normal 'evil-org-mode-map "X" 'delete-backward-char))
   ) ; end-of after evil
 
 ;;;;; evil cursor with toggle-input-method
@@ -1328,11 +1322,10 @@ work computers.")
   :init
   (setq imenu-list-focus-after-activation t)
   (setq imenu-list-auto-resize nil)
+  (setq imenu-list-auto-update nil) ;; imenu-list-idle-update-delay 2.0
   (setq imenu-list-position 'right)
   (add-hook 'imenu-list-major-mode-hook #'prot-common-truncate-lines-silently)
-  ;; (setq imenu-list-idle-update-delay 2.0) ; default 1.0
   :config
-
   ;;;;###autoload
   (defun spacemacs/imenu-list-smart-focus ()
     "Focus the `imenu-list' buffer, creating as necessary.
@@ -1568,11 +1561,21 @@ only those in the selected frame."
 
     (evil-define-key '(normal visual) markdown-mode-map (kbd "C-n") 'markdown-outline-next)
     (evil-define-key '(normal visual) markdown-mode-map (kbd "C-p") 'markdown-outline-previous)
+
     (evil-define-key '(insert) markdown-mode-map (kbd "C-n") 'next-line)
     (evil-define-key '(insert) markdown-mode-map (kbd "C-p") 'previous-line)
 
     (evil-define-key '(normal visual) markdown-mode-map (kbd "C-j") 'markdown-outline-next-same-level)
     (evil-define-key '(normal visual) markdown-mode-map (kbd "C-k") 'markdown-outline-previous-same-level)
+
+    (evil-define-key '(normal visual) markdown-mode-map (kbd "M-j") 'markdown-outline-next-same-level)
+    (evil-define-key '(normal visual) markdown-mode-map (kbd "M-k") 'markdown-outline-previous-same-level)
+    (evil-define-key '(normal visual) evil-markdown-mode-map (kbd "M-j") 'markdown-outline-next-same-level)
+    (evil-define-key '(normal visual) evil-markdown-mode-map (kbd "M-k") 'markdown-outline-previous-same-level)
+
+    (evil-define-key '(normal visual) markdown-mode-map (kbd "M-n") 'markdown-outline-next) ;; markdown-mode-down
+    (evil-define-key '(normal visual) markdown-mode-map (kbd "M-p") 'markdown-outline-previous)
+
     (evil-define-key '(normal visual) markdown-mode-map (kbd "C-S-p") 'markdown-up-heading)
     (evil-define-key '(normal visual) markdown-mode-map "zu" 'markdown-up-heading) ;; same with evil-collection outline
     )
@@ -2171,10 +2174,9 @@ only those in the selected frame."
 ;; hilsner
 (setq magit-save-repository-buffers nil
       ;; Don't restore the wconf after quitting magit, it's jarring
-      magit-inhibit-save-previous-winconf t
-      )
+      magit-inhibit-save-previous-winconf t)
 
-;; (setq evil-collection-magit-want-horizontal-movement t) ; default nil
+(setq evil-collection-magit-want-horizontal-movement t) ; default nil
 
 ;; Location of Git repositories
 ;; define paths and level of sub-directories to search

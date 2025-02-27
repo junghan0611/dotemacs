@@ -3029,6 +3029,8 @@
   ;; (global-git-commit-mode t)
   ;; ---------------------------------------
 
+  (setq evil-collection-magit-want-horizontal-movement t) ; default nil
+
   ;; ---------------------------------------
   ;; Set locations of all your Git repositories
   ;; with a number to define how many sub-directories to search

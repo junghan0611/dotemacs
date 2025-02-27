@@ -1124,6 +1124,9 @@ A prefix arg forces clock in of the default task."
   (evil-define-key '(normal visual) org-mode-map (kbd "C-n") 'org-next-visible-heading)
   (evil-define-key '(normal visual) org-mode-map (kbd "C-p") 'org-previous-visible-heading)
 
+  (evil-define-key '(normal visual) org-mode-map (kbd "M-n") 'org-next-visible-heading)
+  (evil-define-key '(normal visual) org-mode-map (kbd "M-p") 'org-previous-visible-heading)
+
   ;; evil-collection
   (evil-define-key '(normal visual) org-mode-map (kbd "C-j") 'org-forward-heading-same-level)
   (evil-define-key '(normal visual) org-mode-map (kbd "C-k") 'org-backward-heading-same-level)

@@ -660,8 +660,6 @@ Also see `prot-window-delete-popup-frame'." command)
           '(:inverse-video t :box nil :weight 'bold))
     (add-hook 'org-mode-hook #'org-rainbow-tags-mode)))
 
-
-
 ;;;; goto-last-change
 
 (when (locate-library "goto-last-change")

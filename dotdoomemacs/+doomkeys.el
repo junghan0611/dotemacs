@@ -683,6 +683,17 @@
 
   (map! :map evil-org-agenda-mode-map "P" 'org-procrastinate)
   (map! :map evil-org-mode-map
+        :n "x" 'delete-forward-char
+        :n "X" 'delete-backward-char
+
+        ;; :niv "M-j" #'org-meta-down ; M-<up>
+        ;; :niv "M-k" #'org-meta-up ; M-<down>
+        :niv "M-j" #'org-forward-heading-same-level
+        :niv "M-k" #'org-backward-heading-same-level
+
+        :niv "M-n" #'org-next-visible-heading
+        :niv "M-p" #'org-previous-visible-heading
+
         ;; :ni [C-return]   #'org-insert-heading-respect-content
         ;; :ni [C-S-return] #'org-insert-todo-heading-respect-content
         :ni "C-c C-RET"      #'my/org-open-at-point-other-window
@@ -1619,7 +1630,17 @@
   (map! :map imenu-list-major-mode-map
         :n "f"      #'hs-toggle-hiding
         :n "g"      #'imenu-list-refresh
-        :n "RET"      #'imenu-list-ret-dwim
+        :n "r"      #'imenu-list-refresh
+        :n "d"      #'imenu-list-display-dwim
+        :n "RET"    #'imenu-list-ret-dwim
+        :n "u"      #'imenu-list-up-level
+        :n "z u"      #'imenu-list-up-level ; outline-up-heading
+        :n "^"      #'imenu-list-up-level  ; dired style
+        :n "C-S-p"  #'imenu-list-up-level  ; sync org-mode markdown-mode
+        :n "M-j"    #'imenu-list-next-entry-same-level
+        :n "M-k"    #'imenu-list-previous-entry-same-level
+        :n "M-n"    #'evil-next-line
+        :n "M-p"    #'evil-previous-line
         ))
 
 ;;;; Experiments
