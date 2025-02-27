@@ -478,13 +478,16 @@
       ("^ \\*undo-tree\\*" :slot 2 :side left :size 20 :select t :quit t)
       ;; `help-mode', `helpful-mode'
       ("^\\*\\([Hh]elp\\|Apropos\\)" :slot 2 :vslot -8 :size 0.42 :select t)
+
       ;; ("^\\*eww\\*"  ; `eww' (and used by dash docsets)
       ;;  :vslot -11 :size 0.35 :select t)
       ("^\\*xwidget" :vslot -11 :size 0.35 :select nil)
       ;; ("*Org Agenda(n)*" :size 0.5 :side left :select nil :quit nil :ttl 0)
       ("^\\*eww.*" :size 82 :side left :modeline t :select t :quit nil :ttl t) ; jh
 
-      ("*Ilist*" :size 45 :side left :modeline nil :select nil :quit nil)
+      ;; =M-x eldoc-doc-buffer= 함수 호출로 표시하는 buffer 크기 조절
+      ("^\\*eldoc for" :size 0.2 :vslot -1) ; "*eldoc*"
+      ("*Ilist*" :size 45 :side right :modeline t :select nil :quit nil)
       ;; ("^ ?\\*Treemacs" :slot 7 :size 45 :side left :modeline nil :select nil :quit nil)
       ;; ("^ ?\\*NeoTree" :slot 7 :size 45 :side left :modeline t :slect nil :quit nil)
 
@@ -507,11 +510,6 @@
        :select t
        :ttl nil)) ;; `Info-mode' jh
     )
-
-  ;; =M-x eldoc-doc-buffer= 함수 호출로 표시하는 buffer 크기 조절
-  (set-popup-rule! "^\\*eldoc for" :size 0.2 :vslot -1) ; "*eldoc*"
-
-  ;; (add-hook 'imenu-list-major-mode-hook (lambda (tab-line-mode -1) ))
 
   ;; 와우 이거다. 태그랑 쓰기랑 나눠야 한다.
   ;; (add-to-list
@@ -741,6 +739,32 @@
  emms-cache-file (concat doom-cache-dir "emms"))
 
 ;; M-x emms-add-directory-tree
+
+
+;;;;; winum
+
+;; (use-package! winum
+;;   :demand t
+;;   :config
+;;   (defun my/winum-assign-custom ()
+;;     (cond
+;;      ;; 0 minibuffer, 9 treemacs, 8 imenu-list
+;;      ((equal (buffer-name) "*Ilist*") 8)
+;;      ((equal (buffer-name) "*Calculator*") 7)
+;;      ;; ((equal (buffer-name) "*Flycheck errors*") 6) ; use flymake
+;;      )
+;;     )
+
+;;   (set-face-attribute 'winum-face nil :weight 'bold)
+;;   (add-to-list 'winum-assign-functions #'my/winum-assign-custom)
+
+;;   (setq winum-scope                      'frame-local
+;;         winum-auto-assign-0-to-minibuffer t ; important
+;;         winum-ignored-buffers '(" *LV*" " *which-key*")
+;;         winum-auto-setup-mode-line nil
+;;         winum-reverse-frame-list nil)
+;;   (winum-mode +1)
+;;   )
 
 ;;;; :emacs
 
@@ -1302,13 +1326,13 @@ work computers.")
 ;; Show an outline summary of the current buffer.
 (use-package! imenu-list
   :init
-  (setq imenu-list-focus-after-activation nil)
+  (setq imenu-list-focus-after-activation t)
   (setq imenu-list-auto-resize nil)
-  (setq imenu-list-position 'left)
+  (setq imenu-list-position 'right)
   (add-hook 'imenu-list-major-mode-hook #'prot-common-truncate-lines-silently)
   ;; (setq imenu-list-idle-update-delay 2.0) ; default 1.0
-  ;; (setq imenu-list-size 45) ; default 0.3
   :config
+
   ;;;;###autoload
   (defun spacemacs/imenu-list-smart-focus ()
     "Focus the `imenu-list' buffer, creating as necessary.
@@ -1319,14 +1343,16 @@ only those in the selected frame."
     (if (get-buffer-window imenu-list-buffer-name t)
         (imenu-list-show)
       (imenu-list-smart-toggle)))
-  (after! winum
-    (define-key
-     winum-keymap
-     [remap winum-select-window-8]
-     #'spacemacs/imenu-list-smart-focus)))
+  )
 
 (global-set-key (kbd "<f8>") 'imenu-list-smart-toggle)
 (global-set-key (kbd "M-<f8>") 'spacemacs/imenu-list-smart-focus)
+
+;; (after! winum
+;;   (define-key
+;;    winum-keymap
+;;    [remap winum-select-window-8]
+;;    #'spacemacs/imenu-list-smart-focus))
 
 ;;;;; ace-link
 
@@ -2108,24 +2134,24 @@ only those in the selected frame."
    ;; treemacs-fringe-indicator-mode nil ; default t
    )
 
-  (after! winum
-    ;; `0', `M-0' and `C-x w 0' are bound to `winum-select-window-0-or-10'
-    ;; (define-key winum-keymap [remap winum-select-window-0-or-10] #'treemacs-select-window)
-    (define-key winum-keymap
-                [remap winum-select-window-9] #'treemacs-select-window) ; spacemacs/switch-to-minibuffer-window
+  ;; (after! winum
+  ;;   ;; `0', `M-0' and `C-x w 0' are bound to `winum-select-window-0-or-10'
+  ;;   ;; (define-key winum-keymap [remap winum-select-window-0-or-10] #'treemacs-select-window)
+  ;;   (define-key winum-keymap
+  ;;               [remap winum-select-window-9] #'treemacs-select-window) ; spacemacs/switch-to-minibuffer-window
 
-    ;; replace the which-key name
-    (push '((nil . "winum-select-window-9") ; winum-select-window-0-or-10
-            .
-            (nil . "treemacs-select-window"))
-          which-key-replacement-alist)
+  ;;   ;; replace the which-key name
+  ;;   (push '((nil . "winum-select-window-9") ; winum-select-window-0-or-10
+  ;;           .
+  ;;           (nil . "treemacs-select-window"))
+  ;;         which-key-replacement-alist)
 
-    (dolist (n (number-sequence 1 5))
-      (add-to-list
-       'winum-ignored-buffers
-       (format "%sFramebuffer-%s*" treemacs--buffer-name-prefix n))))
-
-  (winum-mode +1)
+  ;;   (dolist (n (number-sequence 1 5))
+  ;;     (add-to-list
+  ;;      'winum-ignored-buffers
+  ;;      (format "%sFramebuffer-%s*" treemacs--buffer-name-prefix n)))
+  ;;   (winum-mode +1)
+  ;;   )
   )
 
 ;;;;; tabgo
@@ -2671,7 +2697,7 @@ ${content}"))
   ;;                                    (org-code (:height 1.55) org-code)
   ;;                                    (org-verbatim (:height 1.55) org-verbatim)
   ;;                                    (org-block (:height 1.25) org-block)
-  ;;                                    (org-block-begin-line (:height 0.7) org-block)))
+  ;;                                    (org-block-begin-line (:height 0.85) org-block)))
   )
 
 (defun my/presentation-end ()
@@ -4094,8 +4120,9 @@ Called with a PREFIX, resets the context buffer list before opening"
      ;; lsp-ui-peek-enable t ; doom t
      ))
 
-  (after! lsp-treemacs
-    (setq lsp-treemacs-error-list-current-project-only t))
+  (when (modulep! :ui treemacs +lsp)
+    (setq lsp-treemacs-error-list-current-project-only t)
+    (lsp-treemacs-sync-mode +1))
   )
 
 ;;;;; devdocs-browser
@@ -4584,7 +4611,7 @@ x×X .,·°;:¡!¿?`'‘’   ÄAÃÀ TODO
   (setq doom-modeline-minor-modes nil)
   ;; (setq doom-modeline-battery nil)
   ;; (setq Info-breadcrumbs-in-mode-line-mode nil)
-  (setq doom-modeline-support-imenu t)
+  (setq doom-modeline-support-imenu nil)
 
   ;; UTF-8 is default encoding remove it from modeline
   ;; frap-dot-doom/ui-old.el
@@ -4934,31 +4961,6 @@ Suitable for `imenu-create-index-function'."
 (use-package! nerd-icons-dired
   :if window-system
   :hook (dired-mode . nerd-icons-dired-mode))
-
-;;;;; winum
-
-(use-package! winum
-  :demand t
-  :config
-  (defun my/winum-assign-custom ()
-    (cond
-     ;; 0 minibuffer, 9 treemacs, 8 imenu-list
-     ((equal (buffer-name) "*Ilist*") 8)
-     ((equal (buffer-name) "*Calculator*") 7)
-     ;; ((equal (buffer-name) "*Flycheck errors*") 6) ; use flymake
-     )
-    )
-
-  (set-face-attribute 'winum-face nil :weight 'bold)
-  (add-to-list 'winum-assign-functions #'my/winum-assign-custom)
-
-  (setq winum-scope                      'frame-local
-        winum-auto-assign-0-to-minibuffer t ; important
-        winum-ignored-buffers '(" *LV*" " *which-key*")
-        winum-auto-setup-mode-line nil
-        winum-reverse-frame-list nil)
-  (winum-mode +1)
-  )
 
 ;;;;; lin - hl-line
 
@@ -5682,6 +5684,8 @@ Suitable for `imenu-create-index-function'."
 
 ;;;; :ui
 
+(defvar user-imenu-list-height 0.95)
+
 ;;;;; jit-lock-defer-time
 
 ;; NOTE: setting this to `0' like it was recommended in the article above seems
@@ -5782,7 +5786,7 @@ Suitable for `imenu-create-index-function'."
   ;;       )
 
   (when (display-graphic-p) ; gui
-    ;; (setq modus-themes-variable-pitch-ui t)
+    (setq modus-themes-variable-pitch-ui t)
     ;; The `modus-themes-headings' is an alist: read the manual's
     ;; node about it or its doc string. Basically, it supports
     ;; per-level configurations for the optional use of
@@ -5829,6 +5833,15 @@ Suitable for `imenu-create-index-function'."
 
        ;; `(org-drawer ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata :height 0.8)))
        ;; `(org-special-keyword ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata)))
+
+       `(imenu-list-entry-face-0 ((,c :inherit variable-pitch :foreground ,fg-heading-1 :height ,user-imenu-list-height)))
+       `(imenu-list-entry-face-1 ((,c :inherit variable-pitch :foreground ,fg-heading-2 :height ,user-imenu-list-height)))
+       `(imenu-list-entry-face-2 ((,c :inherit variable-pitch :foreground ,fg-heading-3 :height ,user-imenu-list-height)))
+       `(imenu-list-entry-face-3 ((,c :inherit variable-pitch :foreground ,fg-heading-4 :height ,user-imenu-list-height)))
+       `(imenu-list-entry-subalist-face-0 ((,c :inherit variable-pitch :foreground ,fg-heading-1 :underline t :height ,user-imenu-list-height)))
+       `(imenu-list-entry-subalist-face-1 ((,c :inherit variable-pitch :foreground ,fg-heading-2 :underline t :height ,user-imenu-list-height)))
+       `(imenu-list-entry-subalist-face-2 ((,c :inherit variable-pitch :foreground ,fg-heading-3 :underline t :height ,user-imenu-list-height)))
+       `(imenu-list-entry-subalist-face-3 ((,c :inherit variable-pitch :foreground ,fg-heading-4 :underline t :height ,user-imenu-list-height)))
 
        ;; 2024-07-03 spacious-padding
        `(tab-bar ((,c :background ,bg-tab-bar)))
@@ -5886,7 +5899,7 @@ Suitable for `imenu-create-index-function'."
   (setq ef-themes-region '(intense no-extend neutral))
 
   (when (display-graphic-p) ; gui
-    ;; (setq ef-themes-variable-pitch-ui t)
+    (setq ef-themes-variable-pitch-ui t)
     (setq ef-themes-headings
           '(
             (0                . (bold 1.2)) ;; variable-pitch
@@ -5912,11 +5925,14 @@ Suitable for `imenu-create-index-function'."
       `(consult-separator ((,c :inherit default :foreground ,yellow)))
       `(consult-notes-time ((,c :inherit default :foreground ,cyan)))
 
-      ;; `(ekg-notes-mode-title ((,c :inherit outline-1 :weight bold :height 1.0)))
-      ;; `(ekg-title ((,c :inherit outline-2 :weight semibold :height 1.0 :underline t)))
-      ;; `(ekg-tag ((,c :background ,bg-yellow-subtle :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
-      ;; `(ekg-resource ((,c :inherit outline-7 :weight regular :height 1.0 :underline t)))
-      ;; `(ekg-metadata ((,c :inherit outline-1 :weight regular :height 1.0)))
+      `(imenu-list-entry-face-0 ((,c :inherit variable-pitch :foreground ,rainbow-1 :height ,user-imenu-list-height)))
+      `(imenu-list-entry-face-1 ((,c :inherit variable-pitch :foreground ,rainbow-2 :height ,user-imenu-list-height)))
+      `(imenu-list-entry-face-2 ((,c :inherit variable-pitch :foreground ,rainbow-3 :height ,user-imenu-list-height)))
+      `(imenu-list-entry-face-3 ((,c :inherit variable-pitch :foreground ,rainbow-4 :height ,user-imenu-list-height)))
+      `(imenu-list-entry-subalist-face-0 ((,c :inherit variable-pitch :foreground ,rainbow-1 :underline t :height ,user-imenu-list-height)))
+      `(imenu-list-entry-subalist-face-1 ((,c :inherit variable-pitch :foreground ,rainbow-2 :underline t :height ,user-imenu-list-height)))
+      `(imenu-list-entry-subalist-face-2 ((,c :inherit variable-pitch :foreground ,rainbow-3 :underline t :height ,user-imenu-list-height)))
+      `(imenu-list-entry-subalist-face-3 ((,c :inherit variable-pitch :foreground ,rainbow-4 :underline t :height ,user-imenu-list-height)))
 
       ;; `(org-link ((,c :inherit link :weight bold)))
       ;; `(denote-faces-link ((,c :inherit link :weight bold :slant italic)))

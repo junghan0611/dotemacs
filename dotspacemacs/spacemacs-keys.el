@@ -229,9 +229,9 @@
 (when (locate-library "hypothesis")
   (spacemacs/declare-prefix "Ch"  "hypothesis")
   (spacemacs/set-leader-keys
-    "Cho" #'hypothesis-to-org
-    "Cha" #'hypothesis-to-archive
-    )
+   "Cho" #'hypothesis-to-org
+   "Cha" #'hypothesis-to-archive
+   )
   )
 
 ;;;;; 'SPC f'

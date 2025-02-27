@@ -1613,6 +1613,15 @@
   (setq vterm-always-compile-module t)
   (map! :map vterm-mode-map "M-y" #'vterm-yank-pop))
 
+;;;; imenu-list-mode-map
+
+(after! imenu-list
+  (map! :map imenu-list-major-mode-map
+        :n "f"      #'hs-toggle-hiding
+        :n "g"      #'imenu-list-refresh
+        :n "RET"      #'imenu-list-ret-dwim
+        ))
+
 ;;;; Experiments
 
 ;; Use `,,` to close a commit message and `,k' to cancel
