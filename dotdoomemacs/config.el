@@ -444,28 +444,11 @@
       ("^\\*Compil\\(?:ation\\|e-Log\\)" :size 0.3 :ttl 0 :quit t)
       ("^\\*Messages\\*" :vslot -4 :side right :size 0.4 :quit t :ttl 0) ; jh
       ("^\\*\\(?:doom \\|Pp E\\)" ; transient buffers (no interaction required)
-       :vslot -3
-       :size +popup-shrink-to-fit
-       :autosave t
-       :select ignore
-       :quit t
-       :ttl 0)
-      ("^\\*doom:" ; editing buffers (interaction required)
-       :vslot -4
-       :size 0.35
-       :side right
-       :autosave t
-       :select t
-       :modeline t
-       :quit nil
-       :ttl t)
+       :vslot -3 :size +popup-shrink-to-fit :autosave t :select ignore :quit t :ttl 0)
+      ("^\\*doom:" :vslot -4 :size 0.35 :side right :autosave t :select t :modeline t :quit nil :ttl t) ; editing buffers (interaction required)
       ("^\\*doom:\\(?:v?term\\|e?shell\\)-popup" ; editing buffers (interaction required)
-       :vslot -5
-       :size 0.35
-       :select t
-       :modeline nil
-       :quit nil
-       :ttl nil)
+       :vslot -5 :size 0.35 :select t :modeline nil :quit nil :ttl nil)
+      ("^\\*jupyter-repl.*?\\(\\*\\|<[[:digit:]]>\\)$" :vslot -5 :size 0.35 :select t :modeline nil :quit nil :ttl nil) ; 2025-02-27
       ("^\\*\\(?:Wo\\)?Man " :vslot -6 :size 0.45 :select t :quit t :ttl 0)
       ("^\\*Calc" :vslot -7 :side bottom :size 0.4 :select t :quit nil :ttl 0)
       ("^\\*Customize" :slot 2 :side right :size 0.5 :select t :quit nil)
@@ -1322,7 +1305,8 @@ work computers.")
   :init
   (setq imenu-list-focus-after-activation t)
   (setq imenu-list-auto-resize nil)
-  (setq imenu-list-auto-update nil) ;; imenu-list-idle-update-delay 2.0
+  (setq imenu-list-auto-update t)
+  (setq imenu-list-idle-update-delay 5.0)
   (setq imenu-list-position 'right)
   (add-hook 'imenu-list-major-mode-hook #'prot-common-truncate-lines-silently)
   :config
@@ -4269,7 +4253,8 @@ Called with a PREFIX, resets the context buffer list before opening"
 
 (require 'my-python-jupyter)
 (require 'my-org-literate)
-;; (setq jupyter-eval-use-overlays t)
+
+(setq jupyter-eval-use-overlays t)
 
 ;;;;;; uv : uv-mode and uv-menu
 

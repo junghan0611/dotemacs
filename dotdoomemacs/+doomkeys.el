@@ -1352,12 +1352,16 @@
 
 ;;;; treemacs - f9
 
-(map!
- (:when (modulep! :ui treemacs)
+(when (modulep! :ui treemacs)
+  (map!
    "<f9>"   #'+treemacs/toggle
    "<C-f9>" #'treemacs-find-file
    "<M-f9>" #'treemacs-select-window
-   ))
+   (:map treemacs-mode-map
+         "." #'consult-line)
+   (:map evil-treemacs-state-map
+         "." #'consult-line))
+  )
 
 ;;;; dired-mode-map
 

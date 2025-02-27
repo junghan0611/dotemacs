@@ -146,11 +146,9 @@ Use the `company-doc-buffer' to insert the results."
     ;; (add-to-list 'code-cells-eval-region-commands '(jupyter-repl-interaction-mode . gm/jupyter-eval-region))
 
     (let ((map code-cells-mode-map))
-      (define-key map [remap evil-search-next] (code-cells-speed-key 'code-cells-forward-cell)) ;; n
-      (define-key map [remap evil-paste-after] (code-cells-speed-key 'code-cells-backward-cell)) ;; p
-      (define-key map [remap evil-backward-word-begin] (code-cells-speed-key 'code-cells-eval-above)) ;; b
-      (define-key map [remap evil-forward-word-end] (code-cells-speed-key 'code-cells-eval)) ;; e
-      (define-key map [remap evil-jump-forward] (code-cells-speed-key 'outline-cycle))
+      ;; (define-key map [remap evil-backward-word-begin] (code-cells-speed-key 'code-cells-eval-above)) ;; b
+      ;; (define-key map [remap evil-forward-word-end] (code-cells-speed-key 'code-cells-eval)) ;; e
+      ;; (define-key map [remap evil-jump-forward] (code-cells-speed-key 'outline-cycle))
 
       (define-key map (kbd "C-c <up>") 'code-cells-backward-cell)
       (define-key map (kbd "C-c <down>") 'code-cells-forward-cell)

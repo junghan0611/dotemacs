@@ -91,9 +91,6 @@
 
 (package! emojify :disable t) ; from mastodon
 
-;; conflict treemacs-lsp icons
-(package! treemacs-nerd-icons :disable t)
-
 ;; (package! corfu-popupinfo :disable t)
 
 (package! evil-snipe :disable t)
