@@ -207,7 +207,7 @@
 
      (colors :packages (color-identifiers-mode rainbow-mode))
 
-     imenu-list
+     (imenu-list :variables imenu-list-position 'left)
 
      (spacemacs-modeline :packages (doom-modeline))
 
@@ -2689,7 +2689,6 @@
   (with-eval-after-load 'imenu-list
     (setq imenu-list-focus-after-activation t)
     (setq imenu-list-auto-resize nil)
-    (setq imenu-list-position 'right)
     (setq imenu-list-size 45) ; default 0.3
     (setq imenu-list-idle-update-delay 1.0) ; default 0.5
     ;; (setq-default imenu-list-mode-line-format nil)

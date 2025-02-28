@@ -464,7 +464,7 @@
 
       ;; =M-x eldoc-doc-buffer= 함수 호출로 표시하는 buffer 크기 조절
       ("^\\*eldoc for" :size 0.2 :vslot -1) ; "*eldoc*"
-      ("*Ilist*" :size 45 :side right :modeline t :select nil :quit nil)
+      ("*Ilist*" :size 45 :side left :modeline t :select nil :quit nil) ; imenu-list
       ;; ("^ ?\\*Treemacs" :slot 7 :size 45 :side left :modeline nil :select nil :quit nil)
       ;; ("^ ?\\*NeoTree" :slot 7 :size 45 :side left :modeline t :slect nil :quit nil)
 
@@ -1295,21 +1295,25 @@ work computers.")
 ;;;;; imenu-list
 
 ;;;;###autoload
-(defun prot-common-truncate-lines-silently ()
+(defun my/imenu-list-tuncates-without-tab-line ()
   "Toggle line truncation without printing messages."
   (let ((inhibit-message t))
+    (tab-line-mode -1)
     (toggle-truncate-lines t)))
 
 ;; Show an outline summary of the current buffer.
 (use-package! imenu-list
+  :custom
+  (imenu-list-position 'left) ; why not work?!
+  (imenu-list-size 45)
   :init
   (setq imenu-list-focus-after-activation t)
   (setq imenu-list-auto-resize nil)
   (setq imenu-list-auto-update t)
   (setq imenu-list-idle-update-delay 5.0)
-  (setq imenu-list-position 'right)
-  (add-hook 'imenu-list-major-mode-hook #'prot-common-truncate-lines-silently)
+  (add-hook 'imenu-list-major-mode-hook #'my/imenu-list-tuncates-without-tab-line)
   :config
+
   ;;;;###autoload
   (defun spacemacs/imenu-list-smart-focus ()
     "Focus the `imenu-list' buffer, creating as necessary.
@@ -1321,8 +1325,7 @@ only those in the selected frame."
         (imenu-list-show)
       (imenu-list-smart-toggle)))
 
-  (progn
-; imenu-list--set-mode-line
+  (progn ; imenu-list--set-mode-line
     (setq imenu-list-mode-line-format
           (eval
            '(progn
@@ -2124,12 +2127,15 @@ only those in the selected frame."
 
 ;;;;; treemacs
 
+(setq treemacs-position 'right)
+(setq +treemacs-git-mode 'deferred)
+
 (after! treemacs
   ;; (setq treemacs-follow-mode t)
   ;; (setq treemacs-git-mode nil)
   ;; (setq treemacs-move-files-by-mouse-dragging nil)
   (setq
-   treemacs-position 'left
+   ;; treemacs-position 'right
    treemacs-width 45
    treemacs-imenu-scope 'current-project
    treemacs-indentation 1
