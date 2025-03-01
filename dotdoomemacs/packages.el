@@ -60,8 +60,9 @@
 (when (eq emacs-major-version 30)
   (package! eldoc :built-in t) ; 2025-02-25 with flycheck
   (package! use-package :built-in t)
+  (package! editorconfig :built-in t)
   (package! which-key :built-in t)
-  ;; (package! eglot :built-in t)
+  (package! eglot :built-in t)
   ;; (package! flymake :built-in t)
   )
 

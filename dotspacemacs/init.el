@@ -1058,7 +1058,7 @@
    dotspacemacs-mode-line-theme '(doom)
    ;; dotspacemacs-mode-line-theme '(spacemacs :separator zigzag :separator-scale 1.5)
 
-   dotspacemacs-default-font '("Monoplex KR Nerd" :size 14.0
+   dotspacemacs-default-font '("Monoplex Nerd" :size 14.0
                                :width normal
                                :weight regular)
 

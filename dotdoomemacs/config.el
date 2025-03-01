@@ -119,8 +119,8 @@
 
 (when (display-graphic-p) ; gui
   (setq
-   doom-font (font-spec :family "Monoplex KR Nerd" :size 14.0)
-   doom-big-font (font-spec :family "Monoplex KR Nerd" :size 23.0))
+   doom-font (font-spec :family "Monoplex Nerd" :size 14.0)
+   doom-big-font (font-spec :family "Monoplex Nerd" :size 23.0))
   (setq doom-variable-pitch-font (font-spec :family "Pretendard Variable" :size 14.0))
   (setq doom-unicode-font (font-spec :family "Symbola" :size 14.0))
   ;; (setq doom-font (font-spec :family "Sarasa Term K Nerd Font" :size 15.1)
@@ -4509,7 +4509,7 @@ Called with a PREFIX, resets the context buffer list before opening"
 ;;       :line-spacing 3
 ;;       ;; :default-family "Sarasa Term K Nerd Font"
 ;;       ;; :default-height 151
-;;       :default-family "Monoplex KR Nerd"
+;;       :default-family "Monoplex Nerd"
 ;;       :default-height 140
 ;;       :default-weight regular
 ;;       ;; :fixed-pitch-family "Sarasa Term K Nerd Font"
@@ -4543,7 +4543,7 @@ Called with a PREFIX, resets the context buffer list before opening"
 ;;   (defun my/load-font-cjk ()
 ;;     (interactive)
 ;;     (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family))) ; default face
-;;     ;; (set-fontset-font "fontset-default" 'hangul (font-spec :family "Monoplex KR Nerd")) ;  "Sarasa Term K"
+;;     ;; (set-fontset-font "fontset-default" 'hangul (font-spec :family "Monoplex Nerd")) ;  "Sarasa Term K"
 ;;     ;; (set-fontset-font "fontset-default" 'cjk-misc (font-spec :family "Sarasa Term SC" )) ; default face
 ;;     ;; (set-fontset-font "fontset-default" 'bopomofo (font-spec :family "Sarasa Term SC" )) ; default face
 ;;     ;; (set-fontset-font "fontset-default" 'kana (font-spec :family "Sarasa Term J")) ; default face

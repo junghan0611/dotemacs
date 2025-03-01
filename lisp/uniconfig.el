@@ -95,7 +95,8 @@
 
 ;; (setenv "LANG" "en_US.UTF-8")
 ;; (setenv "LC_ALL" "en_US.UTF-8")
-;; (setenv "LANG" "ko_KR.UTF-8")
+(setenv "LANG" "ko_KR.UTF-8")
+(setenv "LC_ALL" "ko_KR.UTF-8")
 
 ;; 날짜 표시를 영어로한다. org mode에서 time stamp 날짜에 영향을 준다.
 (setq system-time-locale "C")
@@ -588,7 +589,7 @@ Also see `prot-window-delete-popup-frame'." command)
 ;;              :line-spacing 3
 ;;              ;; :default-family "Sarasa Term K Nerd Font"
 ;;              ;; :default-height 151
-;;              :default-family "Monoplex KR Nerd"
+;;              :default-family "Monoplex Nerd"
 ;;              :default-height 140
 ;;              :default-weight regular
 ;;              ;; :fixed-pitch-family "Sarasa Term K Nerd Font"
