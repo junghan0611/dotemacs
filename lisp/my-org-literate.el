@@ -16,7 +16,8 @@
 ;;; Commentary:
 ;;
 ;;  Description
-;;
+;; #+property: header-args:jupyter-python :session python :tangle python.py
+
 ;;; Code:
 
 
@@ -54,6 +55,7 @@
             ("emacs-lisp" "el")
             ("elisp" "el")
             ("python" "py")
+            ("jupyter-python" "py")
             ;; ("ruby" "rb")
             ;; ...
             ("bash" "sh")

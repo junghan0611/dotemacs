@@ -27,6 +27,13 @@
       :desc "consult-buffer" "`" #'consult-buffer
       :desc "Eval expression" "M-;" #'pp-eval-expression
       :desc "Search for symbol in cwd" "(" #'my/search-cwd-symbol-at-point
+
+      :desc "1st workspace" "1" #'+workspace/switch-to-0
+      :desc "2nd workspace" "2" #'+workspace/switch-to-1
+      :desc "3rd workspace" "3" #'+workspace/switch-to-2
+      :desc "4th workspace" "4" #'+workspace/switch-to-3
+      :desc "5th workspace" "5" #'+workspace/switch-to-4
+      :desc "6th workspace" "6" #'+workspace/switch-to-5
       )
 
 ;;;; SPC
@@ -45,22 +52,6 @@
   (global-set-key (kbd "C-s-]") '+workspace/switch-right)
   )
 
-;; Doom's Default
-;; (:when (modulep! :ui workspaces)
-;;   :n "C-t"   #'+workspace/new
-;;   :n "C-S-t" #'+workspace/display
-;;   :g "M-1"   #'+workspace/switch-to-0
-;;   :g "M-2"   #'+workspace/switch-to-1
-;;   :g "M-3"   #'+workspace/switch-to-2
-;;   :g "M-4"   #'+workspace/switch-to-3
-;;   :g "M-5"   #'+workspace/switch-to-4
-;;   :g "M-6"   #'+workspace/switch-to-5
-;;   :g "M-7"   #'+workspace/switch-to-6
-;;   :g "M-8"   #'+workspace/switch-to-7
-;;   :g "M-9"   #'+workspace/switch-to-8
-;;   ;; :g "M-0"   #'+workspace/switch-to-final
-;;   :g "M-0"   #'+workspace/switch-to-final
-;;   )
 
 ;;;; DONT 'l' Layout keys - disable `SPC TAB' workspace prefix
 
@@ -77,17 +68,33 @@
        :desc "+workspace/restore-last-session" "R" #'+workspace/restore-last-session
        :desc "+workspace/save" "s" #'+workspace/save
        :desc "+workspace/kill-session" "x" #'+workspace/kill-session
-       :desc "+workspace/swtich-to-0" "0" #'+workspace/switch-to-0
-       :desc "+workspace/switch-to-1" "1" #'+workspace/switch-to-1
-       :desc "+workspace/switch-to-2" "2" #'+workspace/switch-to-2
-       :desc "+workspace/switch-to-3" "3" #'+workspace/switch-to-3
-       :desc "+workspace/switch-to-4" "4" #'+workspace/switch-to-4
-       :desc "+workspace/switch-to-5" "5" #'+workspace/switch-to-5
-       ;; :desc "Switch to 6" "6" #'+workspace/switch-to-6
-       ;; :desc "Switch to 7" "7" #'+workspace/switch-to-7
+       :desc "1st workspace" "1" #'+workspace/switch-to-0
+       :desc "2nd workspace" "2" #'+workspace/switch-to-1
+       :desc "3rd workspace" "3" #'+workspace/switch-to-2
+       :desc "4th workspace" "4" #'+workspace/switch-to-3
+       :desc "5th workspace" "5" #'+workspace/switch-to-4
+       :desc "6th workspace" "6" #'+workspace/switch-to-5
+       :desc "7th workspace" "7" #'+workspace/switch-to-6
        ;; :desc "Switch to 8" "8" #'+workspace/switch-to-8
        ;; :desc "Switch to 9" "9" #'+workspace/switch-to-9
        ))
+
+;; Doom's Default
+;; (:when (modulep! :ui workspaces)
+;;   :n "C-t"   #'+workspace/new
+;;   :n "C-S-t" #'+workspace/display
+;;   :g "M-1"   #'+workspace/switch-to-0
+;;   :g "M-2"   #'+workspace/switch-to-1
+;;   :g "M-3"   #'+workspace/switch-to-2
+;;   :g "M-4"   #'+workspace/switch-to-3
+;;   :g "M-5"   #'+workspace/switch-to-4
+;;   :g "M-6"   #'+workspace/switch-to-5
+;;   :g "M-7"   #'+workspace/switch-to-6
+;;   :g "M-8"   #'+workspace/switch-to-7
+;;   :g "M-9"   #'+workspace/switch-to-8
+;;   ;; :g "M-0"   #'+workspace/switch-to-final
+;;   :g "M-0"   #'+workspace/switch-to-final
+;;   )
 
 ;;;; popup
 
@@ -509,8 +516,8 @@
 (map! :leader
       (:prefix ("o" . "open")
        ;; :desc "Side-journal-toggle" :n "TAB" #'side-journal-toggle-notes
-       :desc "open journal today" :n "SPC" #'org-journal-open-current-journal-file
        :desc "elfeed" "l" #'elfeed
+       :desc "open workspaces" "w" #'my/open-workspaces
        ))
 
 ;;;; 'j' junghanacs hotkey
@@ -571,7 +578,8 @@
 
        :desc "+org/export-to-clipboard"      "y" #'+org/export-to-clipboard
 
-       :desc "org-journal-open-today" "SPC" #'org-journal-open-current-journal-file
+       ;; :desc "org-journal-open-today" "SPC" #'org-journal-open-current-journal-file
+       :desc "open current journal" :n "SPC" #'org-journal-open-current-journal-file
        ;; :desc "side-journal-toggle" "TAB" #'side-journal-toggle-notes
 
        :desc "org-drill"                     "D" #'org-drill

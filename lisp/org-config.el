@@ -165,7 +165,7 @@
 (global-set-key (kbd "C-c \\") 'org-tags-sparse-tree)
 
 (global-unset-key (kbd "<f6>"))
-(global-set-key (kbd "<C-f6>") #'(lambda () (interactive) (bookmark-set "SAVED")))
+(global-set-key (kbd "<M-f6>") #'(lambda () (interactive) (bookmark-set "SAVED")))
 (global-set-key (kbd "<f6>") #'(lambda () (interactive) (bookmark-jump "SAVED")))
 
 (global-set-key (kbd "<f10> c") 'calendar)

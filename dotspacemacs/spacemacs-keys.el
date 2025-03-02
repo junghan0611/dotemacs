@@ -229,9 +229,9 @@
 (when (locate-library "hypothesis")
   (spacemacs/declare-prefix "Ch"  "hypothesis")
   (spacemacs/set-leader-keys
-   "Cho" #'hypothesis-to-org
-   "Cha" #'hypothesis-to-archive
-   )
+    "Cho" #'hypothesis-to-org
+    "Cha" #'hypothesis-to-archive
+    )
   )
 
 ;;;;; 'SPC f'
@@ -330,6 +330,14 @@
 
 ;;;; Global 'n' narrow  / numbers
 
+(spacemacs/set-leader-keys "n SPC" #'org-journal-open-current-journal-file)
+(spacemacs/declare-prefix "nj" "journal")
+(spacemacs/set-leader-keys
+  "njf" 'org-journal-open-current-journal-file
+  "njj" 'org-journal-new-entry
+  "njs" 'org-journal-search-forever
+  "njt" 'org-journal-new-scheduled-entry
+  "njv" 'org-journal-schedule-view)
 (spacemacs/set-leader-keys "nm" #'my/split-and-indirect-orgtree)
 (spacemacs/set-leader-keys "nM" #'my/kill-and-unsplit-orgtree)
 (spacemacs/set-leader-keys "tM" #'my/org-toggle-emphasis-markers)

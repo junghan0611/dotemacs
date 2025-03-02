@@ -215,8 +215,8 @@ Use the `company-doc-buffer' to insert the results."
   (add-hook 'org-babel-after-execute-hook
             #'my/org-babel-jupyter-strip-ansi-escapes-block)
 
-  (define-key jupyter-org-interaction-mode-map (kbd "C-c h") nil)
-  (define-key jupyter-org-interaction-mode-map (kbd "<f2>") 'jupyter-org-hydra/body)
+  ;; (define-key jupyter-org-interaction-mode-map (kbd "C-c h") nil)
+  (define-key jupyter-org-interaction-mode-map (kbd "M-h") 'jupyter-org-hydra/body)
 
   (setq org-babel-jupyter-resource-directory (concat user-emacs-directory "ob-jupyter"))
 
