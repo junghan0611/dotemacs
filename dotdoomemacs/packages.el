@@ -164,7 +164,7 @@
 
 (package! keycast)
 (package! outli :recipe (:host github :repo "jdtsmith/outli" :files ("*.el")))
-;; (package! fontaine)
+(package! fontaine)
 (package! golden-ratio)
 (package! mode-minder :recipe (:host github :repo "jdtsmith/mode-minder"))
 ;; (package! breadcrumb)
@@ -528,8 +528,8 @@
 
 ;;;;; misc
 
-;; (package! fireplace)
-;; (package! snow)
+(package! fireplace)
+(package! snow)
 ;; (package! selectric-mode)
 
 ;;; end-of file

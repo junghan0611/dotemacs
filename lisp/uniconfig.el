@@ -564,57 +564,56 @@ Also see `prot-window-delete-popup-frame'." command)
 ;; Slopes :: Upright Oblique Italic
 ;; Width :: Normal Extended
 
-;; (when (locate-library "fontaine")
-;;   (when (display-graphic-p) ; gui
-;;     ;; (setq fontaine-latest-state-file
-;;     ;;       (locate-user-emacs-file "fontaine-latest-state.eld"))
-;;     (setq fontaine-presets
-;;           ;; 80 120, 136, 151, 180, 211 ; sarasa mono / term
-;;           ;; 120, 140, 170, 190, 210, 230 ; monoplex kr nerd
-;;           '(
-;;             (small12 :default-height 120)
-;;             (regular :default-height 140)
-;;             (regular14 :default-height 140)
-;;             (regular17 :default-height 170)
-;;             (logosfocus :default-height 170)
-;;             (large19 :default-height 190)
-;;             (large21 :default-height 210)
-;;             (present23
-;;              :default-height 230
-;;              ;; :fixed-pitch-family "Sarasa Term Slab K"
-;;              ;; :fixed-pitch-serif-family "Sarasa Term Slab K"
-;;              :bold-weight extrabold)
-;;             (t
-;;              ;; Following Prot’s example, keeping these for for didactic purposes.
-;;              :line-spacing 3
-;;              ;; :default-family "Sarasa Term K Nerd Font"
-;;              ;; :default-height 151
-;;              :default-family "Monoplex Nerd"
-;;              :default-height 140
-;;              :default-weight regular
-;;              ;; :fixed-pitch-family "Sarasa Term K Nerd Font"
-;;              ;; :fixed-pitch-height 151
-;;              ;; :fixed-pitch-weight nil
-;;              ;; :fixed-piath-serif-family nil
-;;              ;; :fixed-pitch-serif-weight nil
-;;              ;; :fixed-pitch-serif-height nil
-;;              :variable-pitch-family "Pretendard Variable"
-;;              ;; :variable-pitch-height 1.0
-;;              ;; :variable-pitch-family nil
-;;              ;; :variable-pitch-weight nil
-;;              :bold-family nil
-;;              :bold-weight bold
-;;              ;; :bold-width extended
-;;              :italic-family nil
-;;              :italic-slant italic)))
+(when (locate-library "fontaine")
+  (when (display-graphic-p) ; gui
+    ;; (setq fontaine-latest-state-file
+    ;;       (locate-user-emacs-file "fontaine-latest-state.eld"))
+    (setq fontaine-presets
+          ;; 80 120, 136, 151, 180, 211 ; sarasa mono / term
+          ;; 120, 140, 170, 190, 210, 230 ; monoplex kr nerd
+          '(
+            (small12 :default-height 120)
+            (regular :default-height 140)
+            (regular14 :default-height 140)
+            (regular17 :default-height 170)
+            (logosfocus :default-height 170)
+            (large19 :default-height 190)
+            (large21 :default-height 210)
+            (present23
+             :default-height 230
+             ;; :fixed-pitch-family "Sarasa Term Slab K"
+             ;; :fixed-pitch-serif-family "Sarasa Term Slab K"
+             :bold-weight extrabold)
+            (t
+             ;; Following Prot’s example, keeping these for for didactic purposes.
+             :line-spacing 3
+             ;; :default-family "Sarasa Term K Nerd Font"
+             ;; :default-height 151
+             :default-family "Monoplex Nerd"
+             :default-height 140
+             :default-weight regular
+             ;; :fixed-pitch-family "Sarasa Term K Nerd Font"
+             ;; :fixed-pitch-height 151
+             ;; :fixed-pitch-weight nil
+             ;; :fixed-piath-serif-family nil
+             ;; :fixed-pitch-serif-weight nil
+             ;; :fixed-pitch-serif-height nil
+             :variable-pitch-family "Pretendard Variable"
+             ;; :variable-pitch-height 1.0
+             ;; :variable-pitch-family nil
+             ;; :variable-pitch-weight nil
+             :bold-family nil
+             :bold-weight bold
+             ;; :bold-width extended
+             :italic-family nil
+             :italic-slant italic)))
 
-;;     ;; (fontaine-set-preset (or (fontaine-restore-latest-preset) 'regular14))
-;;     (fontaine-set-preset 'regular)
-;;     (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family))))
-;;   ;; Persist the latest font preset when closing/starting Emacs and while switching between themes.
-;;   ;; (fontaine-mode 1)
-;;   )
-
+    ;; (fontaine-set-preset (or (fontaine-restore-latest-preset) 'regular14))
+    (fontaine-set-preset 'regular)
+    (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family))))
+  ;; Persist the latest font preset when closing/starting Emacs and while switching between themes.
+  ;; (fontaine-mode 1)
+  )
 
 ;;;; Ten with etags
 
