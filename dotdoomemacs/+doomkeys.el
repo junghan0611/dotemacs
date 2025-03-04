@@ -427,6 +427,14 @@
                ;;  :desc "sdcv" "l" #'sdcv-search-pointer
                ;;  :desc "Merriam Webster" "m" #'mw-thesaurus-lookup-dwim
                ;;  :desc "wiktionary" "w" #'wiktionary-bro-dwim)
+               (:prefix ("i" . "string-inflection")
+                        "C" #'string-inflection-camelcase
+                        "i" #'string-inflection-all-cycle
+                        "-" #'string-inflection-kebab-case
+                        "k" #'string-inflection-kebab-case
+                        "_" #'string-inflection-underscore
+                        "u" #'string-inflection-underscore
+                        "U" #'string-inflection-upcase)
                (:prefix ("g" . "google-translate")
                 :desc "en->ko" "k" #'google-translate-query-translate-reverse
                 :desc "en->ko2" "K" #'+google-translate-en->ko
@@ -687,6 +695,15 @@
       :n "g ]" #'evil-jump-forward
       :n "g [" #'evil-jump-backward
       :n "g RET" #'tabgo
+
+      (:prefix ("z'" . "string-inflection")
+       :n "C" #'string-inflection-camelcase
+       :n "i" #'string-inflection-all-cycle
+       :n "-" #'string-inflection-kebab-case
+       :n "k" #'string-inflection-kebab-case
+       :n "_" #'string-inflection-underscore
+       :n "u" #'string-inflection-underscore
+       :n "U" #'string-inflection-upcase)
 
       ;; "[b" #'evil-prev-buffer
       ;; "]b" #'evil-next-buffer

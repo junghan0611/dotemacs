@@ -137,6 +137,11 @@
 
 (setq +snippets-dir (expand-file-name "snippets/" user-dotemacs-dir))
 
+;;;;; global completion-at-point-functions should be nil
+
+;; 'tags-completion-at-point-function' break ten-glossary
+(setq-default completion-at-point-functions nil)
+
 ;;;;; Basics
 
 ;; (setq-default display-line-numbers-width-start t) ; doom's default t
@@ -961,41 +966,41 @@
 
 ;;;; :checkers
 
-;;;;; OKAY Flycheck
+;;;;; DONT Flycheck
 
-(after! flycheck
-  (setq flycheck-global-modes '(not emacs-lisp-mode org-mode markdown-mode gfm-mode))
-  (setq flycheck-checker-error-threshold 1000) ; need more than default of 400
-  (global-flycheck-mode +1)
-  )
+;; (after! flycheck
+;;   (setq flycheck-global-modes '(not emacs-lisp-mode org-mode markdown-mode gfm-mode))
+;;   (setq flycheck-checker-error-threshold 1000) ; need more than default of 400
+;;   (global-flycheck-mode +1)
+;;   )
 
-(progn
-  (setq flycheck-help-echo-function nil ; default 'flycheck-help-echo-all-error-messages
-        flycheck-display-errors-function nil ; default 'flycheck-display-error-messages
-        )
+;; (progn
+;;   (setq flycheck-help-echo-function nil ; default 'flycheck-help-echo-all-error-messages
+;;         flycheck-display-errors-function nil ; default 'flycheck-display-error-messages
+;;         )
 
-  (after! flycheck
-    (ignore-errors
-      (define-key flycheck-mode-map flycheck-keymap-prefix nil))
-    (setq flycheck-keymap-prefix nil)
+;;   (after! flycheck
+;;     (ignore-errors
+;;       (define-key flycheck-mode-map flycheck-keymap-prefix nil))
+;;     (setq flycheck-keymap-prefix nil)
 
-    (add-hook! flycheck-mode
-      (defun disable-flycheck-popup-buffer ()
-        (setq flycheck-display-errors-function #'ignore)))
-    (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-package)
-    )
+;;     (add-hook! flycheck-mode
+;;       (defun disable-flycheck-popup-buffer ()
+;;         (setq flycheck-display-errors-function #'ignore)))
+;;     (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-package)
+;;     )
 
-  (after! elisp-mode
-    (add-hook! 'doom-scratch-buffer-created-hook
-      (defun flycheck-off ()
-        (flycheck-mode -1))))
-  )
+;;   (after! elisp-mode
+;;     (add-hook! 'doom-scratch-buffer-created-hook
+;;       (defun flycheck-off ()
+;;         (flycheck-mode -1))))
+;;   )
 
-;;;;; DONT Flymake
+;;;;; Flymake
 
-;;;;;; disable flymake-mode default
+;;;;;; remove flymake-mode default
 
-;; (remove-hook! (prog-mode text-mode) #'flymake-mode)
+(remove-hook! (prog-mode text-mode) #'flymake-mode)
 
 ;;;;;; DONT flymake-vale
 
@@ -1031,6 +1036,19 @@
 ;;     (define-key embark-region-map "T" #'titlecase-region)
 ;;     (define-key embark-heading-map "T" #'titlecase-line)
 ;;     (define-key embark-sentence-map "T" #'titlecase-sentence)))
+
+;;;;; :editor string-inflection
+
+(use-package! string-inflection
+  :commands (string-inflection-all-cycle
+             string-inflection-toggle
+             string-inflection-camelcase
+             string-inflection-lower-camelcase
+             string-inflection-kebab-case
+             string-inflection-underscore
+             string-inflection-capital-underscore
+             string-inflection-upcase)
+  )
 
 ;;;;; unfill
 
@@ -7325,10 +7343,5 @@ Suitable for `imenu-create-index-function'."
 
 ;; override and add doom keybindings
 (load! "+doomkeys")
-
-;;;; overide completion-at-point-functions nil
-
-;; Global Value (tags-completion-at-point-function)
-(setq-default completion-at-point-functions nil)
 
 ;;; left blank on purpose

@@ -123,7 +123,7 @@
  (:if (not (memq system-type '(cygwin windows-nt ms-dos))) vterm) ; the best terminal emulation in Emacs
 
  :checkers
- syntax ;; +flymake) ; tasing you for every semicolon you forget
+ (syntax +flymake) ; tasing you for every semicolon you forget
 
  (:unless IS-TERMUX (spell +flyspell)) ; +hunspell - tasing you for misspelling mispelling
  ;; grammar           ; tasing grammar mistake every you make

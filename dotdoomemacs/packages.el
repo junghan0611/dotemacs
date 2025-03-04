@@ -62,9 +62,8 @@
   (package! use-package :built-in t)
   (package! editorconfig :built-in t)
   (package! which-key :built-in t)
-  (package! eglot :built-in t)
-  ;; (package! flymake :built-in t)
-  )
+  (package! flymake :built-in t)
+  (package! eglot :built-in t))
 
 ;;; doom-disabled-packages
 
@@ -79,6 +78,7 @@
  ;; lsp-python-ms
  flyspell-lazy
  flymake-popon
+ vundo
  undo-fu-session
  elfeed-goodies
  org-superstar
@@ -167,7 +167,7 @@
 ;; (package! fontaine) ; break custom.el
 (package! golden-ratio)
 (package! mode-minder :recipe (:host github :repo "jdtsmith/mode-minder"))
-;; (package! breadcrumb)
+(package! breadcrumb) ; with eglot
 (package! celestial-mode-line)
 (package! lin)
 (package! nerd-icons-dired)
@@ -182,6 +182,7 @@
 
 (package! copy-as-format)
 (package! expand-region)
+(package! string-inflection)
 ;; (package! evil-matchit)
 (package! evil-owl) ;; register
 (package! tempel)
