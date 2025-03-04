@@ -1302,7 +1302,7 @@ work computers.")
 (defun my/imenu-list-tuncates-without-tab-line ()
   "Toggle line truncation without printing messages."
   (let ((inhibit-message t))
-    (tab-line-mode -1)
+    ;; (tab-line-mode -1)
     (toggle-truncate-lines t)))
 
 ;; Show an outline summary of the current buffer.
@@ -5438,8 +5438,8 @@ Suitable for `imenu-create-index-function'."
   (gt-default-translator
    (gt-translator
     :taker (gt-taker :langs '(en ko) :text (lambda () (replace-regexp-in-string
-                                                       "\\([^\n]\\)\n\\([^\n]\\)" "\\1 \\2"
-                                                       (thing-at-point 'paragraph)))
+                                                   "\\([^\n]\\)\n\\([^\n]\\)" "\\1 \\2"
+                                                   (thing-at-point 'paragraph)))
                      :prompt t
                      )
     :engines (gt-google-engine)
@@ -6452,8 +6452,8 @@ Suitable for `imenu-create-index-function'."
   ;; (tab-bar-select-tab 1)
   )
 
-;; (when (display-graphic-p) ; gui
-;;   (add-hook 'doom-first-input-hook #'my/open-workspaces))
+(when (display-graphic-p) ; gui
+  (add-hook 'doom-first-input-hook #'my/open-workspaces))
 
 ;;;; tab-line-mode on emacs-30
 
@@ -6463,7 +6463,6 @@ Suitable for `imenu-create-index-function'."
     :demand t
     :config
     (setq tab-line-exclude-modes '(completion-list-mode reb-mode reb-lisp-mode calc-mode calc-trail-mode)) ; 2025-02-09
-    (global-tab-line-mode 1)
     (setq tab-line-close-tab-function #'kill-buffer)
     (setq tab-line-tab-name-truncated-max 26) ; default 20
     (setq tab-line-tab-name-ellipsis "…")
@@ -6471,7 +6470,10 @@ Suitable for `imenu-create-index-function'."
           #'tab-line-tab-name-truncated-buffer)
     (setq
      tab-line-new-button-show nil
-     tab-line-close-button-show nil))
+     tab-line-close-button-show nil)
+
+    ;; (global-tab-line-mode 1)
+    )
   )
 
 ;;;; copy-screenshot-markdown

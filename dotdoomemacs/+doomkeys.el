@@ -18,9 +18,11 @@
 ;;;; Top-menu M-x
 
 (map! :leader
+      "TAB" nil
       "SPC" nil
       "." nil
       "," nil
+      :desc "last-buffer" "TAB" #'evil-switch-to-windows-last-buffer
       :desc "M-x" "SPC" #'execute-extended-command
       :desc "Find file in project" "." #'projectile-find-file
       :desc "Find file in cwd" "," #'my/consult-fd
@@ -28,18 +30,14 @@
       :desc "Eval expression" "M-;" #'pp-eval-expression
       :desc "Search for symbol in cwd" "(" #'my/search-cwd-symbol-at-point
 
-      :desc "1st workspace" "1" #'+workspace/switch-to-0
-      :desc "2nd workspace" "2" #'+workspace/switch-to-1
-      :desc "3rd workspace" "3" #'+workspace/switch-to-2
-      :desc "4th workspace" "4" #'+workspace/switch-to-3
-      :desc "5th workspace" "5" #'+workspace/switch-to-4
-      :desc "6th workspace" "6" #'+workspace/switch-to-5
+      :desc "window-1" "1" #'winum-select-window-1
+      :desc "window-2" "2" #'winum-select-window-2
+      :desc "window-3" "3" #'winum-select-window-3
+      :desc "window-4" "4" #'winum-select-window-4
+      ;; :desc "1st workspace" "1" #'+workspace/switch-to-0
       )
 
 ;;;; SPC
-
-;; (:prefix-map ("TAB" . nil))
-;; :desc "Last Buffer" "TAB" #'evil-switch-to-windows-last-buffer
 
 (progn
   ;; unset doom keybidings
@@ -666,7 +664,7 @@
       :n "zk" #'text-scale-increase ; fold
       :n "zj" #'text-scale-decrease
       ;; :n "DEL" #'previous-buffer
-      :n "DEL" #'evil-switch-to-windows-last-buffer
+      :n "DEL" #'+vertico/switch-workspace-buffer ; default
       ;; :n "s-e" #'+scroll-line-down-other-window
       ;; :n "s-y" #'+scroll-line-up-other-window
       :i "M-/" #'hippie-expand
@@ -690,6 +688,8 @@
       :n "g [" #'evil-jump-backward
       :n "g RET" #'tabgo
 
+      ;; "[b" #'evil-prev-buffer
+      ;; "]b" #'evil-next-buffer
       )
 
 ;;; Major-Mode Leader Keybindings
@@ -766,8 +766,6 @@
         "s-p" #'org-hugo-export-to-md ;; "M-p"
         "M-n" #'org-next-link
         "M-p" #'org-previous-link
-        :n "]b"  #'org-next-block
-        :n "[b"  #'org-previous-block
         "C-c d"  #'cape-dict
         ;; :i "<tab>"  #'completion-at-point ; 2025-02-03
         ;; :i "TAB"  #'completion-at-point
