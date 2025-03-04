@@ -28,6 +28,10 @@
 ;; ㉽ :: U+327D
 ;; ㉼ :: U+327C
 
+;;;; Load use-package org
+
+(straight-use-package 'org)
+
 ;;;; Load 'Per-Machine' - User Configs
 
 ;; Most of my per-environment config done via =customize= and is in .custom.el.
@@ -4002,45 +4006,25 @@ ${content}"))
   ;; (markdown-mode . copilot-mode)
   )
 
-;;;;; copilot for doom
-
-;; https://github.com/michaelneuper/doom
-;; (after! (evil copilot)
-;;   (evil-define-key 'insert 'global (kbd "<tab>") 'copilot-accept-completion))
-;; (map! :leader
-;;       (:prefix ("e" . "copilot")
-;;        :desc "Enable Copilot Mode"
-;;        "c" #'copilot-mode
-;;        :desc "Display Chat Window"
-;;        "d" #'copilot-chat-display
-;;        :desc "Explain Selected Code"
-;;        "e" #'copilot-chat-explain
-;;        :desc "Review Selected Code"
-;;        "r" #'copilot-chat-review
-;;        :desc "Fix Selected Code"
-;;        "f" #'copilot-chat-fix
-;;        :desc "Optimize Selected Code"
-;;        "o" #'copilot-chat-optimize
-;;        :desc "Write Test for Code"
-;;        "t" #'copilot-chat-test
-;;        :desc "Add Current Buffer"
-;;        "a" #'copilot-chat-add-current-buffer
-;;        :desc "Document Selected Code"
-;;        "D" #'copilot-chat-doc
-;;        :desc "Reset Chat History"
-;;        "R" #'copilot-chat-reset
-;;        :desc "Remove Current Buffer"
-;;        "x" #'copilot-chat-del-current-buffer))
-
 ;;;;; llmclient: github copilot-chat
 
 (use-package! copilot-chat
   :after request
+  :bind (:map global-map
+              ("C-c C-y" . copilot-chat-yank)
+              ("C-c M-y" . copilot-chat-yank-pop)
+              ("C-c C-M-y" . (lambda () (interactive) (copilot-chat-yank-pop -1))))
+  :init
+  ;; (setq copilot-chat-backend 'request)
+  ;; (setq! copilot-chat-model "claude-3.5-sonnet"
+  ;;        copilot-chat-frontend 'org)
+  ;; (set-popup-rules!
+  ;;   '(("^\\*Copilot-chat-prompt\\*$" :vslot -2 :size 0.15 :select t :quit t)
+  ;;     ("^\\*Copilot-chat-list\\*$" :slot 10 :side bottom :size 0.1 :select nil :quit t)
+  ;;     ("^\\*Copilot-chat\\*$" :slot 2 :side right :size 0.45 :select nil :quit t)))
   :config
-  (setq copilot-chat-backend 'request)
-  (setq copilot-chat-frontend 'markdown)
   ;; From https://github.com/chep/copilot-chat.el/issues/24
-  (defun meain/copilot-chat-display (prefix)
+  (defun my/copilot-chat-display (prefix)
     "Opens the Copilot chat window, adding the current buffer to the context.
 Called with a PREFIX, resets the context buffer list before opening"
     (interactive "P")
