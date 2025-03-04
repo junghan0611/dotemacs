@@ -881,7 +881,7 @@
 
 (after! corfu
   ;; (setq corfu-auto-delay 0.5) ; doom 0.24
-  (setq corfu-auto-prefix 3) ; doom 2, default 3
+  (setq corfu-auto-prefix 4) ; doom 2, default 3
   (setq corfu-preselect 'valid) ; doom 'prompt
   (setq tab-always-indent t) ; for jump-out-of-pair - doom 'complete
   (setq +corfu-want-minibuffer-completion nil) ; doom t
@@ -4105,37 +4105,37 @@ Called with a PREFIX, resets the context buffer list before opening"
 ;; (setq lsp-file-watch-threshold (* 1024 1024))
 ;; (setq read-process-output-max (* 1024 1024))
 
-(progn
-  (after! lsp-mode
-    (setq
-     lsp-headerline-breadcrumb-enable t ; doom nil
-     lsp-headerline-breadcrumb-icons-enable nil
-     ;; lsp-headerline-breadcrumb-segments '(symbols) ; namespace & symbols, no file path
+;; (progn
+;;   (after! lsp-mode
+;;     (setq
+;;      lsp-headerline-breadcrumb-enable t ; doom nil
+;;      lsp-headerline-breadcrumb-icons-enable nil
+;;      ;; lsp-headerline-breadcrumb-segments '(symbols) ; namespace & symbols, no file path
 
-     ;; lsp-idle-delay 0.2  ; smooth LSP features response
-     ;; lsp-eldoc-enable-hover nil ; default t - disable all hover actions
-     ;; lsp-modeline-code-actions-segments '(count icon)
-     ;; lsp-navigation 'both ; default 'both ; 'simple or 'peek
-     ;; lsp-modeline-diagnostics-enable nil
-     ;; lsp-modeline-code-actions-enable nil
-     )
-    )
+;;      ;; lsp-idle-delay 0.2  ; smooth LSP features response
+;;      ;; lsp-eldoc-enable-hover nil ; default t - disable all hover actions
+;;      ;; lsp-modeline-code-actions-segments '(count icon)
+;;      ;; lsp-navigation 'both ; default 'both ; 'simple or 'peek
+;;      ;; lsp-modeline-diagnostics-enable nil
+;;      ;; lsp-modeline-code-actions-enable nil
+;;      )
+;;     )
 
-  (after! lsp-ui
-    (setq
-     ;; lsp-ui-doc-use-webkit nil
-     ;; lsp-ui-doc-winum-ignore t
-     lsp-ui-sideline-enable nil ; doom t - disable sideline for less distraction
-     ;; lsp-ui-doc-enable nil ;; doom t - disable all doc popups
-     treemacs-space-between-root-nodes nil  ;; doom nil
-     ;; lsp-log-io t  ; default nil - Log client-server json communication
-     ;; lsp-ui-peek-enable t ; doom t
-     ))
+;;   (after! lsp-ui
+;;     (setq
+;;      ;; lsp-ui-doc-use-webkit nil
+;;      ;; lsp-ui-doc-winum-ignore t
+;;      lsp-ui-sideline-enable nil ; doom t - disable sideline for less distraction
+;;      ;; lsp-ui-doc-enable nil ;; doom t - disable all doc popups
+;;      treemacs-space-between-root-nodes nil  ;; doom nil
+;;      ;; lsp-log-io t  ; default nil - Log client-server json communication
+;;      ;; lsp-ui-peek-enable t ; doom t
+;;      ))
 
-  (when (modulep! :ui treemacs +lsp)
-    (setq lsp-treemacs-error-list-current-project-only t)
-    (lsp-treemacs-sync-mode +1))
-  )
+;;   (when (modulep! :ui treemacs +lsp)
+;;     (setq lsp-treemacs-error-list-current-project-only t)
+;;     (lsp-treemacs-sync-mode +1))
+;;   )
 
 ;;;;; devdocs-browser
 
@@ -4300,16 +4300,16 @@ Called with a PREFIX, resets the context buffer list before opening"
 ;; (when (modulep! :tools lsp -eglot)
 ;;   (remove-hook 'python-mode-local-vars-hook 'lsp!))
 
-;;;;;; DONT python with eglot
+;;;;;; python with eglot
 
-;; (with-eval-after-load 'eglot
-;;   (add-to-list
-;;    'eglot-server-programs
-;;    `(python-mode .
-;;      ,(eglot-alternatives
-;;        '(("basedpyright-langserver" "--stdio")))))
-;;   ;; (add-hook 'after-save-hook 'eglot-format)
-;;   )
+(with-eval-after-load 'eglot
+  (add-to-list
+   'eglot-server-programs
+   `(python-mode .
+     ,(eglot-alternatives
+       '(("basedpyright-langserver" "--stdio")))))
+  ;; (add-hook 'after-save-hook 'eglot-format)
+  )
 
 ;;;;;; TODO python-pytest
 
@@ -4581,43 +4581,43 @@ x×X .,·°;:¡!¿?`'‘’   ÄAÃÀ TODO
 ;;;;; doom-modeline
 
 (after! doom-modeline
-  ;; (doom-modeline-def-modeline
-  ;;   'main
-  ;;   '(eldoc
-  ;;     bar
-  ;;     persp-name
-  ;;     ;; workspace-name - conflict tab-bar
-  ;;     window-number
-  ;;     modals
-  ;;     input-method
-  ;;     matches
-  ;;     follow
-  ;;     buffer-info
-  ;;     remote-host
-  ;;     buffer-position
-  ;;     word-count
-  ;;     parrot
-  ;;     selection-info)
-  ;;   '(compilation
-  ;;     objed-state
-  ;;     misc-info
-  ;;     battery
-  ;;     grip
-  ;;     irc
-  ;;     mu4e
-  ;;     gnus
-  ;;     github
-  ;;     debug
-  ;;     repl
-  ;;     lsp
-  ;;     minor-modes
-  ;;     indent-info
-  ;;     buffer-encoding
-  ;;     major-mode
-  ;;     process
-  ;;     vcs
-  ;;     check
-  ;;     time))
+  (doom-modeline-def-modeline
+    'main
+    '(eldoc
+      bar
+      persp-name
+      ;; workspace-name - conflict tab-bar
+      window-number
+      modals
+      input-method
+      matches
+      follow
+      buffer-info
+      remote-host
+      buffer-position
+      word-count
+      parrot
+      selection-info)
+    '(compilation
+      objed-state
+      misc-info
+      battery
+      grip
+      irc
+      mu4e
+      gnus
+      github
+      debug
+      repl
+      lsp
+      minor-modes
+      indent-info
+      buffer-encoding
+      major-mode
+      process
+      vcs
+      check
+      time))
 
   (setq doom-modeline-time nil)
   (setq doom-modeline-time-icon nil)
@@ -7325,5 +7325,10 @@ Suitable for `imenu-create-index-function'."
 
 ;; override and add doom keybindings
 (load! "+doomkeys")
+
+;;;; overide completion-at-point-functions nil
+
+;; Global Value (tags-completion-at-point-function)
+(setq-default completion-at-point-functions nil)
 
 ;;; left blank on purpose

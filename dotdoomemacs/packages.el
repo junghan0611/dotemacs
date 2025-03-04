@@ -164,7 +164,7 @@
 
 (package! keycast)
 (package! outli :recipe (:host github :repo "jdtsmith/outli" :files ("*.el")))
-(package! fontaine)
+;; (package! fontaine) ; break custom.el
 (package! golden-ratio)
 (package! mode-minder :recipe (:host github :repo "jdtsmith/mode-minder"))
 ;; (package! breadcrumb)
@@ -235,7 +235,7 @@
 (package! org-sliced-images)
 ;; (package! image-slicing :recipe (:host github :repo "ginqi7/image-slicing"))
 
-(package! org-linenote) ; require lsp-mode
+;; (package! org-linenote) ; require lsp-mode
 
 (package! parse-csv :recipe (:host github :repo "junghan0611/el-csv")) ; for om-dash
 (package! om-dash :recipe (:host github :repo "gavv/om-dash" :files ("*.el" "*.org"))) ; org-based dashboards

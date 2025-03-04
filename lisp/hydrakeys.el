@@ -569,57 +569,57 @@
           ))
   )
 
-;;;; Major-Mode-Hydra > python-mode
+;;;; DONT Major-Mode-Hydra > python-mode
 
 ;; /home/junghan/sync/man/dotsamples/vanilla/hamacs-evil/ha-programming-python.org
 
-(major-mode-hydra-define python-mode
-  (:title "Python-mode" :color pink :separator "-" :quit-key "<escape>")
-  (
-   "Basic"
-   (
-    ("'" python-shell-switch-to-shell)
-    ("m" python-mark-defun)
-    ("v" python-check)
-    ("s" python-describe-at-point)
-    ("R" run-python "run-python-repl")
-    )
-   "Eval/Repl"
-   (
-    ("ee" python-shell-send-region "send-region")
-    ("ed" python-shell-send-defun "send-defun")
-    ("eb" python-shell-send-buffer)
-    ("ef" python-shell-send-file)
-    ("er" python-shell-send-region)
-    ("ep" python-shell-send-string)
-    ("es" python-shell-send-statement)
-    ("<f2>" python-shell-send-statement)
-    )
-   "Navigate"
-   (
-    ("nh" python-nav-backward-statement)
-    ("nj" python-nav-forward-block)
-    ("nk" python-nav-backward-block)
-    ("nl" python-nav-forward-statement)
-    ("n[" python-nav-backward-up-list)
-    ("n]" python-nav-up-list)
-    ("na" python-nav-beginning-of-block)
-    ("ne" python-nav-end-of-block)
-    ("nm" python-nav-if-name-main)
-    )
-   "Imports"
-   (
-    ("ii" pyimport-remove-unused)
-    ("iu" pyimport-insert-missing)
-    )
-   "Help/Misc"
-   (
-    ("hh" consult-history "history" :exit t)
-    ("hp" python-eldoc-at-point)
-    ("q" nil "Quit" :color red :exit t)
-    )
-   )
-  )
+;; (major-mode-hydra-define python-mode
+;;   (:title "Python-mode" :color pink :separator "-" :quit-key "<escape>")
+;;   (
+;;    "Basic"
+;;    (
+;;     ("'" python-shell-switch-to-shell)
+;;     ("m" python-mark-defun)
+;;     ("v" python-check)
+;;     ("s" python-describe-at-point)
+;;     ("R" run-python "run-python-repl")
+;;     )
+;;    ;; "Eval/Repl"
+;;    ;; (
+;;    ;;  ("ee" python-shell-send-region "send-region")
+;;    ;;  ("ed" python-shell-send-defun "send-defun")
+;;    ;;  ("eb" python-shell-send-buffer)
+;;    ;;  ("ef" python-shell-send-file)
+;;    ;;  ("er" python-shell-send-region)
+;;    ;;  ("ep" python-shell-send-string)
+;;    ;;  ("es" python-shell-send-statement)
+;;    ;;  ("<f2>" python-shell-send-statement)
+;;    ;;  )
+;;    ;; "Navigate"
+;;    ;; (
+;;    ;;  ("nh" python-nav-backward-statement)
+;;    ;;  ("nj" python-nav-forward-block)
+;;    ;;  ("nk" python-nav-backward-block)
+;;    ;;  ("nl" python-nav-forward-statement)
+;;    ;;  ("n[" python-nav-backward-up-list)
+;;    ;;  ("n]" python-nav-up-list)
+;;    ;;  ("na" python-nav-beginning-of-block)
+;;    ;;  ("ne" python-nav-end-of-block)
+;;    ;;  ("nm" python-nav-if-name-main)
+;;    ;;  )
+;;    ;; "Imports"
+;;    ;; (
+;;    ;;  ("ii" pyimport-remove-unused)
+;;    ;;  ("iu" pyimport-insert-missing)
+;;    ;;  )
+;;    "Help/Misc"
+;;    (
+;;     ("hh" consult-history "history" :exit t)
+;;     ("hp" python-eldoc-at-point)
+;;     ("q" nil "Quit" :color red :exit t)
+;;     )
+;;    )
+;;   )
 
 ;;;; Major-Mode-Hydra > eshell-mode
 

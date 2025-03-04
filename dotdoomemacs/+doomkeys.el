@@ -1440,6 +1440,19 @@
         :localleader
         :map python-mode-map
         "'" #'jupyter-repl-associate-buffer
+        (:prefix ("j" . "jupyter")
+                 "c" #'my/jupyter-connect-repl
+                 "C" #'my/jupyter-cleanup-kernels
+                 "r" #'my/jupyter-refresh-kernelspecs
+                 "R" #'my/jupyter-refesh-langs
+                 "l" #'my/list-jupyter-kernel-files
+                 ;; #'my/select-jupyter-kernel
+                 ;; #'my/insert-jupyter-kernel
+                 ;; #'my/jupyter-qtconsole
+                 ;; #'my/jupyter-eval-region
+                 ;; #'my/org-babel-jupyter-strip-ansi-escapes-block
+                 ;; #'my/org-src-block-jupyter-eval-line-or-region
+                 )
         (:prefix ("h" . "help")
                  "l" #'pylookup-lookup
                  "h" #'pylookup-lookup-at-point)
@@ -1450,6 +1463,7 @@
                  "f" #'code-cells-forward-cell)
         )
   )
+
 
 ;; (after! python
 ;;   (map! :after python
