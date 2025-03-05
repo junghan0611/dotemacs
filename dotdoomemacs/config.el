@@ -1753,7 +1753,7 @@ only those in the selected frame."
     #'flyspell-mode)
   )
 
-;;;;; jinx - 통합하자
+;;;;; jinx for hangul with hunspell
 
 ;; 2024-05-21 성능이 빠르다면 한글을 이걸로 써야 한다.
 (use-package! jinx
@@ -1762,37 +1762,18 @@ only those in the selected frame."
   ;; (dolist (hook '(text-mode-hook conf-mode-hook)) ; prog-mode-hook
   ;;   (add-hook hook #'jinx-mode))
 
-
   ;; (add-hook 'org-mode-hook #'jinx-mode)
   ;; (add-hook 'prog-mode-hook #'jinx-mode) ; 주석
 
-  ;; 영어만 검사
-  ;; (setenv "LANG" "en_US.UTF-8")
-  ;; (setq jinx-languages "en")
-
-  ;; (add-hook 'jinx-mode-hook (lambda () (setq-local jinx-languages "en")))
-  ;; (setq jinx-exclude-regexps
-  ;;       '((emacs-lisp-mode "Package-Requires:.*$")
-  ;;         (t "[가-힣]" "[A-Z]+\\>" "-+\\>" "\\w*?[0-9]\\w*\\>" "[a-z]+://\\S-+" "<?[-+_.~a-zA-Z][-+_.~:a-zA-Z0-9]*@[-.a-zA-Z0-9]+>?" "\\(?:Local Variables\\|End\\):\\s-*$" "jinx-\\(?:languages\\|local-words\\):\\s-+.*$")))
-
-  ;; 1) 개인사전 연결해줄 것
-  ;; ~/.config/enchant/en.dic -> /home/junghan/.aspell_en_personal
-  ;; ko.dic -> /home/junghan/.aspell_en_personal 뭐지? 이렇게 들어가네?!
-  ;; 한글 일 경우는 ko.dic 을 ~/.hunspell_ko_personal 으로 심볼링 링크 해줄 것
-  ;; 되는데로 하자
-  ;; 2) enchant.ordering aspell 로 변경할 것
-  ;; 	*:nuspell,aspell,hunspell
-  ;; en_AU:aspell,hunspell,nuspell
-  ;; en_CA:aspell,hunspell,nuspell
-  ;; en_GB:aspell,hunspell,nuspell
-  ;; en_US:aspell,hunspell,nuspell
-  ;; en:aspell,hunspell,nuspell
-
   ;; 1) 영어 제외 : 한글만 검사
   ;; 2) 한글 영어 선택하도록 제공
+  ;; 한글 일 경우는 ko.dic 을 ~/.hunspell_ko_personal 으로 심볼링 링크 해줄 것
+  ;; enchant.ordering -> ../../mydotfiles/config-common/.config/enchant/enchant.ordering
+  ;; hunspell -> /usr/share/hunspell/
+  ;; ~/.config/enchant/ko.dic -> /home/junghan/dotemacs/var/hunspell_ko_personal
+  ;; 2) enchant.ordering hunspell 변경 ko_KR:hunspell
   (setq jinx-languages "ko")
-  ;; (setq jinx-exclude-regexps
-  ;;       '((t "[A-Za-z]" "[']")))
+  ;; (setq jinx-exclude-regexps '((t "[A-Za-z]" "[']")))
   (setq jinx-exclude-regexps
         '((emacs-lisp-mode "Package-Requires:.*$")
           (t "[A-Za-z]" "[']" "[A-Z]+\\>" "-+\\>" "\\w*?[0-9]\\w*\\>" "[a-z]+://\\S-+" "<?[-+_.~a-zA-Z][-+_.~:a-zA-Z0-9]*@[-.a-zA-Z0-9]+>?" "\\(?:Local Variables\\|End\\):\\s-*$" "jinx-\\(?:languages\\|local-words\\):\\s-+.*$")))
@@ -1836,6 +1817,30 @@ only those in the selected frame."
   ;; not just after the end.
   ;; (advice-add 'jinx-next :after (lambda (_) (left-word)))
   )
+
+;;;;;; jinx for english
+
+;; 영어만 검사
+;; (setenv "LANG" "en_US.UTF-8")
+;; (setq jinx-languages "en")
+
+;; (add-hook 'jinx-mode-hook (lambda () (setq-local jinx-languages "en")))
+;; (setq jinx-exclude-regexps
+;;       '((emacs-lisp-mode "Package-Requires:.*$")
+;;         (t "[가-힣]" "[A-Z]+\\>" "-+\\>" "\\w*?[0-9]\\w*\\>" "[a-z]+://\\S-+" "<?[-+_.~a-zA-Z][-+_.~:a-zA-Z0-9]*@[-.a-zA-Z0-9]+>?" "\\(?:Local Variables\\|End\\):\\s-*$" "jinx-\\(?:languages\\|local-words\\):\\s-+.*$")))
+
+;; 1) 개인사전 연결해줄 것
+;; ~/.config/enchant/en.dic -> /home/junghan/.aspell_en_personal
+;; ko.dic -> /home/junghan/.aspell_en_personal 뭐지? 이렇게 들어가네?!
+;; 한글 일 경우는 ko.dic 을 ~/.hunspell_ko_personal 으로 심볼링 링크 해줄 것
+;; 되는데로 하자
+;; 2) enchant.ordering aspell 로 변경할 것
+;; 	*:nuspell,aspell,hunspell
+;; en_AU:aspell,hunspell,nuspell
+;; en_CA:aspell,hunspell,nuspell
+;; en_GB:aspell,hunspell,nuspell
+;; en_US:aspell,hunspell,nuspell
+;; en:aspell,hunspell,nuspell
 
 ;;;;; org-glossary
 
@@ -5041,14 +5046,16 @@ Suitable for `imenu-create-index-function'."
 ;;   :hook
 ;;   (eglot-connect . breadcrumb-mode))
 
-;; (use-package! breadcrumb
-;;   :defer 1
-;;   :init
-;;   ;; (add-hook 'prog-mode-hook 'breadcrumb-local-mode)
-;;   (add-hook 'emacs-lisp-mode-hook 'breadcrumb-local-mode)
+(use-package! breadcrumb
+  :defer 2
+  :init
+  ;; (add-hook 'prog-mode-hook 'breadcrumb-local-mode)
+  (add-hook 'python-mode-hook 'breadcrumb-local-mode)
+  (add-hook 'emacs-lisp-mode-hook 'breadcrumb-local-mode)
+  )
+
 ;;   (add-hook 'markdown-mode-hook 'breadcrumb-local-mode)
 ;;   ;; (add-hook 'org-mode-hook 'breadcrumb-local-mode)
-
 ;;   ;; (add-hook 'text-mode-hook 'breadcrumb-local-mode)
 ;;   (setq breadcrumb-idle-time 5) ; 1
 ;;   ;; (setq breadcrumb-imenu-crumb-separator "/")
