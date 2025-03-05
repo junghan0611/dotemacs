@@ -314,8 +314,8 @@
 (when (locate-library "exercism")
   (global-set-key (kbd "M-g M-e") 'exercism))
 
-;; (when (locate-library "leetcode")
-;;   (global-set-key (kbd "M-g l") 'leetcode))
+(when (locate-library "leetcode")
+  (global-set-key (kbd "M-g M-t") 'leetcode))
 
 ;;;; side-notes
 

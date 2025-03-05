@@ -444,7 +444,7 @@ org-journal-mode
 ;; "\" \n#+END:\n\n"
 (template
  "#+title: " (format-time-string "%Y-%m-%d") n
- "#+hugo_lastmod: Time-stamp: <>" n
+ "#+hugo_lastmod: " n
  "#+filetags: :journal:\n#+date: " (format-time-string "[%Y-%m-%d %a %H:%M]") n
  "#+identifier: " (format-time-string "%Y%m%dT000000") n
  "#+export_file_name: " (format-time-string "%Y%m%dT000000") ".md" n

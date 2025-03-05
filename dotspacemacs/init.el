@@ -2782,14 +2782,6 @@
                   (t . (monochrome)))))
     )
 
-;;;;; DONT jit-lock-defer
-
-  ;; NOTE: setting this to `0' like it was recommended in the article above seems
-  ;; to cause fontification to happen in real time, which can be pretty slow in
-  ;; large buffers. Giving it a delay seems to be better.
-  ;; (setq jit-lock-defer-time 0.25) ;; better
-  ;; (setq jit-lock-defer-time 0) ;; Important
-
 ;;;;; jh-visual > spacious-padding
 
   (use-package spacious-padding

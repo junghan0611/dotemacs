@@ -236,8 +236,6 @@
 (package! org-sliced-images)
 ;; (package! image-slicing :recipe (:host github :repo "ginqi7/image-slicing"))
 
-;; (package! org-linenote) ; require lsp-mode
-
 (package! parse-csv :recipe (:host github :repo "junghan0611/el-csv")) ; for om-dash
 (package! om-dash :recipe (:host github :repo "gavv/om-dash" :files ("*.el" "*.org"))) ; org-based dashboards
 
@@ -247,6 +245,10 @@
 ;; (package! org-bookmark-heading)
 ;; (package! d2-mode)
 ;; (package! ob-d2 :recipe (:host github :repo "dmacvicar/ob-d2"))
+
+;; (package! org-linenote) ; require lsp-mode
+;; (package! org-linenote :recipe (:local-repo "local/org-linenote"))
+(package! org-linenote :recipe (:host github :repo "junghan0611/org-linenote" :branch "main")) ; eglot
 
 ;;;; :tools
 
@@ -363,6 +365,8 @@
 
 ;;;; Coding
 
+(package! eglot-booster :recipe (:type git :host github :repo "jdtsmith/eglot-booster"))
+
 (package! auto-highlight-symbol)
 (package! symbol-overlay)
 
@@ -381,6 +385,7 @@
 (package! elisp-demos :recipe (:host github :repo "junghan0611/elisp-demos" :branch "ko")) ;; https://github.com/junghan0611/elisp-demos
 
 (package! exercism)
+(package! leetcode)
 (package! bats-mode)
 
 (unpin! jupyter)
@@ -533,5 +538,7 @@
 (package! fireplace)
 (package! snow)
 ;; (package! selectric-mode)
+
+
 
 ;;; end-of file

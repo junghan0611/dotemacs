@@ -1000,6 +1000,7 @@
 
 ;;;;;; remove flymake-mode default
 
+(setq flymake-no-changes-timeout 5)
 (remove-hook! (prog-mode text-mode) #'flymake-mode)
 
 ;;;;;; DONT flymake-vale
@@ -3412,6 +3413,7 @@ ${content}"))
         ;; Add metadata to the file
         (goto-char 0) (search-forward ":END:") (end-of-line)
         (insert (format "\n#+title: #LLM: %s\n" suffix))
+        (insert (format "#+hugo_lastmod: %s\n" (format-time-string "[%Y-%m-%d]")))
         (insert "#+filetags: :llmlog:\n")
         (insert (format "#+date: %s\n" (format-time-string "[%Y-%m-%d %a %H:%M]")))
         (insert (format "#+identifier: %s\n" suffix))
@@ -4114,6 +4116,37 @@ Called with a PREFIX, resets the context buffer list before opening"
 
 ;;;; :lang coding
 
+;;;;; eglot configuration
+
+(progn
+  (map! (:map eglot-mode-map
+         :after eglot
+         "C-c r" 'eglot-rename
+         "C-c d" 'eldoc
+         "C-c f" 'flymake-show-buffer-diagnostics
+         "C-c 0" 'eglot-inlay-hints-mode
+         "M-RET" 'eglot-code-actions)
+
+        (:map 'flymake-mode-map
+              "M-n" #'flymake-goto-next-error
+              "M-p" #'flymake-goto-prev-error))
+
+  (setq eglot-send-changes-idle-time 0.5)
+
+  (add-hook! 'eglot-managed-mode-hook
+    (eglot-inlay-hints-mode -1))
+  )
+
+;;;;; TODO eglot-booster
+
+;; install lsp-booster binary first
+(use-package! eglot-booster
+  :after eglot
+  :config
+  ;; (setq eglot-confirm-server-initiated-edits nil)
+  ;; (setq eglot-extend-to-xref t)
+  (eglot-booster-mode +1))
+
 ;;;;; indent-bars
 
 (progn
@@ -4265,15 +4298,6 @@ Called with a PREFIX, resets the context buffer list before opening"
   (define-key yas/keymap (kbd "M-n") 'yas-next-field-or-maybe-expand)
   (define-key yas/keymap (kbd "M-p") 'yas-prev-field)
   )
-
-;;;;; DONT Eglot + Flycheck
-
-;; (use-package! eglot
-;;   :bind
-;;   (:map
-;;    eglot-mode-map ("C-c d" . eldoc) ("C-c a" . eglot-code-actions)
-;;    ;; ("C-c f" . flymake-show-buffer-diagnostics) ;; flycheck
-;;    ("C-c r" . eglot-rename)))
 
 ;;;;; bats-mode for testing awk bash
 
@@ -5039,7 +5063,7 @@ Suitable for `imenu-create-index-function'."
 ;;   (setq ahs-idle-interval 1.0) ; default 1.0
 ;;   (add-hook 'prog-mode-hook #'auto-highlight-symbol-mode))
 
-;;;;; DONT breadcrumb - with eglot
+;;;;; breadcrumb - with eglot
 
 ;; (use-package! breadcrumb
 ;;   :defer 2
@@ -5225,6 +5249,23 @@ Suitable for `imenu-create-index-function'."
     (ert-delete-all-tests)
     (eval-buffer)
     (ert 't))
+  )
+
+;;;;; :app @leetcode
+
+(use-package! leetcode
+  :if (not IS-TERMUX)
+  :defer t
+  :commands leetcode
+  :init
+  (setq leetcode-prefer-language "python")
+  (setq leetcode-prefer-sql "mysql")
+  (setq leetcode-save-solutions t)
+  (setq leetcode-directory "~/leetcode")
+  (setq leetcode-show-problem-by-slug t)
+  ;; :config
+  ;; (add-hook 'leetcode-solution-mode-hook
+  ;;           (lambda() (flycheck-mode -1)))
   )
 
 ;;;;; :app @osm OpenStreetMaps
@@ -5723,19 +5764,6 @@ Suitable for `imenu-create-index-function'."
 ;;;; :ui
 
 (defvar user-imenu-list-height 0.95)
-
-;;;;; jit-lock-defer-time
-
-;; NOTE: setting this to `0' like it was recommended in the article above seems
-;; to cause fontification to happen in real time, which can be pretty slow in
-;; large buffers. Giving it a delay seems to be better.
-;; (setq jit-lock-defer-time 0.05) ;; better
-;; (setq jit-lock-defer-time 0) ; important
-
-;; My guess for how big this number should be for my setup. Call
-;; `cae-set-jit-lock-chunk-size-to-optimal' on a few different files to get an
-;; idea.
-;; (setq jit-lock-chunk-size 2500) ; default 1500
 
 ;;;;; savehist-auto-save-interval
 
@@ -7350,5 +7378,9 @@ Suitable for `imenu-create-index-function'."
 
 ;; override and add doom keybindings
 (load! "+doomkeys")
+
+;;;; linenote
+
+(use-package! org-linenote)
 
 ;;; left blank on purpose
