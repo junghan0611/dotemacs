@@ -236,7 +236,7 @@ org-mode
 
 (hugotags
  "#+description: 요약
-#+hugo_tags: "태그"
+#+hugo_tags: notes
 #+print_bibliography:")
 
 (ai "#+begin_ai :temperature 1
