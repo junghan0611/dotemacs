@@ -1652,13 +1652,13 @@ depending on which one is appropriate based on the context."
     ;; (logos-narrow-dwim)
     ;; (visual-line-mode -1)
 
-    (when (fboundp 'fontaine-set-preset)
-      (fontaine-set-preset 'logosfocus))
+    ;; (when (fboundp 'fontaine-set-preset)
+    ;;   (fontaine-set-preset 'logosfocus))
     (when (fboundp 'vi-tilde-fringe-mode)
       (vi-tilde-fringe-mode -1))
 
-    (when (fboundp 'tab-line-mode)
-      (tab-line-mode -1))
+    ;; (when (fboundp 'tab-line-mode)
+    ;;   (tab-line-mode -1))
 
     (when (fboundp 'keycast-tab-bar-mode)
       (keycast-tab-bar-mode -1))
@@ -1677,13 +1677,12 @@ depending on which one is appropriate based on the context."
     ;; (widen)
     ;; (visual-line-mode 1)
 
-    (when (fboundp 'fontaine-set-preset)
-      (fontaine-set-preset 'default))
+    ;; (when (fboundp 'fontaine-set-preset)
+    ;;   (fontaine-set-preset 'default))
     (when (fboundp 'vi-tilde-fringe-mode)
       (vi-tilde-fringe-mode t))
-
-    (when (fboundp 'tab-line-mode)
-      (tab-line-mode 1))
+    ;; (when (fboundp 'tab-line-mode)
+    ;;   (tab-line-mode 1))
 
     (when (fboundp 'keycast-tab-bar-mode)
       (when (string= (system-name) "jhnuc")

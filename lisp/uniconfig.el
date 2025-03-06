@@ -215,13 +215,13 @@
   )
 
 
-;;;; jit-lock-defer-time
+;;;; DONT jit-lock-defer-time
 
 ;; NOTE: setting this to `0' like it was recommended in the article above seems
 ;; to cause fontification to happen in real time, which can be pretty slow in
 ;; large buffers. Giving it a delay seems to be better.
 ;; (setq jit-lock-defer-time 0.05) ;; better
-(setq jit-lock-defer-time 0) ; important
+;; (setq jit-lock-defer-time 0) ; important
 
 ;; My guess for how big this number should be for my setup. Call
 ;; `cae-set-jit-lock-chunk-size-to-optimal' on a few different files to get an

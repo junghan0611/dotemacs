@@ -68,9 +68,9 @@
 ;;; doom-disabled-packages
 
 (disable-packages!
- ;; anaconda-mode
  ;; lsp-mode
  ;; consult-lsp
+ anaconda-mode
  diredfl ; conflict denote
  dirvish
  code-review
@@ -302,7 +302,8 @@
 
 (package! binder)
 (package! ten :recipe (:host sourcehut :repo "nobiot/ten")) ;; https://git.sr.ht/~nobiot/ten
-;; (package! obsidian)
+(package! chu :recipe (:host sourcehut :repo "nobiot/chu")) ;; https://git.sr.ht/~nobiot/chu
+(package! obsidian)
 
 ;; (package! org-fc
 ;;   :recipe (:host github
@@ -497,12 +498,13 @@
   ;; (package! pylookup :recipe (:host github :repo "junghan0611/pylookup"))
   (package! pylookup :recipe (:local-repo "local/pylookup")))
 
-;; (package! paw :recipe (:local-repo "local/paw" :branch "ko" :files ("*")))
-;; (package! paw :recipe (:host github :repo "junghan0611/paw" :branch "ko" :files ("*")))
+  ;; (package! paw :recipe (:local-repo "local/paw" :branch "ko" :files ("*"))))
+
+  ;; (package! paw :recipe (:host github :repo "junghan0611/paw" :branch "ko" :files ("*")))
+
 
 ;; (package! trekker
 ;;   :recipe (:host github :repo "junghan0611/trekker" :branch "ko" :files("*.md" "*.el" "*.py")))
-
 
 ;;; Applications
 ;;;; Calculator

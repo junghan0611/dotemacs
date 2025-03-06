@@ -457,7 +457,7 @@
       ("^\\*doom:" :vslot -4 :size 0.35 :side right :autosave t :select t :modeline t :quit nil :ttl t) ; editing buffers (interaction required)
       ("^\\*doom:\\(?:v?term\\|e?shell\\)-popup" ; editing buffers (interaction required)
        :vslot -5 :size 0.35 :select t :modeline nil :quit nil :ttl nil)
-      ("^\\*jupyter-repl.*?\\(\\*\\|<[[:digit:]]>\\)$" :vslot -5 :size 0.35 :select t :modeline nil :quit nil :ttl nil) ; 2025-02-27
+      ("^\\*jupyter-repl.*?\\(\\*\\|<[[:digit:]]>\\)$" :vslot -5 :side right :size 0.35 :select t :modeline t :quit nil :ttl t) ; 2025-02-27 python
       ("^\\*\\(?:Wo\\)?Man " :vslot -6 :size 0.45 :select t :quit t :ttl 0)
       ("^\\*Calc" :vslot -7 :side bottom :size 0.4 :select t :quit nil :ttl 0)
       ("^\\*Customize" :slot 2 :side right :size 0.5 :select t :quit nil)
@@ -498,7 +498,7 @@
     )
 
   ;; 와우 이거다. 태그랑 쓰기랑 나눠야 한다.
-  ;; (add-to-list
+  ;;(add-to-list
   ;;  'display-buffer-alist
   ;;  `("*ekg tag.*\\*"
   ;;    (display-buffer-reuse-window display-buffer-in-direction)
@@ -1000,7 +1000,6 @@
 
 ;;;;;; remove flymake-mode default
 
-(setq flymake-no-changes-timeout 5)
 (remove-hook! (prog-mode text-mode) #'flymake-mode)
 
 ;;;;;; DONT flymake-vale
@@ -3081,7 +3080,7 @@ ${content}"))
   (require 'denote-silo-extras)
   ;; (require 'denote-journal-extras)
   (require 'denote-org-extras)
-  ;; (require 'denote-md-extras) ; markdown-obsidian
+  (require 'denote-md-extras) ; markdown-obsidian
   (setq denote-file-type 'org)
   (setq denote-sort-components '(signature title keywords identifier))
   ;; (setq denote-backlinks-show-context nil) ; default nil
@@ -3316,22 +3315,22 @@ ${content}"))
                                       (t . find-file)))
 
     ;; FIXME for denote-obsidian
-    ;; (setq citar-denote-file-types
-    ;;       `((org
-    ;;          :reference-format "#+reference:  %s\n"
-    ;;          :reference-regex "^#\\+reference\\s-*:")
-    ;;         (markdown-obsidian ;; 2025-02-03
-    ;;          :reference-format "reference:  %s\n"
-    ;;          :reference-regex "^reference\\s-*:")
-    ;;         (markdown-yaml
-    ;;          :reference-format "reference:  %s\n"
-    ;;          :reference-regex "^reference\\s-*:")
-    ;;         (markdown-toml
-    ;;          :reference-format "reference  = %s\n"
-    ;;          :reference-regex "^reference\\s-*=")
-    ;;         (text
-    ;;          :reference-format "reference:  %s\n"
-    ;;          :reference-regex "^reference\\s-*:")))
+    (setq citar-denote-file-types
+          `((org
+             :reference-format "#+reference:  %s\n"
+             :reference-regex "^#\\+reference\\s-*:")
+            (markdown-obsidian ;; 2025-02-03
+             :reference-format "reference:  %s\n"
+             :reference-regex "^reference\\s-*:")
+            (markdown-yaml
+             :reference-format "reference:  %s\n"
+             :reference-regex "^reference\\s-*:")
+            (markdown-toml
+             :reference-format "reference  = %s\n"
+             :reference-regex "^reference\\s-*=")
+            (text
+             :reference-format "reference:  %s\n"
+             :reference-regex "^reference\\s-*:")))
     (citar-denote-mode))
 
 ;;;;;; end-of denote
@@ -4127,11 +4126,14 @@ Called with a PREFIX, resets the context buffer list before opening"
          "C-c 0" 'eglot-inlay-hints-mode
          "M-RET" 'eglot-code-actions)
 
-        (:map 'flymake-mode-map
-              "M-n" #'flymake-goto-next-error
-              "M-p" #'flymake-goto-prev-error))
+        ;; FIXME need new keybindings
+        ;; (:map 'flymake-mode-map
+        ;;       "C-n" #'flymake-goto-next-error
+        ;;       "C-p" #'flymake-goto-prev-error)
+        )
 
-  (setq eglot-send-changes-idle-time 0.5)
+  ;; (setq eglot-send-changes-idle-time 0.5)
+  (setq flymake-no-changes-timeout nil)
 
   (add-hook! 'eglot-managed-mode-hook
     (eglot-inlay-hints-mode -1))

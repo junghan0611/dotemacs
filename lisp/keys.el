@@ -611,8 +611,11 @@
       ;; (define-key outli-mode-map (kbd "C-M-<iso-lefttab>")
       ;;             (lambda () (interactive) (outline-cycle-buffer)))
 
-      (evil-define-key '(normal visual) outli-mode-map (kbd "C-n") 'outline-next-heading)
-      (evil-define-key '(normal visual) outli-mode-map (kbd "C-p") 'outline-previous-heading)
+      ;; (evil-define-key '(normal visual) outli-mode-map (kbd "C-n") 'outline-next-heading)
+      ;; (evil-define-key '(normal visual) outli-mode-map (kbd "C-p") 'outline-previous-heading)
+
+      ;; (evil-define-key '(normal visual) outli-mode-map (kbd "M-S-n") 'flymake-goto-next-error)
+      ;; (evil-define-key '(normal visual) outli-mode-map (kbd "M-S-p") 'flymake-goto-prev-error)
 
       (evil-define-key '(normal visual) outli-mode-map (kbd "M-n") 'outline-next-heading)
       (evil-define-key '(normal visual) outli-mode-map (kbd "M-p") 'outline-previous-heading)
@@ -625,7 +628,8 @@
 
       (evil-define-key '(insert) prog-mode-map (kbd "C-k") 'kill-line)
 
-      (define-key prog-mode-map (kbd "C-c H") 'outline-insert-heading)
+      ;; (define-key outli-mode-map (kbd "C-c RET") 'outli-insert-heading-respect-content)
+      (define-key outli-mode-map (kbd "C-c RET") 'outline-insert-heading)
       (define-key prog-mode-map (kbd "C-c o") 'consult-outline))
     )
   )

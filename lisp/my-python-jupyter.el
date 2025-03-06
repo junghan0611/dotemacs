@@ -130,33 +130,35 @@ Use the `company-doc-buffer' to insert the results."
 
 (when (locate-library "code-cells")
   (with-eval-after-load 'code-cells
-    (defun my/jupyter-eval-region (beg end)
-      "Evaluate the region between BEG and END."
-      (interactive "r")
-      (let* ((string (buffer-substring beg end))
-             (string (replace-regexp-in-string "\\`[\n]*" "" string)) ; Remove leading empty lines
-             (indent-length (string-match "[^ \t]" string)) ; Find indent length of the first line
-             (unindented-string (replace-regexp-in-string (format "^%s" (make-string indent-length ?\ ))
-                                                          "" string t t))) ; Remove exactly that amount of indentation
-        (jupyter-eval-string unindented-string)))
-    (add-to-list 'code-cells-eval-region-commands '(jupyter-repl-interaction-mode . my/jupyter-eval-region))
+    (when (locate-library "outli")
+      (setq code-cells-boundary-regexp "^##\\(#+\\)"))
+
+    ;; <option1>
+    ;; (defun my/jupyter-eval-region (beg end)
+    ;;   "Evaluate the region between BEG and END."
+    ;;   (interactive "r")
+    ;;   (let* ((string (buffer-substring beg end))
+    ;;          (string (replace-regexp-in-string "\\`[\n]*" "" string)) ; Remove leading empty lines
+    ;;          (indent-length (string-match "[^ \t]" string)) ; Find indent length of the first line
+    ;;          (unindented-string (replace-regexp-in-string (format "^%s" (make-string indent-length ?\ ))
+    ;;                                                       "" string t t))) ; Remove exactly that amount of indentation
+    ;;     (jupyter-eval-string unindented-string)))
+    ;; (add-to-list 'code-cells-eval-region-commands '(jupyter-repl-interaction-mode . my/jupyter-eval-region))
+
+    ;; <option 2>
     ;; see https://github.com/astoff/code-cells.el/issues/22
     ;; (defun gm/jupyter-eval-region (beg end)
     ;;   (jupyter-eval-region nil beg end))
     ;; (add-to-list 'code-cells-eval-region-commands '(jupyter-repl-interaction-mode . gm/jupyter-eval-region))
 
     (let ((map code-cells-mode-map))
-      ;; (define-key map [remap evil-backward-word-begin] (code-cells-speed-key 'code-cells-eval-above)) ;; b
-      ;; (define-key map [remap evil-forward-word-end] (code-cells-speed-key 'code-cells-eval)) ;; e
-      ;; (define-key map [remap evil-jump-forward] (code-cells-speed-key 'outline-cycle))
-
       (define-key map (kbd "C-c <up>") 'code-cells-backward-cell)
       (define-key map (kbd "C-c <down>") 'code-cells-forward-cell)
       ;; (define-key map (kbd "M-<up>") 'code-cells-move-cell-up)
       ;; (define-key map (kbd "M-<down>") 'code-cells-move-cell-down)
-      (define-key map (kbd "C-c C-c") 'code-cells-eval)
+      ;; (define-key map (kbd "C-c C-c") 'code-cells-eval) ;; default jupyter-eval-line-or-region
       ;; Overriding other minor mode bindings requires some insistence...
-      (define-key map [remap jupyter-eval-line-or-region] 'code-cells-eval)
+      ;; (define-key map [remap jupyter-eval-line-or-region] 'code-cells-eval) ; never
       )
 
     ;; convert to org-mode it's very useful
@@ -164,26 +166,26 @@ Use the `company-doc-buffer' to insert the results."
         				   ("pandoc" "--to" "org" "--from" "ipynb")
         				   org-mode))
 
-    (defun my/new-notebook (notebook-name &optional kernel)
-      "Creates an empty notebook in the current directory with an associated kernel."
-      (interactive "sEnter the notebook name: ")
-      (when (file-name-extension notebook-name)
-        (setq notebook-name (file-name-sans-extension notebook-name)))
-      (unless kernel
-        (setq kernel
-              (jupyter-kernelspec-name
-               (jupyter-completing-read-kernelspec))))
-      (unless (executable-find "jupytext")
-        (error "Can't find \"jupytext\""))
-      (let ((notebook-py (concat notebook-name ".py")))
-        (shell-command (concat "touch " notebook-py))
-        (shell-command
-         (concat "jupytext --set-kernel " kernel " " notebook-py))
-        (shell-command (concat "jupytext --to notebook " notebook-py))
-        (shell-command (concat "rm " notebook-py))
-        (message
-         (concat
-          "Notebook successfully created at " notebook-name ".ipynb"))))
+    ;; (defun my/new-notebook (notebook-name &optional kernel)
+    ;;   "Creates an empty notebook in the current directory with an associated kernel."
+    ;;   (interactive "sEnter the notebook name: ")
+    ;;   (when (file-name-extension notebook-name)
+    ;;     (setq notebook-name (file-name-sans-extension notebook-name)))
+    ;;   (unless kernel
+    ;;     (setq kernel
+    ;;           (jupyter-kernelspec-name
+    ;;            (jupyter-completing-read-kernelspec))))
+    ;;   (unless (executable-find "jupytext")
+    ;;     (error "Can't find \"jupytext\""))
+    ;;   (let ((notebook-py (concat notebook-name ".py")))
+    ;;     (shell-command (concat "touch " notebook-py))
+    ;;     (shell-command
+    ;;      (concat "jupytext --set-kernel " kernel " " notebook-py))
+    ;;     (shell-command (concat "jupytext --to notebook " notebook-py))
+    ;;     (shell-command (concat "rm " notebook-py))
+    ;;     (message
+    ;;      (concat
+    ;;       "Notebook successfully created at " notebook-name ".ipynb"))))
     )
   )
 
