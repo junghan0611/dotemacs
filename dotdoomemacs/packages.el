@@ -327,8 +327,8 @@
 (package! ob-chatgpt-shell)
 (package! pcsv)
 
-(package! gptel)
-;; (package! gptel :recipe (:host github :repo "karthink/gptel" :branch "master"))
+;; (package! gptel)
+(package! gptel :recipe (:host github :repo "junghan0611/gptel" :branch "ko"))
 ;; (package! gptel :recipe (:host github :repo "karthink/gptel" :branch "feature-tool-use"))
 (package! gptel-quick :recipe (:host github :repo "karthink/gptel-quick"))
 

@@ -324,7 +324,7 @@
   (setq org-export-with-section-numbers t) ; default t
   (setq org-export-with-timestamps t) ; default t
   ;; (setq org-export-with-drawers '(not "LOGBOOK")) ; default (not "LOGBOOK")
-  (setq org-export-with-todo-keywords t) ; default t
+  (setq org-export-with-todo-keywords nil) ; default t
   )
 
 ;; ;; (setq org-export-preserve-breaks t) ; default nil
@@ -616,8 +616,8 @@
                             ("IMPORTANT" . ?i) ; 별도 처리
                             ;; ("Up" . ?u) ;;
                             ("SUBNOTE" . ?s) ;; subtree -> subnote
+                            ("EXPORT" . ?e)
                             ;; ("crypt" . ?E)
-                            ;; ("NOTE" . ?o)
                             ("noexport" . ?x)
                             ("video" . ?v)
                             ("fulltext" . ?f)

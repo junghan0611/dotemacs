@@ -75,7 +75,6 @@
 (setq default-input-method "korean-hangul")
 (set-language-environment "Korean")
 ;; (setq default-transient-input-method "TeX") ; C-u set-input-method
-
 (set-keyboard-coding-system 'utf-8)
 (setq locale-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
@@ -90,6 +89,8 @@
 
 ;; Treat clipboard input as UTF-8 string first; compound text next, etc.
 (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
+
+(set-clipboard-coding-system 'utf-8)
 
 (setq-default line-spacing 3) ; use fontaine
 
@@ -528,9 +529,32 @@ Also see `prot-window-delete-popup-frame'." command)
 
     (gptel "My:AI Chat" gptel-api-key nil)
     (switch-to-buffer "My:AI Chat")
-    (delete-other-windows)))
-;; (tab-line-mode -1)
+    (delete-other-windows))
+  )
 
+
+;;;;; use gptel citations utf8
+
+(defun my/url-decode-to-korean (url)
+  "URL을 디코딩하고 한글로 표시합니다."
+  (decode-coding-string (url-unhex-string url t) 'utf-8))
+
+;; (when (locate-library "gptel")
+;;   (with-eval-after-load 'gptel
+;;     (require 'url)
+;;     (fmakunbound 'gptel--perplexity-parse-citations)
+;;     (defun gptel--perplexity-parse-citations (citations)
+;;       (let ((counter 0))
+;;         (concat "\n\nCitations:\n"
+;;                 (mapconcat (lambda (url)
+;;                              (setq counter (1+ counter))
+;;                              (format "- [%d] %s" counter
+;;                                      (decode-coding-string (url-unhex-string url t) 'utf-8)
+;;                                      ;; (url-decode-to-korean url)
+;;                                      ))
+;;                            citations "\n"))))
+;;     )
+;;   )
 
 ;;; Packages with functions
 ;;;; consult - swiper style check wiki
