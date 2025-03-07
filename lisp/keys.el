@@ -1658,6 +1658,7 @@ window."
   "B" #'denote-org-extras-backlinks-for-heading
   "d" #'denote-create-note
 
+
   "f" #'my/denote-find-file ; find org files
   "g" #'my/denote-grep
   "." #'consult-denote-find ; find all types of files
@@ -1673,7 +1674,7 @@ window."
 
   "e" ews-denote-extra-map
   "E" #'my/denote-assign-evergreen
-  "o" ews-org-noter-map
+  "o" #'my/denote-howmish-find-file
   "p" ews-org-publish-map
 
   "h" #'my/denote-org-store-link-to-heading
@@ -1722,6 +1723,7 @@ window."
 
   "M-f" #'denote-find-link
   "M-b" #'denote-find-backlink
+  ;; "o" ews-org-noter-map
   )
 
 (defvar-keymap ews-modus-themes-map
@@ -1845,7 +1847,7 @@ window."
       "a" `("Annotate" . ,ews-annotate-map)
       "b" `("Bibliography" . ,ews-bibliography-map)
       "x" `("Denote-Explore" . ,ews-denote-explore-map)
-      "o" `("Org-noter" . ,ews-org-noter-map)
+      ;; "o" `("Org-noter" . ,ews-org-noter-map)
       "u" `("Org-Transclusion" . ,ews-org-transclusion-map)
       "e" `("Denote-Extra" . ,ews-denote-extra-map)
       "p" `("Org-Publish" . ,ews-org-publish-map)

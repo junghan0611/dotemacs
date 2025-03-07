@@ -975,7 +975,8 @@
         ;; :desc "@note-map" "n" ews-note-map
         :desc "@denote-map" "n" ews-denote-map
         :desc "@org-transclusion-map" "u" ews-org-transclusion-map
-        :desc "@org-noter-map" "o" ews-org-noter-map
+        ;; :desc "@org-noter-map" "o" ews-org-noter-map
+        "o" #'my/denote-howmish-find-file
 
         :desc "org-set-effot" "E" #'org-set-effort
         :desc "time-stamp" "1" #'time-stamp

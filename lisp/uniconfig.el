@@ -591,6 +591,46 @@ Also see `prot-window-delete-popup-frame'." command)
 ;;   )
 
 
+;;;; consult-denote
+
+(when (locate-library "consult-denote")
+  (progn
+    ;; https://systemcrafters.net/live-streams/march-7-2025/
+    (consult-denote-mode 1)
+
+    (defun my/denote-howmish-find-file ()
+      (declare (interactive-only t))
+      (interactive)
+      (let* ((sorted-files (sort (mapcar (lambda (file)
+                                           (cons (file-attribute-modification-time
+                                                  (file-attributes file))
+                                                 file))
+                                         (denote-directory-files))
+                                 (lambda (left right)
+                                   (not
+                                    (time-less-p (car left)
+                                                 (car right))))))
+             (table (make-hash-table :test 'equal))
+             (options
+              (mapcar (lambda (file)
+                        (puthash (denote-retrieve-title-or-filename (cdr file) 'org)
+                                 (cdr file)
+                                 table))
+                      sorted-files))
+             (result
+              (consult--read table
+                             :prompt "Note: "
+                             :sort nil
+                             :require-match t
+                             :add-history (thing-at-point 'filename)
+                             :state (consult--file-preview)
+                             :category 'file
+                             :history '(:input consult--find-history))))
+        (when result
+          (find-file (gethash result table)))))
+    )
+  )
+
 ;;;; DONT fontaine
 
 ;; ;; This is defined in Emacs C code: it belongs to font settings.
