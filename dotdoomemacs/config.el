@@ -201,7 +201,10 @@
 ;;;;; Time
 
 (require 'time)
-(setq display-time-format " |%a %e %b, %H:%M| ")
+
+;; (setq display-time-format "%l:%M %p %b %d W%U") ;; dw-dotfiles
+(setq display-time-format " 🅆%U|%a %e %b, %H:%M| ") ; Ⓦ 🅆 🆆
+
 ;; Covered by `display-time-format'
 ;; (setq display-time-24hr-format t)
 ;; (setq display-time-day-and-date t)
