@@ -1556,8 +1556,7 @@ window."
   "n" #'citar-denote-open-note
   "o" #'citar-open
 
-  ;; "e" #'citar-open-entry
-  "e" #'citar-denote-open-reference-entry
+  "e" #'citar-open-entry
 
   "a" #'citar-denote-add-reference
   "1" #'citar-denote-find-citation ;; grep [cite @xxx]
@@ -1570,6 +1569,8 @@ window."
 
   "s" #'citar-denote-create-silo-note
   "k" #'citar-denote-remove-reference
+
+  "r" #'citar-denote-open-reference-entry
 
   "SPC" #'citar-denote-dwim
   )
@@ -1658,13 +1659,13 @@ window."
   "B" #'denote-org-extras-backlinks-for-heading
   "d" #'denote-create-note
 
-
   "f" #'my/denote-find-file ; find org files
+  "F" #'consult-denote-find ; find all types of files with .attach files
+  ;; "F" #'+default/find-in-notes ; find-files
+
   "g" #'my/denote-grep
-  "." #'consult-denote-find ; find all types of files
   "SPC" #'consult-denote-grep
 
-  "F" #'+default/find-in-notes ; find-files
   ;;   "F" #'+default/browse-notes
 
   "1" #'denote-random-notes

@@ -113,11 +113,11 @@
 
 (global-set-key (kbd "C-`") #'+vterm/toggle) ;; vscode style
 
-;;;; Replace Doom `/' highlight with buffer-search
+;;;; DONT Replace Doom `/' highlight with buffer-search - consult-line
 
-(map! :after evil
-      :map evil-normal-state-map
-      "." #'+default/search-buffer) ;; / -> .
+;; (map! :after evil
+;;       :map evil-normal-state-map
+;;       "." #'+default/search-buffer) ;; / -> .
 
 ;;;; 'v' er/expand-region
 
@@ -1644,9 +1644,9 @@
  :after (embark citar-denote)
  (:map citar-embark-citation-map
        "1" #'citar-denote-find-citation ; really useful
-       ;; "2" #'citar-denote-open-note
+       "2" #'citar-denote-open-note
+       "3" #'citar-open-entry
        ))
-
 
 ;;;; vertico-map
 

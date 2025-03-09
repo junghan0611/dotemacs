@@ -34,7 +34,7 @@
 
 (with-eval-after-load 'cape
   ;; /gopar-dotfiles-youtuber/README.org:1371
-  (setq cape-dabbrev-min-length 5) ; default 4
+  (setq cape-dabbrev-min-length 6) ; default 4
   ;; (setq cape-dabbrev-check-other-buffers 'some)
   )
 
@@ -591,12 +591,20 @@ Also see `prot-window-delete-popup-frame'." command)
 ;;   )
 
 
-;;;; consult-denote
+;;;; consult-denote and howmish
+
+;; (let ((tab (make-hash-table :test 'equal)))
+;;   (puthash "Foo" "foo.org" tab)
+;;   (gethash (completing-read "Yes: "  tab) tab))
 
 (when (locate-library "consult-denote")
   (progn
     ;; https://systemcrafters.net/live-streams/march-7-2025/
-    (consult-denote-mode 1)
+    ;; - Searching for notes in most-recent-edit order
+    ;; - Searching for notes from today, yesterday, specific date
+    ;; - Following search query links
+
+    ;; (consult-denote-mode +1)
 
     (defun my/denote-howmish-find-file ()
       (declare (interactive-only t))
@@ -728,6 +736,46 @@ Also see `prot-window-delete-popup-frame'." command)
     )
   )
 
+;;;; markdown-mode
+
+(when (locate-library "markdown-mode")
+  (progn
+    ;; https://www.reddit.com/r/emacs/comments/10h9jf0/beautify_markdown_on_emacs/
+
+    (defvar nb/current-line '(0 . 0)
+      "(start . end) of current line in current buffer")
+    (make-variable-buffer-local 'nb/current-line)
+
+    (defun nb/unhide-current-line (limit)
+      "Font-lock function"
+      (let ((start (max (point) (car nb/current-line)))
+            (end (min limit (cdr nb/current-line))))
+        (when (< start end)
+          (remove-text-properties start end
+                                  '(invisible t display "" composition ""))
+          (goto-char limit)
+          t)))
+
+    (defun nb/refontify-on-linemove ()
+      "Post-command-hook"
+      (let* ((start (line-beginning-position))
+             (end (line-beginning-position 2))
+             (needs-update (not (equal start (car nb/current-line)))))
+        (setq nb/current-line (cons start end))
+        (when needs-update
+          (font-lock-fontify-block 3))))
+
+    (defun nb/markdown-unhighlight ()
+      "Enable markdown concealling"
+      (interactive)
+      (markdown-toggle-markup-hiding 'toggle)
+      (font-lock-add-keywords nil '((nb/unhide-current-line)) t)
+      (add-hook 'post-command-hook #'nb/refontify-on-linemove nil t))
+
+    (add-hook 'markdown-mode-hook #'nb/markdown-unhighlight)
+    )
+  )
+
 ;;;; org-rainbow-tags
 
 (when (locate-library "org-rainbow-tags")
@@ -737,6 +785,13 @@ Also see `prot-window-delete-popup-frame'." command)
     (setq org-rainbow-tags-extra-face-attributes
           '(:inverse-video t :box nil :weight 'bold))
     (add-hook 'org-mode-hook #'org-rainbow-tags-mode)))
+
+;;;; tab-width for org-mode and org-journal-mode
+
+(when (locate-library "org-journal")
+  (add-hook 'org-mode-hook (lambda () (setq-local tab-width 8)))
+  (add-hook 'org-journal-mode-hook (lambda () (setq-local tab-width 8)))
+  )
 
 ;;;; goto-last-change
 
@@ -763,58 +818,58 @@ Also see `prot-window-delete-popup-frame'." command)
      '((main
         .
         ;; [${urldate:10}]
-        "[${dateadded:10}] \{${datemodified:10}\} ${author editor:20} ${translator:8} (${date year issued:4}) @${=key= id:16} ${title:68} ")  ; 2024-09-12 김정한
+        "'${dateadded:10} ${author editor:19} ${title:49}  ${date year issued:4} ${translator:7} ${=key= id:17}")  ; 2024-09-12 김정한
        (suffix
-        . "${shorttitle:25} ${=type=:10} ${namea:16} ${url:20} ${tags keywords:*}") ; 2024-11-17 add url
+        . "#${datemodified:10} ${=type=:10} ${shorttitle:19} ${namea:16} ${url:19} ${tags keywords:*}") ; 2024-11-17 add url
        (preview
         .
         "${title}\n- ${shorttitle}\n- ${author} ${translator} ${namea}\n- ${abstract}\n- ${year issued date:4}") ; citar-copy-reference
        (note . "#+title: ${author translator:10}, ${title}")))
     ;; (note . "Notes on ${author:10 editor:%etal}, ${title}")
 
-    (progn
-      (defvar citar-indicator-files-icons
-        (citar-indicator-create
-         :symbol (nerd-icons-faicon
-                  "nf-fa-file_o"
-                  :face 'nerd-icons-green
-                  :v-adjust 0.01)
-         :function #'citar-has-files
-         :padding "  " ; need this because the default padding is too low for these icons
-         :tag "has:files"))
-      (defvar citar-indicator-links-icons
-        (citar-indicator-create
-         :symbol (nerd-icons-faicon
-                  "nf-fa-link"
-                  :face 'nerd-icons-orange
-                  :v-adjust 0.0)
-         :function #'citar-has-links
-         :padding "  "
-         :tag "has:links"))
-      (defvar citar-indicator-notes-icons
-        (citar-indicator-create
-         :symbol (nerd-icons-codicon
-                  "nf-cod-note"
-                  :face 'nerd-icons-blue
-                  :v-adjust 0.0)
-         :function #'citar-has-notes
-         :padding "    "
-         :tag "has:notes"))
-      (defvar citar-indicator-cited-icons
-        (citar-indicator-create
-         :symbol (nerd-icons-faicon
-                  "nf-fa-circle_o"
-                  :face 'nerd-icon-green
-                  :v-adjust 0.0)
-         :function #'citar-is-cited
-         :padding "  "
-         :tag "is:cited"))
-      (setq citar-indicators
-            (list citar-indicator-files-icons
-                  citar-indicator-links-icons
-                  citar-indicator-notes-icons
-                  citar-indicator-cited-icons)))))
-
+    ;; (progn
+    ;;   (defvar citar-indicator-files-icons
+    ;;     (citar-indicator-create
+    ;;      :symbol (nerd-icons-faicon
+    ;;               "nf-fa-file_o"
+    ;;               :face 'nerd-icons-green
+    ;;               :v-adjust 0.01)
+    ;;      :function #'citar-has-files
+    ;;      :padding "  " ; need this because the default padding is too low for these icons
+    ;;      :tag "has:files"))
+    ;;   (defvar citar-indicator-links-icons
+    ;;     (citar-indicator-create
+    ;;      :symbol (nerd-icons-faicon
+    ;;               "nf-fa-link"
+    ;;               :face 'nerd-icons-orange
+    ;;               :v-adjust 0.0)
+    ;;      :function #'citar-has-links
+    ;;      :padding "  "
+    ;;      :tag "has:links"))
+    ;;   (defvar citar-indicator-notes-icons
+    ;;     (citar-indicator-create
+    ;;      :symbol (nerd-icons-codicon
+    ;;               "nf-cod-note"
+    ;;               :face 'nerd-icons-blue
+    ;;               :v-adjust 0.0)
+    ;;      :function #'citar-has-notes
+    ;;      :padding "    "
+    ;;      :tag "has:notes"))
+    ;;   (defvar citar-indicator-cited-icons
+    ;;     (citar-indicator-create
+    ;;      :symbol (nerd-icons-faicon
+    ;;               "nf-fa-circle_o"
+    ;;               :face 'nerd-icon-green
+    ;;               :v-adjust 0.0)
+    ;;      :function #'citar-is-cited
+    ;;      :padding "  "
+    ;;      :tag "is:cited"))
+    ;;   (setq citar-indicators
+    ;;         (list citar-indicator-files-icons
+    ;;               citar-indicator-links-icons
+    ;;               citar-indicator-notes-icons
+    ;;               citar-indicator-cited-icons)))
+    ))
 
 ;;;; ox-hugo
 

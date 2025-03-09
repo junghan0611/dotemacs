@@ -823,8 +823,8 @@
 (when (file-exists-p (my/org-blog-file))
   (add-to-list 'my/consult-org-files (my/org-blog-file) t))
 
-(when (file-exists-p (my/org-reading-file))
-  (add-to-list 'my/consult-org-files (my/org-reading-file) t))
+;; (when (file-exists-p (my/org-reading-file))
+;;   (add-to-list 'my/consult-org-files (my/org-reading-file) t))
 
 ;; (when (file-exists-p (my/org-emacs-config-file))
 ;;     (add-to-list 'my/consult-org-files (my/org-emacs-config-file) t))

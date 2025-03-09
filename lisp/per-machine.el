@@ -115,7 +115,7 @@
 (defun my/org-life-file () (my/expand-org-file-name "20240327T112315--life.org"))
 (defun my/org-elfeed-file () (my/expand-org-file-name "20220706T160000--elfeed.org"))
 
-(defun my/org-reading-file () (my/expand-org-file-name "20240329T154123--reading__lists.org"))
+(defun my/org-reading-file () (my/expand-org-file-name "20240329T154123--reading-list.org"))
 
 ;; meta
 (defun my/org-kdc-file () (my/expand-org-file-name "meta/20240312T142358--한국십진분류__classification_kdc_meta.org"))

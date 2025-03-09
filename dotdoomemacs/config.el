@@ -203,7 +203,7 @@
 (require 'time)
 
 ;; (setq display-time-format "%l:%M %p %b %d W%U") ;; dw-dotfiles
-(setq display-time-format " 🅆%U|%a %e %b, %H:%M| ") ; Ⓦ 🅆 🆆
+(setq display-time-format " Ⓦ%U |%a %e %b, %H:%M| ") ; Ⓦ 🅆 🆆
 
 ;; Covered by `display-time-format'
 ;; (setq display-time-24hr-format t)
@@ -3191,7 +3191,7 @@ ${content}"))
 
   (use-package! consult-denote
     :after denote
-    ;; :hook (org-mode . consult-denote-mode)
+    :hook (org-mode . consult-denote-mode)
     :config
     ;; Prefer `ripgrep' and `fd' variants when available
     (when (executable-find "fd")
@@ -7387,5 +7387,10 @@ Suitable for `imenu-create-index-function'."
 ;;;; linenote
 
 (use-package! org-linenote)
+
+;;;; org-books
+
+(require 'org-books)
+(setq org-books-file (my/org-reading-file))
 
 ;;; left blank on purpose

@@ -450,6 +450,9 @@
 (package! org-supertag :recipe (:host github :repo "yibie/org-supertag"))
 (package! docsim)
 
+;;(package! org-books :recipe (:host github :repo "junghan0611/org-books" :branch "ko"))
+(package! org-books :recipe (:local-repo "~/emacs/git/junghan0611/org-books"))
+
 ;;;; Workspace
 
 (package! tabgo)
