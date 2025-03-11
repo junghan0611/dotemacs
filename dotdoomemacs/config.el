@@ -2948,8 +2948,11 @@ ${content}"))
 
 (progn
   (require 'citar)
+  (require 'bibtex)
   (setq citar-bibliography config-bibfiles)
+
   (setq org-cite-global-bibliography config-bibfiles)
+  (setq bibtex-files config-bibfiles)
 
   ;; use #+cite_export: csl apa.csl
   (setq org-cite-csl-styles-dir (concat user-org-directory ".csl"))

@@ -1573,6 +1573,8 @@ window."
   "r" #'citar-denote-open-reference-entry
 
   "SPC" #'citar-denote-dwim
+
+  "0" #'my/citar-org-to-reading-list
   )
 
 (defvar-keymap ews-annotate-map

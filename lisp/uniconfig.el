@@ -808,24 +808,69 @@ Also see `prot-window-delete-popup-frame'." command)
   (require 'side-notes)
   (add-hook 'side-notes-hook #'visual-line-mode))
 
-;;;; citar templates and nerd-icons
+;;;; custom citar-org
 
 (when (locate-library "citar")
 
   (with-eval-after-load 'citar
-    (setq
-     citar-templates
-     '((main
-        .
-        ;; [${urldate:10}]
-        "'${dateadded:10} ${author editor:19} ${title:49}  ${date year issued:4} ${translator:7} ${=key= id:17}")  ; 2024-09-12 김정한
-       (suffix
-        . "#${datemodified:10} ${=type=:10} ${shorttitle:19} ${namea:16} ${url:19} ${tags keywords:*}") ; 2024-11-17 add url
-       (preview
-        .
-        "${title}\n- ${shorttitle}\n- ${author} ${translator} ${namea}\n- ${abstract}\n- ${year issued date:4}") ; citar-copy-reference
-       (note . "#+title: ${author translator:10}, ${title}")))
+
+;;;;; citar-templates
+    (setq citar-templates
+          '((main
+             .
+             ;; [${urldate:10}]
+             "'${dateadded:10} ${author editor:19} ${title:49}  ${date year issued:4} ${translator:7} ${=key= id:17}")  ; 2024-09-12 김정한
+            (suffix
+             . "#${datemodified:10} ${=type=:10} ${shorttitle:19} ${namea:16} ${url:19} ${tags keywords:*}") ; 2024-11-17 add url
+            (preview
+             .
+             "${title}\n- ${shorttitle}\n- ${author} ${translator} ${namea}\n- ${abstract}\n- ${year issued date:4}") ; citar-copy-reference
+            (note . "#+title: ${author translator:10}, ${title}")))
+
     ;; (note . "Notes on ${author:10 editor:%etal}, ${title}")
+
+;;;;; my/citar-org-to-reading-list
+
+    (progn
+      (require 'ol-bibtex)
+
+      ;; use embark with at-point
+      ;; (setq citar-at-point-function 'embark-act) ; citar-dwim
+      ;; add beref entry for bookends
+      ;; (setq citar-additional-fields '("url"))
+
+      (defun my/citar-org-to-reading-list (citekeys)
+        "Insert bibliographic entry associated with the CITEKEYS."
+        (interactive (list (citar-select-refs)))
+        (dolist (citekey citekeys)
+          (my/citar--org-to-reading-list
+           citekey)))
+
+      (defun my/citar--org-to-reading-list (citekey)
+        "Insert the bibtex entry for CITEKEY at point."
+
+        (let* ((key citekey)
+               (reading-list-file (my/org-reading-file)))
+          (when key
+            (with-temp-buffer
+              ;; BibTeX 엔트리를 버퍼에 삽입
+              (citar--insert-bibtex citekey)
+              ;; org-bibtex 형식으로 변환
+              (org-bibtex-read)
+              ;; 변환된 내용을 reading list 파일에 추가
+              (with-current-buffer (find-file-noselect reading-list-file)
+                (goto-char (point-max))
+                (insert "\n")
+                (org-bibtex-write)
+                (insert "\n")
+                (insert (format "[cite:@%s]" citekey))
+                (insert "\n")
+
+                (save-buffer)))
+            (message "Entry added to reading list: %s" key))))
+      )
+
+;;;;; citar-indicator icons
 
     ;; (progn
     ;;   (defvar citar-indicator-files-icons
@@ -869,7 +914,9 @@ Also see `prot-window-delete-popup-frame'." command)
     ;;               citar-indicator-links-icons
     ;;               citar-indicator-notes-icons
     ;;               citar-indicator-cited-icons)))
-    ))
+
+    )
+  )
 
 ;;;; ox-hugo
 
