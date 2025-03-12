@@ -806,7 +806,10 @@ Also see `prot-window-delete-popup-frame'." command)
 
 (when (locate-library "side-notes")
   (require 'side-notes)
-  (add-hook 'side-notes-hook #'visual-line-mode))
+  (setq side-notes-display-alist '((side . right)
+                                   (window-width . 84)))
+  (add-hook 'side-notes-hook #'visual-line-mode)
+  )
 
 ;;;; custom citar-org
 

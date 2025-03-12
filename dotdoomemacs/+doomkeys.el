@@ -113,11 +113,11 @@
 
 (global-set-key (kbd "C-`") #'+vterm/toggle) ;; vscode style
 
-;;;; DONT Replace Doom `/' highlight with buffer-search - consult-line
+;;;; Replace Doom `/' highlight with buffer-search - consult-line
 
-;; (map! :after evil
-;;       :map evil-normal-state-map
-;;       "." #'+default/search-buffer) ;; / -> .
+(map! :after evil
+      :map evil-normal-state-map
+      "." #'+default/search-buffer) ;; / -> .
 
 ;;;; 'v' er/expand-region
 
@@ -203,6 +203,8 @@
 ;;        :desc "" "s" nil  ; remove existing binding
 ;;        :desc "Magit Status" "s" #'magit-status))
 
+(require 'my-git-link)
+
 ;; ~/sync/man/dotsamples/doom/agzam-dot-doom/config.el
 (map! :leader
       (:prefix ("g" . "git")
@@ -224,9 +226,14 @@
         :desc "gh-search-issues" "i" #'consult-gh-search-issues
         :desc "gh-issue-list" "I" #'consult-gh-issue-list
         :desc "gh-fork-current-repo" "k" #'consult-gh-fork-current-repo)
-       (:prefix (";" . "git link")
+       (:prefix (";" . "git blame/link/messenger")
+        "p" #'git-messenger:popup-message
+        "i" #'blamer-show-posframe-commit-info
         :desc "git-link-blame" "b" #'git-link-blame
-        :desc "git-link-kill/copy" "l" #'git-link-kill
+        :desc "git-link-commit" "c" #'git-link-commit
+        :desc "git-link" "l" #'git-link
+        :desc "git-link-homepage" "h" #'git-link-homepage
+        :desc "git-link-kill/copy" "k" #'git-link-kill
         :desc "git-link-main-branch" "m" #'git-link-main-branch)))
 
 ;;;; 'h' help
@@ -524,6 +531,19 @@
 ;; (after! (evil copilot)
 ;;   (evil-define-key 'insert 'global (kbd "<tab>") 'copilot-accept-completion))
 
+(map!
+ (:after copilot-chat
+         (:map copilot-chat-prompt-mode-map
+          :g "C-3" (cmd! ()
+                         (copilot-chat-reset)
+                         (copilot-chat-display)))
+         (:map copilot-chat-list-mode-map
+          :n "m" #'copilot-chat-list-add-or-remove-buffer
+          :n "x" #'copilot-chat-list-add-or-remove-buffer
+          :n "u" #'copilot-chat-list-refresh
+          :n "X" #'copilot-chat-list-clear-buffers))
+ )
+
 (map! :leader
       (:prefix ("e" . "copilot")
        :desc "Enable Copilot Mode"
@@ -553,7 +573,6 @@
 
 (map! :leader
       (:prefix ("o" . "open")
-       ;; :desc "Side-journal-toggle" :n "TAB" #'side-journal-toggle-notes
        :desc "elfeed" "l" #'elfeed
        :desc "open workspaces" "w" #'my/open-workspaces
        ))
@@ -581,6 +600,7 @@
 
 (map! :leader
       (:prefix ("n" . "notes")
+       :n "TAB" #'my/side-notes-toggle-daily-note
        ;; "a" nil
        "d" nil
        "n" nil
@@ -787,6 +807,8 @@
         ;; :i "<tab>"  #'completion-at-point ; 2025-02-03
         ;; :i "TAB"  #'completion-at-point
         :i "<tab>" #'my/denote-try-to-complete-then-cycle
+        ;; :n "ds" #'orgbox-schedule
+
         "M--" #'denote-find-backlink
 
         ;; "C-c C-S-l"  #'+org/remove-link
@@ -1741,6 +1763,16 @@
         :n "M-n"    #'evil-next-line
         :n "M-p"    #'evil-previous-line
         ))
+
+;;;; leetcode
+
+(map!
+ (:after leetcode
+         (:map leetcode-solution-mode-map
+          :g "C-4" #'leetcode-try
+          :g "C-5" #'leetcode-restore-layout
+          :g "C-7" #'leetcode-submit)))
+
 
 ;;;; Experiments
 

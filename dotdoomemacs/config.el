@@ -4248,16 +4248,36 @@ Called with a PREFIX, resets the context buffer list before opening"
 
 ;;;;; git-link
 
+;; 현재 git repo의 homepage link를 clipboard에 넣어준다
 (use-package! git-link
-  :defer t
-  :config
+  :commands (git-link-commit git-link-homepage git-link)
+  :init
   ;; default is to open the generated link
-  (setq git-link-open-in-browser t))
+  (setq git-link-open-in-browser t)
+  )
 
-;; (spacemacs/declare-prefix "gl" "links")
-;; (spacemacs/set-leader-keys
-;;  "glc" 'git-link-commit
-;;  "gll" 'git-link
+;;;;; blamer git-messenger
+
+(use-package! blamer
+  :if window-system
+  :custom
+  ;; Set to 0 because I don’t enable by default.  So I’m in a mindset of show me who and when.
+  (blamer-idle-time 0) ; 0.5
+  (blamer-show-avatar-p nil)
+  (blamer-author-formatter "✎ %s ")
+  (blamer-datetime-formatter "[%s] ")
+  ;; (blamer-commit-formatter "● %s")
+  ;; (blamer-min-offset 40) ; default 60
+  ;; (blamer-max-commit-message-length 20)
+  )
+
+;; git-messenger.el provides function that popup commit message at current line.
+;; This is useful when you want to know why this line was changed.
+(use-package! git-messenger
+  :defer t
+  :commands git-messenger:popup-message
+  :config (setq git-messenger:use-magit-popup t)
+  )
 
 ;;;;; emacs-lisp-mode-hook
 
@@ -7395,5 +7415,89 @@ Suitable for `imenu-create-index-function'."
 
 (require 'org-books)
 (setq org-books-file (my/org-reading-file))
+
+;;; org-todo
+
+(progn
+  ;; /home/junghan/sync/man/dotsamples/dotall/yqrashawn-dot-doom-clj/.doom.d/org.el
+
+  (use-package! org-todoist
+    :config
+    (setq org-todoist-api-token user-todoist-token)
+    (setq org-todoist-storage-dir (concat org-directory ".cache")) ; for cache
+    (setq org-todoist-file "org-todoist.org")
+    )
+
+  ;; (use-package! todoist
+  ;;   :commands (todoist)
+  ;;   :init
+  ;;   (setq! todoist-token user-todoist-token
+  ;;          ;; todoist-use-scheduled-instead-of-deadline
+  ;;          todoist-backing-buffer (concat org-directory ".cache/todoist.org")))
+
+  (use-package! orgbox
+    :commands (orgbox orgbox-schedule)
+    :init
+    (setq! orgbox-start-time-of-day "9:30"
+           orgbox-start-time-of-weekends "11:00"
+           orgbox-start-time-of-evening "20:00"))
+
+  (defun ar/org-insert-link-dwim ()
+    "Like `org-insert-link' but with personal dwim preferences."
+    (interactive)
+    (let* ((point-in-link (org-in-regexp org-link-any-re 1))
+           (clipboard-url (when (string-match-p "^http" (current-kill 0))
+                            (current-kill 0)))
+           (region-content (when (region-active-p)
+                             (buffer-substring-no-properties (region-beginning)
+                                                             (region-end)))))
+      (cond ((and region-content clipboard-url (not point-in-link))
+             (delete-region (region-beginning) (region-end))
+             (insert (org-make-link-string clipboard-url region-content)))
+            ((and clipboard-url (not point-in-link))
+             (insert (org-make-link-string
+                      clipboard-url
+                      (read-string "title: "
+                                   (with-current-buffer (url-retrieve-synchronously clipboard-url)
+                                     (dom-text (car
+                                                (dom-by-tag (libxml-parse-html-region
+                                                             (point-min)
+                                                             (point-max))
+                                                            'title))))))))
+            (t
+             (call-interactively 'org-insert-link)))))
+
+  (defun +denote-daily-note-file-name ()
+    (concat (org-journal--get-entry-path
+             (time-subtract (current-time)
+                            (* 3600 org-extend-today-until)))))
+  ;; (concat denote-directory "/" (format-time-string "%Y%m%dT000000" (current-time)) "==dailynote--daily-note__dailynote.md")
+
+  (defun +denote-daily-note ()
+    (interactive)
+    (let ((daily-note-file (+denote-daily-note-file-name)))
+      (if (f-exists? daily-note-file)
+          (find-file daily-note-file)
+        (progn
+          ;; TODO add denote commands
+          (org-journal-open-current-journal-file)
+          ;; (format-time-string "[%Y-%m-%d %a %H:%M]")
+          ;; (format-time-string "%Y%m%dT000000"
+          ;;                     (org-journal--convert-time-to-file-type-time
+          ;;                      (time-subtract (current-time)
+          ;;                                     (* 3600 org-extend-today-until))))
+          ))
+      daily-note-file))
+
+  ;; M-g j
+  (defun my/side-notes-toggle-daily-note ()
+    (interactive)
+    (let ((daily-note-file (+denote-daily-note-file-name)))
+      (unless (f-exists? daily-note-file)
+        (+denote-daily-note)
+        (bury-buffer))
+      (setq! side-notes-file daily-note-file)
+      (call-interactively #'side-notes-toggle-notes)))
+  )
 
 ;;; left blank on purpose

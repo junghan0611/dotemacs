@@ -23,7 +23,6 @@
 
 ;;; Emacs Keys
 
-;; (global-set-key (kbd "M-g j") 'side-journal-toggle-notes)
 ;; (global-set-key (kbd "<f2>") 'eval-last-sexp)
 
 ;; (global-set-key (kbd "C-M-u") 'universal-argument)
@@ -321,7 +320,9 @@
 
 ;; add devdocs-browser
 (when (locate-library "side-notes")
-  (global-set-key (kbd "M-g M-s") 'side-notes-toggle-notes))
+  (global-set-key (kbd "M-g M-s") 'side-notes-toggle-notes)
+  (global-set-key (kbd "M-g j") 'my/side-notes-toggle-daily-note)
+  )
 
 ;;;; markdown-mode-map
 
@@ -809,6 +810,11 @@
 ;; deadgrep
 (when (locate-library "deadgrep")
   (global-set-key (kbd "M-s v") 'deadgrep)
+  )
+
+(when (locate-library "blamer")
+  (global-set-key (kbd "M-g M-i") 'blamer-show-posframe-commit-info)
+  ;; (global-set-key (kbd "M-g M-I") 'blamer-mode)
   )
 
 ;; recent-rgrep

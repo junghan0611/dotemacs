@@ -203,6 +203,10 @@
 
 ;;;; :lang org-mode
 
+(package! org-todoist :recipe (:host github :repo "lillenne/org-todoist" :branch "main"))
+;; (package! todoist)
+(package! orgbox)
+
 (package! org-fragtog) ;; interactive toggling of inline latex formulas
 (package! org-appear)
 (package! orgabilize :recipe (:host github :repo "akirak/orgabilize.el"))
@@ -365,6 +369,9 @@
 (package! math-symbol-lists)
 
 ;;;; Coding
+
+(package! blamer)
+(package! git-messenger)
 
 (package! eglot-booster :recipe (:type git :host github :repo "jdtsmith/eglot-booster"))
 

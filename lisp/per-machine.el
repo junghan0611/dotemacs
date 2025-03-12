@@ -180,8 +180,6 @@
 
 (defvar org-user-contacts-files (list (my/org-contacts-file)))
 
-(defvar +org-journal-today-file nil)
-
 ;;; emacs-type
 
 (defcustom emacs-type 'doomemacs
