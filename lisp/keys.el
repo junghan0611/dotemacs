@@ -118,11 +118,14 @@
   ;; default map
   (define-key vertico-map (kbd "C-j") #'vertico-next)
   (define-key vertico-map (kbd "C-k") #'vertico-previous)
+
   (define-key vertico-map (kbd "C-S-j") #'vertico-scroll-up)
   (define-key vertico-map (kbd "C-S-k") #'vertico-scroll-down)
-  (define-key vertico-map (kbd "C-M-j") #'vertico-next-group)
-  (define-key vertico-map (kbd "C-M-k") #'vertico-previous-group)
+  (define-key vertico-map (kbd "M-J") #'vertico-scroll-up)
+  (define-key vertico-map (kbd "M-K") #'vertico-scroll-down)
 
+  (define-key vertico-map (kbd "C-M-j") #'vertico-next-group)
+  (define-key vertico-map (kbd "C-M-j") #'vertico-previous-group)
 
   (unless (display-graphic-p) ; terminal
     (define-key vertico-map (kbd "M-<return>") #'vertico-exit-input))
