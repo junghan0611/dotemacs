@@ -344,7 +344,7 @@ alias:
 (transclude "#+transclude: " r> " :level 2") ; org-transclusion
 
 (mark "#+begin_mark" n> r> n> "#+end_mark")
-(quote "#+BEGIN_QUOTE" n> r> n> "#+END_QUOTE")
+(quote "#+begin_quote" n> r> n> "#+end_quote")
 
 (example "#+BEGIN_EXAMPLE" n> r> n> "#+END_EXAMPLE")
 (notes "#+BEGIN_NOTES" n> r> n> "#+END_NOTES") ; reveal.js slides
@@ -360,14 +360,54 @@ alias:
 
 (hugo-relref "@@hugo:[Title]({{< relref \"docs\" >}})@@")
 
-(hugo-quote "#+attr_shortcode: emoji=\"🔮\"\n#+begin_callout" n>
-            "\"But needless to say, Leonardo never finished executing his plan. Coming up with the conception was enough for him.\"
-Walter Isaacson 《Leonardo da Vinci》\n#+end_callout")
-(hugo-info "#+attr_shortcode: type=\"info\"\n#+begin_callout" n> r> n> "#+end_callout")
-(hugo-warning "#+attr_shortcode: type=\"warning\"\n#+begin_callout" n> r> n> "#+end_callout")
-(hugo-error "#+attr_shortcode: type=\"error\"\n#+begin_callout" n> r> n> "#+end_callout")
-(hugo-details "#+attr_shortcode: \"Details\"\n#+begin_details" n> r> n> "#+end_details")
-(hugo-detailshidden "#+attr_shortcode: title=\"Click me to reveal\" closed=\"true\"\n#+begin_details" n> r> n> "#+end_details")
+;; (hugo-quote "#+attr_shortcode: emoji=\"🔮\"\n#+begin_callout" n>
+;;             "\"But needless to say, Leonardo never finished executing his plan. Coming up with the conception was enough for him.\"
+;; Walter Isaacson 《Leonardo da Vinci》\n#+end_callout")
+;; (hugo-info "#+attr_shortcode: type=\"info\"\n#+begin_callout" n> r> n> "#+end_callout")
+;; (hugo-warning "#+attr_shortcode: type=\"warning\"\n#+begin_callout" n> r> n> "#+end_callout")
+;; (hugo-error "#+attr_shortcode: type=\"error\"\n#+begin_callout" n> r> n> "#+end_callout")
+;; (hugo-details "#+attr_shortcode: \"Details\"\n#+begin_details" n> r> n> "#+end_details")
+;; (hugo-detailshidden "#+attr_shortcode: title=\"Click me to reveal\" closed=\"true\"\n#+begin_details" n> r> n> "#+end_details")
+
+
+;;;; quartz quote-block
+
+(qnote "#+begin_quote" n> "[!note]" n> n> r> n> "#+end_quote")
+
+(qtldr "#+begin_quote" n> "[!tldr]" n> n> r> n> "#+end_quote")
+(qsummary "#+begin_quote" n> "[!summary]" n> n> r> n> "#+end_quote")
+(qabstract "#+begin_quote" n> "[!abstract] abstract" n> n> r> n> "#+end_quote")
+
+(qtodo "#+begin_quote" n> "[!todo]" n> n> r> n> "#+end_quote")
+
+;; [!tip] tip hint important
+(qtip "#+begin_quote" n> "[!tip]" n> n> r> n> "#+end_quote")
+
+;; [!done] done check success
+(qdone "#+begin_quote" n> "[!done]" n> n> r> n> "#+end_quote")
+
+;; [!question] question help faq
+(qquestion "#+begin_quote" n> "[!question]" n> n> r> n> "#+end_quote")
+
+;; [!warning] warning caution attention
+(qwarning "#+begin_quote" n> "[!warning]" n> n> r> n> "#+end_quote")
+
+;; [!failure] failure fail missing
+(qfail "#+begin_quote" n> "[!fail]" n> n> r> n> "#+end_quote")
+
+;; [!error] error danger
+(qerror "#+begin_quote" n> "[!error]" n> n> r> n> "#+end_quote")
+
+;; [!bug]
+(qbug "#+begin_quote" n> "[!bug]" n> n> r> n> "#+end_quote")
+
+;; [!example]
+(qexample "#+begin_quote" n> "[!example]" n> n> r> n> "#+end_quote")
+
+;; [!quote] cite quote
+(qquote "#+begin_quote" n> "[!quote] quote" n> n> r> n> "#+end_quote")
+
+;;;; python
 
 (python "# #+name:
 #+begin_src python :results output" n> r> n> "#+end_src")
@@ -376,6 +416,8 @@ Walter Isaacson 《Leonardo da Vinci》\n#+end_callout")
 
 (hy "# #+name:
 #+begin_src hy :results output" n> r> n> "#+end_src")
+
+;;;; others
 
 (coq "# #+name:
 #+begin_src coq" n> r> n> "#+end_src")
