@@ -405,7 +405,10 @@ alias:
 (qexample "#+begin_quote" n> "[!example]" n> n> r> n> "#+end_quote")
 
 ;; [!quote] cite quote
-(qquote "#+begin_quote" n> "[!quote] quote" n> n> r> n> "#+end_quote")
+(qquote "#+begin_quote" n> "[!quote] quote" n> n> r> n> "
+
+― 저자명, 『책』
+#+end_quote")
 
 ;;;; python
 

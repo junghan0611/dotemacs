@@ -104,7 +104,6 @@
 
 (defun my/org-index-file () (my/expand-org-file-name "20240429T165725--index.org"))
 (defun my/org-about-file () (my/expand-org-file-name "20240326T053829--about.org"))
-(defun my/org-contacts-file () (my/expand-org-file-name "20230303T030300--contacts.org"))
 (defun my/org-links-file () (my/expand-org-file-name "20230219T035500--links.org"))
 
 (defun my/org-mobile-file () (my/expand-org-file-name "agenda/20240312T111900--mobile.org")) ;; agenda
@@ -115,9 +114,9 @@
 (defun my/org-life-file () (my/expand-org-file-name "20240327T112315--life.org"))
 (defun my/org-elfeed-file () (my/expand-org-file-name "20220706T160000--elfeed.org"))
 
-(defun my/org-reading-file () (my/expand-org-file-name "20240329T154123--reading-list.org"))
-
 ;; meta
+(defun my/org-contacts-file () (my/expand-org-file-name "meta/20230303T030300--contacts.org"))
+(defun my/org-reading-file () (my/expand-org-file-name "meta/20240329T154123--reading-list.org"))
 (defun my/org-kdc-file () (my/expand-org-file-name "meta/20240312T142358--한국십진분류__classification_kdc_meta.org"))
 (defun my/org-tags-file () (my/expand-org-file-name "meta/20231005T133900--tags__meta.org"))
 (defun my/org-glossary-file () (my/expand-org-file-name "dict/20240913T145640--general__glossary.txt"))

@@ -1014,7 +1014,19 @@ Also see `prot-window-delete-popup-frame'." command)
     (insert " "))
 
   ;; "⊢" prove, "⊨" entail , "∉" notin
-  (setq my/unicode-notetaking '( " " "§" "¶" "†" "‡" "№" "↔" "←" "→" "⊢" "⊨" "∉"))
+  ;;  『 』(겹낫표), ≪ ≫(겹화살괄호) / ｢ ｣(홑낫표) - https://wikidocs.net/79912
+  ;; 0x002012	‒	FIGURE DASH
+  ;; 0x002013	–	EN DASH
+  ;; 0x002014	—	EM DASH
+  ;; 0x002015	―	QUOTATION DASH
+  ;; 0x002015	―	HORIZONTAL BAR
+  (setq my/unicode-notetaking '( " " "§"
+                                 "¶" "†" "‡" "№" "↔" "←" "→" "⊢" "⊨" "∉"
+                                 "『겹낫표』"
+                                 "≪겹화살괄호≫"
+                                 "｢홑낫표｣"
+                                 "― QUOTADASH"
+                                 ))
 
   (defun my/insert-unicode-notetaking ()
     "Insert Unicode for NoteTaking."

@@ -268,13 +268,13 @@
 ;;                         '(("^ *\\([-]\\) "
 ;;                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "◦"))))))
 
-;;;; DONT prettify-symbols with logic
+;;;; org prettify-symbols-alist with logic
 
 ;; https://en.wikipedia.org/wiki/Glossary_of_mathematical_symbols
 ;; 2024-03-07 기호를 활용하면 관계를 표현할 수 있다.
 ;; M-x list-unicode-display
 (add-hook 'org-mode-hook (lambda ()
-                           (push '("--" . "—") prettify-symbols-alist)
+                           (push '("--" . "—") prettify-symbols-alist) ; 0x2014 EMDASH
                            (push '("->" . "→" ) prettify-symbols-alist)
                            (push '("<-" . "←" ) prettify-symbols-alist)
                            (push '("<->" . "↔" ) prettify-symbols-alist)
