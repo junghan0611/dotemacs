@@ -164,7 +164,7 @@
 
 (package! keycast)
 (package! outli :recipe (:host github :repo "jdtsmith/outli" :files ("*.el")))
-;; (package! fontaine) ; break custom.el
+(package! fontaine) ; break custom.el
 (package! golden-ratio)
 (package! mode-minder :recipe (:host github :repo "jdtsmith/mode-minder"))
 (package! breadcrumb) ; with eglot

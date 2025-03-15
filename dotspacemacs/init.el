@@ -845,14 +845,14 @@
     (add-to-list 'dotspacemacs-configuration-layers 'pdf)
     (add-to-list 'dotspacemacs-configuration-layers 'epub)
 
-    ;; DONT Disable EAF
-    ;; (add-to-list 'dotspacemacs-configuration-layers
-    ;;              '(eaf :variables eaf-apps '(eaf-browser eaf-pdf-viewer)
-    ;;                    ;; eaf-enable-debug t
-    ;;                    eaf-pdf-synctex-path nil
-    ;;                    eaf-pdf-dark-mode 'ignore
-    ;;                    ;; browse-url-browser-function 'browse-url-firefox
-    ;;                    ))
+    ;; EAF
+    (add-to-list 'dotspacemacs-configuration-layers
+                 '(eaf :variables eaf-apps '(eaf-browser) ; eaf-pdf-viewer
+                       ;; eaf-enable-debug t
+                       eaf-pdf-synctex-path nil
+                       eaf-pdf-dark-mode 'ignore
+                       ;; browse-url-browser-function 'browse-url-firefox
+                       ))
 
 ;;;;; Packages for gui only
     (add-to-list 'dotspacemacs-additional-packages 'saveplace-pdf-view)
@@ -1657,7 +1657,7 @@
 
   ;; /spacemacs/core/libs/ido-vertical-mode.el
   ;; 찾아서 꺼줘야 한다. Spacemacs 에서 자동으로 켜놓았네.
-  (ido-vertical-mode -1)
+  ;; ;; (ido-vertical-mode -1) 2025-03-14 removed
 
   ;; http://yummymelon.com/devnull/surprise-and-emacs-defaults.html
   ;;텍스트를 선택한 다음 그 위에 입력하면 해당 텍스트가 삭제되어야 합니다.
@@ -2871,7 +2871,7 @@
     (setq dired-guess-shell-alist-user ; those are the suggestions for ! and & in Dired
           '(("\\.\\(png\\|jpe?g\\|tiff\\)" "feh" "xdg-open")
             ("\\.\\(mp[34]\\|m4a\\|ogg\\|flac\\|webm\\|mkv\\)" "mpv" "xdg-open")
-	        (".*" "xdg-open")))
+            (".*" "xdg-open")))
 
     ;; (setq dired-recursive-deletes 'always)
     (setq copy-directory-create-symlink t)
@@ -5502,12 +5502,19 @@ For instance pass En as source for English."
   ;; (when (display-graphic-p) ;; gui
   ;;   (require 'ccmenu))
 
-;;;; DONT EAF
+;;;; EAF
 
-  ;; (when (locate-library "eaf")
-  ;;   (require 'eaf-demo)
-  ;;   (require 'eaf-browser)
-  ;;   )
+  (when (locate-library "eaf")
+    ;; [EAF] Please always ensure the following config are added to your init.el:
+    (require 'eaf-pdf-viewer)
+    (require 'eaf-pyqterminal)
+    (require 'eaf-vue-tailwindcss)
+    (require 'eaf-mind-elixir)
+    (require 'eaf-map)
+    (require 'eaf-2048)
+    (require 'eaf-demo)
+    (require 'eaf-browser)
+    )
 
 ;;;; end-of user-config
   ) ;; end-of user-config

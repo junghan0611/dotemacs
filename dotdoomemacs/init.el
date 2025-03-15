@@ -41,6 +41,8 @@
 
 (setq-default root-path "/")
 
+(defvar IS-DEMO (string= (getenv "IS_EMACSDEMO") "true"))
+
 (defvar IS-TERMUX
   (string-suffix-p "Android" (string-trim (shell-command-to-string "uname -a"))))
 

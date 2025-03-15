@@ -203,7 +203,7 @@
 (require 'time)
 
 ;; (setq display-time-format "%l:%M %p %b %d W%U") ;; dw-dotfiles
-(setq display-time-format " Ⓦ%U |%a %e %b, %H:%M| ") ; Ⓦ 🅆 🆆
+(setq display-time-format " W%U |%a %e %b, %H:%M| ") ; Ⓦ 🅆 🆆
 
 ;; Covered by `display-time-format'
 ;; (setq display-time-24hr-format t)
@@ -763,7 +763,7 @@
 
 ;;;;; vertico
 
-(unless IS-TERMUX
+(unless (or IS-TERMUX IS-DEMO)
 
   (require 'vertico-buffer)
   ;; (setq vertico-resize 'grow-only) ; doom nil
@@ -5888,10 +5888,10 @@ Suitable for `imenu-create-index-function'."
     ;; the base font size (e.g. 1.5), and a `WEIGHT'.
     (setq modus-themes-headings
           '(
-            (0                . (bold 1.2)) ;; variable-pitch
-            (1                . (bold  1.1))
-            (2                . (bold 1.05))
-            (3                . (semibold 1.0))
+            (0                . (bold 1.3)) ;; variable-pitch
+            (1                . (bold 1.2))
+            (2                . (bold 1.1))
+            (3                . (semibold 1.05))
             (4                . (medium 1.0))
             (5                . (medium 1.0))
             (6                . (medium 1.0))
@@ -6088,9 +6088,9 @@ Suitable for `imenu-create-index-function'."
   :if window-system ; important
   :hook (server-after-make-frame . spacious-padding-mode)
   :init
-  ;; (setq spacious-padding-subtle-mode-line
-  ;;       '( :mode-line-active spacious-padding-subtle-mode-line-active
-  ;;          :mode-line-inactive spacious-padding-subtle-mode-line-inactive))
+  (setq spacious-padding-subtle-mode-line
+        '( :mode-line-active spacious-padding-subtle-mode-line-active
+           :mode-line-inactive spacious-padding-subtle-mode-line-inactive))
   (setq spacious-padding-widths
         '(:header-line-width 4
           :mode-line-width 4 ; 6
@@ -6533,8 +6533,9 @@ Suitable for `imenu-create-index-function'."
   ;; (tab-bar-select-tab 1)
   )
 
-(when (display-graphic-p) ; gui
-  (add-hook 'doom-first-input-hook #'my/open-workspaces))
+(unless IS-DEMO
+  (when (display-graphic-p) ; gui
+    (add-hook 'doom-first-input-hook #'my/open-workspaces)))
 
 ;;;; tab-line-mode on emacs-30
 
@@ -7498,6 +7499,19 @@ Suitable for `imenu-create-index-function'."
         (bury-buffer))
       (setq! side-notes-file daily-note-file)
       (call-interactively #'side-notes-toggle-notes)))
+  )
+;;; IS-DEMO
+
+(when IS-DEMO
+  (after! vertico
+    (setq vertico-count 5)
+    )
+
+  ;; (setq doom-variable-pitch-font (font-spec :family "Hahmlet" :size 14.0))
+  (setq modus-themes-variable-pitch-ui t)
+
+  ;; (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'variable-pitch :family)))
+  ;; (set-fontset-font "fontset-default" 'emoji (font-spec :family "Noto Emoji") nil 'prepend) ; default face
   )
 
 ;;; left blank on purpose

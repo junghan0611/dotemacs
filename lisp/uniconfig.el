@@ -182,8 +182,6 @@
   (defun my/emoji-set-font ()
     (interactive)
 
-    (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family)))
-
     (when (display-graphic-p) ; gui
       ;; (set-fontset-font t 'unicode (font-spec :family "Symbola") nil 'prepend) ;; 2024-09-16 테스트 -- 𝑀＜1
       ;; (set-fontset-font t 'mathematical (font-spec :family "Symbola") nil 'prepend) ; best
@@ -198,6 +196,9 @@
       (my/set-fonts-scale
        "Symbola" 0.90 ; unicode
        "Noto Color Emoji" 0.95)
+
+      (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family))) ; default face
+      (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'variable-pitch :family)) nil 'append) ; important 2025-03-14 가변 한글 필수!
       )
 
     (unless (display-graphic-p) ; terminal
@@ -642,9 +643,9 @@ Also see `prot-window-delete-popup-frame'." command)
 ;;;; DONT fontaine
 
 ;; ;; This is defined in Emacs C code: it belongs to font settings.
-;; (setq x-underline-at-descent-line t)
+;; (setq x-underline-at-descent-line t) ; default nil
 ;; ;; And this is for Emacs28.
-;; (setq-default text-scale-remap-header-line t)
+(setq-default text-scale-remap-header-line t) ; default nil
 
 ;; Weights :: Thin ExtraLight Light Regular Medium SemiBold Bold ExtraBold Heavy
 ;; Slopes :: Upright Oblique Italic
@@ -658,10 +659,12 @@ Also see `prot-window-delete-popup-frame'." command)
 ;;           ;; 80 120, 136, 151, 180, 211 ; sarasa mono / term
 ;;           ;; 120, 140, 170, 190, 210, 230 ; monoplex kr nerd
 ;;           '(
+;;             (demo14 :variable-pitch-family "Hahmlet")
 ;;             (small12 :default-height 120)
 ;;             (regular :default-height 140)
 ;;             (regular14 :default-height 140)
-;;             (regular17 :default-height 170)
+;;             (regular17 :default-height 170
+;;                        :variable-pitch-height 1.0)
 ;;             (logosfocus :default-height 170)
 ;;             (large19 :default-height 190)
 ;;             (large21 :default-height 210)
@@ -684,8 +687,9 @@ Also see `prot-window-delete-popup-frame'." command)
 ;;              ;; :fixed-piath-serif-family nil
 ;;              ;; :fixed-pitch-serif-weight nil
 ;;              ;; :fixed-pitch-serif-height nil
-;;              :variable-pitch-family "Pretendard Variable"
-;;              ;; :variable-pitch-height 1.0
+;;              ;; :variable-pitch-family "Pretendard Variable"
+;;              :variable-pitch-family "Hahmlet"
+;;              :variable-pitch-height 1.0
 ;;              ;; :variable-pitch-family nil
 ;;              ;; :variable-pitch-weight nil
 ;;              :bold-family nil
@@ -696,9 +700,16 @@ Also see `prot-window-delete-popup-frame'." command)
 
 ;;     ;; (fontaine-set-preset (or (fontaine-restore-latest-preset) 'regular14))
 ;;     (fontaine-set-preset 'regular)
-;;     (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family))))
+
+;;     ;; 한글 사용 위해서 필수!
+;;     (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family))) ; default face
+;;     (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'variable-pitch :family)  nil 'append)) ; for variable-pitch
+;;     )
+
 ;;   ;; Persist the latest font preset when closing/starting Emacs and while switching between themes.
-;;   ;; (fontaine-mode 1)
+;;   (fontaine-mode 1)
+;;   (add-hook 'fontaine-mode-hook (lambda ()
+;;                                   (display-time-mode +1))) ; for tab-bar update
 ;;   )
 
 ;;;; Ten with etags
@@ -969,7 +980,9 @@ Also see `prot-window-delete-popup-frame'." command)
   (setq org-hugo-link-desc-insert-type t)
 
   ;; 내보낼 때는 fill-column 끈다.
+  ;; 개행문자는 조직모드에서 \\ 를 뒤에 넣으라
   (setq org-hugo-preserve-filling nil) ; important
+  ;; (setq org-hugo-delete-trailing-ws nil) ; default t for quartz
 
   (setq org-hugo-allow-spaces-in-tags t) ; default t
   (setq org-hugo-prefer-hyphen-in-tags t) ; default t
