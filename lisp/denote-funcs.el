@@ -35,11 +35,11 @@
   (consult-ripgrep denote-directory))
 ;; (consult-ripgrep denote-directory "") ; 무슨 차이?
 
-;;; TODO my/denote-org-extras-dblock-insert
+;;; TODO my/denote-org-dblock-insert
 
 ;; 2025-01-21 include-date t and keybindings
 
-(defun my/denote-org-extras-dblock-insert-backlinks ()
+(defun my/denote-org-dblock-insert-backlinks ()
   "Create Org dynamic block to insert Denote backlinks to current file."
   (interactive nil org-mode)
   (org-create-dblock (list :name "denote-backlinks"
@@ -51,7 +51,7 @@
                            :include-date t))
   (org-update-dblock))
 
-(defun my/denote-org-extras-dblock-insert-links (regexp)
+(defun my/denote-org-dblock-insert-links (regexp)
   "Create Org dynamic block to insert Denote links matching REGEXP."
   (interactive
    (list
@@ -68,7 +68,7 @@
   (org-update-dblock))
 
 ;; my/denote-insert-meta-links ()
-(defun my/denote-org-extras-dblock-insert-meta-links  ()
+(defun my/denote-org-dblock-insert-meta-links  ()
   (interactive)
   (let* ((topics (mapcar (lambda (file)
                            (denote-retrieve-front-matter-title-value file 'org))

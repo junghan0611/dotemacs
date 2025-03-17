@@ -5115,9 +5115,10 @@ For instance pass En as source for English."
     :commands (denote denote-create-note denote-insert-link denote-show-backlinks-buffer denote-link-ol-store)
     :init
     (setq denote-directory user-org-directory)
-    (require 'denote-silo-extras)
-    ;; (require 'denote-journal-extras)
-    (require 'denote-org-extras)
+    (require 'denote-silo) ;; 2025-03-17 deprecated
+    ;; (require 'denote-journal)
+    (require 'denote-org)
+    (require 'denote-markdown) ; markdown-obsidian
     (setq denote-file-type 'org)
     (setq denote-sort-components '(signature title keywords identifier))
     (setq denote-backlinks-show-context t)
@@ -5170,18 +5171,18 @@ For instance pass En as source for English."
 
 
     (progn ;; vedangs tips
-      (setq denote-silo-extras-directories
+      (setq denote-silo-directories
             (list (expand-file-name denote-directory)))
 
       (unless IS-TERMUX
         (add-to-list
-         'denote-silo-extras-directories
+         'denote-silo-directories
          (expand-file-name "~/git/jh-blogookpub/org"))
         (add-to-list
-         'denote-silo-extras-directories
+         'denote-silo-directories
          (expand-file-name "~/sync/markdown/books"))
         (add-to-list
-         'denote-silo-extras-directories (expand-file-name "~/sync/winmacs/org")))
+         'denote-silo-directories (expand-file-name "~/sync/winmacs/org")))
 
       ;; I use Yasnippet to expand these into a better template.
       (add-to-list 'denote-templates '(reference-note . "reference"))
@@ -5193,7 +5194,7 @@ For instance pass En as source for English."
 
       (setq
        denote-dired-directories-include-subdirectories t
-       denote-dired-directories denote-silo-extras-directories)
+       denote-dired-directories denote-silo-directories)
 
       ;; Also check the commands `denote-link-after-creating',
       ;; `denote-link-or-create'.  You may want to bind them to keys as well.

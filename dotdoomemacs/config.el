@@ -3083,10 +3083,10 @@ ${content}"))
   ;; :hook (dired-mode . denote-dired-mode)
   :init
   (setq denote-directory user-org-directory)
-  (require 'denote-silo-extras)
-  ;; (require 'denote-journal-extras)
-  (require 'denote-org-extras)
-  (require 'denote-md-extras) ; markdown-obsidian
+    (require 'denote-silo)
+  ;; (require 'denote-journal)
+  (require 'denote-org)
+  (require 'denote-markdown) ; markdown-obsidian
   (setq denote-file-type 'org)
   (setq denote-sort-components '(signature title keywords identifier))
   ;; (setq denote-backlinks-show-context nil) ; default nil
@@ -3136,18 +3136,18 @@ ${content}"))
   (add-hook 'dired-mode-hook #'denote-dired-mode-in-directories)
 
   (progn ;; vedangs tips
-    (setq denote-silo-extras-directories
+    (setq denote-silo-directories
           (list (expand-file-name denote-directory)))
 
     (unless IS-TERMUX
       (add-to-list
-       'denote-silo-extras-directories
+       'denote-silo-directories
        (expand-file-name "~/git/jh-blogookpub/org"))
       (add-to-list
-       'denote-silo-extras-directories
+       'denote-silo-directories
        (expand-file-name "~/Documents/org"))
       ;; (add-to-list
-      ;;  'denote-silo-extras-directories (expand-file-name "~/sync/winmacs/org"))
+      ;;  'denote-silo-directories (expand-file-name "~/sync/winmacs/org"))
       )
 
     ;; I use Yasnippet to expand these into a better template.
@@ -3160,7 +3160,7 @@ ${content}"))
 
     (setq
      denote-dired-directories-include-subdirectories t
-     denote-dired-directories denote-silo-extras-directories)
+     denote-dired-directories denote-silo-directories)
 
     ;; Also check the commands `denote-link-after-creating',
     ;; `denote-link-or-create'.  You may want to bind them to keys as well.
@@ -3338,6 +3338,21 @@ ${content}"))
              :reference-format "reference:  %s\n"
              :reference-regex "^reference\\s-*:")))
     (citar-denote-mode))
+
+;;;;;; denote-search
+
+  (use-package! denote-search
+    :commands (denote-search denote-search-marked-dired-files denote-search-files-referenced-in-region)
+    ;; :bind
+    ;; Customize keybindings to your liking
+    ;; (("C-c s s" . denote-search)
+    ;;  ("C-c s d" . denote-search-marked-dired-files)
+    ;;  ("C-c s r" . denote-search-files-referenced-in-region))
+    :custom
+    ;; Disable help string (set it once you learn the commands)
+    ;; (denote-search-help-string "")
+    ;; Display keywords in results buffer
+    (denote-search-format-heading-function #'denote-search-format-heading-with-keywords))
 
 ;;;;;; end-of denote
   ) ;; end-of denote
@@ -4256,20 +4271,26 @@ Called with a PREFIX, resets the context buffer list before opening"
   (setq git-link-open-in-browser t)
   )
 
+;;;;; sideline-blame
+
+(use-package! sideline-blame
+  :init
+  (setq sideline-backends-left '((sideline-blame . down))))
+
 ;;;;; blamer git-messenger
 
-(use-package! blamer
-  :if window-system
-  :custom
-  ;; Set to 0 because I don’t enable by default.  So I’m in a mindset of show me who and when.
-  (blamer-idle-time 0) ; 0.5
-  (blamer-show-avatar-p nil)
-  (blamer-author-formatter "✎ %s ")
-  (blamer-datetime-formatter "[%s] ")
-  ;; (blamer-commit-formatter "● %s")
-  ;; (blamer-min-offset 40) ; default 60
-  ;; (blamer-max-commit-message-length 20)
-  )
+;; (use-package! blamer
+;;   :if window-system
+;;   :custom
+;;   ;; Set to 0 because I don’t enable by default.  So I’m in a mindset of show me who and when.
+;;   (blamer-idle-time 0) ; 0.5
+;;   (blamer-show-avatar-p nil)
+;;   (blamer-author-formatter "✎ %s ")
+;;   (blamer-datetime-formatter "[%s] ")
+;;   ;; (blamer-commit-formatter "● %s")
+;;   ;; (blamer-min-offset 40) ; default 60
+;;   ;; (blamer-max-commit-message-length 20)
+;;   )
 
 ;; git-messenger.el provides function that popup commit message at current line.
 ;; This is useful when you want to know why this line was changed.

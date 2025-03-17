@@ -183,7 +183,7 @@
 
 (progn
   (define-prefix-command 'my-cape-map)
-  (define-key global-map (kbd "C-c SPC") 'my-cape-map)
+  (define-key global-map (kbd "M-c") 'my-cape-map)
   (let ((map my-cape-map))
     (define-key map (kbd "SPC") 'complete-tag)
     (define-key map (kbd "a") 'cape-abbrev)
@@ -204,10 +204,10 @@
     )
   )
 
-;;;; Remap all C-c prefix keys to M-c?
+;;;; DONT Remap all C-c prefix keys to M-c?
 
 ;; static map
-(define-key key-translation-map (kbd "M-c") (kbd "C-c"))
+;; (define-key key-translation-map (kbd "M-c") (kbd "C-c"))
 
 ;; dynamic map - copying
 ;; (progn
@@ -818,6 +818,10 @@
 (when (locate-library "blamer")
   (global-set-key (kbd "M-g M-i") 'blamer-show-posframe-commit-info)
   ;; (global-set-key (kbd "M-g M-I") 'blamer-mode)
+  )
+
+(when (locate-library "sideline-blame")
+  (global-set-key (kbd "M-g M-i") 'sideline-mode)
   )
 
 ;; recent-rgrep
@@ -1555,6 +1559,21 @@ window."
   "r" #'org-transclusion-refresh
   "g" #'org-transclusion-move-to-source)
 
+(defvar-keymap denote-search-map
+  :doc "Emacs denote-search keymap."
+
+  "s" #'denote-search
+  "d" #'denote-search-marked-dired-files
+  "r" #'denote-search-files-referenced-in-region
+  ;; "r" #'denote-search-refine
+  ;; "f" #'denote-search-focused-search
+  ;; denote-search-exclude-files
+  ;; denote-search-clean-all-filters
+  ;; denote-search-only-include-files
+  ;; denote-search-exclude-files-with-keywords
+  ;; denote-search-only-include-files-with-keywords
+  )
+
 (defvar-keymap ews-bibliography-map
   :doc "Bibliograpic functions keymap."
 
@@ -1576,7 +1595,8 @@ window."
   "f" #'citar-denote-find-reference
   "l" #'citar-denote-link-reference
 
-  "s" #'citar-denote-create-silo-note
+  "s" denote-search-map
+  "S" #'citar-denote-create-silo-note
   "k" #'citar-denote-remove-reference
 
   "r" #'citar-denote-open-reference-entry
@@ -1650,7 +1670,7 @@ window."
   "P" #'ews-denote-assign-para
   ;; "z" #'denote-signature ; "zettelkasten" mnemonic
 
-  "M-i" #'denote-org-extras-dblock-insert-files
+  "M-i" #'denote-org-dblock-insert-files
   "M-r" #'my/rename-all-screenshot-images-to-denote-id
 
   ;; "S" #'my/denote-sort-with-days
@@ -1667,7 +1687,7 @@ window."
   "a" ews-annotate-map
   "b" ews-bibliography-map
 
-  "B" #'denote-org-extras-backlinks-for-heading
+  "B" #'denote-org-backlinks-for-heading
   "d" #'denote-create-note
 
   "f" #'my/denote-find-file ; find org files
@@ -1690,11 +1710,11 @@ window."
   "p" ews-org-publish-map
 
   "h" #'my/denote-org-store-link-to-heading
-  "H" #'denote-org-extras-link-to-heading
+  "H" #'denote-org-link-to-heading
 
-  "i" #'my/denote-org-extras-dblock-insert-links
-  "I" #'my/denote-org-extras-dblock-insert-backlinks
-  "M-i" #'my/denote-org-extras-dblock-insert-meta-links
+  "i" #'my/denote-org-dblock-insert-links
+  "I" #'my/denote-org-dblock-insert-backlinks
+  "M-i" #'my/denote-org-dblock-insert-meta-links
 
   "l" #'denote-link-or-create
   "L" #'denote-link-after-creating-with-command
@@ -1707,8 +1727,8 @@ window."
   "m" #'my/denote-insert-meta-links
   "M" #'my/denote-create-meta-note
 
-  "s" #'denote-silo-extras-open-or-create
-  "S" #'denote-silo-extras-select-silo-then-command
+  "s" #'denote-silo-open-or-create
+  "S" #'denote-silo-select-silo-then-command
 
   "t" #'denote-type
 

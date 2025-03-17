@@ -293,8 +293,14 @@
 ;;;;; :pkm denote
 
 (package! denote)
+(package! denote-org)
+(package! denote-silo)
+(package! denote-sequence)
+(package! denote-markdown)
+(package! denote-journal)
 
 (package! denote-explore)
+(package! denote-search)
 (package! consult-notes)
 
 (package! consult-denote)
@@ -370,7 +376,8 @@
 
 ;;;; Coding
 
-(package! blamer)
+;; (package! blamer)
+(package! sideline-blame)
 (package! git-messenger)
 
 (package! eglot-booster :recipe (:type git :host github :repo "jdtsmith/eglot-booster"))

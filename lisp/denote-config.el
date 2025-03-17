@@ -412,10 +412,10 @@
 
 ;; Use a =journals/= subdirectory to integrate nicely with Logseq
 
-;; (require 'denote-journal-extras)
-;; (fmakunbound 'denote-journal-extras-new-entry) ;; delete
+;; (require 'denote-journal)
+;; (fmakunbound 'denote-journal-new-entry) ;; delete
 
-;; (setq denote-journal-extras-title-format "%Y-%m-%d")
+;; (setq denote-journal-title-format "%Y-%m-%d")
 
 ;; Denote templates
 ;; (add-to-list 'denote-templates '(journal . "* Thoughts\n\n* Tasks (require a category)\n" ))
