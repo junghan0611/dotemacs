@@ -113,18 +113,19 @@
 
 (global-set-key (kbd "C-`") #'+vterm/toggle) ;; vscode style
 
-;;;; Replace Doom `/' highlight with buffer-search - consult-line
-
-(map! :after evil
-      :map evil-normal-state-map
-      "." #'+default/search-buffer) ;; / -> .
-
 ;;;; 'v' er/expand-region
 
 (map! :leader
       :desc "er/expand-region" "v" #'er/expand-region
       :desc "expand-transient" "V" #'expand-transient
       )
+
+;;;; Replace Doom `/' highlight with buffer-search - consult-line
+
+(map! :after evil
+      ;; :map evil-visual-state-map "v" #'expand-transient
+      :map evil-normal-state-map
+      "." #'+default/search-buffer) ;; / -> .
 
 ;;;; '=' Format
 

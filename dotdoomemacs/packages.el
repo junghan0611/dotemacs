@@ -183,7 +183,7 @@
 (package! copy-as-format)
 (package! expand-region)
 (package! string-inflection)
-;; (package! evil-matchit)
+(package! evil-matchit)
 (package! evil-owl) ;; register
 (package! tempel)
 (package! tempel-collection)
@@ -220,7 +220,7 @@
 (package! org-download)
 (package! ox-epub)
 
-;; (package! org-rainbow-tags)
+(package! org-rainbow-tags)
 (package! org-drill)
 
 (package! org-rich-yank)
@@ -379,12 +379,13 @@
 (package! sideline-blame)
 (package! git-messenger)
 
-;; (package! eglot-booster :recipe (:type git :host github :repo "jdtsmith/eglot-booster"))
+(package! eglot-booster :recipe (:type git :host github :repo "jdtsmith/eglot-booster"))
 
 (package! auto-highlight-symbol)
 (package! symbol-overlay)
 
 (when (modulep! :lang clojure)
+  (package! clojure-mode-extra-font-locking) ;; better looks
   (package! kaocha-runner) ; Koacha test runner in Emacs
   (package! vega-view)
   (package! clj-deps-new)

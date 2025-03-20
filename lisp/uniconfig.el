@@ -224,6 +224,11 @@
   )
 
 
+;;;; show-paren-delay 0
+
+  ;; 괄호 강조를 즉시 보여준다
+  (setq show-paren-delay 0) ; 0.125
+
 ;;;; DONT jit-lock-defer-time
 
 ;; NOTE: setting this to `0' like it was recommended in the article above seems
@@ -747,7 +752,8 @@ Also see `prot-window-delete-popup-frame'." command)
   (setq ten-tags-file-default user-ten-tags-file)
   ;;   ;; :bind (("M-c t" . complete-tag)
   ;;   ;;        ("C-c M-." . my/goto-etags))
-  ;;   ;; :hook ((org-mode Info-mode) . ten-font-lock-mode) ;; text-mode
+  (add-hook 'org-mode-hook 'ten-font-lock-mode) ;; never! for all text-mode
+  (add-hook 'Info-mode-hook 'ten-font-lock-mode)
   (with-eval-after-load 'consult
     (require 'consult-ten)
     (add-to-list 'consult-buffer-sources 'consult-ten-glossary 'append) ; g
@@ -794,15 +800,16 @@ Also see `prot-window-delete-popup-frame'." command)
 ;;     )
 ;;   )
 
-;;;; DONT org-rainbow-tags
+;;;; org-rainbow-tags
 
-;; (when (locate-library "org-rainbow-tags")
-;;   (with-eval-after-load 'org
-;;     (require 'org-rainbow-tags)
-;;     (setq org-rainbow-tags-hash-start-index 0)
-;;     (setq org-rainbow-tags-extra-face-attributes
-;;           '(:inverse-video t :box nil :weight 'bold))
-;;     (add-hook 'org-mode-hook #'org-rainbow-tags-mode)))
+(when (locate-library "org-rainbow-tags")
+  (with-eval-after-load 'org
+    (require 'org-rainbow-tags)
+    (setq org-rainbow-tags-hash-start-index 0)
+    (setq org-rainbow-tags-extra-face-attributes
+          '(:inverse-video t :box nil :weight 'bold))
+    (add-hook 'org-mode-hook #'org-rainbow-tags-mode)
+    ))
 
 ;;;; tab-width for org-mode and org-journal-mode
 
@@ -1089,6 +1096,34 @@ Also see `prot-window-delete-popup-frame'." command)
 ;;   )
 
 ;;;; TODO clojure/cider utils
+
+;; benjamin-asdf-dotall/mememacs/.emacs-mememacs.d/lisp/init-cider.el
+(when (locate-library "cider")
+  (with-eval-after-load 'cider
+    (defun my/clojure-add-libs-snippet ()
+      (interactive)
+      (insert
+       "(comment
+ (require '[clojure.tools.deps.alpha.repl :refer [add-libs]]))
+  (add-libs
+   '{org.sg.get-currency-conversions/get-currency-conversions
+     {:local/root \"../get-currency-conversions/\"}})"))
+
+    (defun my/clojure-dir-locals-snippet ()
+      (interactive)
+      (with-current-buffer
+          (find-file (expand-file-name ".dir-locals.el" (project-root (project-current))))
+        (insert
+"((nil .
+      ( ;; (cider-clojure-cli-aliases . \"dev\")
+       (cider-preferred-build-tool . clojure-cli)))
+ (clojure-mode . (
+                  (eval . (indent-bars-mode 1))
+                  (eval . (copilot-mode 1))
+                  ))
+ )"
+         )))
+    ))
 
 ;; https://github.com/sstraust/sammys-cider-utils
 ;; make-unit-test.el

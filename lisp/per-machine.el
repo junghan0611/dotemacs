@@ -223,10 +223,11 @@
         "~/sync/org/dict/20240913T150903--philosophy__glossary.txt"
         "~/sync/org/dict/20240913T150904--philosophy-all__glossary.txt"
         "~/sync/org/dict/20241109T120829--physics__glossary.txt"
-        "~/sync/org/dict/20241109T120830--physics-all__glossary.txt"
+        ;; "~/sync/org/dict/20241109T120830--physics-all__glossary.txt"
         "~/sync/org/dict/20241109T123634--math__glossary.txt"
-        "~/sync/org/dict/20241109T123635--math-all__glossary.txt"
-        "~/sync/org/dict/20241110T051844--it-terms__glossary.txt"
+        ;; "~/sync/org/dict/20241109T123635--math-all__glossary.txt"
+        "~/sync/org/dict/20241112T121549--it-terms__glossary.txt"
+        ;; "~/sync/org/dict/20241112T121555--it-terms-all__glossary.txt"
         ;;,(concat org-directory "dict/20240913T145640--general__glossary.txt")
         ))
 (setq user-ten-tags-file (concat user-org-directory "dict/ten-TAGS"))

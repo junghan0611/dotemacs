@@ -1063,7 +1063,8 @@
 ;;;;; evil-matchit - symbol-overlay
 
 ;; % evilmi
-;; 절대 글로벌로 켜지 말 것! 각 스페이스맥스 프로그래밍 언어 레이어에 보면 이미 들어가 있다.
+
+;; 스페이스맥스 : 절대 글로벌로 켜지 말 것! 각 언어 레이어에 보면 이미 들어가 있다.
 ;; /mpereira-dotfiles-evil-clojure/configuration.org
 ;; vim matchit.vim is ported into emacs
 ;; (use-package! evil-matchit
@@ -1071,6 +1072,11 @@
 ;;   ;; https://github.com/redguardtoo/evil-matchit/pull/141
 ;;   (evilmi-load-plugin-rules '(web-mode) '(simple template html))
 ;;   (add-hook 'web-mode-hook 'turn-on-evil-matchit-mode))
+
+(use-package! evil-matchit
+  :after evil
+  :config
+  (global-evil-matchit-mode 1))
 
 ;;;;; evil-surround
 
@@ -1471,7 +1477,6 @@ only those in the selected frame."
   (setq expand-region-contract-fast-key "V"
         expand-region-reset-fast-key "r"
         expand-region-subword-enabled t))
-
 
 ;;;;; separedit
 
@@ -2587,7 +2592,7 @@ ${content}"))
   :after org
   :if window-system
   :init
-  (add-hook 'org-mode-hook 'org-appear-mode)
+  ;; (add-hook 'org-mode-hook 'org-appear-mode)
   (setq org-appear-autolinks nil ;; default nil
         org-appear-autoemphasis t
         org-appear-autosubmarkers t)
@@ -4116,21 +4121,22 @@ Called with a PREFIX, resets the context buffer list before opening"
     (eglot-inlay-hints-mode -1))
   )
 
-;;;;; DONT eglot-booster
+;;;;; eglot-booster
 
 ;; install lsp-booster binary first
-;; (use-package! eglot-booster
-;;   :after eglot
-;;   :config
-;;   ;; (setq eglot-confirm-server-initiated-edits nil)
-;;   ;; (setq eglot-extend-to-xref t)
-;;   (eglot-booster-mode +1))
+(use-package! eglot-booster
+  :after eglot
+  :config
+  ;; (setq eglot-confirm-server-initiated-edits nil)
+  ;; (setq eglot-extend-to-xref t)
+  (eglot-booster-mode +1))
 
 ;;;;; indent-bars
 
 (progn
   (remove-hook 'text-mode-hook #'+indent-guides-init-maybe-h)
   (remove-hook 'prog-mode-hook #'+indent-guides-init-maybe-h)
+  ;; use indent-bar-mode
   )
 
 ;;;;; lsp-mode - lsp-ui-mode - lsp-treemacs
@@ -5080,6 +5086,7 @@ Suitable for `imenu-create-index-function'."
   :init
   ;; (add-hook 'prog-mode-hook 'breadcrumb-local-mode)
   (add-hook 'python-mode-hook 'breadcrumb-local-mode)
+  (add-hook 'clojure-mode-hook 'breadcrumb-local-mode)
   (add-hook 'emacs-lisp-mode-hook 'breadcrumb-local-mode)
   )
 
@@ -5670,7 +5677,7 @@ Suitable for `imenu-create-index-function'."
        org-agenda-tags-column 0)
 
       (setq org-modern-table nil) ; org-modern-indent
-      ;;  org-modern-tag t
+      (setq org-modern-tag nil)
       ;;  org-modern-todo t
       ;;  org-modern-timestamp t
       ;;  org-modern-priority t
@@ -5755,13 +5762,14 @@ Suitable for `imenu-create-index-function'."
               ("DONT" :inverse-video t :inherit +org-todo-dont)
               ))
       )
-    (progn
-      (add-hook 'org-mode-hook #'org-modern-mode)
-      (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
+    ;; (progn
+    ;;   (add-hook 'org-mode-hook #'org-modern-mode)
+    ;;   (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
 
-      (require 'org-modern-indent)
-      (add-hook 'org-mode-hook #'org-modern-indent-mode 90)
-      ))
+    ;;   (require 'org-modern-indent)
+    ;;   (add-hook 'org-mode-hook #'org-modern-indent-mode 90)
+    ;;   )
+    )
   )
 
 ;;;;; TODO org-src-mode-map
@@ -7161,10 +7169,11 @@ Suitable for `imenu-create-index-function'."
   ;; Do not indent single ; comment characters
   (add-hook 'clojure-mode-hook (lambda () (setq-local comment-column 0)))
 
-  ;; (after! clojure-mode
-  ;;   (define-key clojure-mode-map (kbd "<M-return>") 'clerk-show)
-  ;;   (define-key clojure-mode-map (kbd "C-c v") 'vega-view)
-  ;;   )
+  (after! clojure-mode
+    (require 'clojure-mode-extra-font-locking)
+    ;; (define-key clojure-mode-map (kbd "<M-return>") 'clerk-show)
+    ;; (define-key clojure-mode-map (kbd "C-c v") 'vega-view)
+    )
 
 ;;;;;; cider
 
@@ -7481,7 +7490,9 @@ Suitable for `imenu-create-index-function'."
 
 ;;;; linenote
 
-(use-package! org-linenote)
+(use-package! org-linenote
+  :init
+  (setq org-linenote-default-extension ".md"))
 
 ;;;; org-books
 
