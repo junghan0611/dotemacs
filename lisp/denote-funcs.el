@@ -80,7 +80,7 @@
                              (mapconcat 'identity (mapcar (lambda (s) (replace-regexp-in-string "#" "" s)) selected) "\\|")
                              :not-regexp nil
                              :excluded-dirs-regexp
-                             "\\(meta\\|private\\|ekg\\)"
+                             "\\(meta\\|screenshot\\|private\\|ekg\\)"
                              :sort-by-component nil
                              :reverse-sort nil
                              :id-only nil

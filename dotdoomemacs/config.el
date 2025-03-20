@@ -915,8 +915,6 @@
   ;; doom/hlissner-dot-doom/config.el
   ;; (setq corfu-auto nil)
 
-  ;; default 'C-S-s'
-  (define-key corfu-map (kbd "M-.") '+corfu-move-to-minibuffer)
   )
 
 ;;;;; DONT corfu-echo
@@ -2551,57 +2549,6 @@ ${content}"))
 
 ;;;;; additional packages
 
-;;;;;; DONT org-modern
-
-;; (org-modern-tag t)
-;; (org-modern-todo nil)
-;; (org-modern-table nil)
-;; (org-modern-keyword nil)
-;; (org-modern-timestamp nil)
-;; (org-modern-priority nil)
-;; (org-modern-checkbox nil)
-;; (org-modern-block-name nil)
-;; (org-modern-keyword nil)
-;; (org-modern-footnote nil)
-;; (org-modern-internal-target nil)
-;; (org-modern-radio-target nil)
-;; (org-modern-progress nil)
-;; :config
-;; (setq org-modern-todo-faces
-;;       '(("TODO" :inverse-video t :inherit org-todo)
-;;         ("PROJ" :inverse-video t :inherit +org-todo-project)
-;;         ("STRT" :inverse-video t :inherit +org-todo-active)
-;;         ("[-]"  :inverse-video t :inherit +org-todo-active)
-;;         ("HOLD" :inverse-video t :inherit +org-todo-onhold)
-;;         ("WAIT" :inverse-video t :inherit +org-todo-onhold)
-;;         ("[?]"  :inverse-video t :inherit +org-todo-onhold)
-;;         ("KILL" :inverse-video t :inherit +org-todo-cancel)
-;;         ("NO"   :inverse-video t :inherit +org-todo-cancel)))
-;; (custom-set-faces! '(org-modern-statistics :inherit org-checkbox-statistics-todo))
-
-;; (use-package! org-modern
-;;   :after org
-;;   :config
-;;   (setq
-;;    ;; Edit settings
-;;    org-auto-align-tags nil ; t
-;;    org-tags-column 0
-;;    org-catch-invisible-edits 'show-and-error
-;;    org-special-ctrl-a/e t
-;;    org-insert-heading-respect-content t
-
-;;    ;; Org styling, hide markup etc.
-;;    org-hide-emphasis-markers t ; nil
-;;    org-pretty-entities t ; nil
-;;    org-agenda-tags-column 0)
-
-;;   (add-hook 'org-mode-hook #'org-modern-mode)
-;;   (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
-
-;;   (require 'org-modern-indent)
-;;   (add-hook 'org-mode-hook #'org-modern-indent-mode 90)
-;;   )
-
 ;;;;;; org-download
 
 (use-package! org-download
@@ -2641,17 +2588,9 @@ ${content}"))
   :if window-system
   :init
   (add-hook 'org-mode-hook 'org-appear-mode)
-  (setq org-appear-autolinks t ;; nil
+  (setq org-appear-autolinks nil ;; default nil
         org-appear-autoemphasis t
         org-appear-autosubmarkers t)
-  (setq org-appear-trigger 'manual) ;'on-change
-  :config
-  (when org-appear-trigger 'manual
-        (add-hook 'org-mode-hook
-                  (lambda ()
-                    (add-hook 'evil-insert-state-entry-hook #'org-appear-manual-start nil t)
-                    (add-hook 'evil-insert-state-exit-hook #'org-appear-manual-stop nil t)))
-        )
   )
 
 ;;;;;; org-rich-yank
@@ -3391,8 +3330,9 @@ ${content}"))
   :defer 1
   :commands (gptel gptel-send)
   :init
+  ;; (add-to-list 'yank-excluded-properties 'gptel)
   (setq gptel-default-mode 'org-mode)
-  ;; (setq gptel-temperature 0.5) ; gptel 1.0, Perplexity 0.2
+  (setq gptel-temperature 0.5) ; gptel 1.0, Perplexity 0.2
 
   ;; "^\\*gptel-ask\\*"
   ;; ("^\\*ChatGPT\\*" :size 84 :side right :modeline t :select t :quit nil :ttl t)
@@ -3444,13 +3384,14 @@ ${content}"))
         (insert (format "#+print_bibliography:\n* Related Notes\n* History\n- %s\n" (format-time-string "[%Y-%m-%d %a %H:%M]")))
 
         ;; heading-1 add backlink to today
-        (insert (format "* [[denote:%s][%s]]\n"
+        (insert (format "* [[denote:%s::%s][%s]]\n"
                         ;; (format-time-string "%Y%m%dT000000")
                         (format-time-string "%Y%m%dT000000"
                                             (org-journal--convert-time-to-file-type-time
                                              (time-subtract (current-time)
                                                             (* 3600 org-extend-today-until))))
-                        (format-time-string "%Y-%m-%d W%W")))
+                        (format-time-string "#h:%Y-%m-%d")
+                        (format-time-string "|%Y-%m-%d %a %H:%M|")))
         ;; heading-2 [SUM]:
         ;; (insert (format "** TODO [SUM]: \n"))
         (insert "\n"))))
@@ -3482,7 +3423,7 @@ ${content}"))
   (gptel-make-gemini "Gemini" :key user-gemini-api-key :stream t)
 
   ;; Anthropic - Claude
-  ;; (gptel-make-anthropic "Claude" :key user-claude-api-key :stream t)
+  (gptel-make-anthropic "Claude" :key user-claude-api-key :stream t)
 
   ;; https://perplexity.mintlify.app/guides/pricing
   ;; Model	Context Length	Model Type
@@ -3636,6 +3577,12 @@ ${content}"))
               :desc "clear" "l" #'gptel-clear-buffer+
               "p" #'gptel-save-as-org-with-denote-metadata
               )))))
+
+  (add-hook! 'gptel-mode-hook
+    (defun cae-gptel-mode-setup-h ()
+      (setq-local nobreak-char-display nil)
+      (auto-fill-mode -1)
+      (doom-mark-buffer-as-real-h)))
 
   ;; 2024-12-12 disable
   ;; (add-hook! 'kill-emacs-hook
@@ -3964,15 +3911,19 @@ ${content}"))
 ;; (setq dall-e-spinner-type 'flipping-line)
 ;; (setq dall-e-display-width 256)
 
-;;;;; TODO llmclient: elysium with gptel
+;;;;; llmclient: elysium with gptel for pairprogramming
 
-;; (use-package! elysium :after gptel)
-
-;; "sq" #'elysium-query
-;; "so" #'elysium-keep-all-suggested-changes
-;; "sm" #'elysium-discard-all-suggested-changes
-;; "st" #'elysium-toggle-window)
-; '(insert normal) 'gptel-mode-map "C-<return>" #'elysium-query
+(use-package! elysium
+  :after gptel
+  :init
+  ;; Below are the default values
+  (setq elysium-window-size 0.33) ; The elysium buffer will be 1/3 your screen
+  (setq elysium-window-style 'vertical) ; Can be customized to horizontal
+  :config
+  ;; Use `smerge-mode` to then merge in the changes
+  (require 'smerge-mode)
+  (add-hook 'prog-mode-hook 'smerge-mode)
+  )
 
 ;;;;; TODO llmclient: yap - gptel another
 
@@ -4028,6 +3979,7 @@ ${content}"))
 ;;;;; llmclient: github copilot
 
 (use-package! copilot
+  :defer 5
   :commands (copilot-login copilot-diagnose)
   :init
   ;; Sometimes the copilot agent doesn't start. Restarting fixes the issue.
@@ -4053,13 +4005,17 @@ ${content}"))
 
 ;;;;; llmclient: github copilot-chat
 
+;; 2025-03-19 v2.0
 (use-package! copilot-chat
+  :defer 6
   :after request
   :bind (:map global-map
               ("C-c C-y" . copilot-chat-yank)
               ("C-c M-y" . copilot-chat-yank-pop)
               ("C-c C-M-y" . (lambda () (interactive) (copilot-chat-yank-pop -1))))
   :init
+  (setq copilot-chat-frontend 'markdown)
+
   ;; (setq copilot-chat-backend 'request)
   ;; (setq! copilot-chat-model "claude-3.5-sonnet"
   ;;        copilot-chat-frontend 'org)
@@ -4160,15 +4116,15 @@ Called with a PREFIX, resets the context buffer list before opening"
     (eglot-inlay-hints-mode -1))
   )
 
-;;;;; TODO eglot-booster
+;;;;; DONT eglot-booster
 
 ;; install lsp-booster binary first
-(use-package! eglot-booster
-  :after eglot
-  :config
-  ;; (setq eglot-confirm-server-initiated-edits nil)
-  ;; (setq eglot-extend-to-xref t)
-  (eglot-booster-mode +1))
+;; (use-package! eglot-booster
+;;   :after eglot
+;;   :config
+;;   ;; (setq eglot-confirm-server-initiated-edits nil)
+;;   ;; (setq eglot-extend-to-xref t)
+;;   (eglot-booster-mode +1))
 
 ;;;;; indent-bars
 
@@ -4890,7 +4846,7 @@ x×X .,·°;:¡!¿?`'‘’   ÄAÃÀ TODO
   ;; (advice-add #'shr-colorize-region :around #'ignore)
 
   ;; Allow switching to these buffers with `C-x b'
-  (add-hook 'eww-mode-hook #'doom-mark-buffer-as-real-h)
+  (add-hook 'eww-mode-hook #'doom-mark-buffer-as-real-h) ; add
 
   ;; Default Browser
   ;; (setq browse-url-browser-function 'eww-browse-url
@@ -5695,26 +5651,117 @@ Suitable for `imenu-create-index-function'."
   ;; 2024-06-24 performance issue
   ;; (remove-hook 'org-mode-hook 'org-eldoc-load)
 
-  ;; 2024-09-15 TODO
-  ;; (progn
-  ;;   ;; Those advice were designed when using a bottom modeline. Since we are using
-  ;;   ;; a header line, we must remove them.
-  ;;   (advice-remove 'org-fast-tag-selection #'+popup--org-fix-popup-window-shrinking-a)
-  ;;   (advice-remove 'org-fast-todo-selection #'+popup--org-fix-popup-window-shrinking-a)
+  (when (locate-library "org-modern")
+    (require 'org-modern)
+    (progn
+      ;; configurtaion
+      (setq
+       ;; Edit settings
+       org-auto-align-tags nil ; default t
+       org-tags-column 0 ; doom 0
+       org-catch-invisible-edits 'show-and-error ; smart
+       org-special-ctrl-a/e t
+       ;; org-insert-heading-respect-content t ; prefer nil
 
-  ;;   ;; (defadvice! +popup--suppress-delete-other-windows-a (fn &rest args)
-  ;;   ;; Courtesy: doom emacs (popup/+hacks.el)
-  ;;   (defun +popup--supress-delete-other-windows-a (origin-fn &rest args)
-  ;;     (if +popup-mode
-  ;;         (cl-letf (((symbol-function #'delete-other-windows) #'ignore)
-  ;;                   ((symbol-function #'delete-window)        #'ignore))
-  ;;           (apply origin-fn args))
-  ;;       (apply origin-fn args)))
+       ;; Org styling, hide markup etc.
+       ;; org-ellipsis "…"
+       org-hide-emphasis-markers t ; nil
+       org-pretty-entities t ; nil
+       org-agenda-tags-column 0)
 
-  ;;   (advice-add #'org-fast-tag-selection :around #'+popup--supress-delete-other-windows-a)
-  ;;   (advice-add #'org-fast-todo-selection :around #'+popup--supress-delete-other-windows-a)
-  ;;   )
+      (setq org-modern-table nil) ; org-modern-indent
+      ;;  org-modern-tag t
+      ;;  org-modern-todo t
+      ;;  org-modern-timestamp t
+      ;;  org-modern-priority t
+      ;;  org-modern-checkbox t
+      ;;  org-modern-block-name t
+      ;;  org-modern-footnote nil
+      ;;  org-modern-internal-target nil
+      ;;  org-modern-radio-target nil
+      ;;  org-modern-progress nil)
 
+      (setq org-modern-star nil) ; org-modern-indent
+      (setq org-modern-hide-stars nil) ; adds extra indentation
+      (setq org-modern-list
+            '((?+ . "➤") ; ◦
+              (?- . "–") ; ‣, – endash
+              (?* . "•")))
+
+      (setq org-modern-block-fringe 0) ; default 2
+      ;; (setq org-modern-block-name
+      ;;       '((t . t)
+      ;;         ("src" "»" "«")
+      ;;         ("example" "»–" "–«")
+      ;;         ("quote" "❝" "❞")
+      ;;         ("export" "⏩" "⏪")))
+
+      (setq org-modern-progress nil)
+
+      ;; https://github.com/tecosaur/emacs-config/blob/master/config.org?plain=1#L7886
+      (setq org-modern-keyword nil)
+      ;; (setq org-modern-keyword
+      ;;       '((t . t)
+      ;;         ("title" . "𝙏")
+      ;;         ("subtitle" . "𝙩")
+      ;;         ("author" . "𝘼")
+      ;;         ("email" . "")
+      ;;         ("date" . "𝘿")
+      ;;         ("property" . "󰠳")
+      ;;         ("options" . #("󰘵" 0 1 (display (height 0.75))))
+      ;;         ("startup" . "⏻")
+      ;;         ("macro" . "𝓜")
+      ;;         ("bind" . "󰌷")
+      ;;         ("bibliography" . "")
+      ;;         ("print_bibliography" . "󰌱")
+      ;;         ("cite_export" . "⮭")
+      ;;         ("print_glossary" . "󰌱ᴬᶻ")
+      ;;         ("glossary_sources" . "󰒻")
+      ;;         ("include" . "⇤")
+      ;;         ("setupfile" . "⇚")
+      ;;         ("html_head" . "🅷")
+      ;;         ("html" . "🅗")
+      ;;         ("latex_class" . "🄻")
+      ;;         ("latex_class_options" . "🄻󰒓")
+      ;;         ("latex_header" . "🅻")
+      ;;         ("latex_header_extra" . "🅻⁺")
+      ;;         ("latex" . "🅛")
+      ;;         ("beamer_theme" . "🄱")
+      ;;         ("beamer_color_theme" . "🄱󰏘")
+      ;;         ("beamer_font_theme" . "🄱𝐀")
+      ;;         ("beamer_header" . "🅱")
+      ;;         ("beamer" . "🅑")
+      ;;         ("attr_latex" . "🄛")
+      ;;         ("attr_html" . "🄗")
+      ;;         ("attr_org" . "⒪")
+      ;;         ("call" . "󰜎")
+      ;;         ("name" . "⁍")
+      ;;         ("header" . "›")
+      ;;         ("caption" . "☰")
+      ;;         ("results" . "🠶")))
+
+      (setq org-modern-priority t)
+      (setq org-modern-priority-faces
+            '((?A :inverse-video t :inherit +org-todo-todo)
+              (?B :inverse-video t :inherit +org-todo-next)
+              (?C :inverse-video t :inherit +org-todo-dont)
+              ;; (?D :inverse-video t :inherit +org-todo-done)
+              ))
+
+      (setq org-modern-todo-faces
+            '(("TODO" :inverse-video t :inherit +org-todo-todo)
+              ("DONE" :inverse-video t :inherit +org-todo-done)
+              ("NEXT"  :inverse-video t :inherit +org-todo-next)
+              ("DONT" :inverse-video t :inherit +org-todo-dont)
+              ))
+      )
+    (progn
+      (add-hook 'org-mode-hook #'org-modern-mode)
+      (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
+
+      (require 'org-modern-indent)
+      (add-hook 'org-mode-hook #'org-modern-indent-mode 90)
+      ))
   )
 
 ;;;;; TODO org-src-mode-map
@@ -7107,16 +7154,17 @@ Suitable for `imenu-create-index-function'."
 
 ;;;;;; emmy
 
+  ;; TODO emmy
 
 ;;;;;; clojure-mode
 
   ;; Do not indent single ; comment characters
   (add-hook 'clojure-mode-hook (lambda () (setq-local comment-column 0)))
 
-  (after! clojure-mode
-    (define-key clojure-mode-map (kbd "<M-return>") 'clerk-show)
-    (define-key clojure-mode-map (kbd "C-c v") 'vega-view)
-    )
+  ;; (after! clojure-mode
+  ;;   (define-key clojure-mode-map (kbd "<M-return>") 'clerk-show)
+  ;;   (define-key clojure-mode-map (kbd "C-c v") 'vega-view)
+  ;;   )
 
 ;;;;;; cider
 
@@ -7150,15 +7198,17 @@ Suitable for `imenu-create-index-function'."
       "Return a prompt string that mentions NAMESPACE."
       (format "%s🦄 " (cider-abbreviate-ns namespace)))
 
+    (setq cider-repl-result-prefix ";; => ")
+
     ;; NOTE 2022-11-21: for the linter (clj-kondo), refer to the Flymake
     ;; NOTE 2022-11-23: This is not final.  I will iterate on it over
     ;; time as I become more familiar with the requirements.
-    (setq cider-repl-result-prefix ";; => "
-          cider-eval-result-prefix ""
-          cider-connection-message-fn t ; cute, but no!
-          cider-repl-prompt-function #'my/cider-repl-prompt
-          ;; cider-use-overlays nil ; echo area is fine
-          )
+    ;; (setq cider-repl-result-prefix ";; => "
+    ;;       cider-eval-result-prefix ""
+    ;;       cider-connection-message-fn t ; cute, but no!
+    ;;       cider-repl-prompt-function #'my/cider-repl-prompt
+    ;;       ;; cider-use-overlays nil ; echo area is fine
+    ;;       )
 
     ;; (setq cider-preferred-build-tool 'clojure-cli)
     ;; (setq
@@ -7179,14 +7229,14 @@ Suitable for `imenu-create-index-function'."
     :defer 5
     :commands clj-deps-new)
 
-;;;;;; clay
+;;;;;; TODO clay
 
   (use-package! clay
     :after cider
     :config
     (require 'clay))
 
-;;;;;; DONT kaocha-runner
+;;;;;; kaocha-runner
 
   ;; Kaocha test runner from Emacs
   ;; - provides rich test reports
@@ -7207,8 +7257,8 @@ Suitable for `imenu-create-index-function'."
     (setq clojure-essential-ref-nov-epub-path "~/git/default/clj-essential-ref-v31.epub")
     :config
     (with-eval-after-load 'cider
-      (evil-define-key '(insert normal) cider-mode-map (kbd "M-9") 'clojure-essential-ref)
-      (evil-define-key '(insert normal) cider-repl-mode-map (kbd "M-9") 'clojure-essential-ref))
+      (evil-define-key '(insert normal) cider-mode-map (kbd "M-<f1>") 'clojure-essential-ref)
+      (evil-define-key '(insert normal) cider-repl-mode-map (kbd "M-<f1>") 'clojure-essential-ref))
     )
 
 ;;;;;; TODO Clojure helper functions

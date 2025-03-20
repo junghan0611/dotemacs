@@ -220,7 +220,7 @@
 (package! org-download)
 (package! ox-epub)
 
-(package! org-rainbow-tags)
+;; (package! org-rainbow-tags)
 (package! org-drill)
 
 (package! org-rich-yank)
@@ -243,8 +243,8 @@
 (package! parse-csv :recipe (:host github :repo "junghan0611/el-csv")) ; for om-dash
 (package! om-dash :recipe (:host github :repo "gavv/om-dash" :files ("*.el" "*.org"))) ; org-based dashboards
 
-;; (package! org-modern)
-;; (package! org-modern-indent :recipe (:host github :repo "jdtsmith/org-modern-indent"))
+(package! org-modern)
+(package! org-modern-indent :recipe (:host github :repo "jdtsmith/org-modern-indent"))
 
 ;; (package! org-bookmark-heading)
 ;; (package! d2-mode)
@@ -327,8 +327,7 @@
 (package! khoj)
 
 ;; (package! minuet) ;; code completion using LLM
-(package! aider :recipe (:host github :repo "tninja/aider.el" :files
-                               ("aider.el" "aider-core.el" "aider-file.el" "aider-code-change.el" "aider-discussion.el" "aider-prompt-mode.el" "aider-doom.el")))
+(package! aider :recipe (:host github :repo "tninja/aider.el" :files ("aider.el" "aider-core.el" "aider-file.el" "aider-code-change.el" "aider-discussion.el" "aider-prompt-mode.el" "aider-doom.el")))
 
 (package! llm)
 (package! kagi)
@@ -342,13 +341,13 @@
 ;; (package! gptel :recipe (:host github :repo "karthink/gptel" :branch "feature-tool-use"))
 (package! gptel-quick :recipe (:host github :repo "karthink/gptel-quick"))
 
+;; gptel plugins
+(package! elysium :recipe (:host github :repo "lanceberge/elysium" :branch "main" :files ("*.el")))  ; star 236 using smerge
+;; (package! evedel :recipe (:host github :repo "daedsidog/evedel")) ; star 87
+;; (package! yap :recipe (:host github :repo "meain/yap")) ; star 13
+
 (package! copilot :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))) ; github copilot
 (package! copilot-chat :recipe (:host github :repo "chep/copilot-chat.el" :files ("*.el"))) ; github copilot
-
-;; gptel plugins
-;; (package! yap :recipe (:host github :repo "meain/yap"))
-;; (package! elysium :recipe (:host github :repo "lanceberge/elysium" :branch "main" :files ("*.el")))
-;; (package! evedel :recipe (:host github :repo "daedsidog/evedel"))
 
 (package! whisper :recipe (:host github :repo "natrys/whisper.el"))
 
@@ -380,7 +379,7 @@
 (package! sideline-blame)
 (package! git-messenger)
 
-(package! eglot-booster :recipe (:type git :host github :repo "jdtsmith/eglot-booster"))
+;; (package! eglot-booster :recipe (:type git :host github :repo "jdtsmith/eglot-booster"))
 
 (package! auto-highlight-symbol)
 (package! symbol-overlay)
@@ -557,7 +556,5 @@
 (package! fireplace)
 (package! snow)
 ;; (package! selectric-mode)
-
-
 
 ;;; end-of file

@@ -123,7 +123,7 @@
 
 (map! :leader
       :desc "er/expand-region" "v" #'er/expand-region
-      :desc "expand-menu" "V" #'expand-transient
+      :desc "expand-transient" "V" #'expand-transient
       )
 
 ;;;; '=' Format
@@ -258,54 +258,58 @@
 
 ;;;; 'k' lisp
 
+(map! :leader
+      "k" nil
+      "k" #'sexp-transient)
+
 ;; /john-dot-doom/+smartparens.el
-(when (locate-library "smartparens")
-  ;; A Spacemacs like Lisp state menu (without the transient state)
-  (map! :leader
-        (:prefix ("k". "Smartparens")
-         :desc "Delete Pair" "D" #'delete-pair
-         :desc "Slurp forward" "s" #'sp-forward-slurp-sexp
-         :desc "Slurp backward" "S" #'sp-backward-slurp-sexp
-         :desc "" "$"   #'sp-end-of-sexp
-         (:prefix ("`" . "Hybrid")
-          :desc "Kill" "k" #'sp-kill-hybrid-sexp
-          :desc "Push" "p" #'sp-push-hybrid-sexp
-          :desc "Slurp" "s" #'sp-slurp-hybrid-sexp
-          :desc "Transpose" "t" #'sp-transpose-hybrid-sexp
-          :desc "Absorb" "a" #'sp-absorb-sexp
-          :desc "Barf forward" "b" #'sp-forward-barf-sexp
-          :desc "Barf backward" "B" #'sp-backward-barf-sexp
-          :desc "Convoluted" "c" #'sp-convolute-sexp)
-         (:prefix ("d" . "Delete")
-          :desc "Delete Pair" "d" #'delete-pair
-          :desc "Symbol" "s" #'sp-kill-symbol
-          :desc "Symbol Backward" "S" #'sp-backward-kill-symbol
-          :desc "Word" "w" #'sp-kill-word
-          :desc "Word Backward" "W" #'sp-backward-kill-word
-          :desc "Kill" "x" #'sp-kill-sexp
-          :desc "Kill Backward" "X" #'sp-backward-kill-sexp)
-         :desc "Splice" "e" #'sp-splice-sexp-killing-forward
-         :desc "Splice Backward" "E" #'sp-splice-sexp-killing-backward
-         :desc "Symbol Backward" "h" #'sp-backward-symbol
-         :desc "Sexp Backward" "H" #'sp-backward-sexp
-         :desc "Join" "j" #'sp-join-sexp
-         :desc "Sexp Forward" "l" #'sp-forward-sexp
-         :desc "Sexp Forward" "L" #'sp-forward-sexp
-         :desc "Raise" "r" #'sp-raise-sexp
-         :desc "Slurp" "s" #'sp-forward-slurp-sexp
-         :desc "Slurp Backward" "S" #'sp-backward-slurp-sexp
-         :desc "Transpose" "t" #'sp-transpose-sexp
-         :desc "Up Backward" "U" #'sp-backward-up-sexp
-         (:prefix ("w" . "Wrap")
-          :desc "()" "(" #'sp-wrap-round
-          :desc "{}" "{" #'sp-wrap-curly
-          :desc "[]" "[" #'sp-wrap-square
-          :desc "Round" "w" #'sp-wrap-round
-          :desc "Curly" "c" #'sp-wrap-curly
-          :desc "Square" "s" #'sp-wrap-square
-          :desc "Unwrap" "u" #'sp-unwrap-sexp)
-         :desc "Copy sexp" "y" #'sp-copy-sexp))
-  )
+;; (when (locate-library "smartparens")
+;;   ;; A Spacemacs like Lisp state menu (without the transient state)
+;;   (map! :leader
+;;         (:prefix ("k". "Smartparens")
+;;          :desc "Delete Pair" "D" #'delete-pair
+;;          :desc "Slurp forward" "s" #'sp-forward-slurp-sexp
+;;          :desc "Slurp backward" "S" #'sp-backward-slurp-sexp
+;;          :desc "" "$"   #'sp-end-of-sexp
+;;          (:prefix ("`" . "Hybrid")
+;;           :desc "Kill" "k" #'sp-kill-hybrid-sexp
+;;           :desc "Push" "p" #'sp-push-hybrid-sexp
+;;           :desc "Slurp" "s" #'sp-slurp-hybrid-sexp
+;;           :desc "Transpose" "t" #'sp-transpose-hybrid-sexp
+;;           :desc "Absorb" "a" #'sp-absorb-sexp
+;;           :desc "Barf forward" "b" #'sp-forward-barf-sexp
+;;           :desc "Barf backward" "B" #'sp-backward-barf-sexp
+;;           :desc "Convoluted" "c" #'sp-convolute-sexp)
+;;          (:prefix ("d" . "Delete")
+;;           :desc "Delete Pair" "d" #'delete-pair
+;;           :desc "Symbol" "s" #'sp-kill-symbol
+;;           :desc "Symbol Backward" "S" #'sp-backward-kill-symbol
+;;           :desc "Word" "w" #'sp-kill-word
+;;           :desc "Word Backward" "W" #'sp-backward-kill-word
+;;           :desc "Kill" "x" #'sp-kill-sexp
+;;           :desc "Kill Backward" "X" #'sp-backward-kill-sexp)
+;;          :desc "Splice" "e" #'sp-splice-sexp-killing-forward
+;;          :desc "Splice Backward" "E" #'sp-splice-sexp-killing-backward
+;;          :desc "Symbol Backward" "h" #'sp-backward-symbol
+;;          :desc "Sexp Backward" "H" #'sp-backward-sexp
+;;          :desc "Join" "j" #'sp-join-sexp
+;;          :desc "Sexp Forward" "l" #'sp-forward-sexp
+;;          :desc "Sexp Forward" "L" #'sp-forward-sexp
+;;          :desc "Raise" "r" #'sp-raise-sexp
+;;          :desc "Slurp" "s" #'sp-forward-slurp-sexp
+;;          :desc "Slurp Backward" "S" #'sp-backward-slurp-sexp
+;;          :desc "Transpose" "t" #'sp-transpose-sexp
+;;          :desc "Up Backward" "U" #'sp-backward-up-sexp
+;;          (:prefix ("w" . "Wrap")
+;;           :desc "()" "(" #'sp-wrap-round
+;;           :desc "{}" "{" #'sp-wrap-curly
+;;           :desc "[]" "[" #'sp-wrap-square
+;;           :desc "Round" "w" #'sp-wrap-round
+;;           :desc "Curly" "c" #'sp-wrap-curly
+;;           :desc "Square" "s" #'sp-wrap-square
+;;           :desc "Unwrap" "u" #'sp-unwrap-sexp)
+;;          :desc "Copy sexp" "y" #'sp-copy-sexp))
+;;   )
 
 ;;;; 'C' Capture
 
@@ -524,49 +528,84 @@
        :desc "toggle-window-dedicated" "d" #'toggle-window-dedicated)
       )
 
-;;;; 'e' copilot
+;;;; 'e' LLM - elysium/gptel
 
-;; https://github.com/michaelneuper/doom
-;; Add keybindings for [[https:https://github.com/copilot-emacs/copilot.el][copilot]] and [[https://github.com/chep/copilot-chat.el][copilot-chat]] with [[kbd:][<leader> e]]  prefix.
-;; (after! (evil copilot)
-;;   (evil-define-key 'insert 'global (kbd "<tab>") 'copilot-accept-completion))
+;; | `elysium-query`                         | send a query to the `gptel` backend                |
+;; | `elysium-keep-all-suggested-changes`    | keep all of the AI-suggested changes               |
+;; | `elysium-discard-all-suggested-changes` | discard all of the AI-suggested changes            |
+;; | `elysium-clear-buffer`                  | clear the elysium buffer                           |
+;; | `elysium-add-context`                   | add the contents of a region to the elysium buffer |
+;; | `smerge-next`                           | go to the next conflicting hunk                    |
+;; | `smerge-previous`                       | go to the next conflicting hunk                    |
+;; | `smerge-keep-other`                     | keep this set of changes                           |
+;; | `smerge-keep-mine`                      | discard this set of changes                        |
+;; | `elysium-toggle-window`                 | toggle the chat window                             |
 
-(map!
- (:after copilot-chat
-         (:map copilot-chat-prompt-mode-map
-          :g "C-3" (cmd! ()
-                         (copilot-chat-reset)
-                         (copilot-chat-display)))
-         (:map copilot-chat-list-mode-map
-          :n "m" #'copilot-chat-list-add-or-remove-buffer
-          :n "x" #'copilot-chat-list-add-or-remove-buffer
-          :n "u" #'copilot-chat-list-refresh
-          :n "X" #'copilot-chat-list-clear-buffers))
- )
+(progn
+  (require 'smerge-mode)
+  (map! :map smerge-mode-map
+        :localleader
+        (:prefix ("0" . "smerge")
+                 "n" #'smerge-next
+                 "p" #'smerge-prev
+                 "r" #'smerge-resolve
+                 "a" #'smerge-keep-all
+                 "b" #'smerge-keep-base
+                 "o" #'smerge-keep-lower
+                 "l" #'smerge-keep-lower
+                 "m" #'smerge-keep-upper
+                 "u" #'smerge-keep-upper
+                 "E" #'smerge-ediff
+                 "C" #'smerge-combine-with-next
+                 "R" #'smerge-refine
+                 "C-m" #'smerge-keep-current
+                 (:prefix ("=" . "diff")
+                          "<" #'smerge-diff-base-upper
+                          ">" #'smerge-diff-base-lower
+                          "=" #'smerge-diff-upper-lower)))
+  )
 
 (map! :leader
-      (:prefix ("e" . "copilot")
-       :desc "Enable Copilot Mode"
+      "e" nil
+      (:prefix ("e" . "elysium/gptel")
+        ;; '(insert normal) 'gptel-mode-map "C-<return>" #'elysium-query
+       "q" #'elysium-query
+       "o" #'elysium-keep-all-suggested-changes
+       "m" #'elysium-discard-all-suggested-changes
+       "c" #'elysium-clear-buffer
+       "t" #'elysium-toggle-window
+       "a" #'elysium-add-context
+      ))
+
+;;;; '9' gptel
+
+
+(map! :leader
+      "9" nil
+      (:prefix ("9" . "gptel")
+       ;; "0" #'+gpt-dwim-current-buffer
+       "9" #'gptel-mode
+       "t" #'gptel-org-toggle-branching-context
+       :desc "gptel-send: default" :n "l" (cmd! (cashpw/gptel-send (alist-get 'default gptel-directives)))
+       :desc "gptel-send: chain-of-thought" :n "c" (cmd! (cashpw/gptel-send (alist-get 'chain-of-thought gptel-directives)))
+       :desc "gptel-send: follow-up" :n "f" (cmd! (cashpw/gptel-send (alist-get 'follow-up gptel-directives))))
+      )
+
+;;;; '0' copilot / copilot-chat
+
+(map! :leader
+      (:prefix
+       ("0" . "copilot")
        "c" #'copilot-mode
-       :desc "Display Chat Window"
        "d" #'copilot-chat-display
-       :desc "Explain Selected Code"
        "e" #'copilot-chat-explain
-       :desc "Review Selected Code"
        "r" #'copilot-chat-review
-       :desc "Fix Selected Code"
        "f" #'copilot-chat-fix
-       :desc "Optimize Selected Code"
        "o" #'copilot-chat-optimize
-       :desc "Write Test for Code"
        "t" #'copilot-chat-test
-       :desc "Add Current Buffer"
        "a" #'copilot-chat-add-current-buffer
-       :desc "Document Selected Code"
        "D" #'copilot-chat-doc
-       :desc "Reset Chat History"
        "R" #'copilot-chat-reset
-       :desc "Remove Current Buffer"
        "x" #'copilot-chat-del-current-buffer))
 
 ;;;; 'o' open
@@ -664,19 +703,6 @@
 ;;       :desc "select-window 2" "2" #'winum-select-window-2
 ;;       :desc "select-window 3" "3" #'winum-select-window-3
 ;;       :desc "select-window 4" "4" #'winum-select-window-4)
-
-;;;; TODO '0' LLM - gptel
-
-(map! :leader
-      "0" nil
-      (:prefix ("0" . "llm/gptel")
-       ;; "0" #'+gpt-dwim-current-buffer
-       "0" #'gptel-mode
-       "t" #'gptel-org-toggle-branching-context
-       :desc "gptel-send: default" :n "l" (cmd! (cashpw/gptel-send (alist-get 'default gptel-directives)))
-       :desc "gptel-send: chain-of-thought" :n "c" (cmd! (cashpw/gptel-send (alist-get 'chain-of-thought gptel-directives)))
-       :desc "gptel-send: follow-up" :n "f" (cmd! (cashpw/gptel-send (alist-get 'follow-up gptel-directives))))
-      )
 
 ;;; Custom EVIL Keys
 
@@ -1182,6 +1208,30 @@
          ))
   )
 
+;;;; corfu
+
+(after! corfu
+  (map! :map corfu-map
+        "<escape>" #'+corfu-quit-and-escape
+        "M-i"    #'corfu-insert-separator
+        ;; "C-/" #'+corfu-move-to-minibuffer  ; undo-fu-only-undo
+        "M-." #'+corfu-move-to-minibuffer ;; default 'C-S-s'
+        )
+
+  ;; corfu-indexed like in Company, M+number - inserts the thing
+  (map! :map corfu-map
+        "M-0" (cmd! () (+corfu-insert-indexed 9))
+        "M-1" (cmd! () (+corfu-insert-indexed 0))
+        "M-2" (cmd! () (+corfu-insert-indexed 1))
+        "M-3" (cmd! () (+corfu-insert-indexed 2))
+        "M-4" (cmd! () (+corfu-insert-indexed 3))
+        "M-5" (cmd! () (+corfu-insert-indexed 4))
+        "M-6" (cmd! () (+corfu-insert-indexed 5))
+        "M-7" (cmd! () (+corfu-insert-indexed 6))
+        "M-8" (cmd! () (+corfu-insert-indexed 7))
+        "M-9" (cmd! () (+corfu-insert-indexed 8)))
+  )
+
 ;;;; TODO clojure-mode-map
 
 ;; Lookup functions in Clojure - The Essentail Reference book
@@ -1189,6 +1239,8 @@
 
 ;; TODO: review evaluation key bindings from Spacemacs
 (map! :after cider
+      :map cider-mode-map
+      :i "M-9" #'insert-parentheses
       :map clojure-mode-map
       :localleader
       :desc "REPL session" "'" #'sesman-start
@@ -1428,6 +1480,7 @@
 
 ;; (map! :i "C-j" #'bk/improve-last-parens
 ;;       :i "C-l" #'sp-forward-sexp)
+
 
 ;;;; treemacs - f9
 
@@ -1773,6 +1826,11 @@
           :g "C-5" #'leetcode-restore-layout
           :g "C-7" #'leetcode-submit)))
 
+
+;;;; aider
+
+(after! aider
+  (aider-doom-enable))
 
 ;;;; Experiments
 

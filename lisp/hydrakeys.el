@@ -631,6 +631,24 @@
                ("M-c" nil "Quit" :color red :exit t)
                )))
 
+;;;; TODO Major-Mode-Hydra > clojure-mode
+
+(major-mode-hydra-define clojure-mode
+  (:title "clojure-mode" :color blue :separator "-" :quit-key "<escape>")
+  ("Eval" (
+           (";" #'cider-eval-defun-to-comment "cider-eval-defun-to-comment")
+           ("(" #'cider-eval-list-at-point "cider-eval-list-at-point")
+           ("b" #'cider-eval-buffer "cider-eval-buffer")
+           ("e" #'cider-eval-last-sexp "cider-eval-last-sexp")
+           ("<f2>" #'cider-eval-last-sexp "cider-eval-last-sexp")
+           ("f" #'cider-eval-defun-at-point "cider-eval-defun-at-point")
+           ("i" #'cider-interrupt "cider-interrupt")
+           ("r" #'cider-eval-region "cider-eval-region"))
+   "ETC" (
+          ("q" nil "Quit" :color red :exit t)
+          ("M-c" nil "Quit" :color red :exit t)
+          ))
+  )
 
 ;;;; Major-Mode-Hydra > Elfeed
 

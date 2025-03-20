@@ -252,7 +252,7 @@
 ;; 왜 minemacs 는 org-pretty 설정을 둘다 t 로 했을까?  org-pretty-entities 가
 ;; 설정되면 abc_def 에서 def 가 아래로 기어 들어간다.
 ;; 2023-10-13: I prefer using M-x org-toggle-pretty-entities instead.
-(setq org-pretty-entities nil) ; very important
+;; (setq org-pretty-entities nil) ; very important
 ;; orgmode 익스포트 할 때, underscore 가 subscripts 변환 방지
 ;; http://ohyecloudy.com/emacsian/2019/01/12/org-export-with-sub-superscripts/
 (setq org-pretty-entities-include-sub-superscripts nil)
@@ -380,14 +380,14 @@
 ;; (setq org-hide-block-startup nil) ; nil
 ;; (setq org-hide-macro-markers nil) ; nil
 
-(setq org-indent-mode-turns-on-hiding-stars nil) ; default t -- MINE
 (setq org-indent-mode-turns-off-org-adapt-indentation t) ; must t, default t
-(setq org-hide-leading-stars nil) ; doom t
+;; (setq org-indent-mode-turns-on-hiding-stars nil) ; default t -- MINE
+;; (setq org-hide-leading-stars nil) ; doom t
 
 ;;;; DONT custom indentation
 
 ;; (setq org-adapt-indentation t)
-(setq org-startup-indented nil) ; doom t, spacemacs nil
+(setq org-startup-indented t) ; doom t, spacemacs nil
 (setq org-src-preserve-indentation t) ; doom t, spacemacs nil
 (setq org-edit-src-content-indentation 0) ; default 2
 
@@ -513,13 +513,15 @@
 ;; https://emacs.stackexchange.com/questions/37526/add-note-to-clock-entry-after-clocking-out
 ;; (setq org-log-note-clock-out t)
 
+;;;; DONT 4 priorities to model Eisenhower's matrix.
+
 ;; 4 priorities to model Eisenhower's matrix.
 ;; - [#A] means +important +urgent
 ;; - [#B] means +important -urgent
 ;; - [#C] means -important +urgent
 ;; - [#D] means -important -urgent
-(setq org-priority-default 68
-      org-priority-lowest 68)
+;; (setq org-priority-default 68
+;;       org-priority-lowest 68)
 
 ;;;; diary-file
 
@@ -593,7 +595,7 @@
 
 ;; (setq org-auto-align-tags nil) ; default t, use doom's custom
 ;; (setq org-tags-column 0) ; default -77
-(setq org-agenda-tags-column -80) ;; 'auto ; org-tags-column
+;; (setq org-agenda-tags-column -80) ;; 'auto ; org-tags-column
 (setq org-agenda-show-inherited-tags nil)
 
 (setq org-tag-alist (quote (

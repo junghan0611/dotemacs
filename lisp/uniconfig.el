@@ -19,8 +19,9 @@
 (add-hook 'backtrace-mode-hook 'display-line-numbers-mode)
 (add-hook 'backtrace-mode-hook 'visual-line-mode)
 
-;;;; dabbrev
+;;;; custom dabbrev
 
+;; doomemacs-junghan0611/modules/completion/corfu/config.el
 (progn
   (require 'dabbrev)
   (setq dabbrev-abbrev-char-regexp "[가-힣A-Za-z-_]")
@@ -29,8 +30,14 @@
           "\\.\\(?:pdf\\|jpe?g\\|png\\)\\'"
           "\\(?:\\(?:[EG]?\\|GR\\)TAGS\\|e?tags\\|GPATH\\)\\(<[0-9]+>\\)?"))
   (setq dabbrev-abbrev-skip-leading-regexp "[$*/=~']")
-  (setq dabbrev-upcase-means-case-search nil)) ; default t
-;; (setq dabbrev-check-all-buffers t) ;; default t
+  (setq dabbrev-upcase-means-case-search nil) ; default t
+
+  (add-to-list 'dabbrev-ignored-buffer-modes 'pdf-view-mode)
+  (add-to-list 'dabbrev-ignored-buffer-modes 'doc-view-mode)
+  (add-to-list 'dabbrev-ignored-buffer-modes 'tags-table-mode)
+  ;; (setq dabbrev-check-all-buffers t) ;; default t
+  ;; (setq cape-dabbrev-check-other-buffers t) ; enable when dabbrev on init.el
+  )
 
 (with-eval-after-load 'cape
   ;; /gopar-dotfiles-youtuber/README.org:1371
@@ -787,21 +794,28 @@ Also see `prot-window-delete-popup-frame'." command)
 ;;     )
 ;;   )
 
-;;;; org-rainbow-tags
+;;;; DONT org-rainbow-tags
 
-(when (locate-library "org-rainbow-tags")
-  (with-eval-after-load 'org
-    (require 'org-rainbow-tags)
-    (setq org-rainbow-tags-hash-start-index 0)
-    (setq org-rainbow-tags-extra-face-attributes
-          '(:inverse-video t :box nil :weight 'bold))
-    (add-hook 'org-mode-hook #'org-rainbow-tags-mode)))
+;; (when (locate-library "org-rainbow-tags")
+;;   (with-eval-after-load 'org
+;;     (require 'org-rainbow-tags)
+;;     (setq org-rainbow-tags-hash-start-index 0)
+;;     (setq org-rainbow-tags-extra-face-attributes
+;;           '(:inverse-video t :box nil :weight 'bold))
+;;     (add-hook 'org-mode-hook #'org-rainbow-tags-mode)))
 
 ;;;; tab-width for org-mode and org-journal-mode
 
 (when (locate-library "org-journal")
   (add-hook 'org-mode-hook (lambda () (setq-local tab-width 8)))
   (add-hook 'org-journal-mode-hook (lambda () (setq-local tab-width 8)))
+
+  (defun my/org-journal-add-custom-id ()
+    ;;  :CUSTOM_ID: h:20250321
+    (unless (org-journal--daily-p)
+      (org-set-property "CUSTOM_ID" (format-time-string "h:%Y-%m-%d"))))
+
+  (add-hook 'org-journal-after-header-create-hook #'my/org-journal-add-custom-id)
   )
 
 ;;;; goto-last-change
@@ -833,7 +847,7 @@ Also see `prot-window-delete-popup-frame'." command)
           '((main
              .
              ;; [${urldate:10}]
-             "'${dateadded:10} ${author editor:19} ${title:49}  ${date year issued:4} ${translator:7} ${=key= id:17}")  ; 2024-09-12 김정한
+             "'${dateadded:10} ${author editor:19} ${title:49} ${date year issued:4} ${translator:7} @${=key= id:17}")  ; 2024-09-12 김정한
             (suffix
              . "#${datemodified:10} ${=type=:10} ${shorttitle:19} ${namea:16} ${url:19} ${tags keywords:*}") ; 2024-11-17 add url
             (preview
@@ -1022,6 +1036,7 @@ Also see `prot-window-delete-popup-frame'." command)
 ;;;; insert unicode for notetaking
 
 (with-eval-after-load 'org
+
   (defun my/insert-white-space ()
     (interactive)
     (insert " "))
@@ -1033,6 +1048,7 @@ Also see `prot-window-delete-popup-frame'." command)
   ;; 0x002014	—	EM DASH
   ;; 0x002015	―	QUOTATION DASH
   ;; 0x002015	―	HORIZONTAL BAR
+
   (setq my/unicode-notetaking '( " " "§"
                                  "¶" "†" "‡" "№" "↔" "←" "→" "⊢" "⊨" "∉"
                                  "『겹낫표』"
@@ -1047,8 +1063,12 @@ Also see `prot-window-delete-popup-frame'." command)
     (insert (completing-read "Select unicode: " my/unicode-notetaking)))
 
   (evil-define-key '(insert normal) text-mode-map (kbd "M-M") #'my/insert-unicode-notetaking)
-  (evil-define-key '(insert normal) text-mode-map (kbd "M-m") #'my/insert-white-space))
+  (evil-define-key '(insert normal) text-mode-map (kbd "M-m") #'my/insert-white-space)
 
+  (with-eval-after-load 'vertico
+    (define-key minibuffer-mode-map (kbd "M-M") #'my/insert-unicode-notetaking)
+    (define-key vertico-map (kbd "M-M") #'my/insert-unicode-notetaking))
+  )
 
 ;;;; TODO Org-Hugo Links
 
@@ -1066,6 +1086,64 @@ Also see `prot-window-delete-popup-frame'." command)
 ;;     (org-link-set-parameters "hugo"
 ;;                              :complete 'org-hugo-link-complete
 ;;                              :follow 'org-hugo-follow))
+;;   )
+
+;;;; TODO clojure/cider utils
+
+;; https://github.com/sstraust/sammys-cider-utils
+;; make-unit-test.el
+
+;; (when (locate-library "cider")
+;;   (with-eval-after-load 'cider
+;;     (defvar create-cider-test-macro
+;;       "(defmacro convert-to-test [intended-output & args]
+;;     (let [test-form (last args)]
+;;       `(~'deftest ~'my-cider-gen-test
+;;          (~'testing \"test1\"
+;;            (do ~@(drop-last 1 args)
+;;              (~'is (~'= ~intended-output ~test-form)))))))")
+
+;;     (defun write-command-to-test (command-output command-contents)
+;;       (projectile-toggle-between-implementation-and-test)
+;;       (setq current-test-buffer1 (current-buffer))
+;;       (goto-char (point-max))
+;;       (cider-interactive-eval
+;;        (concat "(do " create-cider-test-macro "\n"
+;; 	       "(require 'clojure.pprint)\n"
+;; 	       "(with-out-str (clojure.pprint/pprint (macroexpand-1 '(convert-to-test "
+;; 	       command-output " "
+;; 	       command-contents ")))))")
+;;        (lambda (value)
+;;          (with-current-buffer current-test-buffer1
+;; 	   (when (nrepl-dict-get value "value")
+;; 	     (progn
+;; 	       (insert "\n\n")
+;; 	       (setq output12 (nrepl-dict-get value "value"))
+;; 	       (insert (read (nrepl-dict-get value "value")))))))
+;;        nil
+;;        (cider--nrepl-pr-request-map)))
+
+
+;;     (defun cider-write-region-to-test (start end)
+;;       "Creates a unit test out of the given selected region."
+;;       (interactive "r")
+;;       (goto-char end)
+;;       (let ((curr-selected (buffer-substring start end))
+;; 	    (last-sexp (cider-last-sexp))
+;; 	    (current-buffer2 (current-buffer)))
+;;         (cider-interactive-eval
+;;          last-sexp
+;;          (lambda (value)
+;;            (with-current-buffer current-buffer2
+;;              (when (nrepl-dict-get value "value")
+;; 	       (write-command-to-test
+;; 		(nrepl-dict-get value "value")
+;; 		curr-selected))))
+;;          nil
+;;          (cider--nrepl-pr-request-map))))
+
+;;     ;; (setq debug-on-error t)
+;;     )
 ;;   )
 
 ;;; provide

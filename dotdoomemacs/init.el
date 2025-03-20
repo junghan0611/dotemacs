@@ -79,7 +79,7 @@
 ;; :input
 (doom!
  :completion
- (corfu +orderless +icons +dabbrev)
+ (corfu +orderless +icons) ;; +dabbrev - custom dabbrev
  ;; (vertico +icons)
  vertico ;; search engine of the future
 

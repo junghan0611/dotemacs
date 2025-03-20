@@ -767,6 +767,12 @@
 ;;;;; Packages: jh-pkm
 
      denote
+     denote-org
+     denote-silo
+     denote-sequence
+     denote-markdown
+     denote-journal
+
      (consult-denote :location (recipe :fetcher github :repo "protesilaos/consult-denote"
                                        :files ("*.el" "*.org")))
      citar-denote

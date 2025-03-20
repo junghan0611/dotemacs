@@ -113,8 +113,11 @@ org-mode
                             (org-journal--convert-time-to-file-type-time
                              (time-subtract (current-time)
                                             (* 3600 org-extend-today-until))))
+        (format-time-string "::#h:%Y-%m-%d")
         "]["
-        (format-time-string "%Y-%m-%d W%W") "]]") ; for weekly journal
+        (format-time-string "|%Y-%m-%d %a %H:%M|") "]]") ; for weekly journal
+
+(edit "Edit" (format-time-string " [%Y-%m-%d %a %H:%M]: "))
 
 (Today "[[date:" (format-time-string "%Y-%m-%d") "][Today]]")
 (did (format-time-string "%Y%m%d")) ; remove T
