@@ -453,6 +453,28 @@
 ;; (setq org-id-link-to-org-use-id 'use-existing) ; default nil
 ;; (setq org-hide-emphasis-markers t)
 
+;;; my/update-export-garden all
+
+;; mapcar를 사용하여 각 디렉토리에 함수 a 적용
+(defun my/update-export-garden (dir)
+  (interactive)
+  (message "path %s:" dir)
+  (message "update dblocks")
+  (my/org-update-all-dblocks-on-directory dir)
+  (message "save-org-buffers")
+  (org-save-all-org-buffers)
+  (message "hugo-export-diectory")
+  (my/org-hugo-export-directory dir)
+  (message "kill-all-buffers")
+  ;; (doom/kill-all-buffers) ; never
+  (my/kill-all-buffers-except-toolbox)
+  (garbage-collect))
+
+(defun my/update-export-garden-all ()
+  (interactive)
+  (mapcar 'my/update-export-garden garden-directory-lists)
+  )
+
 ;;; provide
 
 (provide 'denote-config)

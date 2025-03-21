@@ -232,6 +232,10 @@
         ))
 (setq user-ten-tags-file (concat user-org-directory "dict/ten-TAGS"))
 
+;;; garden-directory-list
+
+(setq garden-directory-lists '("~/org/meta" "~/org/bib" "~/org/notes"))
+
 ;;; cc/url-bookmarks
 
 (setq cc/url-bookmarks

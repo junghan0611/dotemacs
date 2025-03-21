@@ -878,236 +878,236 @@
 
 ;;;; DONT transient : EKG
 
-  ;; (when (locate-library "ekg")
-  ;;   (with-eval-after-load 'ekg
-  ;;     ;; (global-set-key (kbd "C-c e") 'ekg-dispatch)
-  ;;     ;; (global-set-key (kbd "<f12>") 'ekg-dispatch)
+;; (when (locate-library "ekg")
+;;   (with-eval-after-load 'ekg
+;;     ;; (global-set-key (kbd "C-c e") 'ekg-dispatch)
+;;     ;; (global-set-key (kbd "<f12>") 'ekg-dispatch)
 
-  ;;     (defun setup-ekg-transients ()
-  ;;       "Set up Transient menus for EKG"
-  ;;       (interactive)
-  ;;       (transient-define-prefix ekg-dispatch ()
-  ;;         "Top level Transient menu for EKG (Emacs Knowledge Graph)"
-  ;;         [["Show"
-  ;;           ("st" "Today" ekg-show-notes-for-today)
-  ;;           ("sl" "Latest Captured" ekg-show-notes-latest-captured)
-  ;;           ("sm" "Latest Mod" ekg-show-notes-latest-modified)
-  ;;           ("sx" "Trash" ekg-show-notes-in-trash)
-  ;;           ("sd" "Drafts" ekg-show-notes-in-drafts)
-  ;;           "Find Tags"
-  ;;           ("tt" "Tag" ekg-show-notes-with-tag)
-  ;;           ("ta" "All Tags" ekg-show-notes-with-all-tags)
-  ;;           ("tn" "Any Tag" ekg-show-notes-with-any-tags)
-  ;;           ]
-  ;;          ["Capture"
-  ;;           ("cc" "New Note" ekg-capture)
-  ;;           ("cu" "...from URL" ekg-capture-url)
-  ;;           ("cb" "...from current buffer" ekg-capture-file)
-  ;;           ]
-  ;;          ["LLM Query" :if (lambda () (or (featurep 'ekg-llm) (featurep 'ekg-embedding)))
-  ;;           ("lt" "for terms" ekg-embedding-search :if (lambda () (featurep 'ekg-embedding)))
-  ;;           ("lb" "similar to current buffer" ekg-embedding-show-similar-to-current-buffer :if (lambda () (featurep 'ekg-embedding)))
-  ;;           ("lR" "Regenerate embeddings" ekg-embedding-generate-all :if (lambda () (featurep 'ekg-embedding)))
-  ;;           "AI"
-  ;;           ("lq" "AI query, all notes" ekg-llm-query-with-notes :if (lambda () (featurep 'ekg-llm)))
-  ;;           ]
-  ;;          ["Misc"
-  ;;           ("R" "Rename tag globally" ekg-global-rename-tag)
-  ;;           ;; ("e" "ekg-notes-dispatch" ekg-notes-dispatch :if-mode ekg-notes-mode)
-  ;;           ("g" "ekg-notes-dispatch" ekg-notes-dispatch :if-mode ekg-notes-mode)
-  ;;           ("q" "ekg-notes-dispatch" ekg-notes-dispatch :if-mode ekg-notes-mode)
-  ;;           ("Q" "Quit this menu" transient-quit-one)
-  ;;           ]
-  ;;          ])
+;;     (defun setup-ekg-transients ()
+;;       "Set up Transient menus for EKG"
+;;       (interactive)
+;;       (transient-define-prefix ekg-dispatch ()
+;;         "Top level Transient menu for EKG (Emacs Knowledge Graph)"
+;;         [["Show"
+;;           ("st" "Today" ekg-show-notes-for-today)
+;;           ("sl" "Latest Captured" ekg-show-notes-latest-captured)
+;;           ("sm" "Latest Mod" ekg-show-notes-latest-modified)
+;;           ("sx" "Trash" ekg-show-notes-in-trash)
+;;           ("sd" "Drafts" ekg-show-notes-in-drafts)
+;;           "Find Tags"
+;;           ("tt" "Tag" ekg-show-notes-with-tag)
+;;           ("ta" "All Tags" ekg-show-notes-with-all-tags)
+;;           ("tn" "Any Tag" ekg-show-notes-with-any-tags)
+;;           ]
+;;          ["Capture"
+;;           ("cc" "New Note" ekg-capture)
+;;           ("cu" "...from URL" ekg-capture-url)
+;;           ("cb" "...from current buffer" ekg-capture-file)
+;;           ]
+;;          ["LLM Query" :if (lambda () (or (featurep 'ekg-llm) (featurep 'ekg-embedding)))
+;;           ("lt" "for terms" ekg-embedding-search :if (lambda () (featurep 'ekg-embedding)))
+;;           ("lb" "similar to current buffer" ekg-embedding-show-similar-to-current-buffer :if (lambda () (featurep 'ekg-embedding)))
+;;           ("lR" "Regenerate embeddings" ekg-embedding-generate-all :if (lambda () (featurep 'ekg-embedding)))
+;;           "AI"
+;;           ("lq" "AI query, all notes" ekg-llm-query-with-notes :if (lambda () (featurep 'ekg-llm)))
+;;           ]
+;;          ["Misc"
+;;           ("R" "Rename tag globally" ekg-global-rename-tag)
+;;           ;; ("e" "ekg-notes-dispatch" ekg-notes-dispatch :if-mode ekg-notes-mode)
+;;           ("g" "ekg-notes-dispatch" ekg-notes-dispatch :if-mode ekg-notes-mode)
+;;           ("q" "ekg-notes-dispatch" ekg-notes-dispatch :if-mode ekg-notes-mode)
+;;           ("Q" "Quit this menu" transient-quit-one)
+;;           ]
+;;          ])
 
-  ;;       (transient-define-prefix ekg-notes-dispatch ()
-  ;;         "Notes buffer Transient menu for EKG (Emacs Knowledge Graph)"
-  ;;         [["[E] Notes > Show"
-  ;;           ("sa" "ekg-notes-any-note-tags" ekg-notes-any-note-tags)
-  ;;           ("sA" "ekg-notes-any-tags" ekg-notes-any-tags)
-  ;;           ("st" "ekg-notes-tag" ekg-notes-tag)
-  ;;           ("ss" "search for similar" ekg-embedding-show-similar :if (lambda () (featurep 'ekg-embedding)))
-  ;;           ]
-  ;;          ["AI"
-  ;;           ("aa" "AI send & append" ekg-llm-send-and-append-note :if (lambda () (featurep 'ekg-llm)))
-  ;;           ("ar" "AI send & replace" ekg-llm-send-and-replace-note :if (lambda () (featurep 'ekg-llm)))
-  ;;           ]
-  ;;          ["[E] Notes > Manage"
-  ;;           ("c" "create" ekg-notes-create)
-  ;;           ("d" "delete" ekg-notes-delete)
-  ;;           ("g" "refresh" ekg-notes-refresh)
-  ;;           ("k" "kill (hide) note" ekg-notes-kill)
-  ;;           ("o" "open/edit" ekg-notes-open)
-  ;;           ("m" "Change mode of current note" ekg-change-mode)
-  ;;           ]
-  ;;          ["[E] Notes > Browse"
-  ;;           ("b" "browse resource" ekg-notes-browse)
-  ;;           ("u" "Browse to URL" ekg-browse-url)
-  ;;           ("B" "select & browse" ekg-notes-select-and-browse-url)
-  ;;           ]
-  ;;          ["[E] Notes > Goto"
-  ;;           ("g" "global <Menu>" ekg-dispatch)
-  ;;           ("q" "Back to notes" transient-quit-one)
-  ;;           ("Q" "quit EKG" kill-buffer-and-window)
-  ;;           ]
-  ;;          ])
-  ;;       )
+;;       (transient-define-prefix ekg-notes-dispatch ()
+;;         "Notes buffer Transient menu for EKG (Emacs Knowledge Graph)"
+;;         [["[E] Notes > Show"
+;;           ("sa" "ekg-notes-any-note-tags" ekg-notes-any-note-tags)
+;;           ("sA" "ekg-notes-any-tags" ekg-notes-any-tags)
+;;           ("st" "ekg-notes-tag" ekg-notes-tag)
+;;           ("ss" "search for similar" ekg-embedding-show-similar :if (lambda () (featurep 'ekg-embedding)))
+;;           ]
+;;          ["AI"
+;;           ("aa" "AI send & append" ekg-llm-send-and-append-note :if (lambda () (featurep 'ekg-llm)))
+;;           ("ar" "AI send & replace" ekg-llm-send-and-replace-note :if (lambda () (featurep 'ekg-llm)))
+;;           ]
+;;          ["[E] Notes > Manage"
+;;           ("c" "create" ekg-notes-create)
+;;           ("d" "delete" ekg-notes-delete)
+;;           ("g" "refresh" ekg-notes-refresh)
+;;           ("k" "kill (hide) note" ekg-notes-kill)
+;;           ("o" "open/edit" ekg-notes-open)
+;;           ("m" "Change mode of current note" ekg-change-mode)
+;;           ]
+;;          ["[E] Notes > Browse"
+;;           ("b" "browse resource" ekg-notes-browse)
+;;           ("u" "Browse to URL" ekg-browse-url)
+;;           ("B" "select & browse" ekg-notes-select-and-browse-url)
+;;           ]
+;;          ["[E] Notes > Goto"
+;;           ("g" "global <Menu>" ekg-dispatch)
+;;           ("q" "Back to notes" transient-quit-one)
+;;           ("Q" "quit EKG" kill-buffer-and-window)
+;;           ]
+;;          ])
+;;       )
 
-  ;;     ;; or you might prefer a binding like this one
-  ;;     ;; https://github.com/ahyatt/ekg/discussions/100
-  ;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "e") #'ekg-notes-dispatch) ; can you think of a better binding for notes-mode?
-  ;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "?") #'ekg-notes-dispatch) ; help when I'm confused
+;;     ;; or you might prefer a binding like this one
+;;     ;; https://github.com/ahyatt/ekg/discussions/100
+;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "e") #'ekg-notes-dispatch) ; can you think of a better binding for notes-mode?
+;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "?") #'ekg-notes-dispatch) ; help when I'm confused
 
-  ;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "j") #'ekg-notes-next)
-  ;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "k") #'ekg-notes-previous)
-  ;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "n") #'ekg-notes-next)
-  ;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "p") #'ekg-notes-previous)
+;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "j") #'ekg-notes-next)
+;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "k") #'ekg-notes-previous)
+;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "n") #'ekg-notes-next)
+;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "p") #'ekg-notes-previous)
 
-  ;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "A") #'ekg-notes-any-tags)
-  ;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "a") #'ekg-notes-any-note-tags)
+;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "A") #'ekg-notes-any-tags)
+;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "a") #'ekg-notes-any-note-tags)
 
-  ;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "C") #'ekg-notes-create)
-  ;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "D") #'ekg-notes-delete)
+;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "C") #'ekg-notes-create)
+;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "D") #'ekg-notes-delete)
 
-  ;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "r") #'ekg-notes-refresh)
-  ;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "o") #'ekg-notes-open)
-  ;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "b") #'ekg-notes-browse)
-  ;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "B") #'ekg-notes-select-and-browse-url)
-  ;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "t") #'ekg-notes-tag)
+;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "r") #'ekg-notes-refresh)
+;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "o") #'ekg-notes-open)
+;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "b") #'ekg-notes-browse)
+;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "B") #'ekg-notes-select-and-browse-url)
+;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "t") #'ekg-notes-tag)
 
-  ;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "q") #'ekg-notes-dispatch) ; toggle menu
-  ;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "Q") #'kill-buffer-and-window) ; I prefer this behavior
-  ;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "K") #'ekg-notes-kill) ; dired style
+;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "q") #'ekg-notes-dispatch) ; toggle menu
+;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "Q") #'kill-buffer-and-window) ; I prefer this behavior
+;;     (evil-define-key '(normal visual) ekg-notes-mode-map (kbd "K") #'ekg-notes-kill) ; dired style
 
-  ;;     ;; load-transient
-  ;;     (setup-ekg-transients) ; only run this once all ekg funcs are loaded
-  ;;     )
-  ;;   )
+;;     ;; load-transient
+;;     (setup-ekg-transients) ; only run this once all ekg funcs are loaded
+;;     )
+;;   )
 
 ;;;; transient : ellama
 
-  (when (locate-library "ellama")
+(when (locate-library "ellama")
 
-    (progn
-      ;; Change natural text & diff against the results
-      ;; One pattern I often want is to change the given text and compare it to the old version.
+  (progn
+    ;; Change natural text & diff against the results
+    ;; One pattern I often want is to change the given text and compare it to the old version.
 
-      ;; LLMs aren't perfectly good at saying what changes they have done, so the pattern here is to query the model and show the changed text together with the diff.
+    ;; LLMs aren't perfectly good at saying what changes they have done, so the pattern here is to query the model and show the changed text together with the diff.
 
-      ;; So first, I need to diff two strings.
-      (defun my/diff-strings (str1 str2)
-        (let ((file1 (make-temp-file "diff1"))
-              (file2 (make-temp-file "diff2")))
-          (unwind-protect
-              (progn
-                (with-temp-file file1
-                  (insert str1))
-                (with-temp-file file2
-                  (insert str2))
-                (with-temp-buffer
-                  (diff-mode)
-                  (diff-no-select file1 file2 (diff-switches) t (current-buffer))
-                  (font-lock-fontify-buffer)
-                  (buffer-string)))
-            (delete-file file1)
-            (delete-file file2))))
+    ;; So first, I need to diff two strings.
+    (defun my/diff-strings (str1 str2)
+      (let ((file1 (make-temp-file "diff1"))
+            (file2 (make-temp-file "diff2")))
+        (unwind-protect
+            (progn
+              (with-temp-file file1
+                (insert str1))
+              (with-temp-file file2
+                (insert str2))
+              (with-temp-buffer
+                (diff-mode)
+                (diff-no-select file1 file2 (diff-switches) t (current-buffer))
+                (font-lock-fontify-buffer)
+                (buffer-string)))
+          (delete-file file1)
+          (delete-file file2))))
 
-      ;; And the function to do the prompting iself. Llama tends to output in Markdown, so I use a function from Ellama to convert the output back to Org-mode, if necessary.
-      (defun my/ellama-text-with-diff (text is-org-mode prompt)
-        (llm-chat-async
-         ellama-provider
-         (llm-make-chat-prompt
-          (format prompt text))
-         (lambda (changed-text)
-           (when is-org-mode
-             (setq changed-text (ellama--translate-markdown-to-org-filter changed-text)))
-           (let ((buffer (generate-new-buffer "*ellama-diff*")))
-             (with-current-buffer buffer
-               (text-mode)
-               (insert changed-text)
-               (insert "\n\n")
-               (insert (my/diff-strings text changed-text)))
-             (display-buffer buffer)))
-         (lambda (&rest err)
-           (message "Error: %s" err))))
+    ;; And the function to do the prompting iself. Llama tends to output in Markdown, so I use a function from Ellama to convert the output back to Org-mode, if necessary.
+    (defun my/ellama-text-with-diff (text is-org-mode prompt)
+      (llm-chat-async
+       ellama-provider
+       (llm-make-chat-prompt
+        (format prompt text))
+       (lambda (changed-text)
+         (when is-org-mode
+           (setq changed-text (ellama--translate-markdown-to-org-filter changed-text)))
+         (let ((buffer (generate-new-buffer "*ellama-diff*")))
+           (with-current-buffer buffer
+             (text-mode)
+             (insert changed-text)
+             (insert "\n\n")
+             (insert (my/diff-strings text changed-text)))
+           (display-buffer buffer)))
+       (lambda (&rest err)
+         (message "Error: %s" err))))
 
-      ;; As for prompts, I like the following prompt to proof-read text. It's pretty conservative, but good for fixing typos, missing commas, articles, etc.
-      (setq my/ellama-proof-read-prompt
-            "Proof-read the following text. Fix any errors but keep the original style and punctuation, including linebreaks. Print the changed text and nothing else, not even \"Here's the proof-read text\".\n\n %s")
+    ;; As for prompts, I like the following prompt to proof-read text. It's pretty conservative, but good for fixing typos, missing commas, articles, etc.
+    (setq my/ellama-proof-read-prompt
+          "Proof-read the following text. Fix any errors but keep the original style and punctuation, including linebreaks. Print the changed text and nothing else, not even \"Here's the proof-read text\".\n\n %s")
 
-      (defun my/ellama--text ()
-        (if (region-active-p)
-            (buffer-substring-no-properties (region-beginning) (region-end))
-          (buffer-substring-no-properties (point-min) (point-max))))
+    (defun my/ellama--text ()
+      (if (region-active-p)
+          (buffer-substring-no-properties (region-beginning) (region-end))
+        (buffer-substring-no-properties (point-min) (point-max))))
 
-      (defun my/ellama-proof-read (text is-org-mode)
-        (interactive (list (my/ellama--text) (derived-mode-p 'org-mode)))
-        (my/ellama-text-with-diff text is-org-mode my/ellama-proof-read-prompt))
+    (defun my/ellama-proof-read (text is-org-mode)
+      (interactive (list (my/ellama--text) (derived-mode-p 'org-mode)))
+      (my/ellama-text-with-diff text is-org-mode my/ellama-proof-read-prompt))
 
-      ;; The following is more expansive, but preserves less of the original text. For instance, it tends to replace my /id est/ and /exempli gratia/. But sometimes it has good ideas.
-      (setq my/ellama-improve-wording-prompt
-            "Proof-read the following text. Fix any errors and improve wording. Print the changed text and nothing else, not even \"Here's the improved text\".\n\n %s")
+    ;; The following is more expansive, but preserves less of the original text. For instance, it tends to replace my /id est/ and /exempli gratia/. But sometimes it has good ideas.
+    (setq my/ellama-improve-wording-prompt
+          "Proof-read the following text. Fix any errors and improve wording. Print the changed text and nothing else, not even \"Here's the improved text\".\n\n %s")
 
-      (defun my/ellama-improve-wording (text is-org-mode)
-        (interactive (list (my/ellama--text) (derived-mode-p 'org-mode)))
-        (my/ellama-text-with-diff text is-org-mode my/ellama-improve-wording-prompt))
+    (defun my/ellama-improve-wording (text is-org-mode)
+      (interactive (list (my/ellama--text) (derived-mode-p 'org-mode)))
+      (my/ellama-text-with-diff text is-org-mode my/ellama-improve-wording-prompt))
 
-      ;; Also, a prompt to make a text more concise.
-      (setq my/ellama-improve-concise-prompt
-            "Make the following text more concise. Print the changed text and nothing else, not even \"Here's the improved text\".\n\n %s")
+    ;; Also, a prompt to make a text more concise.
+    (setq my/ellama-improve-concise-prompt
+          "Make the following text more concise. Print the changed text and nothing else, not even \"Here's the improved text\".\n\n %s")
 
-      (defun my/ellama-improve-concise (text is-org-mode)
-        (interactive (list (my/ellama--text) (derived-mode-p 'org-mode)))
-        (my/ellama-text-with-diff text is-org-mode my/ellama-improve-concise-prompt))
-      )
+    (defun my/ellama-improve-concise (text is-org-mode)
+      (interactive (list (my/ellama--text) (derived-mode-p 'org-mode)))
+      (my/ellama-text-with-diff text is-org-mode my/ellama-improve-concise-prompt))
+    )
 
-    ;; transient
-    (with-eval-after-load 'ellama
-      (transient-define-prefix my/ellama ()
-        "Ellama actions."
-        ["General"
-         :class transient-row
-         ("a" "Chat" ellama-chat)]
-        ["Code"
-         :class transient-row
-         ("ca" "Add" ellama-code-add)
-         ("cc" "Complete" ellama-code-complete)
-         ("ce" "Edit" ellama-code-edit)
-         ("cr" "Review" ellama-code-review)
-         ("ci" "Improve" ellama-code-improve)]
-        ["Natural Language"
-         :class transient-row
-         ("np" "Proof-read" my/ellama-proof-read)
-         ("nw" "Improve wording" my/ellama-improve-wording)
-         ("nc" "Improve conciseness" my/ellama-improve-concise)]
-        ["Formatting"
-         :class transient-row
-         ("ff" "Format" ellama-make-format)
-         ("fm" "List" ellama-make-list)
-         ("ft" "Table" ellama-make-table)]
-        ["Explain & Summarize"
-         :class transient-row
-         ("es" "Summarize" ellama-summarize)
-         ("ea" "Ask about" ellama-ask-about)
-         ("es" "Send to chat" ellama-ask-selection)
-         ("ew" "Word definition" ellama-define-word)]
-        ["Context"
-         :class transient-row
-         ("xb" "Add buffer" ellama-context-add-buffer)
-         ("xf" "Add file" ellama-context-add-file)
-         ("xi" "Add info" ellama-context-add-info-node)
-         ("xs" "Add selection" ellama-context-add-selection)]
-        ["Settings & Sessions"
-         :class transient-row
-         ("sp" "Provider" ellama-provider-select)
-         ("ss" "Session" ellama-session-switch)
-         ("sr" "Rename ression" ellama-session-rename)
-         ("sd" "Delete session" ellama-session-remove)])
-      ;; (my-leader-def "aie" #'my/ellama)
-      )
+  ;; transient
+  (with-eval-after-load 'ellama
+    (transient-define-prefix my/ellama ()
+      "Ellama actions."
+      ["General"
+       :class transient-row
+       ("a" "Chat" ellama-chat)]
+      ["Code"
+       :class transient-row
+       ("ca" "Add" ellama-code-add)
+       ("cc" "Complete" ellama-code-complete)
+       ("ce" "Edit" ellama-code-edit)
+       ("cr" "Review" ellama-code-review)
+       ("ci" "Improve" ellama-code-improve)]
+      ["Natural Language"
+       :class transient-row
+       ("np" "Proof-read" my/ellama-proof-read)
+       ("nw" "Improve wording" my/ellama-improve-wording)
+       ("nc" "Improve conciseness" my/ellama-improve-concise)]
+      ["Formatting"
+       :class transient-row
+       ("ff" "Format" ellama-make-format)
+       ("fm" "List" ellama-make-list)
+       ("ft" "Table" ellama-make-table)]
+      ["Explain & Summarize"
+       :class transient-row
+       ("es" "Summarize" ellama-summarize)
+       ("ea" "Ask about" ellama-ask-about)
+       ("es" "Send to chat" ellama-ask-selection)
+       ("ew" "Word definition" ellama-define-word)]
+      ["Context"
+       :class transient-row
+       ("xb" "Add buffer" ellama-context-add-buffer)
+       ("xf" "Add file" ellama-context-add-file)
+       ("xi" "Add info" ellama-context-add-info-node)
+       ("xs" "Add selection" ellama-context-add-selection)]
+      ["Settings & Sessions"
+       :class transient-row
+       ("sp" "Provider" ellama-provider-select)
+       ("ss" "Session" ellama-session-switch)
+       ("sr" "Rename ression" ellama-session-rename)
+       ("sd" "Delete session" ellama-session-remove)])
+    ;; (my-leader-def "aie" #'my/ellama)
+    )
 
-    (global-set-key (kbd "M-g 9") 'my/ellama)
-    ) ;; end of ellama
+  (global-set-key (kbd "M-g 9") 'my/ellama)
+  ) ;; end of ellama
 
 
 ;;;; transient : jinx - spelling
@@ -1195,6 +1195,7 @@
   ;; cc-prog-mode.el:61:
   (keymap-set compilation-mode-map "C-;" #'casual-editkit-main-tmenu)
   ;; cc-grep-mode.el:33:
+  (require 'grep)
   (keymap-set grep-mode-map "C-;" #'casual-editkit-main-tmenu)
 
   ;; cc-global-keybindings.el:69:
@@ -1470,26 +1471,26 @@
   (require 'avy)
   (require 'edit-indirect)
 
-;; agzam-dot-doom/modules/custom/general/autoload/lisp.el
+  ;; agzam-dot-doom/modules/custom/general/autoload/lisp.el
 ;;;###autoload
-(defun sp-reindent ()
-  (interactive)
-  (save-mark-and-excursion
-    (unless (looking-at "(\\|\\[\\|\{")
-      (up-list -1))
-    (sp-mark-sexp)
-    (if (bound-and-true-p lsp-mode)
-        (lsp--indent-lines
+  (defun sp-reindent ()
+    (interactive)
+    (save-mark-and-excursion
+      (unless (looking-at "(\\|\\[\\|\{")
+        (up-list -1))
+      (sp-mark-sexp)
+      (if (bound-and-true-p lsp-mode)
+          (lsp--indent-lines
+           (region-beginning)
+           (region-end))
+        (evil-indent
          (region-beginning)
-         (region-end))
-      (evil-indent
-       (region-beginning)
-       (region-end)))))
+         (region-end)))))
 
 ;;;###autoload
-(defun sp-wrap-sexp ()
-  (interactive)
-  (sp-wrap-with-pair "("))
+  (defun sp-wrap-sexp ()
+    (interactive)
+    (sp-wrap-with-pair "("))
 
 ;;;###autoload
   (defun sp-evil-sexp-go-back ()
@@ -1568,10 +1569,10 @@
       (call-interactively #'cider-pprint-eval-sexp-at-point))
      (t (call-interactively #'pp-eval-current))))
 
-;; agzam-dot-doom/lisp/sexp-transient.el
+  ;; agzam-dot-doom/lisp/sexp-transient.el
   (transient-define-prefix sexp-transient ()
     "rule the parens"
-     ["Navigation"
+    ["Navigation"
      :hide always
      [
       ("k" "k" sp-evil-sexp-go-back :transient t)

@@ -582,6 +582,21 @@ Also see `prot-window-delete-popup-frame'." command)
 ;;   )
 
 ;;; Packages with functions
+;;;; buffer management
+
+;; check ibuffer-list
+(defun my/kill-all-buffers-except-toolbox ()
+  "현재 버퍼와 기본 도구(*Messages*, *scratch*)를 제외한 모든 버퍼를 제거합니다."
+  (interactive)
+  (mapc 'kill-buffer
+        (remove-if
+         (lambda (x)
+           (or
+            (eq x (current-buffer))
+            (member (buffer-name x) '("*Messages*" "*scratch*"))))
+         (buffer-list)))
+  (delete-other-windows))
+
 ;;;; consult - swiper style check wiki
 
 ;; https://github.com/minad/consult/wiki
