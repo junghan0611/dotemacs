@@ -242,6 +242,25 @@
 ;; idea.
 ;; (setq jit-lock-chunk-size 2500) ; default 1500
 
+
+;;;; prog-mode-hooks
+
+(progn
+  ;; Color the string of whatever color code they are holding
+  (add-hook 'prog-mode-hook 'rainbow-mode) ; 2023-11-23 on
+  ;; (add-hook 'prog-mode-hook 'prettify-symbols-mode)
+
+  ;; (ws-butler-keep-whitespace-before-point nil)
+  ;; (ws-butler-global-exempt-modes '(special-mode comint-mode term-mode eshell-mode diff-mode markdown-mode))
+  (add-hook 'prog-mode-hook 'ws-butler-mode)
+  (add-hook 'prog-mode-hook 'visual-line-mode) ; 2024-10-24
+  )
+
+;;;; make Script Files Executable Automatically
+
+;; Make script files (with shebang like #!/bin/bash, #!/bin/sh) executable automatically. See this blog post from Emacs Redux.
+(add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
+
 ;;; functions
 
 ;;;; Corfu and electric-Pair and Jump In/Out Parens
@@ -387,12 +406,6 @@
 ;; TODO Evil Keymaap
 ;; (global-set-key (kbd "C-=") 'my/text-font-scale-up)
 ;; (global-set-key (kbd "C--") 'my/text-font-scale-down)
-;;;; Make Script Files Executable Automatically
-
-;; Make script files (with shebang like #!/bin/bash, #!/bin/sh) executable automatically. See this blog post from Emacs Redux.
-(add-hook 'after-save-hook
-          'executable-make-buffer-file-executable-if-script-p)
-
 ;;;; clear-kill-ring
 
 (defun clear-kill-ring ()
@@ -443,8 +456,7 @@
   ;; :config
   (global-goto-address-mode +1))
 
-
-;;;; Eldoc
+;;;; eldoc
 
 (progn
   (require 'eldoc)
@@ -761,6 +773,85 @@ Also see `prot-window-delete-popup-frame'." command)
   )
 
 ;;;; markdown-mode
+
+(with-eval-after-load 'markdown-mode
+  (setq markdown-hide-urls nil) ; must
+  (setq markdown-fontify-code-blocks-natively t)
+  (setq markdown-display-remote-images t)
+  (setq markdown-list-item-bullets '("◦" "-" "•" "–"))
+
+  (advice-add
+   'markdown-fontify-list-items :override
+   (lambda (last)
+     (when (markdown-match-list-items last)
+       (when (not (markdown-code-block-at-point-p (match-beginning 2)))
+         (let* ((indent (length (match-string-no-properties 1)))
+                (level (/ indent markdown-list-indent-width))
+                ;; level = 0, 1, 2, ...
+                (bullet (nth (mod level (length markdown-list-item-bullets))
+                             markdown-list-item-bullets)))
+           (add-text-properties
+            (match-beginning 2) (match-end 2) '(face markdown-list-face))
+           (cond
+            ;; Unordered lists
+            ((string-match-p "[\\*\\+-]" (match-string 2))
+             (add-text-properties
+              (match-beginning 2) (match-end 2) `(display ,bullet)))
+            ;; Definition lists
+            ((string-equal ":" (match-string 2))
+             (let ((display-string
+                    (char-to-string (markdown--first-displayable
+                                     markdown-definition-display-char))))
+               (add-text-properties (match-beginning 2) (match-end 2)
+                                    `(display ,display-string)))))))
+       t)))
+
+  (add-hook 'markdown-mode-hook #'visual-line-mode)
+  ;; (add-hook 'markdown-mode-hook #'toggle-text-mode-auto-fill)
+
+  (add-hook
+   'markdown-mode-hook
+   (lambda ()
+     "Beautify Markdown em-dash and checkbox Symbol"
+     (push '("--" . "—") prettify-symbols-alist)
+     (push '("->" . "→" ) prettify-symbols-alist)
+     (push '("=>" . "⟹") prettify-symbols-alist)
+     (prettify-symbols-mode)))
+
+  ;; Plain text (text-mode)
+  (add-to-list 'auto-mode-alist '("\\(README\\|CHANGELOG\\|COPYING\\|LICENSE\\)\\'" . text-mode))
+
+  (progn
+    (define-key markdown-mode-map (kbd "<f3>") 'markdown-toggle-markup-hiding)
+    (define-key markdown-mode-map (kbd "<f4>") 'markdown-toggle-inline-images)
+
+    (evil-define-key '(insert) markdown-mode-map (kbd "C-u") 'undo-fu-only-undo)
+    (evil-define-key '(insert) markdown-mode-map (kbd "C-r") 'undo-fu-only-redo)
+
+    (evil-define-key '(insert normal visual) markdown-mode-map (kbd "C-<up>") 'markdown-backward-paragraph) ;; same as org-mode
+    (evil-define-key '(insert normal visual) markdown-mode-map (kbd "C-<down>") 'markdown-forward-paragraph)
+
+    (evil-define-key '(normal visual) markdown-mode-map (kbd "C-n") 'markdown-outline-next)
+    (evil-define-key '(normal visual) markdown-mode-map (kbd "C-p") 'markdown-outline-previous)
+
+    (evil-define-key '(insert) markdown-mode-map (kbd "C-n") 'next-line)
+    (evil-define-key '(insert) markdown-mode-map (kbd "C-p") 'previous-line)
+
+    (evil-define-key '(normal visual) markdown-mode-map (kbd "C-j") 'markdown-outline-next-same-level)
+    (evil-define-key '(normal visual) markdown-mode-map (kbd "C-k") 'markdown-outline-previous-same-level)
+
+    (evil-define-key '(normal visual) markdown-mode-map (kbd "M-j") 'markdown-outline-next-same-level)
+    (evil-define-key '(normal visual) markdown-mode-map (kbd "M-k") 'markdown-outline-previous-same-level)
+    (evil-define-key '(normal visual) evil-markdown-mode-map (kbd "M-j") 'markdown-outline-next-same-level)
+    (evil-define-key '(normal visual) evil-markdown-mode-map (kbd "M-k") 'markdown-outline-previous-same-level)
+
+    (evil-define-key '(normal visual) markdown-mode-map (kbd "M-n") 'markdown-outline-next) ;; markdown-mode-down
+    (evil-define-key '(normal visual) markdown-mode-map (kbd "M-p") 'markdown-outline-previous)
+
+    (evil-define-key '(normal visual) markdown-mode-map (kbd "C-S-p") 'markdown-up-heading)
+    (evil-define-key '(normal visual) markdown-mode-map "zu" 'markdown-up-heading) ;; same with evil-collection outline
+    )
+  )
 
 ;; (when (locate-library "markdown-mode")
 ;;   (progn
@@ -1109,13 +1200,41 @@ Also see `prot-window-delete-popup-frame'." command)
    '{org.sg.get-currency-conversions/get-currency-conversions
      {:local/root \"../get-currency-conversions/\"}})"))
 
+    (defun my/clojure-setup-env-sh-snippet ()
+      (interactive)
+      (with-current-buffer
+          (find-file (expand-file-name "setup-env.sh" (project-root (project-current))))
+        (insert
+         "
+mkdir -p .linenote
+mkdir -p .vscode
+
+cd .vscode
+ln -s ../.linenote linenote
+cd -
+"
+         )))
+
+    (defun my/clojure-projectile-snippet ()
+      (interactive)
+      (with-current-buffer
+          (find-file (expand-file-name ".projectile" (project-root (project-current))))
+        (insert
+"- /*~
+- /*.elc
+- /modes/*.elc
+- /git/"
+         )))
+
     (defun my/clojure-dir-locals-snippet ()
       (interactive)
       (with-current-buffer
           (find-file (expand-file-name ".dir-locals.el" (project-root (project-current))))
         (insert
-"((nil .
+         "((nil .
       ( ;; (cider-clojure-cli-aliases . \"dev\")
+       (+evil-want-o/O-to-continue-comments . t)
+       (+default-want-RET-continue-comments . t)
        (cider-preferred-build-tool . clojure-cli)))
  (clojure-mode . (
                   (eval . (indent-bars-mode 1))

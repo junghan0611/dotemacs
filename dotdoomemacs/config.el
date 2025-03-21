@@ -290,8 +290,8 @@
   (setq evil-kill-on-visual-paste nil) ; default t
 
   ;; Change Doom's Default
-  (setq +evil-want-o/O-to-continue-comments nil)
-  (setq +default-want-RET-continue-comments nil)
+  (setq +evil-want-o/O-to-continue-comments nil) ;; default t
+  (setq +default-want-RET-continue-comments nil) ;; default t
 
   (setq evil-disable-insert-state-bindings t) ; 2024-10-25 default nil
 
@@ -1531,85 +1531,6 @@ only those in the selected frame."
                   "C" #'markdown-wrap-code-clojure
                   "c" #'markdown-wrap-code-generic))))
 
-(after! markdown-mode
-  (setq markdown-hide-urls nil) ; must
-  (setq markdown-fontify-code-blocks-natively t)
-  (setq markdown-display-remote-images t)
-  (setq markdown-list-item-bullets '("◦" "-" "•" "–"))
-
-  (advice-add
-   'markdown-fontify-list-items :override
-   (lambda (last)
-     (when (markdown-match-list-items last)
-       (when (not (markdown-code-block-at-point-p (match-beginning 2)))
-         (let* ((indent (length (match-string-no-properties 1)))
-                (level (/ indent markdown-list-indent-width))
-                ;; level = 0, 1, 2, ...
-                (bullet (nth (mod level (length markdown-list-item-bullets))
-                             markdown-list-item-bullets)))
-           (add-text-properties
-            (match-beginning 2) (match-end 2) '(face markdown-list-face))
-           (cond
-            ;; Unordered lists
-            ((string-match-p "[\\*\\+-]" (match-string 2))
-             (add-text-properties
-              (match-beginning 2) (match-end 2) `(display ,bullet)))
-            ;; Definition lists
-            ((string-equal ":" (match-string 2))
-             (let ((display-string
-                    (char-to-string (markdown--first-displayable
-                                     markdown-definition-display-char))))
-               (add-text-properties (match-beginning 2) (match-end 2)
-                                    `(display ,display-string)))))))
-       t)))
-
-  (add-hook 'markdown-mode-hook #'visual-line-mode)
-  ;; (add-hook 'markdown-mode-hook #'toggle-text-mode-auto-fill)
-
-  (add-hook
-   'markdown-mode-hook
-   (lambda ()
-     "Beautify Markdown em-dash and checkbox Symbol"
-     (push '("--" . "—") prettify-symbols-alist)
-     (push '("->" . "→" ) prettify-symbols-alist)
-     (push '("=>" . "⟹") prettify-symbols-alist)
-     (prettify-symbols-mode)))
-
-  ;; Plain text (text-mode)
-  (add-to-list 'auto-mode-alist '("\\(README\\|CHANGELOG\\|COPYING\\|LICENSE\\)\\'" . text-mode))
-
-  (progn
-    (define-key markdown-mode-map (kbd "<f3>") 'markdown-toggle-markup-hiding)
-    (define-key markdown-mode-map (kbd "<f4>") 'markdown-toggle-inline-images)
-
-    (evil-define-key '(insert) markdown-mode-map (kbd "C-u") 'undo-fu-only-undo)
-    (evil-define-key '(insert) markdown-mode-map (kbd "C-r") 'undo-fu-only-redo)
-
-    (evil-define-key '(insert normal visual) markdown-mode-map (kbd "C-<up>") 'markdown-backward-paragraph) ;; same as org-mode
-    (evil-define-key '(insert normal visual) markdown-mode-map (kbd "C-<down>") 'markdown-forward-paragraph)
-
-    (evil-define-key '(normal visual) markdown-mode-map (kbd "C-n") 'markdown-outline-next)
-    (evil-define-key '(normal visual) markdown-mode-map (kbd "C-p") 'markdown-outline-previous)
-
-    (evil-define-key '(insert) markdown-mode-map (kbd "C-n") 'next-line)
-    (evil-define-key '(insert) markdown-mode-map (kbd "C-p") 'previous-line)
-
-    (evil-define-key '(normal visual) markdown-mode-map (kbd "C-j") 'markdown-outline-next-same-level)
-    (evil-define-key '(normal visual) markdown-mode-map (kbd "C-k") 'markdown-outline-previous-same-level)
-
-    (evil-define-key '(normal visual) markdown-mode-map (kbd "M-j") 'markdown-outline-next-same-level)
-    (evil-define-key '(normal visual) markdown-mode-map (kbd "M-k") 'markdown-outline-previous-same-level)
-    (evil-define-key '(normal visual) evil-markdown-mode-map (kbd "M-j") 'markdown-outline-next-same-level)
-    (evil-define-key '(normal visual) evil-markdown-mode-map (kbd "M-k") 'markdown-outline-previous-same-level)
-
-    (evil-define-key '(normal visual) markdown-mode-map (kbd "M-n") 'markdown-outline-next) ;; markdown-mode-down
-    (evil-define-key '(normal visual) markdown-mode-map (kbd "M-p") 'markdown-outline-previous)
-
-    (evil-define-key '(normal visual) markdown-mode-map (kbd "C-S-p") 'markdown-up-heading)
-    (evil-define-key '(normal visual) markdown-mode-map "zu" 'markdown-up-heading) ;; same with evil-collection outline
-    )
-  )
-
 ;;;;; palimpsest
 
 ;; M-x palimpsest-move-region-to-bottom
@@ -1897,6 +1818,10 @@ only those in the selected frame."
 ;; *NOTE*: The variable =ob-mermaid-cli-path= needs to be set in the config (because it will change from system to system).
 ;; - npm install -g @mermaid-js/mermaid-cli
 ;; - mmdc -i input.mmd -o output.svg
+
+(after! ob-mermaid
+  (setq ob-mermaid-cli-path "/usr/local/bin/mmdc")
+  )
 
 ;; (use-package! mermaid-mode
 ;;   :config
@@ -3343,6 +3268,7 @@ ${content}"))
   ;; ("^\\*ChatGPT\\*" :size 84 :side right :modeline t :select t :quit nil :ttl t)
   (set-popup-rule! "^\\*ChatGPT\\*$" :side 'right :size 84 :vslot 100 :quit t) ; size 0.4
   (set-popup-rule! "^\\*gptel\\*$" :side 'right :size 84 :vslot 100 :quit t) ; size 0.4
+  (set-popup-rule! "^\\*Deepseek\\*$" :side 'right :size 84 :vslot 100 :quit t) ; size 0.4
   ;; (set-popup-rule! "^\\*xAI\\*$" :side 'right :size 84 :vslot 100 :quit t) ; size 0.4
   :config
 
@@ -3425,7 +3351,10 @@ ${content}"))
 ;;;;;;;; 05 - gptel backend configurations
 
   ;; Google - Gemini
-  (gptel-make-gemini "Gemini" :key user-gemini-api-key :stream t)
+  (gptel-make-gemini "Gemini"
+    :key user-gemini-api-key :stream t
+    :request-params '(:temperature 0.0) ; for coding
+    )
 
   ;; Anthropic - Claude
   (gptel-make-anthropic "Claude" :key user-claude-api-key :stream t)
@@ -3573,7 +3502,7 @@ ${content}"))
             :iv "C-RET" #'cashpw/gptel-send
             :iv "C-<return>" #'cashpw/gptel-send
             (:localleader
-             :desc "gptel/default" "," #'gptel-menu
+             :desc "gptel/default" "5" #'gptel-menu ;; TODO fixme
              "M-s" #'gptel-save-as-org-with-denote-metadata
              :desc "gptel/default" "1" (cmd! (cashpw/gptel-send (alist-get 'default gptel-directives)))
              :desc "gptel/chain of thought" "2" (cmd! (cashpw/gptel-send (alist-get 'chain-of-thought gptel-directives)))
@@ -3812,7 +3741,7 @@ ${content}"))
 
 (use-package! aider
   :config
-  (setq aider-args '("--model" "deepseek/deepseek-chat"))
+  (setq aider-args '("--model" "deepseek/deepseek-reasoner"))
   (setenv "ANTHROPIC_API_KEY" user-claude-api-key)
   (setenv "OPENAI_API_KEY" user-openai-api-key)
   (setenv "GEMINI_API_KEY" user-gemini-api-key)
@@ -3992,10 +3921,10 @@ ${content}"))
         copilot-max-char 10000) ; default 100000
   :bind (:map copilot-completion-map
               ("C-g" . 'copilot-clear-overlay)
-              ("M-p" . 'copilot-previous-completion)
-              ("M-n" . 'copilot-next-completion)
-              ("<tab>" . 'copilot-accept-completion) ; vscode
-              ("TAB" . 'copilot-accept-completion) ; vscode
+              ("M-P" . 'copilot-previous-completion)
+              ("M-N" . 'copilot-next-completion)
+              ("M-<tab>" . 'copilot-accept-completion) ; vscode
+              ;; ("TAB" . 'copilot-accept-completion) ; vscode
               ("M-f" . 'copilot-accept-completion-by-word)
               ("M-<return>" . 'copilot-accept-completion-by-line)
               ("M-]" . 'copilot-next-completion) ; vscode
@@ -4202,13 +4131,6 @@ Called with a PREFIX, resets the context buffer list before opening"
   ;; (add-to-list 'devdocs-browser-major-mode-docs-alist '(js-ts-mode "javascript" "node"))
   )
 
-;;;;; prog-mode-hooks
-
-;; Color the string of whatever color code they are holding
-(add-hook 'prog-mode-hook 'rainbow-mode) ; 2023-11-23 on
-(add-hook 'prog-mode-hook 'prettify-symbols-mode)
-(add-hook 'prog-mode-hook 'visual-line-mode) ; 2024-10-24
-
 ;;;;; DONT symbol-overlay
 
 ;; (use-package! symbol-overlay
@@ -4236,23 +4158,11 @@ Called with a PREFIX, resets the context buffer list before opening"
 ;;;;; sideline-blame
 
 (use-package! sideline-blame
+  :defer 5
   :init
   (setq sideline-backends-left '((sideline-blame . down))))
 
-;;;;; blamer git-messenger
-
-;; (use-package! blamer
-;;   :if window-system
-;;   :custom
-;;   ;; Set to 0 because I don’t enable by default.  So I’m in a mindset of show me who and when.
-;;   (blamer-idle-time 0) ; 0.5
-;;   (blamer-show-avatar-p nil)
-;;   (blamer-author-formatter "✎ %s ")
-;;   (blamer-datetime-formatter "[%s] ")
-;;   ;; (blamer-commit-formatter "● %s")
-;;   ;; (blamer-min-offset 40) ; default 60
-;;   ;; (blamer-max-commit-message-length 20)
-;;   )
+;;;;; git-messenger
 
 ;; git-messenger.el provides function that popup commit message at current line.
 ;; This is useful when you want to know why this line was changed.

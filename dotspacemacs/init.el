@@ -3542,95 +3542,6 @@
 
 ;;;;; jh-writing > Markup
 
-;;;;;; jh-writing > Markup > markdown
-
-  (with-eval-after-load 'markdown-mode
-    ;; Make markdown-mode behave a bit more like org w.r.t. code blocks i.e.
-    ;; use proper syntax highlighting
-    (setq markdown-hide-urls nil) ; must
-    (setq markdown-fontify-code-blocks-natively t)
-    (setq markdown-display-remote-images t)
-    (setq markdown-list-item-bullets '("◦" "-" "•" "–"))
-
-    (setq markdown-command
-          (concat
-           "pandoc"
-           ;; " --from=markdown --to=html"
-           ;; " --standalone --mathjax --highlight-style=pygments"
-           ;; " --css=~/.pandoc/pandoc.css"
-           ;; " --quiet"
-           ;; " --number-sections"
-           ;; " --lua-filter=~/dotfiles/pandoc/cutsection.lua"
-           ;; " --lua-filter=~/dotfiles/pandoc/cuthead.lua"
-           ;; " --lua-filter=~/dotfiles/pandoc/date.lua"
-           ;; " --metadata-file=~/dotfiles/pandoc/metadata.yml"
-           ;; " --metadata=reference-section-title:References"
-           ;; " --citeproc"
-           ;; " --bibliography=~/Dropbox/Work/bibfile.bib"
-           ))
-
-    (advice-add
-     'markdown-fontify-list-items :override
-     (lambda (last)
-       (when (markdown-match-list-items last)
-         (when (not (markdown-code-block-at-point-p (match-beginning 2)))
-           (let* ((indent (length (match-string-no-properties 1)))
-                  (level (/ indent markdown-list-indent-width))
-                  ;; level = 0, 1, 2, ...
-                  (bullet (nth (mod level (length markdown-list-item-bullets))
-                               markdown-list-item-bullets)))
-             (add-text-properties
-              (match-beginning 2) (match-end 2) '(face markdown-list-face))
-             (cond
-              ;; Unordered lists
-              ((string-match-p "[\\*\\+-]" (match-string 2))
-               (add-text-properties
-                (match-beginning 2) (match-end 2) `(display ,bullet)))
-              ;; Definition lists
-              ((string-equal ":" (match-string 2))
-               (let ((display-string
-                      (char-to-string (markdown--first-displayable
-                                       markdown-definition-display-char))))
-                 (add-text-properties (match-beginning 2) (match-end 2)
-                                      `(display ,display-string)))))))
-         t)))
-
-    (add-hook 'markdown-mode-hook #'visual-line-mode)
-    (add-hook 'markdown-mode-hook #'spacemacs/toggle-auto-fill-mode-on)
-
-    (add-hook
-     'markdown-mode-hook
-     (lambda ()
-       "Beautify Markdown em-dash and checkbox Symbol"
-       (push '("---" . "—") prettify-symbols-alist)
-       (push '("->" . "⟶" ) prettify-symbols-alist)
-       (push '("=>" . "⟹") prettify-symbols-alist)
-       (prettify-symbols-mode)))
-
-    ;; Plain text (text-mode)
-    (add-to-list 'auto-mode-alist '("\\(README\\|CHANGELOG\\|COPYING\\|LICENSE\\)\\'" . text-mode))
-
-
-    (define-key markdown-mode-map (kbd "<f3>") 'markdown-toggle-markup-hiding)
-    (define-key markdown-mode-map (kbd "<f4>") 'markdown-toggle-inline-images)
-
-    (evil-define-key '(insert) markdown-mode-map (kbd "C-u") 'undo-fu-only-undo)
-    (evil-define-key '(insert) markdown-mode-map (kbd "C-r") 'undo-fu-only-redo)
-
-    (evil-define-key '(insert normal visual) markdown-mode-map (kbd "C-<up>") 'markdown-backward-paragraph) ;; same as org-mode
-    (evil-define-key '(insert normal visual) markdown-mode-map (kbd "C-<down>") 'markdown-forward-paragraph)
-
-    (evil-define-key '(normal visual) markdown-mode-map (kbd "C-n") 'markdown-outline-next)
-    (evil-define-key '(normal visual) markdown-mode-map (kbd "C-p") 'markdown-outline-previous)
-    (evil-define-key '(insert) markdown-mode-map (kbd "C-n") 'next-line)
-    (evil-define-key '(insert) markdown-mode-map (kbd "C-p") 'previous-line)
-
-    (evil-define-key '(normal visual) markdown-mode-map (kbd "C-j") 'markdown-outline-next-same-level)
-    (evil-define-key '(normal visual) markdown-mode-map (kbd "C-k") 'markdown-outline-previous-same-level)
-    (evil-define-key '(normal visual) markdown-mode-map (kbd "C-S-p") 'markdown-up-heading)
-    (evil-define-key '(normal visual) markdown-mode-map "zu" 'markdown-up-heading) ;; same with evil-collection outline
-    ) ; end-of markdown-mode
-
 ;;;;;; jh-writing > Markup > typst
 
   ;; (use-package typst-ts-mode
@@ -4150,16 +4061,6 @@ For instance pass En as source for English."
   ;; Make script files (with shebang like #!/bin/bash, #!/bin/sh) executable automatically. See this blog post from Emacs Redux.
   (add-hook 'after-save-hook
             'executable-make-buffer-file-executable-if-script-p)
-
-;;;;;; prog-mode-hooks
-
-  ;; Color the string of whatever color code they are holding
-  (add-hook 'prog-mode-hook 'rainbow-mode) ; 2023-11-23 on
-  (add-hook 'prog-mode-hook 'prettify-symbols-mode)
-
-  ;; (ws-butler-keep-whitespace-before-point nil)
-  ;; (ws-butler-global-exempt-modes '(special-mode comint-mode term-mode eshell-mode diff-mode markdown-mode))
-  (add-hook 'prog-mode-hook 'ws-butler-mode)
 
 ;;;;; jh-coding > lsp-mode with corfu
 
@@ -5403,93 +5304,7 @@ For instance pass En as source for English."
   ;;   )
   ;; end-of ekg
 
-;;;; jh-llm
-
-;;;;; copilot copilot-chat
-
-;;;; llmclient: github copilot
-
-  (use-package copilot
-    :commands (copilot-login copilot-diagnose)
-    :init
-    ;; Sometimes the copilot agent doesn't start. Restarting fixes the issue.
-    (setq copilot-indent-offset-warning-disable t
-          copilot-max-char 10000) ; default 100000
-    :bind (:map copilot-completion-map
-                ("C-g" . 'copilot-clear-overlay)
-                ("M-p" . 'copilot-previous-completion)
-                ("M-n" . 'copilot-next-completion)
-                ("<tab>" . 'copilot-accept-completion) ; vscode
-                ("TAB" . 'copilot-accept-completion) ; vscode
-                ("M-f" . 'copilot-accept-completion-by-word)
-                ("M-<return>" . 'copilot-accept-completion-by-line)
-                ("M-]" . 'copilot-next-completion) ; vscode
-                ("M-[" . 'copilot-next-completion) ; vscode
-                ;; ("C-'" . 'copilot-accept-completion)
-                ;; ("C-;" . 'copilot-accept-completion)
-                )
-    ;; :hook ((prog-mode . copilot-mode))
-    ;; (org-mode . copilot-mode)
-    ;; (markdown-mode . copilot-mode)
-    )
-
-;;;; llmclient: github copilot-chat
-
-  ;; (use-package copilot-chat
-  ;;     :after request
-  ;;     :config
-  ;;     (setq copilot-chat-backend 'request)
-  ;;     (setq copilot-chat-frontend 'markdown)
-  ;;     ;; From https://github.com/chep/copilot-chat.el/issues/24
-  ;;     (defun meain/copilot-chat-display (prefix)
-  ;;       "Opens the Copilot chat window, adding the current buffer to the context.
-  ;; Called with a PREFIX, resets the context buffer list before opening"
-  ;;       (interactive "P")
-
-  ;;       (require 'copilot-chat)
-  ;;       (let ((buf (current-buffer)))
-
-  ;;         ;; Explicit reset before doing anything, avoid it resetting later on
-  ;;         ;; target-fn and ignoring the added buffers
-  ;;         (unless (copilot-chat--ready-p)
-  ;;           (copilot-chat-reset))
-
-  ;;         (when prefix (copilot-chat--clear-buffers))
-
-  ;;         (copilot-chat--add-buffer buf)
-  ;;         (copilot-chat-display)))
-  ;;     )
-
-;;;;; openai layer
-
-  (setq openai-key user-openai-api-key) ;; (getenv "OPENAI_API_KEY")
-  ;; Also, most requests require setting a user, which is done via:
-  (setq openai-user "user")
-
-;;;;; llm-client layer
-
-  (with-eval-after-load 'gptel
-    (setq gptel-default-mode 'org-mode)
-    (setq gptel-api-key user-openai-api-key)
-    (setq gptel-model "gpt-4o") ; "gpt-4o-mini"
-
-    ;; (setq-default gptel-backend
-    ;;               ;; :key can be a function that returns the API key.
-    ;;               (gptel-make-gemini
-    ;;                   "gemini-1.5-pro-latest"
-    ;;                 :key (auth-source-pick-first-password :host "gemini")
-    ;;                 :stream t))
-    )
-
-  ;; (setq gptel-api-key
-  ;;     (auth-source-pick-first-password :host "api.openai.com")))
-
-;;;; DONT Flyspell and Jinx-
-
-  ;; (add-hook 'text-mode-hook #'flyspell-mode) ; hangul
-  ;; (add-hook 'prog-mode-hook #'flyspell-prog-mode)
-
-  ;; (add-hook 'prog-mode-hook #'jinx-mode) ; english
+;;;; TODO jh-llm
 
 ;;;; Load shared dotfiles
 

@@ -455,6 +455,7 @@
                 :desc "translate-at-point" "g" #'google-translate-at-point)
                (:prefix ("c" . "chatgpt")
                         "c" #'gptel+
+                        "m" #'gptel-menu
                         "e" #'+gptel-improve-text-transient
                         "p" #'gptel-save-as-org-with-denote-metadata
                         "s" #'gptel-send))
@@ -573,24 +574,31 @@
        "q" #'elysium-query
        "o" #'elysium-keep-all-suggested-changes
        "m" #'elysium-discard-all-suggested-changes
+       "a" #'elysium-add-context
        "c" #'elysium-clear-buffer
        "t" #'elysium-toggle-window
-       "a" #'elysium-add-context
+       "e" #'elysium-toggle-window
+
+       :desc "gptel: gptel-mode" "1" #'gptel-mode
+       "2" #'gptel-org-toggle-branching-context
+       :desc "gptel: send default" :n "3" (cmd! (cashpw/gptel-send (alist-get 'default gptel-directives)))
+       :desc "gptel: send chain-of-thought" :n "4" (cmd! (cashpw/gptel-send (alist-get 'chain-of-thought gptel-directives)))
+       :desc "gptel: send follow-up" :n "5" (cmd! (cashpw/gptel-send (alist-get 'follow-up gptel-directives)))
       ))
 
 ;;;; '9' gptel
 
 
-(map! :leader
-      "9" nil
-      (:prefix ("9" . "gptel")
-       ;; "0" #'+gpt-dwim-current-buffer
-       "9" #'gptel-mode
-       "t" #'gptel-org-toggle-branching-context
-       :desc "gptel-send: default" :n "l" (cmd! (cashpw/gptel-send (alist-get 'default gptel-directives)))
-       :desc "gptel-send: chain-of-thought" :n "c" (cmd! (cashpw/gptel-send (alist-get 'chain-of-thought gptel-directives)))
-       :desc "gptel-send: follow-up" :n "f" (cmd! (cashpw/gptel-send (alist-get 'follow-up gptel-directives))))
-      )
+;; (map! :leader
+;;       "9" nil
+;;       (:prefix ("9" . "gptel")
+;;        ;; "0" #'+gpt-dwim-current-buffer
+;;        "9" #'gptel-mode
+;;        "t" #'gptel-org-toggle-branching-context
+;;        :desc "gptel-send: default" :n "l" (cmd! (cashpw/gptel-send (alist-get 'default gptel-directives)))
+;;        :desc "gptel-send: chain-of-thought" :n "c" (cmd! (cashpw/gptel-send (alist-get 'chain-of-thought gptel-directives)))
+;;        :desc "gptel-send: follow-up" :n "f" (cmd! (cashpw/gptel-send (alist-get 'follow-up gptel-directives))))
+;;       )
 
 ;;;; '0' copilot / copilot-chat
 
@@ -608,6 +616,15 @@
        "D" #'copilot-chat-doc
        "R" #'copilot-chat-reset
        "x" #'copilot-chat-del-current-buffer))
+
+(map! (:map copilot-mode-map
+            "C-c M-f" #'copilot-complete
+            "M-<tab>" #'copilot-complete
+            )
+      (:map copilot-completion-map
+            "<tab>" nil ; jump-out-of-pair
+            "M-<tab>" #'copilot-accept-completion
+            ))
 
 ;;;; 'o' open
 
@@ -861,7 +878,9 @@
 
   (map! :map org-mode-map
         :localleader
-        "RET" #'gptel-mode
+        (:prefix ("RET" . "LLM")
+                 "RET" #'gptel-menu
+                 )
         "#" #'org-update-statistics-cookies
         "'" #'org-edit-special
         "*" #'org-ctrl-c-star
