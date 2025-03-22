@@ -410,10 +410,10 @@
   (package! pydoc)
   (package! code-cells))
 
-
 ;; Use the latest available packages for Clojure
 ;; - cider, clojure-mode
 ;; (unpin! (:lang clojure))
+
 ;; (unpin! conda)
 ;; (package! conda)
 
@@ -430,6 +430,11 @@
 
 ;; (package! uv-mode :recipe (:host github :repo "z80dev/uv-mode"))
 ;; (package! uv-menu :recipe (:host github :repo "pizzatorque/uv-menu"))
+
+;;;;; DONT treesit
+
+;; (package! treesit-auto)
+;; (package! clojure-ts-mode :recipe (:host github :repo "clojure-emacs/clojure-ts-mode"))
 
 ;;;; Git
 

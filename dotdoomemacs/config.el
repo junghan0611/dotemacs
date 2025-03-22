@@ -904,9 +904,10 @@
     (setq text-mode-ispell-word-completion nil))
 
   ;; 2025-02-03 disable - use C-c d @org-mode
-  ;; (add-hook! '(org-mode-hook markdown-mode-hook)
-  ;;   (defun +corfu-add-cape-dict-h ()
-  ;;     (add-hook 'completion-at-point-functions #'cape-dict 0 t)))
+  ;; 2025-03-23 enable for english writing
+  (add-hook! '(org-mode-hook markdown-mode-hook)
+    (defun +corfu-add-cape-dict-h ()
+      (add-hook 'completion-at-point-functions #'cape-dict 0 t)))
 
   ;; IMO, modern editors have trained a bad habit into us all: a burning need for
   ;; completion all the time -- as we type, as we breathe, as we pray to the
@@ -1025,6 +1026,15 @@
 ;; rotate-text       ; cycle region at point between text candidates
 ;; snippets          ; my elves. They type so I don't have to
 ;; ;;word-wrap         ; soft wrapping with language-aware indent
+
+
+;;;;; midnight mode - built-in
+
+(use-package! midnight
+  :defer-incrementally t
+  :config
+  (add-to-list 'clean-buffer-list-kill-buffer-names "*Native-compile-Log*")
+  (add-to-list 'clean-buffer-list-kill-buffer-names "*Async-native-compile-log*"))
 
 ;;;;; NOTE :editor doom
 
@@ -4053,12 +4063,12 @@ Called with a PREFIX, resets the context buffer list before opening"
 ;;;;; eglot-booster
 
 ;; install lsp-booster binary first
-(use-package! eglot-booster
-  :after eglot
-  :config
-  ;; (setq eglot-confirm-server-initiated-edits nil)
-  ;; (setq eglot-extend-to-xref t)
-  (eglot-booster-mode +1))
+;; (use-package! eglot-booster
+;;   :after eglot
+;;   :config
+;;   ;; (setq eglot-confirm-server-initiated-edits nil)
+;;   ;; (setq eglot-extend-to-xref t)
+;;   (eglot-booster-mode +1))
 
 ;;;;; indent-bars
 
@@ -7505,5 +7515,22 @@ Suitable for `imenu-create-index-function'."
   ;; (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'variable-pitch :family)))
   ;; (set-fontset-font "fontset-default" 'emoji (font-spec :family "Noto Emoji") nil 'prepend) ; default face
   )
+
+;;; DONT treesit-auto
+
+;; (use-package! treesit-auto
+;;   :defer 3
+;;   :commands (global-treesit-auto-mode
+;;              treesit-auto-install-all
+;;              treesit-auto-add-to-auto-mode-alist)
+;;   :custom
+;;   (setopt treesit-font-lock-level 5)
+;;   (treesit-auto-install 'prompt)
+;;   :config
+;;   (delete 'janet treesit-auto-langs)
+;;   (delete 'markdown treesit-auto-langs)
+;;   (delete 'latex treesit-auto-langs)
+;;   (treesit-auto-add-to-auto-mode-alist 'all)
+;;   (global-treesit-auto-mode))
 
 ;;; left blank on purpose
