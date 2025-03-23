@@ -2992,6 +2992,8 @@ ${content}"))
 * History
 - %2$s
 
+* Related-Notes
+
 \n")
 
   ;; (setq denote-modules '(project xref ffap)) ; Enable integration with Emacs modules
@@ -3320,6 +3322,7 @@ ${content}"))
         (insert (format "#+date: %s\n" (format-time-string "[%Y-%m-%d %a %H:%M]")))
         (insert (format "#+identifier: %s\n" suffix))
         (insert (format "#+export_file_name: %s.md\n" suffix))
+        (insert (format "#+description:\n"))
         (insert (format "#+hugo_tags: temp\n\n"))
 
         ;; add bib and history
