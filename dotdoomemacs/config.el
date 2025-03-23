@@ -1524,7 +1524,7 @@ only those in the selected frame."
 ;;;;; markdown-mode
 
 ;; agzam
-(after! (:or markdown-mode chatgpt-shell-mode)
+(after! markdown-mode ; chatgpt-shell-mode
   (load! "+markdown")
 
   (setq-default markdown-enable-math t)
@@ -1533,13 +1533,14 @@ only those in the selected frame."
     ;; (advice-add #'evil-ex-start-word-search :around #'evil-ex-visual-star-search-a)
     (advice-add 'evil-yank :around #'maybe-yank-and-convert-a))
 
-  (map! :map (markdown-mode-map
-              chatgpt-shell-mode-map)
-        (:localleader
-         (:prefix ("s" . "wrap")
-                  "<" #'markdown-wrap-collapsible
-                  "C" #'markdown-wrap-code-clojure
-                  "c" #'markdown-wrap-code-generic))))
+  ;; (map! :map (markdown-mode-map
+  ;;             chatgpt-shell-mode-map)
+  ;;       (:localleader
+  ;;        (:prefix ("s" . "wrap")
+  ;;                 "<" #'markdown-wrap-collapsible
+  ;;                 "C" #'markdown-wrap-code-clojure
+  ;;                 "c" #'markdown-wrap-code-generic)))
+  )
 
 ;;;;; palimpsest
 
@@ -3279,7 +3280,7 @@ ${content}"))
   (set-popup-rule! "^\\*ChatGPT\\*$" :side 'right :size 84 :vslot 100 :quit t) ; size 0.4
   (set-popup-rule! "^\\*gptel\\*$" :side 'right :size 84 :vslot 100 :quit t) ; size 0.4
   (set-popup-rule! "^\\*Deepseek\\*$" :side 'right :size 84 :vslot 100 :quit t) ; size 0.4
-  ;; (set-popup-rule! "^\\*xAI\\*$" :side 'right :size 84 :vslot 100 :quit t) ; size 0.4
+  (set-popup-rule! "^\\*xAI\\*$" :side 'right :size 84 :vslot 100 :quit t) ; size 0.4
   :config
 
 ;;;;;;;; 02 - default prompt
@@ -3339,7 +3340,8 @@ ${content}"))
 
 ;;;;;;;; 04 - gptel-org-toggle-branching-context
 
-  (with-eval-after-load 'gptel-org
+  (progn
+    (require 'gptel-org)
     (defun gptel-org-toggle-branching-context ()
       "Toggle gptel context between doc and subheading."
       (interactive)
@@ -3352,13 +3354,28 @@ ${content}"))
 
     ;; (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "*Prompt*: "
     ;;       (alist-get 'org-mode gptel-response-prefix-alist) "*Response*:\n") ; karthink
-    (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "@user "
+    (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "@user\n"
           (alist-get 'org-mode gptel-response-prefix-alist) "@assistant\n"
           (alist-get 'markdown-mode gptel-prompt-prefix-alist) "#### ")
 
-    (setq-default gptel-org-branching-context t))
+    (with-eval-after-load 'gptel-org
+      (setq-default gptel-org-branching-context t))
+    )
 
 ;;;;;;;; 05 - gptel backend configurations
+
+  ;; xAI offers an OpenAI compatible API
+  (setq gptel-model 'grok-2-1212
+        gptel-backend
+        (gptel-make-openai "xAI"
+          :host "api.x.ai"
+          :key user-xai-api-key
+          :endpoint "/v1/chat/completions"
+          :stream t
+          ;; :request-params '(:temperature 0.2) ; default 0.2
+          :models '(grok-2-1212
+                    grok-2-image-1212
+                    )))
 
   ;; Google - Gemini
   (gptel-make-gemini "Gemini"
@@ -3374,15 +3391,13 @@ ${content}"))
   ;; sonar-reasoning	127k	Chat Completion
   ;; sonar-pro	200k	Chat Completion
   ;; sonar	127k	Chat Completion
-  (setq gptel-model 'sonar
-        gptel-backend
-        (gptel-make-perplexity "Perplexity"
-          :host "api.perplexity.ai"
-          :key user-perplexity-api-key
-          :endpoint "/chat/completions"
-          :stream t
-          :request-params '(:temperature 0.2) ; default 0.2
-          :models '(sonar sonar-pro sonar-reasoning)))
+  (gptel-make-perplexity "Perplexity"
+    :host "api.perplexity.ai"
+    :key user-perplexity-api-key
+    :endpoint "/chat/completions"
+    :stream t
+    :request-params '(:temperature 0.2) ; default 0.2
+    :models '(sonar sonar-pro sonar-reasoning))
 
   ;; DeepSeek offers an OpenAI compatible API
   ;; The deepseek-chat model has been upgraded to DeepSeek-V3. deepseek-reasoner points to the new model DeepSeek-R1.
@@ -3414,22 +3429,22 @@ ${content}"))
 
   ;; OpenRouter offers an OpenAI compatible API
   ;; https://openrouter.ai/
-  (gptel-make-openai "OpenRouter"
-    :host "openrouter.ai"
-    :endpoint "/api/v1/chat/completions"
-    :stream t
-    :key user-openrouter-api-key
-    :request-params '(:temperature 0.5)
-    :models '(
-              google/gemini-flash-1.5
-              anthropic/claude-3.5-sonnet
-              openai/gpt-4o-mini
-              deepseek/deepseek-chat
-              ;; qwen/qwen-2.5-7b-instruct
-              ))
+  ;; (gptel-make-openai "OpenRouter"
+  ;;   :host "openrouter.ai"
+  ;;   :endpoint "/api/v1/chat/completions"
+  ;;   :stream t
+  ;;   :key user-openrouter-api-key
+  ;;   :request-params '(:temperature 0.5)
+  ;;   :models '(
+  ;;             google/gemini-flash-1.5
+  ;;             anthropic/claude-3.5-sonnet
+  ;;             openai/gpt-4o-mini
+  ;;             deepseek/deepseek-chat
+  ;;             ;; qwen/qwen-2.5-7b-instruct
+  ;;             ))
 
   ;; Kagi’s FastGPT model and the Universal Summarizer are both supported. A couple of notes:
-  (gptel-make-kagi "Kagi" :stream t :key user-kagi-api-key)
+  ;; (gptel-make-kagi "Kagi" :stream t :key user-kagi-api-key)
 
   ;; Together.ai offers an OpenAI compatible API
   ;; (gptel-make-openai "TogetherAI"
@@ -3449,15 +3464,6 @@ ${content}"))
   ;;   :stream t
   ;;   :key user-github-api-key
   ;;   :models '(gpt-4o-mini)) ;; low tier
-
-  ;; xAI offers an OpenAI compatible API
-  ;; (gptel-make-openai "xAI"
-  ;;   :host "api.x.ai"
-  ;;   :key user-xai-api-key
-  ;;   :endpoint "/v1/chat/completions"
-  ;;   :stream t
-  ;;   :models '(;; xAI now only offers `grok-beta` as of the time of this writing
-  ;;             grok-beta))
 
   ) ; end-of gptel
 
@@ -3604,147 +3610,147 @@ ${content}"))
 
 ;;;;;; use-package chatgpt-shell
 
-(use-package! chatgpt-shell
-  :defer t
-  :commands (chatgpt-shell--primary-buffer chatgpt-shell chatgpt-shell-prompt-compose)
-  :bind (("C-x m" . chatgpt-shell)
-         ("C-c C-0" . chatgpt-shell-prompt-compose))
-  :hook
-  (chatgpt-shell-mode
-   . (lambda () (setq-local completion-at-point-functions nil)))
-  :init (setq shell-maker-history-path (concat user-org-directory "var/"))
-  ;; (add-to-list 'display-buffer-alist
-  ;;              '("\\*chatgpt\\*"
-  ;;                display-buffer-in-side-window
-  ;;                (side . right)
-  ;;                (slot . 0)
-  ;;                (window-parameters . ((no-delete-other-windows . t)))
-  ;;                (dedicated . t)))
-  :custom (shell-maker-prompt-before-killing-buffer nil)
-  ;; (chatgpt-shell-openai-key
-  ;;  (auth-source-pick-first-password :host "api.openai.com"))
-  (chatgpt-shell-openai-key user-openai-api-key)
-  (chatgpt-shell-transmitted-context-length 5)
-  :config
-  (require 'ob-chatgpt-shell)
-  (ob-chatgpt-shell-setup)
+;; (use-package! chatgpt-shell
+;;   :defer t
+;;   :commands (chatgpt-shell--primary-buffer chatgpt-shell chatgpt-shell-prompt-compose)
+;;   :bind (("C-x m" . chatgpt-shell)
+;;          ("C-c C-0" . chatgpt-shell-prompt-compose))
+;;   :hook
+;;   (chatgpt-shell-mode
+;;    . (lambda () (setq-local completion-at-point-functions nil)))
+;;   :init (setq shell-maker-history-path (concat user-org-directory "var/"))
+;;   ;; (add-to-list 'display-buffer-alist
+;;   ;;              '("\\*chatgpt\\*"
+;;   ;;                display-buffer-in-side-window
+;;   ;;                (side . right)
+;;   ;;                (slot . 0)
+;;   ;;                (window-parameters . ((no-delete-other-windows . t)))
+;;   ;;                (dedicated . t)))
+;;   :custom (shell-maker-prompt-before-killing-buffer nil)
+;;   ;; (chatgpt-shell-openai-key
+;;   ;;  (auth-source-pick-first-password :host "api.openai.com"))
+;;   (chatgpt-shell-openai-key user-openai-api-key)
+;;   (chatgpt-shell-transmitted-context-length 5)
+;;   :config
+;;   (require 'ob-chatgpt-shell)
+;;   (ob-chatgpt-shell-setup)
 
-  (setq chatgpt-shell-model-versions '("gpt-4o-mini"
-                                       "gpt-3.5-turbo"
-                                       "gpt-4o-mini"
-                                       "chatgpt-4o-latest" "o1-preview" "o1-mini" "gpt-4o" "gpt-4-0125-preview"
-                                       "gpt-4-turbo-preview" "gpt-4-1106-preview" "gpt-4-0613" "gpt-4" "gpt-3.5-turbo-16k-0613" "gpt-3.5-turbo-16k" "gpt-3.5-turbo-0613" ))
+;;   (setq chatgpt-shell-model-versions '("gpt-4o-mini"
+;;                                        "gpt-3.5-turbo"
+;;                                        "gpt-4o-mini"
+;;                                        "chatgpt-4o-latest" "o1-preview" "o1-mini" "gpt-4o" "gpt-4-0125-preview"
+;;                                        "gpt-4-turbo-preview" "gpt-4-1106-preview" "gpt-4-0613" "gpt-4" "gpt-3.5-turbo-16k-0613" "gpt-3.5-turbo-16k" "gpt-3.5-turbo-0613" ))
 
-  (add-to-list
-   'chatgpt-shell-system-prompts
-   '("Writing" . "You are a large language model and a writing assistant."))
+;;   (add-to-list
+;;    'chatgpt-shell-system-prompts
+;;    '("Writing" . "You are a large language model and a writing assistant."))
 
-  ;; (add-to-list
-  ;;  'chatgpt-shell-system-prompts
-  ;;  `("Cybersecurity" .
-  ;;    ,(concat "The user is an aspiring cybersecurity expert. "
-  ;;             "You need to go as deep into technical details as possible. "
-  ;;             "Elaborate your answers for the highest level of expertise. "
-  ;;             "Do not expand abbreviations unless explicitly asked. "
-  ;;             "Code examples should be in Emacs Org-mode source blocks. "
-  ;;             "Cite relevant RFCs and CVEs, if any. "
-  ;;             "Links and citations should be in Org-mode link format.")))
+;;   ;; (add-to-list
+;;   ;;  'chatgpt-shell-system-prompts
+;;   ;;  `("Cybersecurity" .
+;;   ;;    ,(concat "The user is an aspiring cybersecurity expert. "
+;;   ;;             "You need to go as deep into technical details as possible. "
+;;   ;;             "Elaborate your answers for the highest level of expertise. "
+;;   ;;             "Do not expand abbreviations unless explicitly asked. "
+;;   ;;             "Code examples should be in Emacs Org-mode source blocks. "
+;;   ;;             "Cite relevant RFCs and CVEs, if any. "
+;;   ;;             "Links and citations should be in Org-mode link format.")))
 
-  ;; (add-to-list
-  ;;  'chatgpt-shell-system-prompts
-  ;;  `("Espanól" .
-  ;;    ,(concat "The user is a person trying to learn Spanish. "
-  ;;             "Expect request texts mixed in both languages."
-  ;;             "Answer in Spanish, unless specifically asked to provide the translation."
-  ;;             "Focus on Latin American (primarily Mexican) dialect. "
-  ;;             "When applicable, help the user with memorization and building vocabulary. "
-  ;;             "Highligh the connection of words with shared etymology, e.g.: 'quieres' to 'inquire', and 'ayuda' to 'aid'. "
-  ;;             "When asked about specific words, provide example sentences.")))
+;;   ;; (add-to-list
+;;   ;;  'chatgpt-shell-system-prompts
+;;   ;;  `("Espanól" .
+;;   ;;    ,(concat "The user is a person trying to learn Spanish. "
+;;   ;;             "Expect request texts mixed in both languages."
+;;   ;;             "Answer in Spanish, unless specifically asked to provide the translation."
+;;   ;;             "Focus on Latin American (primarily Mexican) dialect. "
+;;   ;;             "When applicable, help the user with memorization and building vocabulary. "
+;;   ;;             "Highligh the connection of words with shared etymology, e.g.: 'quieres' to 'inquire', and 'ayuda' to 'aid'. "
+;;   ;;             "When asked about specific words, provide example sentences.")))
 
-  (add-to-list
-   'chatgpt-shell-system-prompts
-   `("Leetcode" .
-     ,(concat
-       "Help user to solve Leetcode problems. "
-       "Structure responses in Org-Mode format and org-babel source blocks. "
-       "Write solutions in javascript. "
-       "Avoid using 'for loops' whenever possible, using .map/.reduce instead. "
-       "Comment on time and space complexity of each solution. "
-       "Advertise alternative algorithms and approaches for further research. ")))
+;;   (add-to-list
+;;    'chatgpt-shell-system-prompts
+;;    `("Leetcode" .
+;;      ,(concat
+;;        "Help user to solve Leetcode problems. "
+;;        "Structure responses in Org-Mode format and org-babel source blocks. "
+;;        "Write solutions in javascript. "
+;;        "Avoid using 'for loops' whenever possible, using .map/.reduce instead. "
+;;        "Comment on time and space complexity of each solution. "
+;;        "Advertise alternative algorithms and approaches for further research. ")))
 
-  ;; set default prompt to None
-  (setq chatgpt-shell-system-prompt
-        (- (length chatgpt-shell-system-prompts)
-           (length
-            (member
-             (assoc "None" chatgpt-shell-system-prompts)
-             chatgpt-shell-system-prompts))))
+;;   ;; set default prompt to None
+;;   (setq chatgpt-shell-system-prompt
+;;         (- (length chatgpt-shell-system-prompts)
+;;            (length
+;;             (member
+;;              (assoc "None" chatgpt-shell-system-prompts)
+;;              chatgpt-shell-system-prompts))))
 
-  ;; :bind (:map chatgpt-shell-mode-map
-  ;;             (("RET" . newline)
-  ;;              ("M-RET" . shell-maker-submit)
-  ;;              ("M-." . dictionary-lookup-definition)))
-  )
+;;   ;; :bind (:map chatgpt-shell-mode-map
+;;   ;;             (("RET" . newline)
+;;   ;;              ("M-RET" . shell-maker-submit)
+;;   ;;              ("M-." . dictionary-lookup-definition)))
+;;   )
 
 ;;;;;; Custom ChatGPT Functions
 
 ;; Custom ChatGPT Functions
-(after! chatgpt-shell
-  ;; required for `chatgpt-shell-system-prompts'
-  (require 'pcsv)
+;; (after! chatgpt-shell
+;;   ;; required for `chatgpt-shell-system-prompts'
+;;   (require 'pcsv)
 
-  (defun my/chatgpt-shell-at-point-or-region (header)
-    "Send the header with the token at point or the selected region to ChatGPT."
-    (if (region-active-p)
-        (chatgpt-shell-send-region-with-header header)
+;;   (defun my/chatgpt-shell-at-point-or-region (header)
+;;     "Send the header with the token at point or the selected region to ChatGPT."
+;;     (if (region-active-p)
+;;         (chatgpt-shell-send-region-with-header header)
 
-      (if-let ((token (thing-at-point 'symbol)))
-          (chatgpt-shell-send-to-buffer (concat header "\n\n" token))
-        (user-error "Nothing at point or selected."))))
+;;       (if-let ((token (thing-at-point 'symbol)))
+;;           (chatgpt-shell-send-to-buffer (concat header "\n\n" token))
+;;         (user-error "Nothing at point or selected."))))
 
-  ;; Explains
-  (defun my/chatgpt-shell-explain-org-heading ()
-    "Explain the org heading with GhatGPT."
-    (interactive)
-    (chatgpt-shell-send-to-buffer
-     (concat
-      "Explain the given topic briefly:\n\n" (my/org-get-heading-title)
-      ;; (my/org-breadcrumbs)
-      )))
+;;   ;; Explains
+;;   (defun my/chatgpt-shell-explain-org-heading ()
+;;     "Explain the org heading with GhatGPT."
+;;     (interactive)
+;;     (chatgpt-shell-send-to-buffer
+;;      (concat
+;;       "Explain the given topic briefly:\n\n" (my/org-get-heading-title)
+;;       ;; (my/org-breadcrumbs)
+;;       )))
 
-  (defun my/chatgpt-shell-explain-region ()
-    "Explain the topic using ChatGPT."
-    (interactive)
-    (my/chatgpt-shell-at-point-or-region
-     "Explain the given topic briefly and provides 3 fun facts
-    to help me remebering and learning it: "))
+;;   (defun my/chatgpt-shell-explain-region ()
+;;     "Explain the topic using ChatGPT."
+;;     (interactive)
+;;     (my/chatgpt-shell-at-point-or-region
+;;      "Explain the given topic briefly and provides 3 fun facts
+;;     to help me remebering and learning it: "))
 
-  ;; Summarizes
-  (defun my/chatgpt-shell-summarize-region ()
-    "Explain the topic using ChatGPT."
-    (interactive)
-    (my/chatgpt-shell-at-point-or-region "Summerize the text briefly: "))
+;;   ;; Summarizes
+;;   (defun my/chatgpt-shell-summarize-region ()
+;;     "Explain the topic using ChatGPT."
+;;     (interactive)
+;;     (my/chatgpt-shell-at-point-or-region "Summerize the text briefly: "))
 
-  ;; Writes
-  (defun my/chatgpt-shell-write-org-heading ()
-    "Write the content for the current org heading using ChatGPT."
-    (interactive)
-    (chatgpt-shell-send-to-buffer
-     ;; (format "Write an article for the topic: \n\n%s"
-     (format "Write an article for the topic in briefly: \n\n%s"
-             (my/org-get-heading-title)
-             ;; (my/org-breadcrumbs)
-             )))
+;;   ;; Writes
+;;   (defun my/chatgpt-shell-write-org-heading ()
+;;     "Write the content for the current org heading using ChatGPT."
+;;     (interactive)
+;;     (chatgpt-shell-send-to-buffer
+;;      ;; (format "Write an article for the topic: \n\n%s"
+;;      (format "Write an article for the topic in briefly: \n\n%s"
+;;              (my/org-get-heading-title)
+;;              ;; (my/org-breadcrumbs)
+;;              )))
 
-  ;; Writes in Korean
-  (defun my/chatgpt-shell-write-org-heading-korean ()
-    "Write the content for the current org heading using ChatGPT in Korean."
-    (interactive)
-    (chatgpt-shell-send-to-buffer
-     (format "Write an article for the topic in Korean : \n\n%s"
-             (my/org-get-heading-title)
-             ;; (my/org-breadcrumbs)
-             ))))
+;;   ;; Writes in Korean
+;;   (defun my/chatgpt-shell-write-org-heading-korean ()
+;;     "Write the content for the current org heading using ChatGPT in Korean."
+;;     (interactive)
+;;     (chatgpt-shell-send-to-buffer
+;;      (format "Write an article for the topic in Korean : \n\n%s"
+;;              (my/org-get-heading-title)
+;;              ;; (my/org-breadcrumbs)
+;;              ))))
 
 
 ;;;;; llmclient: aider.el
@@ -3770,21 +3776,21 @@ ${content}"))
 ;; Optional: Set a key binding for the transient menu
 ;; (global-set-key (kbd "C-c a") 'aider-transient-menu)
 
-;;;;; llmclient: kagi
+;;;;; DONT llmclient: kagi
 
 ;; cecil
 ;; agnes
 ;; daphne
 ;; muriel
-(use-package! kagi
-  :defer 3
-  :custom
-  (kagi-api-token user-kagi-api-key)
-  ;; (kagi-api-token (lambda () (password-store-get "Kagi/API")))
-  ;; Universal Summarizer settings
-  (kagi-summarizer-engine "cecil") ;; Formal, technical, analytical summary.
-  (kagi-summarizer-default-language "KO")
-  (kagi-summarizer-cache t))
+;; (use-package! kagi
+;;   :defer 3
+;;   :custom
+;;   (kagi-api-token user-kagi-api-key)
+;;   ;; (kagi-api-token (lambda () (password-store-get "Kagi/API")))
+;;   ;; Universal Summarizer settings
+;;   (kagi-summarizer-engine "cecil") ;; Formal, technical, analytical summary.
+;;   (kagi-summarizer-default-language "KO")
+;;   (kagi-summarizer-cache t))
 
 ;;;;; DONT org-ai
 

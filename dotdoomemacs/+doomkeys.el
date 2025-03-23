@@ -570,7 +570,7 @@
 (map! :leader
       "e" nil
       (:prefix ("e" . "elysium/gptel")
-        ;; '(insert normal) 'gptel-mode-map "C-<return>" #'elysium-query
+       ;; '(insert normal) 'gptel-mode-map "C-<return>" #'elysium-query
        "q" #'elysium-query
        "o" #'elysium-keep-all-suggested-changes
        "m" #'elysium-discard-all-suggested-changes
@@ -584,7 +584,7 @@
        :desc "gptel: send default" :n "3" (cmd! (cashpw/gptel-send (alist-get 'default gptel-directives)))
        :desc "gptel: send chain-of-thought" :n "4" (cmd! (cashpw/gptel-send (alist-get 'chain-of-thought gptel-directives)))
        :desc "gptel: send follow-up" :n "5" (cmd! (cashpw/gptel-send (alist-get 'follow-up gptel-directives)))
-      ))
+       ))
 
 ;;;; '9' gptel
 
@@ -819,344 +819,6 @@
         ;; :ni [C-S-return] #'org-insert-todo-heading-respect-content
         :ni "C-c C-RET"      #'my/org-open-at-point-other-window
         :ni "C-c C-<return>" #'my/org-open-at-point-other-window))
-
-(after! embark
-  (map!
-   (:map embark-org-link-map
-    :desc "open-at-point-other-window" "o" #'my/org-open-at-point-other-window
-    )))
-
-;;;;; after! org
-
-(after! org
-  (message "after org - doomkeys")
-
-;;;;; org-mode-map
-
-  (map! :map org-mode-map
-        ;; Recently, a [tab] keybind in `outline-mode-cycle-map' has begun
-        ;; overriding org's [tab] keybind in GUI Emacs. This is needed to undo
-        ;; that, and should probably be PRed to org.
-        ;; [tab]        #'org-cycle
-
-        "M-8" #'tempel-insert
-        "M-9" #'denote-link
-        "<f12>" #'org-transclusion-mode
-        "C-M-y" #'org-rich-yank
-        ;; "C-M-Y" #'cae-org-rich-yank
-        "s-p" #'org-hugo-export-to-md ;; "M-p"
-        "M-n" #'org-next-link
-        "M-p" #'org-previous-link
-        "C-c d"  #'cape-dict
-        ;; :i "<tab>"  #'completion-at-point ; 2025-02-03
-        ;; :i "TAB"  #'completion-at-point
-        :i "<tab>" #'my/denote-try-to-complete-then-cycle
-        ;; :n "ds" #'orgbox-schedule
-
-        "M--" #'denote-find-backlink
-
-        ;; "C-c C-S-l"  #'+org/remove-link
-        ;; "C-c C-i"    #'org-toggle-inline-images
-        ;; ;; textmate-esque newline insertion
-        ;; "S-RET"      #'+org/shift-return
-        ;; "C-RET"      #'+org/insert-item-below
-        ;; "C-S-RET"    #'+org/insert-item-above
-        ;; "C-M-RET"    #'org-insert-subheading
-        ;; [C-return]   #'+org/insert-item-below
-        ;; [C-S-return] #'+org/insert-item-above
-        ;; [C-M-return] #'org-insert-subheading
-        ;; (:when (featurep :system 'macos)
-        ;;   [s-return]   #'+org/insert-item-below
-        ;;   [s-S-return] #'+org/insert-item-above
-        ;;   [s-M-return] #'org-insert-subheading)
-        ;; ;; Org-aware C-a/C-e
-        ;; [remap doom/backward-to-bol-or-indent]          #'org-beginning-of-line
-        ;; [remap doom/forward-to-last-non-comment-or-eol] #'org-end-of-line
-        )
-
-;;;;; localleader 1
-
-  (map! :map org-mode-map
-        :localleader
-        (:prefix ("RET" . "LLM")
-                 "RET" #'gptel-menu
-                 )
-        "#" #'org-update-statistics-cookies
-        "'" #'org-edit-special
-        "*" #'org-ctrl-c-star
-        "+" #'org-ctrl-c-minus
-        "," #'org-switchb
-        "." #'org-goto
-        "@" #'org-cite-insert
-        (:when (modulep! :completion vertico)
-          "." #'consult-org-heading
-          "/" #'consult-org-agenda)
-        "A" #'org-archive-subtree-default
-        "e" #'org-export-dispatch
-        "f" #'org-footnote-action
-        "h" #'org-toggle-heading
-        "i" #'org-toggle-item
-        "I" #'org-id-get-create
-        "k" #'org-babel-remove-result
-        "K" #'+org/remove-result-blocks
-        "n" #'org-store-link
-        "o" #'org-set-property
-        "q" #'org-set-tags-command
-        "t" #'org-todo
-        "T" #'org-todo-list
-        "x" #'org-toggle-checkbox
-        "V" #'org-marked-text-overview-mode
-        (:prefix ("a" . "attachments")
-                 "a" #'org-attach
-                 "d" #'org-attach-delete-one
-                 "D" #'org-attach-delete-all
-                 "l" #'+org/attach-file-and-insert-link
-                 "f" #'my/consult-org-screenshot
-                 "F" #'+vertico/consult-fd-or-find
-                 ;; "F" #'+org/find-file-in-attachments
-                 "n" #'org-attach-new
-                 "o" #'org-attach-open
-                 "O" #'org-attach-open-in-emacs
-                 "r" #'org-attach-reveal
-                 "R" #'org-attach-reveal-in-emacs
-                 "u" #'org-attach-url
-                 "s" #'org-attach-set-directory
-                 "S" #'org-attach-sync
-                 (:when (modulep! +dragndrop)
-                   "c" #'org-download-screenshot
-                   "p" #'org-download-clipboard
-                   "P" #'org-download-yank))
-        (:prefix ("b" . "tables")
-                 "-" #'org-table-insert-hline
-                 "a" #'org-table-align
-                 "b" #'org-table-blank-field
-                 "c" #'org-table-create-or-convert-from-region
-                 "e" #'org-table-edit-field
-                 "f" #'org-table-edit-formulas
-                 "h" #'org-table-field-info
-                 "s" #'org-table-sort-lines
-                 "r" #'org-table-recalculate
-                 "R" #'org-table-recalculate-buffer-tables
-                 (:prefix ("d" . "delete")
-                          "c" #'org-table-delete-column
-                          "r" #'org-table-kill-row)
-                 (:prefix ("i" . "insert")
-                          "c" #'org-table-insert-column
-                          "h" #'org-table-insert-hline
-                          "r" #'org-table-insert-row
-                          "H" #'org-table-hline-and-move)
-                 (:prefix ("t" . "toggle")
-                          "f" #'org-table-toggle-formula-debugger
-                          "o" #'org-table-toggle-coordinate-overlays)
-                 (:when (modulep! +gnuplot)
-                   "p" #'org-plot/gnuplot))
-        (:prefix ("c" . "clock")
-                 "c" #'org-clock-cancel
-                 "d" #'org-clock-mark-default-task
-                 "e" #'org-clock-modify-effort-estimate
-                 "E" #'org-set-effort
-                 "g" #'org-clock-goto
-                 "G" (cmd! (org-clock-goto 'select))
-                 "l" #'+org/toggle-last-clock
-                 "i" #'org-clock-in
-                 "I" #'org-clock-in-last
-                 "o" #'org-clock-out
-                 "r" #'org-resolve-clocks
-                 "R" #'org-clock-report
-                 "t" #'org-evaluate-time-range
-                 "=" #'org-clock-timestamps-up
-                 "-" #'org-clock-timestamps-down)
-        (:prefix ("d" . "date/deadline")
-                 "d" #'org-deadline
-                 "s" #'org-schedule
-                 "t" #'org-time-stamp
-                 "T" #'org-time-stamp-inactive)
-        (:prefix ("g" . "goto")
-                 "g" #'org-goto
-                 (:when (modulep! :completion ivy)
-                   "g" #'counsel-org-goto
-                   "G" #'counsel-org-goto-all)
-                 (:when (modulep! :completion helm)
-                   "g" #'helm-org-in-buffer-headings
-                   "G" #'helm-org-agenda-files-headings)
-                 (:when (modulep! :completion vertico)
-                   "g" #'consult-org-heading
-                   "G" #'consult-org-agenda)
-                 "c" #'org-clock-goto
-                 "C" (cmd! (org-clock-goto 'select))
-                 "i" #'org-id-goto
-                 "r" #'org-refile-goto-last-stored
-                 "v" #'+org/goto-visible
-                 "x" #'org-capture-goto-last-stored)
-        (:prefix ("l" . "links")
-                 "c" #'org-cliplink
-                 "d" #'+org/remove-link
-                 "i" #'org-id-store-link
-                 "l" #'org-insert-link
-                 "L" #'org-insert-all-links
-                 "s" #'org-store-link
-                 "S" #'org-insert-last-stored-link
-                 "t" #'org-toggle-link-display
-                 (:when (modulep! :os macos)
-                   "g" #'org-mac-link-get-link))
-        (:prefix ("P" . "publish")
-                 "a" #'org-publish-all
-                 "f" #'org-publish-current-file
-                 "p" #'org-publish
-                 "P" #'org-publish-current-project
-                 "s" #'org-publish-sitemap)
-        (:prefix ("r" . "refile")
-                 "." #'+org/refile-to-current-file
-                 "c" #'+org/refile-to-running-clock
-                 "l" #'+org/refile-to-last-location
-                 "f" #'+org/refile-to-file
-                 "o" #'+org/refile-to-other-window
-                 "O" #'+org/refile-to-other-buffer
-                 "v" #'+org/refile-to-visible
-                 "r" #'org-refile
-                 "R" #'org-refile-reverse) ; to all `org-refile-targets'
-        (:prefix ("s" . "tree/subtree")
-                 "a" #'org-toggle-archive-tag
-                 "b" #'org-tree-to-indirect-buffer
-                 "c" #'org-clone-subtree-with-time-shift
-                 "d" #'org-cut-subtree
-                 "h" #'org-promote-subtree
-                 "j" #'org-move-subtree-down
-                 "k" #'org-move-subtree-up
-                 "l" #'org-demote-subtree
-                 "n" #'org-narrow-to-subtree
-                 "r" #'org-refile
-                 "s" #'org-sparse-tree
-                 "A" #'org-archive-subtree-default
-                 "N" #'widen
-                 "S" #'org-sort)
-        (:prefix ("p" . "priority")
-                 "d" #'org-priority-down
-                 "p" #'org-priority
-                 "u" #'org-priority-up))
-
-;;;;; localleader 2
-
-  (map! :map org-mode-map
-        :localleader
-        "o" nil
-        ;; :desc "@note-map" "n" ews-note-map
-        :desc "@denote-map" "n" ews-denote-map
-        :desc "@org-transclusion-map" "u" ews-org-transclusion-map
-        ;; :desc "@org-noter-map" "o" ews-org-noter-map
-        "o" #'my/denote-howmish-find-file
-
-        :desc "org-set-effot" "E" #'org-set-effort
-        :desc "time-stamp" "1" #'time-stamp
-        :desc "org-appear-mode" "8" #'org-appear-mode
-        :desc "insert-inactive-timestamp" "9" #'bh/insert-inactive-timestamp
-
-        :desc "insert checkbox\|bracket" "]" #'cae-org-insert-checkbox-or-bracket
-        :desc "convert syntax to lower" "L" #'cae-org-syntax-convert-keyword-case-to-lower
-
-        ;; l links
-        :desc "cae-org-insert-file-link" "l f" #'cae-org-insert-file-link
-        :desc "my/org-store-link-id-optional" "l I" #'my/org-store-link-id-optional
-
-        :desc "org-paste-subtree" "s p" #'org-paste-subtree
-        :desc "org-rich-yank" "l y" #'org-rich-yank
-        ;; :desc "cae-org-rich-yank" "l Y" #'cae-org-rich-yank
-        :desc "update statistics cookies" "#" #'org-update-statistics-cookies
-        :desc "rename-file-and-buffer" "R" #'my/rename-file-and-buffer
-
-        :desc "ox-reveal: export > html" "PR" #'org-reveal-export-to-html
-        :desc "ox-re-reveal: export > html" "Pr" #'org-re-reveal-export-to-html
-        :desc "ox-hugo: export > md" "Ph" #'org-hugo-export-to-md
-
-        ;; math
-        ;; :desc "math-preview-at-point" "/" #'math-preview-at-point
-        ;; :desc "math-preview-all" "M-/" #'math-preview-all
-        ;; :desc "math-preview-clear-all" "C-M-/" #'math-preview-clear-all
-
-        :desc "math-symbol-list" "C-0" #'math-symbol-list
-        (:prefix ("0" . "@custom")
-                 "c" 'my/genfile-timestamp
-                 "b" 'palimpsest-move-region-to-bottom
-                 "B" 'palimpsest-move-region-to-top
-                 "d" 'my/get-file-line
-                 "e" 'my/get-file-link
-                 "f" 'my/encode-buffer-to-utf8
-                 "g" 'my/copy-word
-                 "h" 'my/copy-line
-                 "i" 'my/copy-paragraph
-                 "j" 'my/copy-buffer
-                 "k" 'my/backward-last-edit
-                 "t" 'my/org-titlecase-level-1
-                 "l" 'my/buffer-edit-hook
-                 "R" 'my/rename-file-and-buffer
-                 "n" 'my/grep-find
-                 "o" 'my/open-external
-                 "p" 'my/open-external-pdf
-                 "q" 'my/unfill-paragraph-or-region
-                 "0" 'cc-todo-item
-                 )
-        (:prefix ("-" . "translate-mode")
-                 "t" 'translate-mode
-                 "p" 'translate/translate-current-reference-paragraph
-                 "w" 'translate/translate-word-at-point
-                 "f" 'translate-open-reference-file
-                 "b" 'translate-select-reference-buffer
-                 "h" 'translate-toggle-highlight
-                 )
-        )
-
-;;;;; after! org-journal
-
-  (message "after org-journal - doomkeys")
-  (require 'org-journal)
-
-  (map! (:map org-journal-mode-map
-         :n "]f"  #'org-journal-next-entry
-         :n "[f"  #'org-journal-previous-entry
-         :n "]b"  #'org-next-block
-         :n "[b"  #'org-previous-block
-         :n "C-n" #'org-next-visible-heading
-         :n "C-p" #'org-previous-visible-heading)
-        ;; :n "C-n" #'org-journal-next-entry
-        ;; :n "C-p" #'org-journal-previous-entry
-        (:map org-journal-search-mode-map
-              "C-n" #'org-journal-search-next
-              "C-p" #'org-journal-search-previous)
-        :localleader
-        (:map org-journal-mode-map
-              (:prefix ("a" . "attachments"))
-              (:prefix ("b" . "tables"))
-              (:prefix ("c" . "clock"))
-              (:prefix ("d" . "date/deadline"))
-              (:prefix ("p" . "priority"))
-              (:prefix ("g" . "goto"))
-              (:prefix ("s" . "tree/subtree"))
-              (:prefix ("r" . "refile"))
-              (:prefix ("P" . "publish"))
-              (:prefix ("l" . "links"))
-              (:prefix ("0" . "@custom"))
-              (:prefix ("-" . "translate-mode"))
-              (:prefix ("u" . "xxxx"))
-              (:prefix ("o" . "xxxx"))
-              (:prefix ("n" . "xxxx"))
-              (:prefix ("p" . "xxxx"))
-              (:prefix ("j" . "journal")
-                       "c" #'org-journal-new-entry
-                       "d" #'org-journal-new-date-entry
-                       "n" #'org-journal-next-entry
-                       "p" #'org-journal-previous-entry)
-              (:prefix ("S" . "journal-search")
-                       "s" #'org-journal-search
-                       "f" #'org-journal-search-forever
-                       "F" #'org-journal-search-future
-                       "w" #'org-journal-search-calendar-week
-                       "m" #'org-journal-search-calendar-month
-                       "y" #'org-journal-search-calendar-year))
-        (:map org-journal-search-mode-map
-              "n" #'org-journal-search-next
-              "p" #'org-journal-search-prev)
-        )
-  )
 
 ;;;; markdown-mode-map
 
@@ -1650,25 +1312,25 @@
 
 ;;;; chatgpt-shell
 
-(map!
- :map chatgpt-shell-mode-map
- :i "RET"
- #'+default/newline
- :i
- "M-<return>" #'shell-maker-submit
- :i "M-RET"
- #'shell-maker-submit
- :i
- "M-." #'dictionary-lookup-definition
- :i "C-c C-l"
- #'chatgpt-shell-clear-buffer
- (:localleader
-  "p"
-  #'chatgpt-shell-swap-system-prompt
-  "m"
-  #'chatgpt-shell-swap-model-version)
- :map comint-mode-map
- "C-c C-l" #'comint-clear-buffer)
+;; (map!
+;;  :map chatgpt-shell-mode-map
+;;  :i "RET"
+;;  #'+default/newline
+;;  :i
+;;  "M-<return>" #'shell-maker-submit
+;;  :i "M-RET"
+;;  #'shell-maker-submit
+;;  :i
+;;  "M-." #'dictionary-lookup-definition
+;;  :i "C-c C-l"
+;;  #'chatgpt-shell-clear-buffer
+;;  (:localleader
+;;   "p"
+;;   #'chatgpt-shell-swap-system-prompt
+;;   "m"
+;;   #'chatgpt-shell-swap-model-version)
+;;  :map comint-mode-map
+;;  "C-c C-l" #'comint-clear-buffer)
 
 ;;;; osm-mode-map
 
@@ -1861,6 +1523,466 @@
       :localleader
       "," #'with-editor-finish
       "k" #'with-editor-cancel)
+
+;;;; org
+
+;;;;; after! org
+
+(after! org
+  (message "after org - doomkeys")
+
+;;;;; org-mode-map
+
+  (map! :map org-mode-map
+        ;; Recently, a [tab] keybind in `outline-mode-cycle-map' has begun
+        ;; overriding org's [tab] keybind in GUI Emacs. This is needed to undo
+        ;; that, and should probably be PRed to org.
+        ;; [tab]        #'org-cycle
+
+        "M-8" #'tempel-insert
+        "M-9" #'denote-link
+        "<f12>" #'org-transclusion-mode
+        "C-M-y" #'org-rich-yank
+        ;; "C-M-Y" #'cae-org-rich-yank
+        "s-p" #'org-hugo-export-to-md ;; "M-p"
+        "M-n" #'org-next-link
+        "M-p" #'org-previous-link
+        "C-c d"  #'cape-dict
+        ;; :i "<tab>"  #'completion-at-point ; 2025-02-03
+        ;; :i "TAB"  #'completion-at-point
+        :i "<tab>" #'my/denote-try-to-complete-then-cycle
+        ;; :n "ds" #'orgbox-schedule
+
+        "M--" #'denote-find-backlink
+
+        ;; "C-c C-S-l"  #'+org/remove-link
+        ;; "C-c C-i"    #'org-toggle-inline-images
+        ;; ;; textmate-esque newline insertion
+        ;; "S-RET"      #'+org/shift-return
+        ;; "C-RET"      #'+org/insert-item-below
+        ;; "C-S-RET"    #'+org/insert-item-above
+        ;; "C-M-RET"    #'org-insert-subheading
+        ;; [C-return]   #'+org/insert-item-below
+        ;; [C-S-return] #'+org/insert-item-above
+        ;; [C-M-return] #'org-insert-subheading
+        ;; (:when (featurep :system 'macos)
+        ;;   [s-return]   #'+org/insert-item-below
+        ;;   [s-S-return] #'+org/insert-item-above
+        ;;   [s-M-return] #'org-insert-subheading)
+        ;; ;; Org-aware C-a/C-e
+        ;; [remap doom/backward-to-bol-or-indent]          #'org-beginning-of-line
+        ;; [remap doom/forward-to-last-non-comment-or-eol] #'org-end-of-line
+        )
+
+;;;;; localleader 1
+
+  (map! :map org-mode-map
+        :localleader
+        (:prefix ("RET" . "LLM")
+                 "RET" #'gptel-menu
+                 )
+        "#" #'org-update-statistics-cookies
+        "'" #'org-edit-special
+        "*" #'org-ctrl-c-star
+        "+" #'org-ctrl-c-minus
+        "," #'org-switchb
+        "." #'org-goto
+        "@" #'org-cite-insert
+        (:when (modulep! :completion vertico)
+          "." #'consult-org-heading
+          "/" #'consult-org-agenda)
+        "A" #'org-archive-subtree-default
+        "e" #'org-export-dispatch
+        "f" #'org-footnote-action
+        "h" #'org-toggle-heading
+        "i" #'org-toggle-item
+        "I" #'org-id-get-create
+        "k" #'org-babel-remove-result
+        "K" #'+org/remove-result-blocks
+        "n" #'org-store-link
+        "o" #'org-set-property
+        "q" #'org-set-tags-command
+        "t" #'org-todo
+        "T" #'org-todo-list
+        "x" #'org-toggle-checkbox
+        "V" #'org-marked-text-overview-mode
+        (:prefix ("a" . "attachments")
+                 "a" #'org-attach
+                 "d" #'org-attach-delete-one
+                 "D" #'org-attach-delete-all
+                 "l" #'+org/attach-file-and-insert-link
+                 "f" #'my/consult-org-screenshot
+                 "F" #'+vertico/consult-fd-or-find
+                 ;; "F" #'+org/find-file-in-attachments
+                 "n" #'org-attach-new
+                 "o" #'org-attach-open
+                 "O" #'org-attach-open-in-emacs
+                 "r" #'org-attach-reveal
+                 "R" #'org-attach-reveal-in-emacs
+                 "u" #'org-attach-url
+                 "s" #'org-attach-set-directory
+                 "S" #'org-attach-sync
+                 (:when (modulep! +dragndrop)
+                   "c" #'org-download-screenshot
+                   "p" #'org-download-clipboard
+                   "P" #'org-download-yank))
+        (:prefix ("b" . "tables")
+                 "-" #'org-table-insert-hline
+                 "a" #'org-table-align
+                 "b" #'org-table-blank-field
+                 "c" #'org-table-create-or-convert-from-region
+                 "e" #'org-table-edit-field
+                 "f" #'org-table-edit-formulas
+                 "h" #'org-table-field-info
+                 "s" #'org-table-sort-lines
+                 "r" #'org-table-recalculate
+                 "R" #'org-table-recalculate-buffer-tables
+                 (:prefix ("d" . "delete")
+                          "c" #'org-table-delete-column
+                          "r" #'org-table-kill-row)
+                 (:prefix ("i" . "insert")
+                          "c" #'org-table-insert-column
+                          "h" #'org-table-insert-hline
+                          "r" #'org-table-insert-row
+                          "H" #'org-table-hline-and-move)
+                 (:prefix ("t" . "toggle")
+                          "f" #'org-table-toggle-formula-debugger
+                          "o" #'org-table-toggle-coordinate-overlays)
+                 (:when (modulep! +gnuplot)
+                   "p" #'org-plot/gnuplot))
+        (:prefix ("c" . "clock")
+                 "c" #'org-clock-cancel
+                 "d" #'org-clock-mark-default-task
+                 "e" #'org-clock-modify-effort-estimate
+                 "E" #'org-set-effort
+                 "g" #'org-clock-goto
+                 "G" (cmd! (org-clock-goto 'select))
+                 "l" #'+org/toggle-last-clock
+                 "i" #'org-clock-in
+                 "I" #'org-clock-in-last
+                 "o" #'org-clock-out
+                 "r" #'org-resolve-clocks
+                 "R" #'org-clock-report
+                 "t" #'org-evaluate-time-range
+                 "=" #'org-clock-timestamps-up
+                 "-" #'org-clock-timestamps-down)
+        (:prefix ("d" . "date/deadline")
+                 "d" #'org-deadline
+                 "s" #'org-schedule
+                 "t" #'org-time-stamp
+                 "T" #'org-time-stamp-inactive)
+        (:prefix ("g" . "goto")
+                 "g" #'org-goto
+                 (:when (modulep! :completion ivy)
+                   "g" #'counsel-org-goto
+                   "G" #'counsel-org-goto-all)
+                 (:when (modulep! :completion helm)
+                   "g" #'helm-org-in-buffer-headings
+                   "G" #'helm-org-agenda-files-headings)
+                 (:when (modulep! :completion vertico)
+                   "g" #'consult-org-heading
+                   "G" #'consult-org-agenda)
+                 "c" #'org-clock-goto
+                 "C" (cmd! (org-clock-goto 'select))
+                 "i" #'org-id-goto
+                 "r" #'org-refile-goto-last-stored
+                 "v" #'+org/goto-visible
+                 "x" #'org-capture-goto-last-stored)
+        (:prefix ("l" . "links")
+                 "c" #'org-cliplink
+                 "d" #'+org/remove-link
+                 "i" #'org-id-store-link
+                 "l" #'org-insert-link
+                 "L" #'org-insert-all-links
+                 "s" #'org-store-link
+                 "S" #'org-insert-last-stored-link
+                 "t" #'org-toggle-link-display
+                 (:when (modulep! :os macos)
+                   "g" #'org-mac-link-get-link))
+        (:prefix ("P" . "publish")
+                 "a" #'org-publish-all
+                 "f" #'org-publish-current-file
+                 "p" #'org-publish
+                 "P" #'org-publish-current-project
+                 "s" #'org-publish-sitemap)
+        (:prefix ("r" . "refile")
+                 "." #'+org/refile-to-current-file
+                 "c" #'+org/refile-to-running-clock
+                 "l" #'+org/refile-to-last-location
+                 "f" #'+org/refile-to-file
+                 "o" #'+org/refile-to-other-window
+                 "O" #'+org/refile-to-other-buffer
+                 "v" #'+org/refile-to-visible
+                 "r" #'org-refile
+                 "R" #'org-refile-reverse) ; to all `org-refile-targets'
+        (:prefix ("s" . "tree/subtree")
+                 "a" #'org-toggle-archive-tag
+                 "b" #'org-tree-to-indirect-buffer
+                 "c" #'org-clone-subtree-with-time-shift
+                 "d" #'org-cut-subtree
+                 "h" #'org-promote-subtree
+                 "j" #'org-move-subtree-down
+                 "k" #'org-move-subtree-up
+                 "l" #'org-demote-subtree
+                 "n" #'org-narrow-to-subtree
+                 "r" #'org-refile
+                 "s" #'org-sparse-tree
+                 "A" #'org-archive-subtree-default
+                 "N" #'widen
+                 "S" #'org-sort)
+        (:prefix ("p" . "priority")
+                 "d" #'org-priority-down
+                 "p" #'org-priority
+                 "u" #'org-priority-up))
+
+;;;;; localleader 2
+
+  (map! :map org-mode-map
+        :localleader
+        "o" nil
+        ;; :desc "@note-map" "n" ews-note-map
+        :desc "@denote-map" "n" ews-denote-map
+        :desc "@org-transclusion-map" "u" ews-org-transclusion-map
+        ;; :desc "@org-noter-map" "o" ews-org-noter-map
+        "o" #'my/denote-howmish-find-file
+
+        :desc "org-set-effot" "E" #'org-set-effort
+        :desc "time-stamp" "1" #'time-stamp
+        :desc "org-appear-mode" "8" #'org-appear-mode
+        :desc "insert-inactive-timestamp" "9" #'bh/insert-inactive-timestamp
+
+        :desc "insert checkbox\|bracket" "]" #'cae-org-insert-checkbox-or-bracket
+        :desc "convert syntax to lower" "L" #'cae-org-syntax-convert-keyword-case-to-lower
+
+        ;; l links
+        :desc "cae-org-insert-file-link" "l f" #'cae-org-insert-file-link
+        :desc "my/org-store-link-id-optional" "l I" #'my/org-store-link-id-optional
+
+        :desc "org-paste-subtree" "s p" #'org-paste-subtree
+        :desc "org-rich-yank" "l y" #'org-rich-yank
+        ;; :desc "cae-org-rich-yank" "l Y" #'cae-org-rich-yank
+        :desc "update statistics cookies" "#" #'org-update-statistics-cookies
+        :desc "rename-file-and-buffer" "R" #'my/rename-file-and-buffer
+
+        :desc "ox-reveal: export > html" "PR" #'org-reveal-export-to-html
+        :desc "ox-re-reveal: export > html" "Pr" #'org-re-reveal-export-to-html
+        :desc "ox-hugo: export > md" "Ph" #'org-hugo-export-to-md
+
+        ;; math
+        ;; :desc "math-preview-at-point" "/" #'math-preview-at-point
+        ;; :desc "math-preview-all" "M-/" #'math-preview-all
+        ;; :desc "math-preview-clear-all" "C-M-/" #'math-preview-clear-all
+
+        :desc "math-symbol-list" "C-0" #'math-symbol-list
+        (:prefix ("0" . "@custom")
+                 "c" 'my/genfile-timestamp
+                 "b" 'palimpsest-move-region-to-bottom
+                 "B" 'palimpsest-move-region-to-top
+                 "d" 'my/get-file-line
+                 "e" 'my/get-file-link
+                 "f" 'my/encode-buffer-to-utf8
+                 "g" 'my/copy-word
+                 "h" 'my/copy-line
+                 "i" 'my/copy-paragraph
+                 "j" 'my/copy-buffer
+                 "k" 'my/backward-last-edit
+                 "t" 'my/org-titlecase-level-1
+                 "l" 'my/buffer-edit-hook
+                 "R" 'my/rename-file-and-buffer
+                 "n" 'my/grep-find
+                 "o" 'my/open-external
+                 "p" 'my/open-external-pdf
+                 "q" 'my/unfill-paragraph-or-region
+                 "0" 'cc-todo-item
+                 )
+        (:prefix ("-" . "translate-mode")
+                 "t" 'translate-mode
+                 "p" 'translate/translate-current-reference-paragraph
+                 "w" 'translate/translate-word-at-point
+                 "f" 'translate-open-reference-file
+                 "b" 'translate-select-reference-buffer
+                 "h" 'translate-toggle-highlight
+                 )
+        )
+
+;;;;; after! org-journal
+
+  (message "after org-journal - doomkeys")
+  (require 'org-journal)
+
+  (map! (:map org-journal-mode-map
+         :n "]f"  #'org-journal-next-entry
+         :n "[f"  #'org-journal-previous-entry
+         :n "]b"  #'org-next-block
+         :n "[b"  #'org-previous-block
+         :n "C-n" #'org-next-visible-heading
+         :n "C-p" #'org-previous-visible-heading)
+        ;; :n "C-n" #'org-journal-next-entry
+        ;; :n "C-p" #'org-journal-previous-entry
+        (:map org-journal-search-mode-map
+              "C-n" #'org-journal-search-next
+              "C-p" #'org-journal-search-previous)
+        :localleader
+        (:map org-journal-mode-map
+              (:prefix ("a" . "attachments"))
+              (:prefix ("b" . "tables"))
+              (:prefix ("c" . "clock"))
+              (:prefix ("d" . "date/deadline"))
+              (:prefix ("p" . "priority"))
+              (:prefix ("g" . "goto"))
+              (:prefix ("s" . "tree/subtree"))
+              (:prefix ("r" . "refile"))
+              (:prefix ("P" . "publish"))
+              (:prefix ("l" . "links"))
+              (:prefix ("0" . "@custom"))
+              (:prefix ("-" . "translate-mode"))
+              (:prefix ("u" . "xxxx"))
+              (:prefix ("o" . "xxxx"))
+              (:prefix ("n" . "xxxx"))
+              (:prefix ("p" . "xxxx"))
+              (:prefix ("j" . "journal")
+                       "c" #'org-journal-new-entry
+                       "d" #'org-journal-new-date-entry
+                       "n" #'org-journal-next-entry
+                       "p" #'org-journal-previous-entry)
+              (:prefix ("S" . "journal-search")
+                       "s" #'org-journal-search
+                       "f" #'org-journal-search-forever
+                       "F" #'org-journal-search-future
+                       "w" #'org-journal-search-calendar-week
+                       "m" #'org-journal-search-calendar-month
+                       "y" #'org-journal-search-calendar-year))
+        (:map org-journal-search-mode-map
+              "n" #'org-journal-search-next
+              "p" #'org-journal-search-prev)
+        )
+  )
+
+
+;;;; embark
+
+;; ~/sync/man/dotsamples/doom/agzam-dot-doom/modules/custom/completion/config.el
+(after! embark
+
+  ;; (require 'org)
+  ;; (setq embark-cycle-key "C-;"
+  ;;       embark-confirm-act-all nil)
+  ;; (setq embark-help-key "M-h") ;; doom's C-h
+
+  ;; (setq embark-indicators '(embark-which-key-indicator
+  ;;                           embark-highlight-indicator
+  ;;                           embark-isearch-highlight-indicator))
+
+  ;; (advice-add #'embark-completing-read-prompter
+  ;;             :around #'embark-hide-which-key-indicator)
+  (map!
+   (:map embark-org-link-map
+    :desc "open-at-point-other-window" "o" #'my/org-open-at-point-other-window
+    ))
+
+  (map!
+   :after embark
+   (:map embark-general-map
+         ;; "C-<return>" #'embark-dwim
+         "m" #'embark-select
+         "/" #'+embark-project-search
+         "[" #'gptel-quick
+         "?" #'gptel-quick
+         "C-c C-e" #'+vertico/embark-export-write
+         ;; (:prefix
+         ;;  ("x" . "text")
+         ;;  "p" #'awesome-switch-to-prev-app-and-type)
+         )
+   (:map embark-file-map
+         "x" #'embark-open-externally+
+         "5" #'embark-dired-merge-action
+         "o" nil
+         (:prefix ("o" . "open")
+                  "j" (embark-split-action find-file evil-window-split)
+                  "k" (embark-split-action find-file +evil/window-split-and-follow)
+                  "l" (embark-split-action find-file evil-window-vsplit)
+                  "h" (embark-split-action find-file +evil/window-vsplit-and-follow)
+                  "a" (embark-ace-action find-file)))
+
+   (:map
+    embark-buffer-map
+    "o" nil
+    (:prefix ("o" . "open")
+             "j" (embark-split-action switch-to-buffer evil-window-split)
+             "k" (embark-split-action switch-to-buffer +evil/window-split-and-follow)
+             "l" (embark-split-action switch-to-buffer evil-window-vsplit)
+             "h" (embark-split-action switch-to-buffer +evil/window-vsplit-and-follow)
+             "a" (embark-ace-action switch-to-buffer)))
+
+   (:map
+    embark-org-heading-map
+    (:prefix ("9" . "denote") ;; TODO add more denote function
+     :desc "denote add links" "u" #'denote-add-links)
+    ;; (:prefix ("9" . "roam")
+    ;;  :desc "add ref" "u" #'roam-ref-add-for-active-tab)
+    )
+
+   (:map
+    embark-url-map
+    "E" #'+default-browse-url
+    "e" #'+eww/open-in-other-window2 ;; +eww-browse-url
+    "v" #'forge-visit-topic-via-url
+    )
+
+   (:map embark-markdown-link-map
+         "E" #'+default-browse-url
+         "b" (cmd! () (browse-url (markdown-link-url)))
+         "v" #'forge-visit-topic-via-url
+         )
+
+   (:map embark-org-link-map
+         "E" #'+default-browse-url
+         "e" #'+eww/open-in-other-window
+         "b" #'org-open-at-point
+         "V" #'+open-link-in-vlc
+         "v" #'forge-visit-topic-via-url
+         "x" #'embark-open-externally
+         )
+
+   (:map
+    embark-collect-mode-map
+    :n "[" #'embark-previous-symbol
+    :n "]" #'embark-next-symbol
+    :n "TAB" #'+embark-collect-outline-cycle
+    :n "m" #'embark-select)
+
+   (:map
+    (embark-identifier-map
+     embark-region-map
+     embark-sentence-map
+     embark-paragraph-map)
+    (:desc "txl-translate" "M-t" #'txl-translate-insert)
+    (:prefix
+     ("x" . "text")
+     (:prefix ("g" . "google-translate")
+      :desc "en->ko" "k" #'google-translate-query-translate-reverse
+      :desc "en->ko2" "K" #'+google-translate-en->ko
+      :desc "ko->en" "e" #'google-translate-query-translate
+      :desc "ko->en2" "E" #'+google-translate-ko->en
+      :desc "translate-at-point" "g" #'google-translate-at-point)
+     ))
+   )
+
+  (add-hook! 'embark-collect-mode-hook
+    (defun visual-line-mode-off-h ()
+      (visual-line-mode -1)))
+
+  ;; don't ask when killing buffers
+  (setq embark-pre-action-hooks
+        (cl-remove
+         '(kill-buffer embark--confirm)
+         embark-pre-action-hooks :test #'equal))
+
+  (defadvice! embark-prev-next-recenter-a ()
+    :after #'embark-previous-symbol
+    :after #'embark-next-symbol
+    (recenter))
+  )
 
 ;;; TODO ctl-x maps
 
