@@ -468,7 +468,9 @@
   (message "kill-all-buffers")
   ;; (doom/kill-all-buffers) ; never
   (my/kill-all-buffers-except-toolbox)
-  (garbage-collect))
+  (garbage-collect)
+  (setq which-key-replacement-alist nil)
+  )
 
 (defun my/update-export-garden-all ()
   (interactive)
