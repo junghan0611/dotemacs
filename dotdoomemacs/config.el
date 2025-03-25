@@ -894,9 +894,9 @@
   (setq tab-always-indent t) ; for jump-out-of-pair - doom 'complete
   (setq +corfu-want-minibuffer-completion nil) ; doom t
 
-  (setq +corfu-want-tab-prefer-expand-snippets t) ; 2024-11-06
-  (setq +corfu-want-tab-prefer-navigating-snippets t)
-  (setq +corfu-want-tab-prefer-navigating-org-tables t)
+  ;; (setq +corfu-want-tab-prefer-expand-snippets nil) ; 2024-11-06
+  ;; (setq +corfu-want-tab-prefer-navigating-snippets nil)
+  ;; (setq +corfu-want-tab-prefer-navigating-org-tables nil)
 
   ;; from minemacs
   ;; HACK: Prevent the annoting completion error when no `ispell' dictionary is set, prefer `cape-dict'

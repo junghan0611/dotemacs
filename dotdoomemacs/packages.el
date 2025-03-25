@@ -55,19 +55,16 @@
 (package! consult-omni :recipe (:host github :repo "armindarvish/consult-omni" :files (:defaults "sources/*.el")) :pin "d0a24058bf0dda823e5f1efcae5da7dc0efe6bda") ;; Feb 19, 2025
 (package! consult-gh)
 
-;;; use built-in on emacs 30
+;;; DONT NEVER use built-in on emacs 30
 
-(when (eq emacs-major-version 30)
-  (package! eldoc :built-in t) ; 2025-02-25 with flycheck
-  (package! use-package :built-in t)
-  (package! editorconfig :built-in t)
-  (package! which-key :built-in t)
-  (package! flymake :built-in t)
-  (package! eglot :built-in t))
+;; (when (eq emacs-major-version 30)
+;;  (package! eldoc :built-in t) ; 2025-02-25 with flycheck
+;;  )
 
 ;;; doom-disabled-packages
 
 (disable-packages!
+ yasnippet-capf ; too much information
  ;; lsp-mode
  ;; consult-lsp
  anaconda-mode
@@ -200,6 +197,7 @@
 (package! separedit :recipe (:host github :repo "twlz0ne/separedit.el"))
 
 (package! goto-last-change)
+(package! ultra-scroll :recipe (:host github :repo "jdtsmith/ultra-scroll"))
 
 ;;;; :lang org-mode
 

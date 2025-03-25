@@ -226,22 +226,20 @@
 
 ;;;; show-paren-delay 0
 
-  ;; 괄호 강조를 즉시 보여준다
-  (setq show-paren-delay 0) ; 0.125
+;; 괄호 강조를 즉시 보여준다
+(setq show-paren-delay 0) ; 0.125
 
-;;;; DONT jit-lock-defer-time
+;;;; jit-lock-defer-time 0
 
 ;; NOTE: setting this to `0' like it was recommended in the article above seems
 ;; to cause fontification to happen in real time, which can be pretty slow in
 ;; large buffers. Giving it a delay seems to be better.
 ;; (setq jit-lock-defer-time 0.05) ;; better
-;; (setq jit-lock-defer-time 0) ; important
+(setq jit-lock-defer-time 0) ; important
 
 ;; My guess for how big this number should be for my setup. Call
-;; `cae-set-jit-lock-chunk-size-to-optimal' on a few different files to get an
-;; idea.
-;; (setq jit-lock-chunk-size 2500) ; default 1500
-
+;; `cae-set-jit-lock-chunk-size-to-optimal' on a few different files to get an idea.
+(setq jit-lock-chunk-size 2500) ; default 1500
 
 ;;;; prog-mode-hooks
 
@@ -435,11 +433,10 @@
   (blink-cursor-mode t)
   (when (fboundp 'tooltip-mode)
     (tooltip-mode 1))
-  (menu-bar-mode -1)
-  (menu-bar-mode 1))
-;; (when (fboundp 'tool-bar-mode)
-;;   (tool-bar-mode 1))
-
+  (menu-bar-mode 1)
+  (when (fboundp 'tool-bar-mode)
+    (tool-bar-mode 1))
+  )
 
 ;;;; goto-addr
 
@@ -1235,7 +1232,7 @@ cd -
       (with-current-buffer
           (find-file (expand-file-name ".projectile" (project-root (project-current))))
         (insert
-"- /*~
+         "- /*~
 - /*.elc
 - /modes/*.elc
 - /git/"

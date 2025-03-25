@@ -1917,7 +1917,6 @@ window."
   "f" #'citar-denote-find-reference
   "l" #'citar-denote-link-reference
 
-  "s" denote-search-map
   "S" #'citar-denote-create-silo-note
   "k" #'citar-denote-remove-reference
 
@@ -2049,7 +2048,8 @@ window."
   "m" #'my/denote-insert-meta-links
   "M" #'my/denote-create-meta-note
 
-  "s" #'denote-silo-open-or-create
+  "s" denote-search-map
+  ;; "s" #'denote-silo-open-or-create
   "S" #'denote-silo-select-silo-then-command
 
   "t" #'denote-type
