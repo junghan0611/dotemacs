@@ -317,6 +317,7 @@
         vlf vundo woman
 
         python
+        gptel
         ))
 
      ;; 이것 때문에 실수로 Replace 하는 경우가 생긴다.
@@ -702,7 +703,8 @@
      bats-mode ; shell-scripts
      ;; awk-ts-mode
 
-     ;; clojure-ts-mode
+     clojure-ts-mode
+     treesit-auto
 
      ;; > python
      pipenv
@@ -4322,6 +4324,17 @@ For instance pass En as source for English."
     ;; (add-to-list 'devdocs-browser-major-mode-docs-alist '(typescript-ts-mode "typescript"))
     ;; (add-to-list 'devdocs-browser-major-mode-docs-alist '(js-ts-mode "javascript" "node"))
     )
+
+;;;;; jh-coding > treesitter > treesit-auto
+
+  ;;  major-mode-remap-alist
+  (use-package treesit-auto
+    :defer 2
+    :init
+    (require 'treesit)
+    (setq treesit-auto-install 'prompt)
+    :config
+    (global-treesit-auto-mode))
 
 ;;;;; DONT jh-coding > treesitter > combobulate
 
