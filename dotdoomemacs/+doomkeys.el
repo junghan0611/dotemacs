@@ -259,58 +259,59 @@
 
 ;;;; 'k' lisp
 
-(map! :leader
-      "k" nil
-      "k" #'sexp-transient)
+;; (map! :leader
+;;       "k" nil
+;;       "k" #'sexp-transient)
 
 ;; /john-dot-doom/+smartparens.el
-;; (when (locate-library "smartparens")
-;;   ;; A Spacemacs like Lisp state menu (without the transient state)
-;;   (map! :leader
-;;         (:prefix ("k". "Smartparens")
-;;          :desc "Delete Pair" "D" #'delete-pair
-;;          :desc "Slurp forward" "s" #'sp-forward-slurp-sexp
-;;          :desc "Slurp backward" "S" #'sp-backward-slurp-sexp
-;;          :desc "" "$"   #'sp-end-of-sexp
-;;          (:prefix ("`" . "Hybrid")
-;;           :desc "Kill" "k" #'sp-kill-hybrid-sexp
-;;           :desc "Push" "p" #'sp-push-hybrid-sexp
-;;           :desc "Slurp" "s" #'sp-slurp-hybrid-sexp
-;;           :desc "Transpose" "t" #'sp-transpose-hybrid-sexp
-;;           :desc "Absorb" "a" #'sp-absorb-sexp
-;;           :desc "Barf forward" "b" #'sp-forward-barf-sexp
-;;           :desc "Barf backward" "B" #'sp-backward-barf-sexp
-;;           :desc "Convoluted" "c" #'sp-convolute-sexp)
-;;          (:prefix ("d" . "Delete")
-;;           :desc "Delete Pair" "d" #'delete-pair
-;;           :desc "Symbol" "s" #'sp-kill-symbol
-;;           :desc "Symbol Backward" "S" #'sp-backward-kill-symbol
-;;           :desc "Word" "w" #'sp-kill-word
-;;           :desc "Word Backward" "W" #'sp-backward-kill-word
-;;           :desc "Kill" "x" #'sp-kill-sexp
-;;           :desc "Kill Backward" "X" #'sp-backward-kill-sexp)
-;;          :desc "Splice" "e" #'sp-splice-sexp-killing-forward
-;;          :desc "Splice Backward" "E" #'sp-splice-sexp-killing-backward
-;;          :desc "Symbol Backward" "h" #'sp-backward-symbol
-;;          :desc "Sexp Backward" "H" #'sp-backward-sexp
-;;          :desc "Join" "j" #'sp-join-sexp
-;;          :desc "Sexp Forward" "l" #'sp-forward-sexp
-;;          :desc "Sexp Forward" "L" #'sp-forward-sexp
-;;          :desc "Raise" "r" #'sp-raise-sexp
-;;          :desc "Slurp" "s" #'sp-forward-slurp-sexp
-;;          :desc "Slurp Backward" "S" #'sp-backward-slurp-sexp
-;;          :desc "Transpose" "t" #'sp-transpose-sexp
-;;          :desc "Up Backward" "U" #'sp-backward-up-sexp
-;;          (:prefix ("w" . "Wrap")
-;;           :desc "()" "(" #'sp-wrap-round
-;;           :desc "{}" "{" #'sp-wrap-curly
-;;           :desc "[]" "[" #'sp-wrap-square
-;;           :desc "Round" "w" #'sp-wrap-round
-;;           :desc "Curly" "c" #'sp-wrap-curly
-;;           :desc "Square" "s" #'sp-wrap-square
-;;           :desc "Unwrap" "u" #'sp-unwrap-sexp)
-;;          :desc "Copy sexp" "y" #'sp-copy-sexp))
-;;   )
+(when (locate-library "smartparens")
+  ;; A Spacemacs like Lisp state menu (without the transient state)
+  (map! :leader
+      "k" nil
+        (:prefix ("k". "Smartparens")
+         :desc "Delete Pair" "D" #'delete-pair
+         :desc "Slurp forward" "s" #'sp-forward-slurp-sexp
+         :desc "Slurp backward" "S" #'sp-backward-slurp-sexp
+         :desc "End Sexp" "$"   #'sp-end-of-sexp
+         (:prefix ("`" . "Hybrid")
+          :desc "Kill" "k" #'sp-kill-hybrid-sexp
+          :desc "Push" "p" #'sp-push-hybrid-sexp
+          :desc "Slurp" "s" #'sp-slurp-hybrid-sexp
+          :desc "Transpose" "t" #'sp-transpose-hybrid-sexp
+          :desc "Absorb" "a" #'sp-absorb-sexp
+          :desc "Barf forward" "b" #'sp-forward-barf-sexp
+          :desc "Barf backward" "B" #'sp-backward-barf-sexp
+          :desc "Convoluted" "c" #'sp-convolute-sexp)
+         (:prefix ("d" . "Delete")
+          :desc "Delete Pair" "d" #'delete-pair
+          :desc "Symbol" "s" #'sp-kill-symbol
+          :desc "Symbol Backward" "S" #'sp-backward-kill-symbol
+          :desc "Word" "w" #'sp-kill-word
+          :desc "Word Backward" "W" #'sp-backward-kill-word
+          :desc "Kill" "x" #'sp-kill-sexp
+          :desc "Kill Backward" "X" #'sp-backward-kill-sexp)
+         :desc "Splice" "e" #'sp-splice-sexp-killing-forward
+         :desc "Splice Backward" "E" #'sp-splice-sexp-killing-backward
+         :desc "Symbol Backward" "h" #'sp-backward-symbol
+         :desc "Sexp Backward" "H" #'sp-backward-sexp
+         :desc "Join" "j" #'sp-join-sexp
+         :desc "Sexp Forward" "l" #'sp-forward-sexp
+         :desc "Sexp Forward" "L" #'sp-forward-sexp
+         :desc "Raise" "r" #'sp-raise-sexp
+         :desc "Slurp" "s" #'sp-forward-slurp-sexp
+         :desc "Slurp Backward" "S" #'sp-backward-slurp-sexp
+         :desc "Transpose" "t" #'sp-transpose-sexp
+         :desc "Up Backward" "U" #'sp-backward-up-sexp
+         (:prefix ("w" . "Wrap")
+          :desc "()" "(" #'sp-wrap-round
+          :desc "{}" "{" #'sp-wrap-curly
+          :desc "[]" "[" #'sp-wrap-square
+          :desc "Round" "w" #'sp-wrap-round
+          :desc "Curly" "c" #'sp-wrap-curly
+          :desc "Square" "s" #'sp-wrap-square
+          :desc "Unwrap" "u" #'sp-unwrap-sexp)
+         :desc "Copy sexp" "y" #'sp-copy-sexp))
+  )
 
 ;;;; 'C' Capture
 
@@ -919,14 +920,30 @@
 ;; Lookup functions in Clojure - The Essentail Reference book
 ;; https://github.com/p3r7/clojure-essential-ref
 
+;; /evil-dot-doom/modules/custom/parenthesis/config.el
+;;;###autoload
+(defun bk/improve-last-parens ()
+  (interactive)
+  (evil-normal-state)
+  (evil-append-line 1))
+
 ;; TODO: review evaluation key bindings from Spacemacs
 (map! :after cider
       :map cider-mode-map
       :i "M-9" #'insert-parentheses
+      :i "M-j" #'bk/improve-last-parens
+      :i "M-l" #'sp-forward-sexp
+      "M-RET" #'cider-eval-last-sexp
+      "M-S-<return>" #'cider-eval-defun-to-comment
+      "C-c M-RET" #'outline-insert-heading
       :map clojure-mode-map
       :localleader
       :desc "REPL session" "'" #'sesman-start
-
+      :i "M-j" #'bk/improve-last-parens
+      :i "M-l" #'sp-forward-sexp
+      "M-RET" #'cider-eval-last-sexp
+      "M-S-<return>" #'cider-eval-defun-to-comment
+      "C-c M-RET" #'outline-insert-heading
       (:prefix ("h" . "help")
                "r" #'clojure-essential-ref))
 
@@ -1091,7 +1108,7 @@
   "M-y" #'consult-yank-pop ;; orig#'yank-pop
   ;; M-g bindings (goto-map
   "M-g E" #'consult-compile-error
-  "M-g f" #'consult-flymake ;; Alternative: consult-flycheck
+  ;; "M-g f" #'consult-flymake ;; Alternative: consult-flycheck
   "M-g g" #'consult-goto-line ;; orig#'goto-line
   ;; ("M-g M-g" #'consult-goto-line           ;; orig#'goto-line
   "M-g o" #'consult-outline ;; Alternative: consult-org-heading
@@ -1153,16 +1170,6 @@
   ;; "C-c [" #'sp-wrap-square ; conflict org-mode-map
   ;; "C-c {" #'sp-wrap-curly
   ))
-
-;; ;;;###autoload
-;; (defun bk/improve-last-parens ()
-;;   (interactive)
-;;   (evil-normal-state)
-;;   (evil-append-line 1))
-
-;; (map! :i "C-j" #'bk/improve-last-parens
-;;       :i "C-l" #'sp-forward-sexp)
-
 
 ;;;; treemacs - f9
 

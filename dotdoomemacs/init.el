@@ -95,8 +95,8 @@
  ophints           ; highlight the region an operation acts on
  popup    ; tame sudden yet inevitable temporary windows
 
- treemacs
- ;; (treemacs +lsp) ;  a project drawer, like neotree but cooler
+ ;; treemacs
+ (treemacs +lsp) ;  a project drawer, like neotree but cooler
  vc-gutter ;; +pretty
  (window-select +numbers) ; visually switch windows
  workspaces        ; tab emulation, persistence & separate workspaces
@@ -125,7 +125,8 @@
  (:if (not (memq system-type '(cygwin windows-nt ms-dos))) vterm) ; the best terminal emulation in Emacs
 
  :checkers
- (syntax +flymake) ; tasing you for every semicolon you forget
+ ;; (syntax +flymake) ; tasing you for every semicolon you forget
+ syntax
 
  (:unless IS-TERMUX (spell +flyspell)) ; +hunspell - tasing you for misspelling mispelling
  ;; grammar           ; tasing grammar mistake every you make
@@ -141,8 +142,8 @@
 
  (eval +overlay)     ; run code, run (also, repls)
  lookup ; only dumb-jump
- (lsp +eglot) ;; +peek
- ;; (lsp +peek)
+ ;; (lsp +eglot)
+ (lsp +peek)
 
  (magit +forge) ; a git porcelain for Emacs
 

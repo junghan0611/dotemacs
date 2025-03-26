@@ -64,7 +64,7 @@
 ;;; doom-disabled-packages
 
 (disable-packages!
- yasnippet-capf ; too much information
+ ;; yasnippet-capf ; too much information
  ;; lsp-mode
  ;; consult-lsp
  anaconda-mode
@@ -168,7 +168,7 @@
 (package! celestial-mode-line)
 (package! lin)
 (package! nerd-icons-dired)
-(package! nerd-icons-completion) ; vertico +icons
+;; (package! nerd-icons-completion) ; 2025-03-26 disable conflict
 
 (package! dired-preview)
 
@@ -204,6 +204,7 @@
 (package! org-todoist :recipe (:host github :repo "lillenne/org-todoist" :branch "main"))
 ;; (package! todoist)
 (package! orgbox)
+(package! org-side-tree)
 
 (package! org-fragtog) ;; interactive toggling of inline latex formulas
 (package! org-appear)
@@ -377,7 +378,7 @@
 (package! sideline-blame)
 (package! git-messenger)
 
-(package! eglot-booster :recipe (:type git :host github :repo "jdtsmith/eglot-booster"))
+;; (package! eglot-booster :recipe (:type git :host github :repo "jdtsmith/eglot-booster"))
 
 (package! auto-highlight-symbol)
 (package! symbol-overlay)
@@ -389,10 +390,6 @@
   (package! clj-deps-new)
   (package! clojure-essential-ref-nov)
   (package! clay))
-
-;(unpin! lsp-mode)
-;(unpin! lsp-ui)
-;(unpin! consult-lsp)
 
 (unpin! elisp-demos)
 (package! elisp-demos :recipe (:host github :repo "junghan0611/elisp-demos" :branch "ko")) ;; https://github.com/junghan0611/elisp-demos
@@ -541,6 +538,8 @@
 (package! dslide :recipe (:host github :repo "positron-solutions/dslide"))
 
 (package! anddo :recipe (:host github :repo "junghan0611/anddo.el"))
+
+(package! jira)
 
 ;; A method for blocking access to emacs commands based on time.
 ;; https://git.sr.ht/~swflint/time-block-command

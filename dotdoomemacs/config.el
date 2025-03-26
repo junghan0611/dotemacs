@@ -968,41 +968,41 @@
 
 ;;;; :checkers
 
-;;;;; DONT Flycheck
+;;;;; Flycheck
 
-;; (after! flycheck
-;;   (setq flycheck-global-modes '(not emacs-lisp-mode org-mode markdown-mode gfm-mode))
-;;   (setq flycheck-checker-error-threshold 1000) ; need more than default of 400
-;;   (global-flycheck-mode +1)
-;;   )
+(after! flycheck
+  (setq flycheck-global-modes '(not emacs-lisp-mode org-mode markdown-mode gfm-mode))
+  (setq flycheck-checker-error-threshold 1000) ; need more than default of 400
+  (global-flycheck-mode +1)
+  )
 
-;; (progn
-;;   (setq flycheck-help-echo-function nil ; default 'flycheck-help-echo-all-error-messages
-;;         flycheck-display-errors-function nil ; default 'flycheck-display-error-messages
-;;         )
+(progn
+  (setq flycheck-help-echo-function nil ; default 'flycheck-help-echo-all-error-messages
+        flycheck-display-errors-function nil ; default 'flycheck-display-error-messages
+        )
 
-;;   (after! flycheck
-;;     (ignore-errors
-;;       (define-key flycheck-mode-map flycheck-keymap-prefix nil))
-;;     (setq flycheck-keymap-prefix nil)
+  (after! flycheck
+    (ignore-errors
+      (define-key flycheck-mode-map flycheck-keymap-prefix nil))
+    (setq flycheck-keymap-prefix nil)
 
-;;     (add-hook! flycheck-mode
-;;       (defun disable-flycheck-popup-buffer ()
-;;         (setq flycheck-display-errors-function #'ignore)))
-;;     (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-package)
-;;     )
+    (add-hook! flycheck-mode
+      (defun disable-flycheck-popup-buffer ()
+        (setq flycheck-display-errors-function #'ignore)))
+    (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-package)
+    )
 
-;;   (after! elisp-mode
-;;     (add-hook! 'doom-scratch-buffer-created-hook
-;;       (defun flycheck-off ()
-;;         (flycheck-mode -1))))
-;;   )
+  (after! elisp-mode
+    (add-hook! 'doom-scratch-buffer-created-hook
+      (defun flycheck-off ()
+        (flycheck-mode -1))))
+  )
 
-;;;;; Flymake
+;;;;; DONT Flymake
 
 ;;;;;; remove flymake-mode default
 
-(remove-hook! (prog-mode text-mode) #'flymake-mode)
+;; (remove-hook! (prog-mode text-mode) #'flymake-mode)
 
 ;;;;;; DONT flymake-vale
 
@@ -2044,6 +2044,10 @@ only those in the selected frame."
 
   (add-hook 'prog-mode-hook 'outli-mode) ; not markdown-mode!
   ;; (add-hook 'org-mode-hook 'outli-mode)
+
+  ;; Add h as narrow prefix for headings in consult-imenu
+  (require 'consult-imenu)
+  (push '(?h "Section") (plist-get (cdr (assoc 'emacs-lisp-mode consult-imenu-config)) :types))
   )
 
 ;;;;; Projectile
@@ -4091,40 +4095,44 @@ Called with a PREFIX, resets the context buffer list before opening"
 
 ;; lsp 관련 설정 메뉴들. 느리게 만드는 범인중 십중팔구 LSP가 관련되어져 있다고 함.
 ;; 해당 튜닝도 구글링을 통해서 찾았다.
-;; (setq lsp-file-watch-threshold (* 1024 1024))
-;; (setq read-process-output-max (* 1024 1024))
+(setq lsp-file-watch-threshold (* 1024 1024))
+(setq read-process-output-max (* 1024 1024))
 
-;; (progn
-;;   (after! lsp-mode
-;;     (setq
-;;      lsp-headerline-breadcrumb-enable t ; doom nil
-;;      lsp-headerline-breadcrumb-icons-enable nil
-;;      ;; lsp-headerline-breadcrumb-segments '(symbols) ; namespace & symbols, no file path
+(progn
+  (after! lsp-mode
+    (setq
+     ;; https://emacs-lsp.github.io/lsp-mode/page/settings/headerline/
+     lsp-headerline-breadcrumb-enable t ; doom nil
+     lsp-headerline-breadcrumb-icons-enable nil
+     lsp-headerline-breadcrumb-segments '(symbols) ; namespace & symbols, no file path
 
-;;      ;; lsp-idle-delay 0.2  ; smooth LSP features response
-;;      ;; lsp-eldoc-enable-hover nil ; default t - disable all hover actions
-;;      ;; lsp-modeline-code-actions-segments '(count icon)
-;;      ;; lsp-navigation 'both ; default 'both ; 'simple or 'peek
-;;      ;; lsp-modeline-diagnostics-enable nil
-;;      ;; lsp-modeline-code-actions-enable nil
-;;      )
-;;     )
+     lsp-imenu-index-function #'lsp-imenu-create-categorized-index ;; 2025-03-26 doom 'lsp-imenu-create-uncategorized-index
 
-;;   (after! lsp-ui
-;;     (setq
-;;      ;; lsp-ui-doc-use-webkit nil
-;;      ;; lsp-ui-doc-winum-ignore t
-;;      lsp-ui-sideline-enable nil ; doom t - disable sideline for less distraction
-;;      ;; lsp-ui-doc-enable nil ;; doom t - disable all doc popups
-;;      treemacs-space-between-root-nodes nil  ;; doom nil
-;;      ;; lsp-log-io t  ; default nil - Log client-server json communication
-;;      ;; lsp-ui-peek-enable t ; doom t
-;;      ))
+     lsp-idle-delay 0.2  ; smooth LSP features response
+     ;; lsp-eldoc-enable-hover nil ; default t - disable all hover actions
+     ;; lsp-modeline-code-actions-segments '(count icon)
+     ;; lsp-navigation 'both ; default 'both ; 'simple or 'peek
+     ;; lsp-modeline-diagnostics-enable nil
+     ;; lsp-modeline-code-actions-enable nil
+     )
+    )
 
-;;   (when (modulep! :ui treemacs +lsp)
-;;     (setq lsp-treemacs-error-list-current-project-only t)
-;;     (lsp-treemacs-sync-mode +1))
-;;   )
+  (after! lsp-ui
+    (setq
+     ;; lsp-ui-doc-use-webkit nil ; default nil
+     ;; lsp-ui-doc-winum-ignore t ; default t
+     lsp-ui-sideline-enable nil ; doom t - disable sideline for less distraction
+     lsp-ui-sideline-diagnostic-max-line-length 20 ; default 100
+     ;; lsp-ui-doc-enable nil ;; doom t - disable all doc popups
+     treemacs-space-between-root-nodes nil  ;; doom nil
+     ;; lsp-log-io t  ; default nil - Log client-server json communication
+     lsp-ui-peek-enable t ; doom t
+     ))
+
+  (when (modulep! :ui treemacs +lsp)
+    (setq lsp-treemacs-error-list-current-project-only t)
+    (lsp-treemacs-sync-mode +1))
+  )
 
 ;;;;; devdocs-browser
 
@@ -4287,16 +4295,16 @@ Called with a PREFIX, resets the context buffer list before opening"
 ;; (when (modulep! :tools lsp -eglot)
 ;;   (remove-hook 'python-mode-local-vars-hook 'lsp!))
 
-;;;;;; python with eglot
+;;;;;; DONT python with eglot
 
-(with-eval-after-load 'eglot
-  (add-to-list
-   'eglot-server-programs
-   `(python-mode .
-     ,(eglot-alternatives
-       '(("basedpyright-langserver" "--stdio")))))
-  ;; (add-hook 'after-save-hook 'eglot-format)
-  )
+;; (with-eval-after-load 'eglot
+;;   (add-to-list
+;;    'eglot-server-programs
+;;    `(python-mode .
+;;      ,(eglot-alternatives
+;;        '(("basedpyright-langserver" "--stdio")))))
+;;   ;; (add-hook 'after-save-hook 'eglot-format)
+;;   )
 
 ;;;;;; TODO python-pytest
 
@@ -4641,7 +4649,7 @@ x×X .,·°;:¡!¿?`'‘’   ÄAÃÀ TODO
   (setq doom-modeline-lsp t)
   (setq doom-modeline-indent-info t)
   (setq doom-modeline-hud nil)
-  ;; (setq doom-modeline-buffer-file-name-style 'truncate-upto-project) ; default 'auto
+  (setq doom-modeline-buffer-file-name-style 'truncate-upto-project) ; default 'auto
 
   (remove-hook 'display-time-mode-hook #'doom-modeline-override-time)
   (remove-hook 'doom-modeline-mode-hook #'doom-modeline-override-time))
@@ -4917,13 +4925,13 @@ Suitable for `imenu-create-index-function'."
   (setq dired-listing-switches "-AGFhgv --group-directories-first --time-style=long-iso") ;; doom "-ahl -v --group-directories-first"
   (setq dired-recursive-copies 'always ; doom 'always
         dired-dwim-target t) ; doom t
-  (setq dired-ls-F-marks-symlinks t ; doom nil -F marks links with @
-        delete-by-moving-to-trash t) ; doom nil
+  (setq dired-ls-F-marks-symlinks t) ; doom nil -F marks links with @
+  (setq delete-by-moving-to-trash t) ; doom nil
 
   (setq dired-use-ls-dired t)  ; doom t
-  (setq dired-do-revert-buffer t) ; doom nil
+  ;; (setq dired-do-revert-buffer t) ; doom nil
   ;; (setq dired-clean-confirm-killing-deleted-buffers t) ; doom nil
-  (setq dired-kill-when-opening-new-dired-buffer t) ; doom nil
+  ;; (setq dired-kill-when-opening-new-dired-buffer t) ; doom nil
 
   (require 'wdired)
   (setq wdired-allow-to-change-permissions t) ; doom nil
@@ -5005,17 +5013,12 @@ Suitable for `imenu-create-index-function'."
 
 ;;;;; breadcrumb - with eglot
 
-;; (use-package! breadcrumb
-;;   :defer 2
-;;   :hook
-;;   (eglot-connect . breadcrumb-mode))
-
 (use-package! breadcrumb
   :defer 2
   :init
   ;; (add-hook 'prog-mode-hook 'breadcrumb-local-mode)
-  (add-hook 'python-mode-hook 'breadcrumb-local-mode)
-  (add-hook 'clojure-mode-hook 'breadcrumb-local-mode)
+  ;; (add-hook 'clojure-mode-hook 'breadcrumb-local-mode)
+  ;; (add-hook 'python-mode-hook 'breadcrumb-local-mode)
   (add-hook 'emacs-lisp-mode-hook 'breadcrumb-local-mode)
   )
 
@@ -7093,7 +7096,7 @@ Suitable for `imenu-create-index-function'."
 
   ;; TODO emmy
 
-;;;;;; clojure-mode
+;;;;;; clojure-mode - extra-font-locking
 
   ;; Do not indent single ; comment characters
   (add-hook 'clojure-mode-hook (lambda () (setq-local comment-column 0)))
@@ -7103,6 +7106,10 @@ Suitable for `imenu-create-index-function'."
     ;; (define-key clojure-mode-map (kbd "<M-return>") 'clerk-show)
     ;; (define-key clojure-mode-map (kbd "C-c v") 'vega-view)
     )
+
+;;;;;; indent-bar
+
+  (add-hook 'clojure-mode-hook #'+indent-guides-init-maybe-h)
 
 ;;;;;; cider
 
@@ -7125,41 +7132,87 @@ Suitable for `imenu-create-index-function'."
     ;; *have* to be able to switch cljc buffer to clj/cljs mode without
     ;; cider complaining.
     ;; (setq clojure-verify-major-mode nil) ; 나중에 해보고
-    ;; (setq clojure-indent-style 'align-arguments)
 
+    ;; john's style
     ;; Vertically align s-expressions
     ;; https://github.com/clojure-emacs/clojure-mode#vertical-alignment
-    ;; (setq clojure-align-forms-automatically t)
+    ;; (setq clojure-indent-style 'align-arguments ; default always-align
+    ;;       clojure-align-forms-automatically t ; default nil
+    ;;       clojure-toplevel-inside-comment-form t  ; nil - evaluate expressions in comment as top level
+    ;;       )
 
     ;; manually use on lsp mode
     (defun my/cider-repl-prompt (namespace)
       "Return a prompt string that mentions NAMESPACE."
       (format "%s🦄 " (cider-abbreviate-ns namespace)))
 
-    (setq cider-repl-result-prefix ";; => ")
-
     ;; NOTE 2022-11-21: for the linter (clj-kondo), refer to the Flymake
     ;; NOTE 2022-11-23: This is not final.  I will iterate on it over
     ;; time as I become more familiar with the requirements.
-    ;; (setq cider-repl-result-prefix ";; => "
-    ;;       cider-eval-result-prefix ""
-    ;;       cider-connection-message-fn t ; cute, but no!
-    ;;       cider-repl-prompt-function #'my/cider-repl-prompt
-    ;;       ;; cider-use-overlays nil ; echo area is fine
-    ;;       )
+    (setq cider-repl-result-prefix ";; => "
+          cider-eval-result-prefix ""
+          cider-connection-message-fn t ; cute, but no!
+          cider-repl-prompt-function #'my/cider-repl-prompt
+          ;; cider-use-overlays nil ; echo area is fine
+          )
+
+    (set-popup-rule! "*cider-test-report*" :side 'right :width 0.4)
+    (set-popup-rule! "^\\*cider-repl" :side 'bottom :quit nil)
 
     ;; (setq cider-preferred-build-tool 'clojure-cli)
-    ;; (setq
-    ;;  cider-prompt-for-symbol nil
-    ;;  cider-repl-display-help-banner t ;; enable help banner
-    ;;  ;; cider-print-fn 'puget                   ;; pretty printing with sorted keys / set values
-    ;;  ;; clojure-toplevel-inside-comment-form t
-    ;;  ;; cider-result-overlay-position 'at-point   ; results shown right after expression
-    ;;  ;; cider-overlays-use-font-lock t
-    ;;  cider-repl-buffer-size-limit 100          ; limit lines shown in REPL buffer
-    ;;  nrepl-use-ssh-fallback-for-remote-hosts t ; connect via ssh to remote hosts
-    ;;  )
+    (setq
+     cider-prompt-for-symbol nil ; default nil
+     cider-repl-buffer-size-limit 100          ; limit lines shown in REPL buffer
+     ;; cider-repl-display-help-banner t ; default nil enable help banner
+     ;; cider-print-fn 'puget                   ;; pretty printing with sorted keys / set values
+     ;; cider-result-overlay-position 'at-point   ; results shown right after expression
+     ;; nrepl-use-ssh-fallback-for-remote-hosts t ; connect via ssh to remote hosts
+
+     ;; cider-repl-use-clojure-font-lock nil ; default t
+     ;; cider-repl-use-pretty-printing nil ; default t
+     )
     )
+
+;;;;;; TODO imenu for clojure
+
+  ;; 2025-03-26 확인 나중에
+;; (progn
+;;     (require 'consult-imenu)
+
+;; ;;;###autoload
+;;     (defun add-clojure-imenu-regexp-h ()
+;;       "Hacky way to get imenu for root-level keywords. Useful in edn files."
+;;       (setq-local imenu-generic-expression
+;;                   `(
+;;                     ("Section" "^[ \t]*;;;+\\**[ \t]+\\([^\n]+\\)" 1)
+;;                     ("Functions" "^\\s-*\\(defn +\\([^ )\n]+\\)" 1)
+;;                     ("Macros" "^\\s-*\\(defmacro +\\([^ )\n]+\\)" 1)
+;;                     ("Structs" "^\\s-*\\(defstruct +\\([^ )\n]+\\)" 1)
+;;                     ("Namespaces" "^\\s-*\\(ns +\\([^ )\n]+\\)" 1)
+;;                     ("Protocols" "^\\s-*\\(defprotocol +\\([^ )\n]+\\)" 1)
+;;                     ("Records" "^\\s-*\\(defrecord +\\([^ )\n]+\\)" 1)
+;;                     ("Types" "^\\s-*\\(deftype +\\([^ )\n]+\\)" 1)
+;;                     ("Vars" "^\\s-*\\(def +\\([^ )\n]+\\)" 1)
+;;                     ("Special Forms" "^\\s-*\\(def\\(?:\\w+\\) +\\([^ )\n]+\\)" 1)
+;;                     ))
+;;       (when (string= "edn" (file-name-extension (or (buffer-file-name) "")))
+;;         (add-to-list 'imenu-generic-expression '(nil "^.?.?\\(:[^ ]+\\).*$" 1) t)))
+
+;;     (add-hook! (clojure-mode clojure-ts-mode) #'add-clojure-imenu-regexp-h)
+
+;;     (dolist (clojure '(clojure-mode clojure-ts-mode))
+;;       (add-to-list 'consult-imenu-config
+;;                    `(,clojure
+;;                      :toplevel "Functions"
+;;                      :types (
+;;                              (?h "Section")
+;;                              (?f "Functions" font-lock-function-name-face)
+;;                              (?m "Macros" font-lock-type-face)
+;;                              (?p "Protocols" font-lock-constant-face)
+;;                              (?t "Types" font-lock-type-face)
+;;                              (?v "Vars" font-lock-variable-name-face)
+;;                              ))))
+;;     )
 
 ;;;;;; clj-deps-new
 
@@ -7322,7 +7375,7 @@ Suitable for `imenu-create-index-function'."
 ;;;;; ccmenu: context-menu with casual
 
 (when (display-graphic-p) ;; gui
-  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup)
+  ;; (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup) ;; 2025-03-26 disable
   (require 'ccmenu))
 
 ;;;;; Terminal Mode - (unless (display-graphic-p)
