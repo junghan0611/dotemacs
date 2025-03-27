@@ -590,7 +590,7 @@ Also see `prot-window-delete-popup-frame'." command)
          (lambda (x)
            (or
             (eq x (current-buffer))
-            (member (buffer-name x) '("*Messages*" "*scratch*"))))
+            (member (buffer-name x) '("*doom:scratch*" "*Messages*" "*scratch*"))))
          (buffer-list)))
   (delete-other-windows))
 

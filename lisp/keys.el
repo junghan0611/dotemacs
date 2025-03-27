@@ -329,6 +329,11 @@
   (global-set-key (kbd "M-g j") 'my/side-notes-toggle-daily-note)
   )
 
+;;;; org-side-tree
+
+(when (locate-library "org-side-tree")
+  (global-set-key (kbd "M-g M-o") 'org-side-tree-toggle))
+
 ;;;; markdown-mode-map
 
 (with-eval-after-load 'markdown-mode

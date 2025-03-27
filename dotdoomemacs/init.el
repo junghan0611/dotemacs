@@ -80,8 +80,8 @@
 (doom!
  :completion
  (corfu +orderless +icons) ;; +dabbrev - custom dabbrev
- ;; (vertico +icons)
- vertico ;; search engine of the future
+ ;; (vertico +childframe) search engine of the future ; +icons
+ vertico
 
  :ui
  doom              ; what makes DOOM look the way it does
@@ -197,7 +197,7 @@
  (javascript +lsp) ;; all(hope(abandon(ye(who(enter(here))))))
  ;;(java +lsp)       ; the poster child for carpal tunnel syndrome
  ;;julia             ; a better, faster MATLAB
- ;;kotlin            ; a better, slicker Java(Script)
+ ;; (kotlin +lsp)       ; a better, slicker Java(Script)
  (latex +latexmk +cdlatex) ; writing papers in Emacs has never been so fun
  ;;lean              ; for folks with too much to prove
  ledger            ; be audit you can be
@@ -225,7 +225,7 @@
  ;; plantuml ; diagrams for confusing people more
  graphviz
  ;;purescript        ; javascript, but functional
- (python +lsp +pyright) ; +conda beautiful is better than ugly
+ (python +poetry +lsp +pyright) ; +conda beautiful is better than ugly
  ;;qt                ; the 'cutest' gui framework ever
  racket ; a DSL for DSLs
  ;;raku              ; the artist formerly known as perl6

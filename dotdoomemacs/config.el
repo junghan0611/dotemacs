@@ -476,7 +476,7 @@
 
       ;; =M-x eldoc-doc-buffer= 함수 호출로 표시하는 buffer 크기 조절
       ("^\\*eldoc for" :size 0.2 :vslot -1) ; "*eldoc*"
-      ("*Ilist*" :size 45 :side left :modeline t :select nil :quit nil) ; imenu-list
+      ("*Ilist*" :size 40 :side left :modeline t :select nil :quit nil) ; imenu-list 45
       ;; ("^ ?\\*Treemacs" :slot 7 :size 45 :side left :modeline nil :select nil :quit nil)
       ;; ("^ ?\\*NeoTree" :slot 7 :size 45 :side left :modeline t :slect nil :quit nil)
 
@@ -761,12 +761,16 @@
 
 ;;;; :completion corfu vertico
 
-;;;;; vertico
+;;;;; vertico remove-hook
+
+(when (modulep! :completion vertico +childframe)
+  (remove-hook 'vertico-mode-hook #'vertico-posframe-mode))
+
+;;;;; vertico on TOP
 
 (unless (or IS-TERMUX IS-DEMO)
-
   (require 'vertico-buffer)
-  ;; (setq vertico-resize 'grow-only) ; doom nil
+  (setq vertico-resize 'grow-only) ; doom nil
 
   ;; vertico on Top
   (setq vertico-buffer-display-action
@@ -818,6 +822,80 @@
 ;;    #'vertico--setup
 ;;    :after #'my/vertico-setup-then-remove-post-command-hook)
 ;;   (advice-add #'vertico--advice :around #'my/vertico-exhibit-with-timer))
+
+;;;;; marginalia with vertico-sort
+
+;;;;;; marginalia for file
+
+(after! vertico
+  (require 'marginalia)
+  (defun gr/marginalia--annotate-local-file (cand)
+    "Annotate local file CAND.
+Removes modes, which I’ve never needed or wanted."
+    (marginalia--in-minibuffer
+      (when-let (attrs (ignore-errors
+                         ;; may throw permission denied errors
+                         (file-attributes (substitute-in-file-name
+                                           (marginalia--full-candidate cand))
+                                          'integer)))
+        (marginalia--fields
+         ((marginalia--file-size attrs) :face 'marginalia-size :width -7)
+         ((marginalia--time (file-attribute-modification-time attrs))
+          :face 'marginalia-date :width -12)
+         ;; File owner at the right
+         ((marginalia--file-owner attrs) :face 'marginalia-file-owner)))))
+
+  (defun gr/marginalia-annotate-file (cand)
+    "Annotate file CAND with its size, modification time and other attributes.
+These annotations are skipped for remote paths."
+    (if-let (remote (or (marginalia--remote-file-p cand)
+                        (when-let (win (active-minibuffer-window))
+                          (with-current-buffer (window-buffer win)
+                            (marginalia--remote-file-p (minibuffer-contents-no-properties))))))
+        (marginalia--fields (remote :format "*%s*" :face 'marginalia-documentation))
+      (gr/marginalia--annotate-local-file cand)))
+
+  ;; M-A 순서를 바꾸면 된다.
+  (add-to-list 'marginalia-annotator-registry
+               '(file gr/marginalia-annotate-file marginalia-annotate-file builtin none))
+
+;;;;;; vertico sort modified
+
+  ;; (setq vertico-multiform-categories nil)
+  ;; (setq vertico-multiform-categories
+  ;;       '(
+  ;;         ;; (file (vertico-sort-function . sort-directories-first))
+  ;;         ;; (file (vertico-sort-function . gr/sort-modified))
+  ;;         (file (+vertico-transform-functions . +vertico-highlight-directory)) ; doom default
+  ;;         ))
+
+  ;; Sort directories before files
+  (defun sort-directories-first (files)
+    (setq files (vertico-sort-history-length-alpha files))
+    (nconc (seq-filter (lambda (x) (string-suffix-p "/" x)) files)
+           (seq-remove (lambda (x) (string-suffix-p "/" x)) files)))
+
+  (defun gr/sort-modified (list)
+    "Sort LIST of files for latest modified."
+    (let ((ht (make-hash-table :test #'equal :size 5000)))
+      (dolist (x list)
+        (puthash x (file-attribute-modification-time (file-attributes x)) ht))
+      (sort list
+            (lambda (a b)
+              (let ((one
+                     (gethash a ht))
+                    (two
+                     (gethash b ht)))
+                (time-less-p two one))))))
+
+  (defun vertico-sort-modified ()
+    (interactive)
+    (setq-local vertico-sort-override-function
+                (and (not vertico-sort-override-function)
+                     #'gr/sort-modified)
+                vertico--input t))
+
+  (keymap-set vertico-map "M-," #'vertico-sort-modified))
 
 ;;;;; custom consult
 
@@ -1349,7 +1427,7 @@ work computers.")
   (setq imenu-list-focus-after-activation t)
   (setq imenu-list-auto-resize nil)
   (setq imenu-list-auto-update t)
-  (setq imenu-list-idle-update-delay 5.0)
+  (setq imenu-list-idle-update-delay 1.0)
   (add-hook 'imenu-list-major-mode-hook #'my/imenu-list-tuncates-without-tab-line)
   :config
 
@@ -2416,11 +2494,9 @@ ${content}"))
 ;;;;; doom packages
 ;;;;;; org-noter
 
-(after! org
-  (require 'org-noter)
-  (setq org-noter-notes-search-path (list (concat user-org-directory "notes/")))
-  (setq org-noter-default-notes-file-names "20240902T165404--org-noter.org")
-  )
+;; (require 'org-noter)
+(setq org-noter-notes-search-path (list (concat user-org-directory "notes/")))
+(setq org-noter-default-notes-file-names "20240902T165404--org-noter.org")
 
 ;;;;;; format-on-save-disabled-modes
 
@@ -3133,13 +3209,14 @@ ${content}"))
 
       ;; (vertico-sort-function 'vertico-sort-history-alpha)
       ;; https://github.com/mclear-tools/consult-notes/issues/16
-      (after! vertico-multiform
-        ;; /doomemacs-junghan0611/modules/completion/vertico/config.el
-        (setq vertico-multiform-categories nil) ; reset nil
-        (setq vertico-multiform-commands nil) ; reset nil
-        (add-to-list 'vertico-multiform-commands
-                     '(consult-denote-open (vertico-sort-function . vertico-sort-history-alpha))
-                     '(consult-notes (vertico-sort-function . vertico-sort-history-alpha)))) ; vertico-sort-alpha
+      ;; (after! vertico-multiform
+      ;; ;;   ;; /doomemacs-junghan0611/modules/completion/vertico/config.el
+      ;; ;;   (setq vertico-multiform-categories nil) ; reset nil
+      ;; ;;   (setq vertico-multiform-commands nil) ; reset nil
+      ;;   (add-to-list 'vertico-multiform-commands
+      ;;                '(consult-denote-open (vertico-sort-function . vertico-sort-history-alpha))
+      ;;                '(consult-notes (vertico-sort-function . vertico-sort-history-alpha))))
+; vertico-sort-alpha
 
       (consult-notes-denote-mode 1)
 
@@ -3372,17 +3449,15 @@ ${content}"))
 ;;;;;;;; 05 - gptel backend configurations
 
   ;; xAI offers an OpenAI compatible API
-  (setq gptel-model 'grok-2-1212
-        gptel-backend
-        (gptel-make-openai "xAI"
-          :host "api.x.ai"
-          :key user-xai-api-key
-          :endpoint "/v1/chat/completions"
-          :stream t
-          ;; :request-params '(:temperature 0.2) ; default 0.2
-          :models '(grok-2-1212
-                    grok-2-image-1212
-                    )))
+  (gptel-make-openai "xAI"
+    :host "api.x.ai"
+    :key user-xai-api-key
+    :endpoint "/v1/chat/completions"
+    :stream t
+    ;; :request-params '(:temperature 0.2) ; default 0.2
+    :models '(grok-2-1212
+              grok-2-image-1212
+              ))
 
   ;; Google - Gemini
   (gptel-make-gemini "Gemini"
@@ -3398,13 +3473,14 @@ ${content}"))
   ;; sonar-reasoning	127k	Chat Completion
   ;; sonar-pro	200k	Chat Completion
   ;; sonar	127k	Chat Completion
-  (gptel-make-perplexity "Perplexity"
+  (setq gptel-model 'sonar
+        gptel-backend (gptel-make-perplexity "Perplexity"
     :host "api.perplexity.ai"
     :key user-perplexity-api-key
     :endpoint "/chat/completions"
     :stream t
     :request-params '(:temperature 0.2) ; default 0.2
-    :models '(sonar sonar-pro sonar-reasoning))
+    :models '(sonar sonar-pro sonar-reasoning)))
 
   ;; DeepSeek offers an OpenAI compatible API
   ;; The deepseek-chat model has been upgraded to DeepSeek-V3. deepseek-reasoner points to the new model DeepSeek-R1.
@@ -5561,6 +5637,10 @@ Suitable for `imenu-create-index-function'."
 ;;;; end-of user-configs
 ;;;; :lang org
 
+;;;;; org configs
+
+(setq org-id-locations-file (file-name-concat org-directory (concat "." system-name "-orgids"))) ; ".org-id-locations"))
+
 ;;;;; org reloading
 
 (after! org
@@ -5570,7 +5650,6 @@ Suitable for `imenu-create-index-function'."
   (require 'org-config)
   ;; (load-file (concat user-dotemacs-dir "lisp/org-funcs.el"))
   ;; (load-file (concat user-dotemacs-dir "lisp/org-config.el"))
-  (setq org-id-locations-file (file-name-concat org-directory (concat "." system-name "-orgids"))) ; ".org-id-locations"))
   ;; (+org-init-keybinds-h) -> 2024-06-01 여기 키바인딩 관련 부분 뒤에서 다시 잡아줌
 
   ;; (setq org-attach-use-inheritance nil) ; selective
@@ -5936,6 +6015,8 @@ Suitable for `imenu-create-index-function'."
        ;; `(org-drawer ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata :height 0.8)))
        ;; `(org-special-keyword ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata)))
 
+       `(org-side-tree-heading-face ((,c :inherit variable-pitch :foreground ,fg-alt :height ,user-imenu-list-height)))
+
        `(imenu-list-entry-face-0 ((,c :inherit variable-pitch :foreground ,fg-heading-1 :height ,user-imenu-list-height)))
        `(imenu-list-entry-face-1 ((,c :inherit variable-pitch :foreground ,fg-heading-2 :height ,user-imenu-list-height)))
        `(imenu-list-entry-face-2 ((,c :inherit variable-pitch :foreground ,fg-heading-3 :height ,user-imenu-list-height)))
@@ -6026,6 +6107,8 @@ Suitable for `imenu-create-index-function'."
      (custom-set-faces
       `(consult-separator ((,c :inherit default :foreground ,yellow)))
       `(consult-notes-time ((,c :inherit default :foreground ,cyan)))
+
+      `(org-side-tree-heading-face ((,c :inherit variable-pitch :foreground ,fg-alt :height ,user-imenu-list-height)))
 
       `(imenu-list-entry-face-0 ((,c :inherit variable-pitch :foreground ,rainbow-1 :height ,user-imenu-list-height)))
       `(imenu-list-entry-face-1 ((,c :inherit variable-pitch :foreground ,rainbow-2 :height ,user-imenu-list-height)))
@@ -7368,9 +7451,8 @@ Suitable for `imenu-create-index-function'."
          ("C-c C-p C-r" . webpaste-paste-region)
          ("C-c C-p C-p" . webpaste-paste-buffer-or-region)))
 
-;; (use-package! fireplace :defer t)
-;; (use-package! snow :defer t)
-;; (use-package! selectric-mode :defer t)
+(use-package! fireplace :defer t)
+(use-package! snow :defer t)
 
 ;;;;; ccmenu: context-menu with casual
 
@@ -7490,7 +7572,7 @@ Suitable for `imenu-create-index-function'."
     :config
     (setq org-todoist-api-token user-todoist-token)
     (setq org-todoist-storage-dir (concat org-directory ".cache")) ; for cache
-    (setq org-todoist-file "org-todoist.org")
+    (setq org-todoist-file "private/20250327T064848--org-todoist__aprj.org")
     )
 
   ;; (use-package! todoist
@@ -7594,5 +7676,20 @@ Suitable for `imenu-create-index-function'."
 ;;   (delete 'latex treesit-auto-langs)
 ;;   (treesit-auto-add-to-auto-mode-alist 'all)
 ;;   (global-treesit-auto-mode))
+;;; org-side-tree
+
+(progn
+ (require 'org-side-tree)
+ (setq-local outline-regexp ";;;\\(;* [^ \t\n]\\)") ; for clojure lisp
+ (setq org-side-tree-persistent nil) ; default nil
+ ;; (setq org-side-tree-cursor 'box)
+ ;; (setq org-side-tree-fontify nil)
+ (setq org-side-tree-timer-delay 1) ; default 0.3
+ ;; (add-hook 'emacs-lisp-mode-hook (lambda () (setq-local outline-regexp ";;;\\(;* [^   \t\n]\\)")))
+ ;; (add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
+
+ (global-set-key (kbd "<f7>") 'org-side-tree-toggle)
+ (global-set-key (kbd "M-<f7>") 'winum-select-window-2)
+ )
 
 ;;; left blank on purpose
