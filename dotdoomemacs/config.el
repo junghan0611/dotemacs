@@ -4180,7 +4180,7 @@ Called with a PREFIX, resets the context buffer list before opening"
      ;; https://emacs-lsp.github.io/lsp-mode/page/settings/headerline/
      lsp-headerline-breadcrumb-enable t ; doom nil
      lsp-headerline-breadcrumb-icons-enable nil
-     lsp-headerline-breadcrumb-segments '(symbols) ; namespace & symbols, no file path
+     ;; lsp-headerline-breadcrumb-segments '(symbols) ; namespace & symbols, no file path
 
      lsp-imenu-index-function #'lsp-imenu-create-categorized-index ;; 2025-03-26 doom 'lsp-imenu-create-uncategorized-index
 
