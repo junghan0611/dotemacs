@@ -194,7 +194,7 @@
  ;;idris             ; a language you can depend on
 
  json  ; At least it ain't XML
- (javascript +lsp) ;; all(hope(abandon(ye(who(enter(here))))))
+ (javascript +tree-sitter +lsp) ;; all(hope(abandon(ye(who(enter(here))))))
  ;;(java +lsp)       ; the poster child for carpal tunnel syndrome
  ;;julia             ; a better, faster MATLAB
  ;; (kotlin +lsp)       ; a better, slicker Java(Script)
@@ -225,7 +225,7 @@
  ;; plantuml ; diagrams for confusing people more
  graphviz
  ;;purescript        ; javascript, but functional
- (python +poetry +lsp +pyright) ; +conda beautiful is better than ugly
+ (python +poetry +lsp +pyright +tree-sitter) ; +conda beautiful is better than ugly
  ;;qt                ; the 'cutest' gui framework ever
  racket ; a DSL for DSLs
  ;;raku              ; the artist formerly known as perl6

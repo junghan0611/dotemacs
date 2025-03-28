@@ -1860,6 +1860,11 @@ window."
 ;;   )
 
 
+;;;; aidermacs
+
+(when (locate-library "aidermacs")
+  (global-set-key (kbd "C-c a") 'aidermacs-transient-menu))
+
 ;;; EWS Map : 'M-c n', 'C-c n' and 'SPC RET'
 
 ;; org-mode

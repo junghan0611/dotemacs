@@ -440,7 +440,7 @@
   ;; (plist-put +popup-defaults :modeline t)
 
   ;; Completely disable management of the mode-line in popups:
-  ;; (remove-hook '+popup-buffer-mode-hook #'+popup-set-modeline-on-enable-h) ; important
+  (remove-hook '+popup-buffer-mode-hook #'+popup-set-modeline-on-enable-h) ; important
 
   ;; (setq +popup--display-buffer-alist nil) ; reset all
 
@@ -3065,7 +3065,7 @@ ${content}"))
 #+export_file_name: %4$s.md
 #+description:
 #+hugo_categories: Noname
-#+hugo_tags: notes
+#+hugo_tags: temp
 
 #+print_bibliography:
 
@@ -3836,18 +3836,20 @@ ${content}"))
 ;;              ))))
 
 
-;;;;; llmclient: aider.el
+;;;;; DONT llmclient: aider.el
 
-(use-package! aider
-  :config
-  (setq aider-args '("--model" "deepseek/deepseek-reasoner"))
-  (setenv "ANTHROPIC_API_KEY" user-claude-api-key)
-  (setenv "OPENAI_API_KEY" user-openai-api-key)
-  (setenv "GEMINI_API_KEY" user-gemini-api-key)
-  (setenv "PERPLEXITYAI_API_KEY" user-perplexity-api-key)
-  (setenv "XAI_API_KEY" user-xai-api-key)
-  (setenv "DEEPSEEK_API_KEY" user-deepseek-api-key)
-  )
+;; (use-package! aider
+;;   :config
+;;   (setq aider-args '("--model"  "deepseek/deepseek-chat"))
+;;   ;; "xai/grok-2-latest"
+;;   (setenv "ANTHROPIC_API_KEY" user-claude-api-key)
+;;   (setenv "OPENAI_API_KEY" user-openai-api-key)
+;;   (setenv "GEMINI_API_KEY" user-gemini-api-key)
+;;   (setenv "PERPLEXITYAI_API_KEY" user-perplexity-api-key)
+;;   (setenv "XAI_API_KEY" user-xai-api-key)
+;;   (setenv "DEEPSEEK_API_KEY" user-deepseek-api-key)
+;;   (add-hook 'aider-comint-mode-hook #'visual-line-mode)
+;;   )
 
 ;; aider --list-models deepseek
 ;; deepseek/deepseek-chat, deepseek/deepseek-coder, deepseek/deepseek-reasoner
@@ -3858,6 +3860,106 @@ ${content}"))
 ;; (setq aider-args '("--model" "gemini/gemini-exp-1206"))
 ;; Optional: Set a key binding for the transient menu
 ;; (global-set-key (kbd "C-c a") 'aider-transient-menu)
+
+;;;;; llmclient: aidermacs
+
+(use-package! aidermacs
+  :defer 3
+  :init
+  (autoload 'aidermacs-transient-menu "aidermacs" nil t)
+  :config
+  (setenv "ANTHROPIC_API_KEY" user-claude-api-key)
+  (setenv "OPENAI_API_KEY" user-openai-api-key)
+  (setenv "GEMINI_API_KEY" user-gemini-api-key)
+  (setenv "PERPLEXITYAI_API_KEY" user-perplexity-api-key)
+  (setenv "XAI_API_KEY" user-xai-api-key)
+  (setenv "DEEPSEEK_API_KEY" user-deepseek-api-key)
+
+;;;###autoload
+  (defun aidermacs-buffer-name ()
+    "Generate the aidermacs buffer name based on project root or current directory.
+Prefers existing sessions closer to current directory."
+    (let* ((root (aidermacs-project-root))
+           (current-dir (file-truename default-directory))
+           ;; Get all existing aidermacs buffers
+           (aidermacs-buffers
+            (cl-remove-if-not
+             (lambda (buf)
+               (string-match-p "^\\*aidermacs:" (buffer-name buf)))
+             (buffer-list)))
+           ;; Extract directory paths and subtree status from buffer names
+           (buffer-dirs
+            (mapcar
+             (lambda (buf)
+               (when (string-match "^\\*aidermacs:\\(.*?\\)\\*$"
+                                   (buffer-name buf))
+                 (cons (match-string 1 (buffer-name buf))
+                       (match-string 2 (buffer-name buf)))))
+             aidermacs-buffers))
+           ;; Find closest parent directory that has an aidermacs session
+           (closest-parent
+            (car
+             (car
+              (sort
+               (cl-remove-if-not
+                (lambda (dir-info)
+                  (and (car dir-info)
+                       (string-prefix-p (car dir-info) current-dir)
+                       (file-exists-p (car dir-info))))
+                buffer-dirs)
+               (lambda (a b)
+                 ;; Sort by path length (deeper paths first)
+                 (> (length (car a)) (length (car b))))))))
+           (display-root (cond
+                          ;; Use current directory for new subtree session
+                          (aidermacs-subtree-only current-dir)
+                          ;; Use closest parent if it exists
+                          (closest-parent closest-parent)
+                          ;; Fall back to project root for new non-subtree session
+                          (t root))))
+      (format "*aidermacs:%s*"
+              (file-truename display-root))))
+
+  ;; (setq aidermacs-default-model "anthropic/claude-3-7-sonnet-20250219")
+  ;;(setq aidermacs-default-model "gemini/gemini-2.5-pro-exp-03-25")
+  ;;(setq aidermacs-editor-model "gemini/gemini-2.5-pro-exp-03-25")
+  (setq aidermacs-auto-commits nil)
+  (setq aidermacs-use-architect-mode t)
+  (setq aidermacs-auto-accept-architect t)
+  (setq aidermacs-backend 'vterm) ; 'comint
+
+  ;; Optional: Set specific model for architect reasoning
+  ;; (setq aidermacs-architect-model "deepseek/deepseek-reasoner")
+  ;; Optional: Set specific model for code generation
+  ;; (setq aidermacs-editor-model "deepseek/deepseek-chat")
+
+  (setq aidermacs-default-model "xai/grok-2-latest")
+  (setq aidermacs-editor-model "xai/grok-2-latest")
+  (setq aidermacs-architect-model "xai/grok-2-latest")
+
+  ;; Comint backend:
+  ;; (setq aidermacs-comint-multiline-newline-key "S-<return>")
+  ;; ;; Vterm backend:
+  ;; (setq aidermacs-vterm-multiline-newline-key "S-<return>")
+
+  (setq aidermacs-extra-args
+        '("--cache-prompts"
+          "--cache-keepalive-pings" "6"
+          "--watch-files"
+          ;;"--auto-test"
+          ;;"--timeout" "120"
+          ;;"--test"
+          "--auto-commits"
+          "--auto-accept-architect"
+          ;;"--install-tree-sitter-language-pack"
+          "--chat-language" "Korean" ; "English"
+          ;;"--editor-edit-format" "editor-whole"
+          ))
+  (defadvice! my/aidermacs-run-make-real-buffer-a ()
+    :after #'aidermacs-run
+    (when-let ((buf (get-buffer (aidermacs-buffer-name)))
+               (_ (buffer-live-p buf)))
+      (doom-set-buffer-real buf t))))
 
 ;;;;; DONT llmclient: kagi
 
@@ -4299,7 +4401,7 @@ Called with a PREFIX, resets the context buffer list before opening"
   (add-hook 'clojure-mode-hook 'aggressive-indent-mode)
   (add-hook 'scheme-mode-hook 'aggressive-indent-mode)
   (add-hook 'racket-mode-hook 'aggressive-indent-mode)
-  ;; (add-hook 'hy-mode-hook 'aggressive-indent-mode)
+  (add-hook 'hy-mode-hook 'aggressive-indent-mode)
   )
 
 ;;;;; yasnippet Navigation M-n/M-p and hippie-expand M-/
@@ -4399,17 +4501,19 @@ Called with a PREFIX, resets the context buffer list before opening"
 ;; use apheleia
 ;; (setq-hook! 'python-mode-hook +format-with-lsp nil)
 
-;;;;; DONT hy : hylang
+;;;;;; hy : hylang
 
-;; (use-package! hy-mode
-;;   :mode "\\.hy\\'"
-;;   :interpreter "hy"
-;;   ;; :hook ((hy-mode . eglot-ensure))
-;;   :config
-;;   (set-repl-handler! 'hy-mode #'hy-shell-start-or-switch-to-shell)
-;;   (set-formatter! 'lisp-indent #'apheleia-indent-lisp-buffer :modes '(hy-mode))
-;;   (when (executable-find "hyuga") ; it's works!
-;;     (set-eglot-client! 'hy-mode '("hyuga"))))
+;; 0.28 hy-mode, hyuga
+(use-package! hy-mode
+  :mode "\\.hy\\'"
+  :interpreter "hy"
+  ;; :hook ((hy-mode . eglot-ensure))
+  :config
+  (set-repl-handler! 'hy-mode #'hy-shell-start-or-switch-to-shell)
+  (set-formatter! 'lisp-indent #'apheleia-indent-lisp-buffer :modes '(hy-mode))
+  ;; (when (executable-find "hyuga") ; it's works!
+  ;;   (set-eglot-client! 'hy-mode '("hyuga")))
+  )
 
 ;;;; :format
 
@@ -7691,5 +7795,15 @@ Suitable for `imenu-create-index-function'."
  (global-set-key (kbd "<f7>") 'org-side-tree-toggle)
  (global-set-key (kbd "M-<f7>") 'winum-select-window-2)
  )
+
+;;;; mb-depth
+
+;; from prot
+(use-package! mb-depth
+  :ensure nil
+  :hook (after-init . minibuffer-depth-indicate-mode)
+  :config
+  (setq read-minibuffer-restore-windows nil) ; doom t
+  (setq enable-recursive-minibuffers t))
 
 ;;; left blank on purpose

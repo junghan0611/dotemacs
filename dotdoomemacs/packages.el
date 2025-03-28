@@ -328,6 +328,9 @@
 ;; (package! minuet) ;; code completion using LLM
 (package! aider :recipe (:host github :repo "tninja/aider.el" :files ("aider.el" "aider-core.el" "aider-file.el" "aider-code-change.el" "aider-discussion.el" "aider-prompt-mode.el" "aider-doom.el")))
 
+;; (package! aidermacs)
+(package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs" :files ("*.el")))
+
 (package! llm)
 
 ;; (package! kagi)
@@ -417,7 +420,9 @@
 
 ;; (package! bats-mode) ; shell-scripts
 
-;; (package! hy-mode :recipe (:host github :repo "jethack23/hy-mode"))
+(package! hy-mode :recipe (:host github :repo "jethack23/hy-mode"))
+(package! ob-hy)
+
 ;; (package! geiser)
 ;; (package! geiser-mit :recipe (:host github :repo "emacsmirror/geiser-mit"))
 
