@@ -353,7 +353,7 @@
 
 (package! whisper :recipe (:host github :repo "natrys/whisper.el"))
 
-(package! codeium :recipe (:host github :repo "Exafunction/codeium.el"))
+;; (package! codeium :recipe (:host github :repo "Exafunction/codeium.el"))
 
 ;; (package! ellama)
 ;; (package! openai :recipe (:host github :repo "emacs-openai/openai" :files ("*.el")))

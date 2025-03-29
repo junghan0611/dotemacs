@@ -225,7 +225,7 @@
  ;; plantuml ; diagrams for confusing people more
  graphviz
  ;;purescript        ; javascript, but functional
- (python +poetry +lsp +pyright +tree-sitter) ; +conda beautiful is better than ugly
+ (python +conda +lsp +pyright +tree-sitter) ; +poetry +conda beautiful is better than ugly
  ;;qt                ; the 'cutest' gui framework ever
  racket ; a DSL for DSLs
  ;;raku              ; the artist formerly known as perl6

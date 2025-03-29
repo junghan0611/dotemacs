@@ -4511,8 +4511,9 @@ Called with a PREFIX, resets the context buffer list before opening"
   :config
   (set-repl-handler! 'hy-mode #'hy-shell-start-or-switch-to-shell)
   (set-formatter! 'lisp-indent #'apheleia-indent-lisp-buffer :modes '(hy-mode))
-  ;; (when (executable-find "hyuga") ; it's works!
-  ;;   (set-eglot-client! 'hy-mode '("hyuga")))
+  (when (executable-find "hyuga") ; it's works!
+    (require 'eglot)
+    (set-eglot-client! 'hy-mode '("hyuga")))
   )
 
 ;;;; :format
@@ -7804,6 +7805,7 @@ Suitable for `imenu-create-index-function'."
   :hook (after-init . minibuffer-depth-indicate-mode)
   :config
   (setq read-minibuffer-restore-windows nil) ; doom t
-  (setq enable-recursive-minibuffers t))
+  ;; (setq enable-recursive-minibuffers t) ; conflict vertico-multiform
+  )
 
 ;;; left blank on purpose

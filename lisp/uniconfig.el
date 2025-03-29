@@ -914,6 +914,17 @@ Also see `prot-window-delete-popup-frame'." command)
     (add-hook 'org-mode-hook #'org-rainbow-tags-mode)
     ))
 
+
+;;;; ob-mermaid
+
+(when (locate-library "ob-mermaid")
+  (with-eval-after-load 'org
+    (require 'ob-mermaid)
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     (append org-babel-load-languages '((mermaid . t))))
+    ))
+
 ;;;; tab-width for org-mode and org-journal-mode
 
 (when (locate-library "org-journal")

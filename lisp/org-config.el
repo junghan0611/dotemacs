@@ -123,7 +123,7 @@
 
 (defun bh/make-markdown-scratch ()
   (interactive)
-  (find-file (concat org-directory "/md/scratch.md"))
+  (find-file (concat org-directory "/tmp/scratch.md"))
   ;; (gnus-make-directory "/tmp/publish")
   )
 

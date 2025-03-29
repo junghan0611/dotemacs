@@ -808,7 +808,9 @@
 
      ;; engine-mode
 
-;;;;; DONT Packages: jh-llm
+;;;;; Packages: jh-llm
+
+     aidermacs
 
      ;; (llm :location (recipe :fetcher github :repo "ahyatt/llm" :branch "main" :files ("*.el" "*.org")))
      ;; ellama
@@ -4567,14 +4569,6 @@ For instance pass En as source for English."
     (setq remember-data-file (my/org-remember-file))
     (setq remember-notes-initial-major-mode 'org-mode
           remember-notes-auto-save-visited-file-name t))
-
-;;;;;; jh-org > packages > ob-mermaid
-
-  (use-package ob-mermaid
-    :after org
-    :config
-    (org-babel-do-load-languages 'org-babel-load-languages
-                                 (append org-babel-load-languages '((mermaid . t)))))
 
 ;;;;;; DONT jh-org > packages > ob-d2
 
