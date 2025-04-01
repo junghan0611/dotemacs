@@ -247,7 +247,7 @@
      bm
      spacemacs-project
 
-     (git :packages (not evil-collection forge)
+     (git :packages (not code-review evil-collection forge)
           :variables
           ;; delta-plugin requires git-delta (apt install git-delta)
           ;; git-enable-magit-delta-plugin t
