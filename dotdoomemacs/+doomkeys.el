@@ -1207,7 +1207,7 @@
 
       :desc "*casual-dired* menu" ";" #'casual-dired-tmenu
       "-" #'nerd-icons-dired-mode
-
+      "P" #'my/dired-hugo-export-wim-to-md
       :desc "denote-map" "n" ews-denote-map
       ;; (:prefix ("y" . "copy")
       ;;          )

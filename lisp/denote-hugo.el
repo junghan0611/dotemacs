@@ -467,10 +467,7 @@ If USE-RELREF is non-nil, format it as a Hugo relref link."
     (interactive)
     (require 'dired+)
     (diredp-do-apply/eval-marked 'org-hugo-export-wim-to-md '(4)))
-
-  (after! org
-    (define-key dired-mode-map (kbd "M-p") #'my/dired-hugo-export-wim-to-md)
-    )
+  ;; (after! org (define-key dired-mode-map (kbd "M-p") #'my/dired-hugo-export-wim-to-md))
   )
 
 ;; (with-eval-after-load 'dired

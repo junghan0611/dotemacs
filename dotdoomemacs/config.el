@@ -3077,8 +3077,8 @@ ${content}"))
 #+identifier: %4$s
 #+export_file_name: %4$s.md
 #+description:
-#+hugo_categories: Noname
 #+hugo_tags: temp
+#+hugo_categories: Noname
 
 #+print_bibliography:
 
@@ -3421,7 +3421,8 @@ ${content}"))
         (insert (format "#+identifier: %s\n" suffix))
         (insert (format "#+export_file_name: %s.md\n" suffix))
         (insert (format "#+description:\n"))
-        (insert (format "#+hugo_tags: temp\n\n"))
+        (insert (format "#+hugo_tags: temp\n"))
+        (insert (format "#+hugo_categories: Noname\n\n"))
 
         ;; add bib and history
         (insert (format "#+print_bibliography:\n* Related Notes\n* History\n- %s\n" (format-time-string "[%Y-%m-%d %a %H:%M]")))
