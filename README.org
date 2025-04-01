@@ -1,14 +1,30 @@
 #+TITLE: Readme
 #+date: <2025-02-21 Fri 18:02>
-#+SUBTITLE:
 #+AUTHOR: Junghan Kim
 #+EMAIL: junghanacs@gmail.com
 
-#+HTML_DOCTYPE: xhtml5
-#+HTML_HTML5_FANCY:
+In construction
 
-# Hugo config
-#+HUGO_AUTO_SET_LASTMOD: t
-#+HUGO_BASE_DIR: ~/workspace/blog
-#+HUGO_AUTO_SET_LASTMOD: t
-#+HUGO_DRAFT: false
+* 괴테
+#+begin_quote
+
+오 오 오
+
+#+end_quote
+
+* 한글 영어
+* 핵심 자동완성프레임워크
+* 디노트
+[2025-03-30 Sun 04:16]
+
+* 스페이스맥스 장점
+* 둠이맥스
+[2025-03-30 Sun 04:25]
+
+* 조직모드
+* 코딩
+[2025-03-30 Sun 04:16]
+
+* Screenshot
+
+[[file:var/20250330T041438-doomemacs-spacemacs.png]]

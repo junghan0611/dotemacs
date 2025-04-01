@@ -485,8 +485,8 @@ org-journal-mode
 ;; https://isamert.net/2021/01/25/how-i-do-keep-my-days-organized-with-org-mode-and-emacs.html
 ;; <2024-09-19 Thu 14:00-15:00>
 ;; 2024-08-27 daily journal template
-;; "#+HUGO_CATEGORIES: Journal Note" n
-;; "#+HUGO_SERIES:" n
+;; "#+hugo_categories: Journal Note" n
+;; "#+hugo_series:" n
 ;; "#+description:\n#+category: Journal\n#+startup: overview\n" n
 ;; "#+BEGIN: clocktable :scope agenda :maxlevel 2 :step day :fileskip0 true :tstart \"" (format-time-string "%Y-%m-%d") "\" :tend \"" (format-time-string "%Y-%m-%d" (time-add 86400 (current-time)))
 ;; "\" \n#+END:\n\n"

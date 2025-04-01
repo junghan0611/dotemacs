@@ -5054,7 +5054,7 @@ For instance pass En as source for English."
 #+identifier: %4$s
 #+export_file_name: %4$s.md
 #+description:
-#+HUGO_CATEGORIES: Noname
+#+hugo_categories: Noname
 #+filetags:   :fleeting:
 
 # #+hugo_front_matter_key_replace: title>today

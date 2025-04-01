@@ -252,6 +252,7 @@
 ;; (package! org-linenote) ; require lsp-mode
 ;; (package! org-linenote :recipe (:local-repo "local/org-linenote"))
 (package! org-linenote :recipe (:host github :repo "junghan0611/org-linenote" :branch "main")) ; eglot
+(package! language-detection) ; html2org
 
 ;;;; :tools
 
@@ -300,6 +301,9 @@
 
 (package! denote-explore)
 (package! denote-search)
+
+(package! denote-regexp)
+
 (package! consult-notes)
 
 (package! consult-denote)
@@ -399,6 +403,7 @@
 
 (package! exercism)
 (package! leetcode)
+
 (package! bats-mode)
 
 (unpin! jupyter)
@@ -444,6 +449,7 @@
 (package! gist)
 (package! consult-git-log-grep)
 (package! magit-todos)
+(package! magit-blame-color-by-age :recipe (:host github :repo "jdtsmith/magit-blame-color-by-age"))
 
 ;;;; Reading
 

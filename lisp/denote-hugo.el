@@ -365,8 +365,6 @@ If USE-RELREF is non-nil, format it as a Hugo relref link."
 ;;           ))))
 ;;   )
 
-
-;; Howto - my/process-files-by-extension
 ;; (defun my/insert-hugo-tags ()
 ;;   (interactive)
 ;;   (save-excursion
@@ -375,6 +373,15 @@ If USE-RELREF is non-nil, format it as a Hugo relref link."
 ;;     (end-of-line)
 ;;     (insert "\n#+hugo_tags: notes"
 ;;             )))
+
+(defun my/insert-hugo-categories ()
+  "Format the current date and add it to Org-Mode metadata."
+  (interactive)
+  (save-excursion
+    (goto-char 0)
+    (search-forward "hugo_tags")
+    (end-of-line)
+    (insert (concat "\n#+hugo_categories: Noname"))))
 
 ;; ;; (diredp-do-apply/eval-marked 'my/insert-hugo-categories '(4))
 
@@ -448,6 +455,29 @@ If USE-RELREF is non-nil, format it as a Hugo relref link."
   (my/denote-remove-hugo-draft-status)
   (my/denote-remove-draft-tag-from-metadata)
   (my/denote-remove-keyword-from-filename "draft"))
+
+
+;;;; 'dired+' hugo
+
+;; Batch Export Files with Org-Hugo
+;; mark files and then batch export them with this command
+
+(when (locate-library "dired+")
+  (defun my/dired-hugo-export-wim-to-md ()
+    (interactive)
+    (require 'dired+)
+    (diredp-do-apply/eval-marked 'org-hugo-export-wim-to-md '(4)))
+
+  (after! org
+    (define-key dired-mode-map (kbd "M-p") #'my/dired-hugo-export-wim-to-md)
+    )
+  )
+
+;; (with-eval-after-load 'dired
+;;   (define-key dired-mode-map (kbd "M-p")
+;;               (lambda() (interactive)
+;;                 (require 'dired+)
+;;                 (diredp-do-apply/eval-marked 'org-hugo-export-wim-to-md '(4)))))
 
 ;;; provide
 

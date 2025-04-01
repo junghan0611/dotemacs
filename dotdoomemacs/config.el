@@ -1051,8 +1051,9 @@ These annotations are skipped for remote paths."
 (after! flycheck
   (setq flycheck-global-modes '(not emacs-lisp-mode org-mode markdown-mode gfm-mode))
   (setq flycheck-checker-error-threshold 1000) ; need more than default of 400
-  (global-flycheck-mode +1)
   )
+
+(remove-hook 'doom-first-buffer-hook #'global-flycheck-mode)
 
 (progn
   (setq flycheck-help-echo-function nil ; default 'flycheck-help-echo-all-error-messages
@@ -2489,6 +2490,17 @@ ${content}"))
     (setq consult-gh-forge-timeout-seconds 20))
   )
 
+;;;;; TODO magit-blame-color-by-age
+
+;; (use-package! magit-blame-color-by-age
+;;   :after magit
+;;   :init
+;;   ;; (setq magit-blame-color-by-age-full-heading t)
+;;   ;; if you'd like date first on heading lines:
+;;   ;; :config (setf (alist-get 'heading-format (alist-get 'headings magit-blame-styles)) "%C %-20a %s\n")
+;;   ;; For full heading coloring
+;;   )
+
 ;;;; :lang org
 
 ;;;;; doom packages
@@ -3043,7 +3055,8 @@ ${content}"))
   ;; :hook (dired-mode . denote-dired-mode)
   :init
   (setq denote-directory user-org-directory)
-    (require 'denote-silo)
+  (require 'denote-silo)
+  (require 'denote-sequence)
   ;; (require 'denote-journal)
   (require 'denote-org)
   (require 'denote-markdown) ; markdown-obsidian
@@ -3316,6 +3329,10 @@ ${content}"))
     ;; (denote-search-help-string "")
     ;; Display keywords in results buffer
     (denote-search-format-heading-function #'denote-search-format-heading-with-keywords))
+
+;;;;;; denote-regexp
+
+  (use-package! denote-regexp)
 
 ;;;;;; end-of denote
   ) ;; end-of denote
@@ -4415,6 +4432,11 @@ Called with a PREFIX, resets the context buffer list before opening"
 ;; M-<left>       +snippets/goto-start-of-field
 ;; M-<right>      +snippets/goto-end-of-field
 ;; yas/expand
+
+(remove-hook! 'yas-minor-mode-hook
+  (defun +corfu-add-yasnippet-capf-h ()
+    (add-hook 'completion-at-point-functions #'yasnippet-capf 30 t)))
+
 (after! yasnippet
   (add-to-list 'hippie-expand-try-functions-list 'yas-hippie-try-expand)
   (yas-reload-all)
@@ -5386,7 +5408,7 @@ Suitable for `imenu-create-index-function'."
   (setq leetcode-prefer-language "python")
   (setq leetcode-prefer-sql "mysql")
   (setq leetcode-save-solutions t)
-  (setq leetcode-directory "~/leetcode")
+  (setq leetcode-directory "~/sync/code/leetcode/")
   (setq leetcode-show-problem-by-slug t)
   ;; :config
   ;; (add-hook 'leetcode-solution-mode-hook
@@ -6729,9 +6751,9 @@ Suitable for `imenu-create-index-function'."
   ;; (tab-bar-select-tab 1)
   )
 
-(unless IS-DEMO
-  (when (display-graphic-p) ; gui
-    (add-hook 'doom-first-input-hook #'my/open-workspaces)))
+;; (unless IS-DEMO
+;;   (when (display-graphic-p) ; gui
+;;     (add-hook 'doom-first-input-hook #'my/open-workspaces)))
 
 ;;;; tab-line-mode on emacs-30
 
@@ -6773,27 +6795,6 @@ Suitable for `imenu-create-index-function'."
     (insert (concat "![" name "]( ../images/" (file-name-nondirectory outfile) ")"))
     (newline)
     (newline)))
-
-;;;; dired+ hugo
-
-;; Batch Export Files with Org-Hugo
-;; mark files and then batch export them with this command
-
-(progn
-  (defun my/dired-hugo-export-wim-to-md ()
-    (interactive)
-    (require 'dired+)
-    (diredp-do-apply/eval-marked 'org-hugo-export-wim-to-md '(4)))
-
-  (after! org
-    (define-key dired-mode-map (kbd "M-p") #'my/dired-hugo-export-wim-to-md)
-    ))
-
-;; (with-eval-after-load 'dired
-;;   (define-key dired-mode-map (kbd "M-p")
-;;               (lambda() (interactive)
-;;                 (require 'dired+)
-;;                 (diredp-do-apply/eval-marked 'org-hugo-export-wim-to-md '(4)))))
 
 ;;;; Latex Preview for math symbol
 
@@ -7584,8 +7585,7 @@ Suitable for `imenu-create-index-function'."
   ;; (remove-hook 'marginalia-mode-hook 'nerd-icons-completion-marginalia-setup)
   )
 
-
-;;;;; recent-rgrep
+;;;;; recent-rgrep - search
 
 ;; $ recent-rgrep -f '*.org' 'happy to see you'
 (use-package! recent-rgrep
@@ -7807,5 +7807,10 @@ Suitable for `imenu-create-index-function'."
   (setq read-minibuffer-restore-windows nil) ; doom t
   ;; (setq enable-recursive-minibuffers t) ; conflict vertico-multiform
   )
+
+;;;; html2org
+
+;; (add-to-list 'load-path "~/emacs/git/default/html2org/")
+;; (require 'html2org)
 
 ;;; left blank on purpose
