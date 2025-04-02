@@ -67,7 +67,6 @@
  ;; yasnippet-capf ; too much information
  ;; lsp-mode
  ;; consult-lsp
- anaconda-mode
  diredfl ; conflict denote
  dirvish
  code-review
@@ -168,7 +167,7 @@
 (package! celestial-mode-line)
 (package! lin)
 (package! nerd-icons-dired)
-;; (package! nerd-icons-completion) ; 2025-03-26 disable conflict
+(package! nerd-icons-completion) ; 2025-03-26 disable conflict with what?!
 
 (package! dired-preview)
 
@@ -195,9 +194,7 @@
 (package! unfill)
 (package! translate-mode)
 (package! separedit :recipe (:host github :repo "twlz0ne/separedit.el"))
-
 (package! goto-last-change)
-(package! ultra-scroll :recipe (:host github :repo "jdtsmith/ultra-scroll"))
 
 ;;;; :lang org-mode
 
@@ -398,9 +395,6 @@
   (package! clojure-essential-ref-nov)
   (package! clay))
 
-(unpin! elisp-demos)
-(package! elisp-demos :recipe (:host github :repo "junghan0611/elisp-demos" :branch "ko")) ;; https://github.com/junghan0611/elisp-demos
-
 (package! exercism)
 (package! leetcode)
 
@@ -548,7 +542,7 @@
 (package! moc :recipe (:host github :repo "positron-solutions/moc"))
 (package! dslide :recipe (:host github :repo "positron-solutions/dslide"))
 
-(package! anddo :recipe (:host github :repo "junghan0611/anddo.el"))
+;; (package! anddo :recipe (:host github :repo "junghan0611/anddo.el"))
 
 (package! jira)
 

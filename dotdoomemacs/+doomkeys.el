@@ -60,6 +60,7 @@
        :desc "+workspace/display" "d" #'+workspace/display
        :desc "+workspace/delete" "D" #'+workspace/delete
        :desc "+workspace/switch-to" "l" #'+workspace/switch-to
+       :desc "open workspaces" "o" #'my/open-workspaces
        :desc "+workspace/load" "L" #'+workspace/load
        :desc "+workspace/new" "n" #'+workspace/new
        :desc "+workspace/rename " "r" #'+workspace/rename
@@ -76,23 +77,6 @@
        ;; :desc "Switch to 8" "8" #'+workspace/switch-to-8
        ;; :desc "Switch to 9" "9" #'+workspace/switch-to-9
        ))
-
-;; Doom's Default
-;; (:when (modulep! :ui workspaces)
-;;   :n "C-t"   #'+workspace/new
-;;   :n "C-S-t" #'+workspace/display
-;;   :g "M-1"   #'+workspace/switch-to-0
-;;   :g "M-2"   #'+workspace/switch-to-1
-;;   :g "M-3"   #'+workspace/switch-to-2
-;;   :g "M-4"   #'+workspace/switch-to-3
-;;   :g "M-5"   #'+workspace/switch-to-4
-;;   :g "M-6"   #'+workspace/switch-to-5
-;;   :g "M-7"   #'+workspace/switch-to-6
-;;   :g "M-8"   #'+workspace/switch-to-7
-;;   :g "M-9"   #'+workspace/switch-to-8
-;;   ;; :g "M-0"   #'+workspace/switch-to-final
-;;   :g "M-0"   #'+workspace/switch-to-final
-;;   )
 
 ;;;; popup
 
@@ -244,6 +228,7 @@
        "SPC" #'consult-info
        "a" #'helpful-at-point
        "f" #'helpful-function
+       "D" #'elisp-demos-find-demo
        "h" #'helpful-symbol
        "t" nil ; consult-theme
        :desc "themes-map" "t" ews-modus-themes-map
@@ -632,7 +617,7 @@
 (map! :leader
       (:prefix ("o" . "open")
        :desc "elfeed" "l" #'elfeed
-       :desc "open workspaces" "w" #'my/open-workspaces
+       :desc "open workspaces" "o" #'my/open-workspaces
        ))
 
 ;;;; 'j' junghanacs hotkey
@@ -642,7 +627,7 @@
        :desc "Mastodon" "m" #'mastodon
        :desc "Tmr" "t" #'tmr
        :desc "Tmr-view" "v" #'tmr-tabulated-view
-       :desc "Anddo: Todos" "d" #'anddo
+       ;; :desc "Anddo: Todos" "d" #'anddo
        ))
 
 ;;;; 'r' remote / register
@@ -776,6 +761,17 @@
 
 ;;; Major-Mode Leader Keybindings
 
+;;;; for alice keyboard
+
+(defun my/enable-alice-keyboard-toggle-input-method ()
+  (interactive)
+  (map! (:map vertico-map
+              "`"   #'toggle-input-method)
+        (:map prog-mode-map
+              "`"   #'toggle-input-method)
+        (:map org-mode-map
+              "`"   #'toggle-input-method)))
+
 ;;;; TODO C-c M-a - M-a Bindings
 
 (map! (:map prog-mode-map
@@ -861,8 +857,8 @@
 
   (map! :map eww-mode-map
         "C-c C-o" #'eww-browse-with-external-browser
-        :n "C-j" (cmd! () (pixel-scroll-precision-scroll-down 50))
-        :n "C-k" (cmd! () (pixel-scroll-precision-scroll-up 50))
+        :n "M-j" (cmd! () (pixel-scroll-precision-scroll-down 50))
+        :n "M-k" (cmd! () (pixel-scroll-precision-scroll-up 50))
         :n "j" #'evil-next-visual-line
         :n "k" #'evil-previous-visual-line
         :n "q" #'kill-buffer-and-window
@@ -878,7 +874,7 @@
          "h" 'eww-list-histories
          "d" 'eww-download
          "a" 'eww-add-bookmark
-         "s" 'ace-link-eww
+         "f" 'ace-link-eww
          ;; "c" 'eww-copy-page-url
          (:prefix ("v" . "view")
                   "x" 'eww-browse-with-external-browser
@@ -1368,9 +1364,14 @@
 
 ;;;; cdlatex
 
-; use cdlatex completion instead of yasnippet
-(map! :map cdlatex-mode-map
-      :i "TAB" #'cdlatex-tab)
+;; Using cdlatex's snippets despite having yasnippet
+;; (map! :map cdlatex-mode-map
+;;       :i "TAB" #'cdlatex-tab)
+
+(after! org
+  (map! :map org-cdlatex-mode-map
+        "`" nil ; cdlatex-math-symbol
+        ))
 
 (map! :after latex
       :map cdlatex-mode-map
@@ -1380,27 +1381,27 @@
       :desc "Begin environment"
       "e" #'cdlatex-environment)
 
-;;;; anddo
+;;;; DONT anddo
 
-(after! anddo
-  (map! :map anddo-mode-map
-        :n "n"   'anddo-new-item
-        :n "e"   'anddo-edit-item
-        :n "s"   'anddo-change-status
-        :n "r"   'anddo-toggle-listing-mode
-        :n "D"   'anddo-delete-item
-        :n "l"   'anddo-show-body
-        :n "<RET>" 'anddo-show-body
-        :n "q" 'casual-anddo-tmenu
-        :n "Q" 'kill-buffer-and-window
-        :localleader
-        "n"   'anddo-new-item
-        "e"   'anddo-edit-item
-        "s"   'anddo-change-status
-        "r"   'anddo-toggle-listing-mode
-        "D"   'anddo-delete-item
-        "l"   'anddo-show-body
-        "<RET>" 'anddo-show-body))
+;; (after! anddo
+;;   (map! :map anddo-mode-map
+;;         :n "n"   'anddo-new-item
+;;         :n "e"   'anddo-edit-item
+;;         :n "s"   'anddo-change-status
+;;         :n "r"   'anddo-toggle-listing-mode
+;;         :n "D"   'anddo-delete-item
+;;         :n "l"   'anddo-show-body
+;;         :n "<RET>" 'anddo-show-body
+;;         :n "q" 'casual-anddo-tmenu
+;;         :n "Q" 'kill-buffer-and-window
+;;         :localleader
+;;         "n"   'anddo-new-item
+;;         "e"   'anddo-edit-item
+;;         "s"   'anddo-change-status
+;;         "r"   'anddo-toggle-listing-mode
+;;         "D"   'anddo-delete-item
+;;         "l"   'anddo-show-body
+;;         "<RET>" 'anddo-show-body))
 
 ;;;; citar-denote embark-citation-map
 
@@ -1755,8 +1756,8 @@
 
         :desc "org-set-effot" "E" #'org-set-effort
         :desc "time-stamp" "1" #'time-stamp
+        :desc "insert-inactive-timestamp" "2" #'bh/insert-inactive-timestamp
         :desc "org-appear-mode" "8" #'org-appear-mode
-        :desc "insert-inactive-timestamp" "9" #'bh/insert-inactive-timestamp
 
         :desc "insert checkbox\|bracket" "]" #'cae-org-insert-checkbox-or-bracket
         :desc "convert syntax to lower" "L" #'cae-org-syntax-convert-keyword-case-to-lower

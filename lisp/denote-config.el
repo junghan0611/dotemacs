@@ -278,7 +278,7 @@
     (if (looking-back "--" limit)
         ;; (looking-back "((" limit)
         (progn
-          (call-interactively #'denote-link-or-create)
+          (call-interactively #'denote-link)
           (let ((end-of-link (point)))
             (goto-char limit)
             (delete-char 2)

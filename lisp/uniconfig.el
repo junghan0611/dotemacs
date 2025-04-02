@@ -14,6 +14,24 @@
 
 ;;; Configs
 
+;;;; DONT custom scrolling
+
+;; (setq
+;;  ;; Do not adjust window-vscroll to view tall lines
+;;  auto-window-vscroll nil ; doom nil
+;;  ;; Keep the point in the same position while scrolling
+;;  scroll-preserve-screen-position t ; doom t
+;;  ;; Do not move cursor to the center when scrolling
+;;  scroll-conservatively 10 ; doom 10
+;;  ;; Scroll at a margin of one line
+;;  ;; scroll-margin 1 ; doom 0
+;;  )
+
+;; (when (fboundp 'pixel-scroll-precision-mode)
+;;   ;; Better scrolling on Emacs29+, specially on a touchpad
+;;   (setq pixel-scroll-precision-use-momentum t) ; doom nil
+;;   (pixel-scroll-precision-mode +1))
+
 ;;;; backtrace-mode-hook
 
 (add-hook 'backtrace-mode-hook 'display-line-numbers-mode)
@@ -297,8 +315,6 @@
           (backward-char))
          (t
           (backward-char 0)))))))
-
-
 
 ;;;; my/backward-kill-word-or-region
 
@@ -1256,8 +1272,8 @@ cd -
         (insert
          "((nil .
       ( ;; (cider-clojure-cli-aliases . \"dev\")
-       (+evil-want-o/O-to-continue-comments . t)
-       (+default-want-RET-continue-comments . t)
+       (+evil-want-o/O-to-continue-comments . nil)
+       (+default-want-RET-continue-comments . nil)
        (cider-preferred-build-tool . clojure-cli)))
  (clojure-mode . (
                   (eval . (indent-bars-mode 1))

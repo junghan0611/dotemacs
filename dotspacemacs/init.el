@@ -694,7 +694,7 @@
 
      ;; > languages
      eros ; emacs-lisp
-     (elisp-demos :location (recipe :fetcher github :repo "junghan0611/elisp-demos" :branch "ko"))
+     elisp-demos
 
      ;; elixir-ts-mode ; elixir
      ;; exunit
@@ -1061,10 +1061,11 @@
 ;;;; Configuration
 
    dotspacemacs-themes '(;; (modus-operandi :package modus-themes)
-                         modus-operandi-tinted
+                         spacemacs-dark
                          spacemacs-light
+                         modus-operandi-tinted
                          modus-vivendi-tinted
-                         spacemacs-dark)
+                         )
 
    dotspacemacs-mode-line-theme '(doom)
    ;; dotspacemacs-mode-line-theme '(spacemacs :separator zigzag :separator-scale 1.5)
@@ -1619,8 +1620,6 @@
    scroll-conservatively 101
    ;; Scroll at a margin of one line
    scroll-margin 1
-   ;; Better scrolling on Emacs29+, specially on a touchpad
-   pixel-scroll-precision-use-momentum t
 
    column-number-mode t ; default nil
 
@@ -1644,9 +1643,6 @@
   ;;    "Kill the minibuffer when switching to window with mouse."
   ;;    (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
   ;;      (abort-recursive-edit))))
-
-  ;; Scroll pixel by pixel, in Emacs29+ there is a more pricise mode way to scroll
-  (pixel-scroll-precision-mode 1)
 
   ;; Files with known long lines
   ;; SPC f l to open files literally to disable most text processing

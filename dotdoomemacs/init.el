@@ -94,6 +94,7 @@
  neotree ; a project drawer, like NERDTree for vim
  ophints           ; highlight the region an operation acts on
  popup    ; tame sudden yet inevitable temporary windows
+ smooth-scroll     ; So smooth you won't believe it's not butter
 
  ;; treemacs
  (treemacs +lsp) ;  a project drawer, like neotree but cooler
@@ -150,7 +151,6 @@
  make              ; run make tasks from Emacs
  ;;pass              ; password manager for nerds
  (:unless IS-TERMUX (pdf)) ; pdf enhancements
- ;; (:unless IS-TERMUX (prodigy)) ;; FIXME managing external services & code builders
  ;;terraform         ; infrastructure as code
  ;;tmux              ; an API for interacting with tmux
  tree-sitter ;; syntax and parsing, sitting in a tree...

@@ -127,8 +127,11 @@
 ;; talks
 (defun my/org-talks-file () (my/expand-org-file-name "talks/20240827T150414--talks.org"))
 
-(defun my/org-remark-file () (my/expand-org-file-name "20231111T094444--remark.org"))
-(defun my/org-remember-file () (my/expand-org-file-name "20231020T210500--remember.org"))
+(defun my/org-remark-file () (my/expand-org-file-name "notes/20231111T094444--remark.org"))
+(defun my/org-remember-file () (my/expand-org-file-name "notes/20231020T210500--remember.org"))
+
+(defun my/org-user-elisp-demo-file () (my/expand-org-file-name
+"notes/20240926T170706--elisp-demos.org"))
 
 ;; directory
 (defun my/org-calendar-directory () (my/expand-org-file-name ".calendar/"))
@@ -149,8 +152,7 @@
                          ))
 
 ;; elisp-demos
-(setq elisp-demos-user-files (list (concat org-directory
-                                           "/notes/20240926T170706--elisp-demos__emacslisp_notes.org")))
+(setq elisp-demos-user-files (list (my/org-user-elisp-demo-file)))
 
 ;; My agenda files. keep it simple
 ;; (defvar org-user-agenda-files (list

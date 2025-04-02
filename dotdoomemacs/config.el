@@ -648,24 +648,6 @@
 (global-auto-revert-mode 1) ; doom nil
 (setq auto-revert-interval 10)
 
-;;;;; DONT custom scrolling
-
-;; (setq
-;;  ;; Do not adjust window-vscroll to view tall lines
-;;  auto-window-vscroll nil ; doom nil
-;;  ;; Keep the point in the same position while scrolling
-;;  scroll-preserve-screen-position t ; doom t
-;;  ;; Do not move cursor to the center when scrolling
-;;  scroll-conservatively 10 ; doom 10
-;;  ;; Scroll at a margin of one line
-;;  ;; scroll-margin 1 ; doom 0
-;;  )
-
-;; (when (fboundp 'pixel-scroll-precision-mode)
-;;   ;; Better scrolling on Emacs29+, specially on a touchpad
-;;   (setq pixel-scroll-precision-use-momentum t) ; doom nil
-;;   (pixel-scroll-precision-mode +1))
-
 ;;;;; DONT help-mode-hook : visual-line-mode
 
 ;; (add-hook 'help-mode-hook #'visual-line-mode)
@@ -2152,19 +2134,23 @@ only those in the selected frame."
   ;; Search https://discourse.doomemacs.org/ for example configuration
   (setq projectile-ignored-projects
         (list "~/" "/tmp" (expand-file-name "straight/repos" doom-local-dir)))
-
   (defun projectile-ignored-project-function (filepath)
     "Return t if FILEPATH is within any of `projectile-ignored-projects'"
     (or (mapcar
          (lambda (p) (s-starts-with-p p filepath)) projectile-ignored-projects)))
 
+  ;; for clojure dev
+  (setq projectile-project-root-files-bottom-up
+        (append projectile-project-root-files-bottom-up
+                '("build.clj" "project.clj" "LICENSE")))
+
   ;; Define a project path to discover projects using SPC Tab D
   ;; https://docs.projectile.mx/projectile/usage.html
   ;; (setq projectile-project-search-path '("~/projects/" "~/work/" ("~/github" . 1)))
-  ;; (setq projectile-project-search-path '(("~/code" . 2) ("~/git" . 1)))
+  ;; (setq projectile-project-search-path '(("~/code" . 2) ("~/git" . 2)))
 
   ;; direct projectile to look for code in a specific folder.
-  (setq projectile-project-search-path '("~/git"))
+  (setq projectile-project-search-path '("~/git" . 2))
 
   (map! :leader
         :desc "Toggle Impl & Test" "pt" #'projectile-toggle-between-implementation-and-test
@@ -2243,16 +2229,15 @@ only those in the selected frame."
 
 ;; Location of developer tokens - default ~/.authinfo
 ;; Use XDG_CONFIG_HOME location or HOME
-;; Optional:
 (setq auth-source-cache-expiry nil)   ; default is 7200 (2h)
-(setq auth-sources (list (concat (getenv "XDG_CONFIG_HOME") "/authinfo.gpg") "~/.authinfo.gpg"))
+;; (setq auth-sources (list (concat (getenv "XDG_CONFIG_HOME") "/authinfo.gpg") "~/.authinfo.gpg"))
 
 ;; hilsner
 (setq magit-save-repository-buffers nil
       ;; Don't restore the wconf after quitting magit, it's jarring
       magit-inhibit-save-previous-winconf t)
 
-(setq evil-collection-magit-want-horizontal-movement t) ; default nil
+;; (setq evil-collection-magit-want-horizontal-movement t) ; default nil
 
 ;; Location of Git repositories
 ;; define paths and level of sub-directories to search
@@ -5043,9 +5028,8 @@ Suitable for `imenu-create-index-function'."
    (lambda ()
      (setq-local imenu-create-index-function #'+eww/imenu-eww-headings)))
 
-  ;; temporary 's'
-  (evil-define-key 'normal eww-link-keymap "s" 'ace-link-eww)
-  (evil-define-key 'normal eww-mode-map "s" 'ace-link-eww)
+  (evil-define-key 'normal eww-link-keymap "f" 'ace-link-eww)
+  (evil-define-key 'normal eww-mode-map "f" 'ace-link-eww)
   )
 
 ;;;;;; eww image-slicing : not working
@@ -5550,18 +5534,18 @@ Suitable for `imenu-create-index-function'."
   (setq font-lock-global-modes '(not nov-mode))
   )
 
-;;;;; :app @anddo for todo
+;;;;; DONT :app @anddo for todo
 
-(progn
-  (require 'anddo)
-  ;; fix path
-  (defun anddo--create-tables ()
-    (unless anddo--db
-      (setq-local anddo--db
-                  (sqlite-open
-                   (expand-file-name "resources/anddo.sqlite" org-directory)))
-      (sqlite-execute anddo--db "create table if not exists item (id integer primary key, status text, subject text, body text, entry_time text, modification_time text)")))
-  )
+;; (progn
+;;   (require 'anddo)
+;;   ;; fix path
+;;   (defun anddo--create-tables ()
+;;     (unless anddo--db
+;;       (setq-local anddo--db
+;;                   (sqlite-open
+;;                    (expand-file-name "resources/anddo.sqlite" org-directory)))
+;;       (sqlite-execute anddo--db "create table if not exists item (id integer primary key, status text, subject text, body text, entry_time text, modification_time text)")))
+;;   )
 
 ;;;;; :app @gif-screencast
 
@@ -7301,67 +7285,68 @@ Suitable for `imenu-create-index-function'."
 
   (add-hook 'clojure-mode-hook #'+indent-guides-init-maybe-h)
 
-;;;;;; cider
+;;;;;; DONT cider
 
-  (after! cider
-    ;; In recent versions, an option has been introduced that attempts to improve
-    ;; the experience of CIDER by accessing java source & javadocs, though this
-    ;; option is still currently considered beta.
-    (setq cider-enrich-classpath t)
+  ;; [2025-04-02 Wed 10:33] jack-in하면 문제 발생. 확인바람.
+  ;; (after! cider
+  ;;   ;; In recent versions, an option has been introduced that attempts to improve
+  ;;   ;; the experience of CIDER by accessing java source & javadocs, though this
+  ;;   ;; option is still currently considered beta.
+  ;;   (setq cider-enrich-classpath t)
 
-    (if (package-installed-p 'corfu)
-        (evil-define-key 'insert cider-repl-mode-map
-          (kbd "C-j") 'corfu-next
-          (kbd "C-k") 'corfu-previous))
+  ;;   (if (package-installed-p 'corfu)
+  ;;       (evil-define-key 'insert cider-repl-mode-map
+  ;;         (kbd "C-j") 'corfu-next
+  ;;         (kbd "C-k") 'corfu-previous))
 
-    ;; (add-to-list 'auto-mode-alist '("\\.clj_kondo\\'" . clojure-mode))
-    ;; (add-to-list 'auto-mode-alist '("\\.endl$" . clojure-mode))
-    ;; (add-to-list 'magic-mode-alist '("^#![^\n]*/\\(clj\\|clojure\\|bb\\|lumo\\)" . clojure-mode))
+  ;;   ;; (add-to-list 'auto-mode-alist '("\\.clj_kondo\\'" . clojure-mode))
+  ;;   ;; (add-to-list 'auto-mode-alist '("\\.endl$" . clojure-mode))
+  ;;   ;; (add-to-list 'magic-mode-alist '("^#![^\n]*/\\(clj\\|clojure\\|bb\\|lumo\\)" . clojure-mode))
 
-    ;; Because of CIDER's insistence to send forms to all linked REPLs, we
-    ;; *have* to be able to switch cljc buffer to clj/cljs mode without
-    ;; cider complaining.
-    ;; (setq clojure-verify-major-mode nil) ; 나중에 해보고
+  ;;   ;; Because of CIDER's insistence to send forms to all linked REPLs, we
+  ;;   ;; *have* to be able to switch cljc buffer to clj/cljs mode without
+  ;;   ;; cider complaining.
+  ;;   ;; (setq clojure-verify-major-mode nil) ; 나중에 해보고
 
-    ;; john's style
-    ;; Vertically align s-expressions
-    ;; https://github.com/clojure-emacs/clojure-mode#vertical-alignment
-    ;; (setq clojure-indent-style 'align-arguments ; default always-align
-    ;;       clojure-align-forms-automatically t ; default nil
-    ;;       clojure-toplevel-inside-comment-form t  ; nil - evaluate expressions in comment as top level
-    ;;       )
+  ;;   ;; john's style
+  ;;   ;; Vertically align s-expressions
+  ;;   ;; https://github.com/clojure-emacs/clojure-mode#vertical-alignment
+  ;;   ;; (setq clojure-indent-style 'align-arguments ; default always-align
+  ;;   ;;       clojure-align-forms-automatically t ; default nil
+  ;;   ;;       clojure-toplevel-inside-comment-form t  ; nil - evaluate expressions in comment as top level
+  ;;   ;;       )
 
-    ;; manually use on lsp mode
-    (defun my/cider-repl-prompt (namespace)
-      "Return a prompt string that mentions NAMESPACE."
-      (format "%s🦄 " (cider-abbreviate-ns namespace)))
+  ;;   ;; manually use on lsp mode
+  ;;   (defun my/cider-repl-prompt (namespace)
+  ;;     "Return a prompt string that mentions NAMESPACE."
+  ;;     (format "%s🦄 " (cider-abbreviate-ns namespace)))
 
-    ;; NOTE 2022-11-21: for the linter (clj-kondo), refer to the Flymake
-    ;; NOTE 2022-11-23: This is not final.  I will iterate on it over
-    ;; time as I become more familiar with the requirements.
-    (setq cider-repl-result-prefix ";; => "
-          cider-eval-result-prefix ""
-          cider-connection-message-fn t ; cute, but no!
-          cider-repl-prompt-function #'my/cider-repl-prompt
-          ;; cider-use-overlays nil ; echo area is fine
-          )
+  ;;   ;; NOTE 2022-11-21: for the linter (clj-kondo), refer to the Flymake
+  ;;   ;; NOTE 2022-11-23: This is not final.  I will iterate on it over
+  ;;   ;; time as I become more familiar with the requirements.
+  ;;   (setq cider-repl-result-prefix ";; => "
+  ;;         cider-eval-result-prefix ""
+  ;;         cider-connection-message-fn t ; cute, but no!
+  ;;         cider-repl-prompt-function #'my/cider-repl-prompt
+  ;;         ;; cider-use-overlays nil ; echo area is fine
+  ;;         )
 
-    (set-popup-rule! "*cider-test-report*" :side 'right :width 0.4)
-    (set-popup-rule! "^\\*cider-repl" :side 'bottom :quit nil)
+  ;;   (set-popup-rule! "*cider-test-report*" :side 'right :width 0.4)
+  ;;   (set-popup-rule! "^\\*cider-repl" :side 'bottom :quit nil)
 
-    ;; (setq cider-preferred-build-tool 'clojure-cli)
-    (setq
-     cider-prompt-for-symbol nil ; default nil
-     cider-repl-buffer-size-limit 100          ; limit lines shown in REPL buffer
-     ;; cider-repl-display-help-banner t ; default nil enable help banner
-     ;; cider-print-fn 'puget                   ;; pretty printing with sorted keys / set values
-     ;; cider-result-overlay-position 'at-point   ; results shown right after expression
-     ;; nrepl-use-ssh-fallback-for-remote-hosts t ; connect via ssh to remote hosts
+  ;;   ;; (setq cider-preferred-build-tool 'clojure-cli)
+  ;;   (setq
+  ;;    cider-prompt-for-symbol nil ; default nil
+  ;;    cider-repl-buffer-size-limit 100          ; limit lines shown in REPL buffer
+  ;;    ;; cider-repl-display-help-banner t ; default nil enable help banner
+  ;;    ;; cider-print-fn 'puget                   ;; pretty printing with sorted keys / set values
+  ;;    ;; cider-result-overlay-position 'at-point   ; results shown right after expression
+  ;;    ;; nrepl-use-ssh-fallback-for-remote-hosts t ; connect via ssh to remote hosts
 
-     ;; cider-repl-use-clojure-font-lock nil ; default t
-     ;; cider-repl-use-pretty-printing nil ; default t
-     )
-    )
+  ;;    ;; cider-repl-use-clojure-font-lock nil ; default t
+  ;;    ;; cider-repl-use-pretty-printing nil ; default t
+  ;;    )
+  ;;   )
 
 ;;;;;; TODO imenu for clojure
 
@@ -7564,8 +7549,10 @@ Suitable for `imenu-create-index-function'."
 ;;;;; ccmenu: context-menu with casual
 
 (when (display-graphic-p) ;; gui
-  ;; (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup) ;; 2025-03-26 disable
-  (require 'ccmenu))
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
+
+;; (when (display-graphic-p) ;; gui
+;;   (require 'ccmenu))
 
 ;;;;; Terminal Mode - (unless (display-graphic-p)
 

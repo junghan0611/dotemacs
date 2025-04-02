@@ -15,7 +15,7 @@
 
 ;; (when (is-doomemacs)
 
-;;; global-unset-key
+;;;; global-unset-key
 
 (global-unset-key (kbd "M-a"))  ; unset forward-sentence -> use ')'
 (global-unset-key (kbd "M-c"))  ; unset capitalize-word
@@ -23,7 +23,7 @@
 (global-unset-key (kbd "M-e"))  ; unset backward-sentence -> use '('
 (global-unset-key (kbd "M-z"))  ; zap-up-to-char
 
-;;; Emacs Keys
+;;;; Emacs Keys
 
 ;; (global-set-key (kbd "<f2>") 'eval-last-sexp)
 
@@ -62,9 +62,9 @@
 ;; (global-set-key (kbd "C-x C-j") 'dired-jump) ; what is?
 ;; (global-set-key (kbd "C-c r") 'remember) ; what is?
 
-;;; NOTE Switch Buffer / Tab-bar, Tab-line / Workspace (persp-mode)
+;;;; NOTE Switch Buffer / Tab-bar, Tab-line / Workspace (persp-mode)
 
-;;;; DONT 1) Window : winum M-[0-9]
+;;;;; DONT 1) Window : winum M-[0-9]
 
 ;; Fast Easy Buffer Switching
 ;; (when (locate-library "winum")
@@ -84,22 +84,22 @@
 ;;     )
 ;;   )
 
-;;;; 2) Worksapce : SPC Tab [0-9]
+;;;;; 2) Worksapce : SPC Tab [0-9]
 
 ;; +workspace/switch-to-0
 ;; Default
 
-;;;; 3) Buffer : tab-line : s-[, s-]
+;;;;; 3) Buffer : tab-line : s-[, s-]
 
 ;; Super Fast
 
-;;;; 4) Tab-bar
+;;;;; 4) Tab-bar
 
 ;; g b
 
-;;; Packages
+;;;; Packages
 
-;;;; vertico
+;;;;; vertico
 
 (with-eval-after-load 'vertico
   ;; M-V -> vertico-multiform-vertical
@@ -133,11 +133,11 @@
     (define-key vertico-map (kbd "M-<return>") #'vertico-exit-input))
   )
 
-;;;; eldoc
+;;;;; eldoc
 
 (global-set-key (kbd "C-M-'") 'eldoc-toggle)
 
-;;;; dired
+;;;;; dired
 
 (with-eval-after-load 'dired
   (evil-define-key 'normal dired-mode-map
@@ -158,7 +158,7 @@
     )
   )
 
-;;;; corfu
+;;;;; corfu
 
 (when (locate-library "corfu")
   ;; Tab 이 자동 완성이면 괄호 점프랑 충돌 난다.
@@ -181,7 +181,7 @@
     )
   )
 
-;;;; cape-map
+;;;;; cape-map
 
 (progn
   (define-prefix-command 'my-cape-map)
@@ -206,7 +206,7 @@
     )
   )
 
-;;;; remap all C-c prefix keys to M-c?
+;;;;; remap all C-c prefix keys to M-c?
 
 ;; static map
 (define-key key-translation-map (kbd "M-c") (kbd "C-c"))
@@ -219,7 +219,7 @@
 ;;       map))
 ;;   (global-set-key (kbd "M-c") (my-generate-c-c-map)))
 
-;;;; embark - doom vs. spacemacs style
+;;;;; embark - doom vs. spacemacs style
 
 ;; C-; embark-ack ; doom default
 ;; C-c C-; embark-export
@@ -230,7 +230,7 @@
 
 (global-set-key (kbd "C-h B") 'embark-bindings) ;; alternative for `describe-bindings'
 
-;;;; activities
+;;;;; activities
 
 (when (locate-library "activities")
   (define-prefix-command 'activities-map)
@@ -248,7 +248,7 @@
     )
   )
 
-;;;; org-remark : C-c r
+;;;;; org-remark : C-c r
 
 ;; Key-bind `org-remark-mark' to global-map so that you can call it
 ;; globally before the library is loaded.
@@ -275,7 +275,7 @@
     )
   )
 
-;;;; puni
+;;;;; puni
 
 (when (locate-library "puni")
   (with-eval-after-load 'puni
@@ -296,7 +296,7 @@
     )
   )
 
-;;;; Expand-region
+;;;;; Expand-region
 
 ;; (global-set-key (kbd "C-=") 'eli/expand-region)
 
@@ -311,7 +311,7 @@
     )
   )
 
-;;;; exercism / leetcode
+;;;;; exercism / leetcode
 
 ;; (global-set-key (kbd "M-g =") 'my/format-buffer)
 
@@ -321,7 +321,7 @@
 (when (locate-library "leetcode")
   (global-set-key (kbd "M-g M-t") 'leetcode))
 
-;;;; side-notes
+;;;;; side-notes
 
 ;; add devdocs-browser
 (when (locate-library "side-notes")
@@ -329,19 +329,19 @@
   (global-set-key (kbd "M-g j") 'my/side-notes-toggle-daily-note)
   )
 
-;;;; org-side-tree
+;;;;; org-side-tree
 
 (when (locate-library "org-side-tree")
   (global-set-key (kbd "M-g M-o") 'org-side-tree-toggle))
 
-;;;; markdown-mode-map
+;;;;; markdown-mode-map
 
 (with-eval-after-load 'markdown-mode
   ;; 문단을 한 라인으로 합쳐 준다. 구글 번역기 돌릴 때 매우 유용.
   (evil-define-key '(normal insert visual) markdown-mode-map (kbd "C-M-q") 'my/unfill-paragraph-or-region)
   )
 
-;;;; window
+;;;;; window
 
 ;; 편집 창 포커스 이동을 간단하게
 (progn
@@ -361,7 +361,7 @@
 (global-set-key (kbd "C-c <left>") 'winner-undo) ; built-in winner
 (global-set-key (kbd "C-c <right>") 'winner-redo)
 
-;;;; tab-bar menu-bar
+;;;;; tab-bar menu-bar
 
 ;; gb / gB
 ;; Ctrl + Number
@@ -399,7 +399,7 @@
     )
   )
 
-;;;; DONT centaur-tabs
+;;;;; DONT centaur-tabs
 
 ;; (when (locate-library "centaur-tabs")
 ;;   (with-eval-after-load 'centaur-tabs
@@ -424,7 +424,7 @@
 ;; ("C-c t p" . centaur-tabs-group-by-projectile-project)
 ;; ("C-c t g" . centaur-tabs-group-buffer-groups)
 
-;;;; math-preview
+;;;;; math-preview
 
 (when (locate-library "math-preview")
   (global-set-key (kbd "M-g /") 'math-preview-at-point)
@@ -432,11 +432,11 @@
   (global-set-key (kbd "M-g M-.") 'math-preview-clear-all)
   )
 
-;;;; my/backward-delete-word-or-region
+;;;;; my/backward-delete-word-or-region
 
 (global-set-key (kbd "M-<backspace>") 'my/backward-delete-word-or-region)
 
-;;;; DONT hungry-delete
+;;;;; DONT hungry-delete
 
 ;;(when (locate-library "hungry-delete")
 
@@ -452,7 +452,7 @@
 ;; (global-set-key (kbd "C-DEL") 'hungry-delete-forward)
 ;  )
 
-;;;; vterm
+;;;;; vterm
 
 (when (locate-library "vterm")
   (with-eval-after-load 'vterm
@@ -471,7 +471,7 @@
     ))
 
 
-;;;; DONT  Wordreference
+;;;;; DONT  Wordreference
 
 ;; (when (locate-library "wordreference")
 ;;   (with-eval-after-load 'wordreference
@@ -501,12 +501,12 @@
 ;;     )
 ;;   )
 
-;;;; calendar :mouse:
+;;;;; calendar :mouse:
 
 (with-eval-after-load 'calendar
   (define-key calendar-mode-map [(double-mouse-1)] 'org-calendar-goto-agenda))
 
-;;;; bm :mouse:
+;;;;; bm :mouse:
 
 (when (locate-library "bm")
   (global-set-key (kbd "<left-fringe> <mouse-5>") 'bm-next-mouse)
@@ -517,16 +517,19 @@
   (global-set-key (kbd "<S-f6>") 'bm-previous)
   )
 
-;;;; ace-link for eww / woman
+;;;;; ace-link for eww / woman
 
 (with-eval-after-load 'woman
+  (define-key woman-mode-map "f" 'link-hint-open-link)
   (define-key woman-mode-map "o" 'link-hint-open-link))
 
 (with-eval-after-load 'eww
+  (define-key eww-link-keymap "f" 'ace-link-eww)
+  (define-key eww-mode-map "f" 'ace-link-eww)
   (define-key eww-link-keymap "o" 'ace-link-eww)
   (define-key eww-mode-map "o" 'ace-link-eww))
 
-;;;; tmr
+;;;;; tmr
 
 (when (locate-library "tmr")
   (define-prefix-command 'tmr-map)
@@ -544,7 +547,7 @@
     )
   )
 
-;;;; mc - multi-cursor
+;;;;; mc - multi-cursor
 
 ;; Idea taken from "Emacs: Define Key Sequence"
 ;; ref: http://ergoemacs.org/emacs/emacs_keybinding_power_of_keys_sequence.html
@@ -566,7 +569,7 @@
 ;; phi-search : another incremental search & replace, compatible with "multiple-cursors"
 ;; (global-set-key (kbd "M-s-r") 'mc/mark-all-like-this-dwim)
 
-;;;; denote dired
+;;;;; denote dired
 
 (when (locate-library "denote")
   ;; Key bindings specifically for Dired.
@@ -583,7 +586,7 @@
   )
 
 
-;;;; yasnippet Navigation M-n/M-p
+;;;;; yasnippet Navigation M-n/M-p
 
 (when (locate-library "yasnippet")
   ;; use Meta-n and Meta-p to jump between fields
@@ -592,7 +595,7 @@
     (define-key yas-keymap (kbd "M-p") 'yas-prev-field))
   )
 
-;;;; outli
+;;;;; outli
 
 (when (locate-library "outli")
 
@@ -645,19 +648,24 @@
     )
   )
 
-;;;; TODO tabgo
+;;;;; TODO tabgo
 
 ;; (when (locate-library "tabgo")
 ;;   (global-set-key (kbd "M-t") #'tabgo))
 
-;;;; scroll-up / down
+;;;;; scroll-up / down
 
 ;; 2025-02-18 add
 (global-set-key (kbd "M-u") 'evil-scroll-up)
 (global-set-key (kbd "M-v") 'evil-scroll-down)
 
-;;; C-c M-g M-s
-;;;; C-c j
+;;;;; elisp-demo
+
+(when (locate-library "elisp-demos")
+  (global-set-key (kbd "M-s d") #'elisp-demos-find-demo))
+
+;;;; C-c M-g M-s
+;;;;; C-c j
 
 (progn
   (defun my/open-hugo-notes-path ()
@@ -767,7 +775,7 @@
 
 ;; (global-set-key (kbd "C-c j h") 'my/browse-hugo-maybe)
 
-;;;; M-g bindings (goto-map)
+;;;;; M-g bindings (goto-map)
 
 (global-set-key (kbd "M-g a") 'consult-org-agenda)
 
@@ -805,9 +813,9 @@
 
 ;; (global-set-key (kbd "M-g SPC") (lambda() (interactive) (tab-bar-select-tab 1)))
 
-;;;; M-s bindings (search-map)
+;;;;; M-s bindings (search-map)
 
-;;;;; M-s consult-omni, rg, deadgrep, recent-rgrep
+;;;;;; M-s consult-omni, rg, deadgrep, recent-rgrep
 
 ; consult-omni
 (when (locate-library "consult-omni")
@@ -837,7 +845,7 @@
   (global-set-key (kbd "M-F") 'recent-rgrep)
   )
 
-;;;;; M-s s my-search-map
+;;;;;; M-s s my-search-map
 
 (progn
   (define-prefix-command 'my-search-map)
@@ -857,7 +865,7 @@
     (define-key map (kbd "d") 'my/search-dict-daum)
     ))
 
-;;;;; M-s t my-translate-map
+;;;;;; M-s t my-translate-map
 
 (progn
   (define-prefix-command 'my-translate-map)
@@ -870,18 +878,18 @@
     (define-key map (kbd "d") 'gt-do-translate)
     ))
 
-;;; major-mode
+;;;; major-mode
 
-;;;; python-mode-map
+;;;;; python-mode-map
 
 ;; [2025-02-19 Wed 22:12]
 (with-eval-after-load 'python
   (define-key python-mode-map (kbd "M-RET") 'python-shell-send-statement)
   )
 
-;;; Transient
+;;;; Transient
 
-;;;; DONT transient : EKG
+;;;;; DONT transient : EKG
 
 ;; (when (locate-library "ekg")
 ;;   (with-eval-after-load 'ekg
@@ -989,7 +997,7 @@
 ;;     )
 ;;   )
 
-;;;; transient : ellama
+;;;;; transient : ellama
 
 (when (locate-library "ellama")
 
@@ -1115,7 +1123,7 @@
   ) ;; end of ellama
 
 
-;;;; transient : jinx - spelling
+;;;;; transient : jinx - spelling
 
 (when (locate-library "jinx")
   (global-set-key (kbd "M-g s") 'my/spell-tmenu)
@@ -1136,7 +1144,7 @@
       ("q" "Quit" transient-quit-one)]])
   )
 
-;;;; DONT move to ccmenu : transient : casual-suite
+;;;;; DONT move to ccmenu : transient : casual-suite
 
 (keymap-global-set "M-a" #'casual-avy-tmenu)
 
@@ -1208,7 +1216,7 @@
   (keymap-global-set "<f11>" #'casual-editkit-main-tmenu)
   )
 
-;;;; transient : casual-mastodon
+;;;;; transient : casual-mastodon
 
 ;; (when (locate-library "mastodon")
 ;;   (require 'mastodon)
@@ -1313,12 +1321,12 @@
 ;;   ;; M-p             mastodon-tl--previous-tab-item
 ;;   )
 
-;;;; transient : expand-region
+;;;;; transient : expand-region
 
 (when (locate-library "expand-region")
   (require 'expand-region)
 
-;;;###autoload
+;;;;###autoload
   (defun expreg--line ()
     "Return a list of regions containing surrounding sentences."
     (ignore-errors
@@ -1329,7 +1337,7 @@
         (setq beg (point))
         `((line . ,(cons beg end))))))
 
-;;;###autoload
+;;;;###autoload
   (defun expreg-transient--insert-browser-url ()
     (interactive)
     (when-let* ((url (browser-copy-tab-link))
@@ -1343,7 +1351,7 @@
         (markdown--mode (markdown-insert-inline-link txt url))
         (t url))))
 
-;;;###autoload
+;;;;###autoload
   (transient-define-prefix expand-transient ()
     "expand/contract"
     [[("v" "expand" er/expand-region :transient t)]
@@ -1466,7 +1474,7 @@
       ("; <" "wrap in collapsible" markdown-wrap-collapsible)]])
   )
 
-;;;; DONT transient : sexp-transient
+;;;;; DONT transient : sexp-transient
 
 ;; (when (locate-library "smartparens")
 ;;   (require 'smartparens)
@@ -1477,7 +1485,7 @@
 ;;   (require 'edit-indirect)
 
 ;;   ;; agzam-dot-doom/modules/custom/general/autoload/lisp.el
-;; ;;;###autoload
+;; ;;;;###autoload
 ;;   (defun sp-reindent ()
 ;;     (interactive)
 ;;     (save-mark-and-excursion
@@ -1492,19 +1500,19 @@
 ;;          (region-beginning)
 ;;          (region-end)))))
 
-;; ;;;###autoload
+;; ;;;;###autoload
 ;;   (defun sp-wrap-sexp ()
 ;;     (interactive)
 ;;     (sp-wrap-with-pair "("))
 
-;; ;;;###autoload
+;; ;;;;###autoload
 ;;   (defun sp-evil-sexp-go-back ()
 ;;     "Find previous sexp."
 ;;     (interactive)
 ;;     (backward-char)
 ;;     (search-backward-regexp "[])}]\\|[[({]"))
 
-;; ;;;###autoload
+;; ;;;;###autoload
 ;;   (defun sp-evil-sexp-go-forward ()
 ;;     "Find next sexp."
 ;;     (interactive)
@@ -1513,7 +1521,7 @@
 ;;       (unless (eq curr (search-forward-regexp "[[({]\\|[])}]"))
 ;;         (backward-char))))
 
-;; ;;;###autoload
+;; ;;;;###autoload
 ;;   (defun sp-narrow-to-current-sexp ()
 ;;     "Narrow screen to current sexp."
 ;;     (interactive)
@@ -1525,7 +1533,7 @@
 ;;        (region-beginning)
 ;;        (region-end))))
 
-;; ;;;###autoload
+;; ;;;;###autoload
 ;;   (defun sp-edit-indirect-current-sexp ()
 ;;     "Edit current sexp in an indirect buffer."
 ;;     (interactive)
@@ -1542,7 +1550,7 @@
 ;;        #'edit-indirect-region
 ;;        (car reg) (cadr reg) t)))
 
-;; ;;;###autoload
+;; ;;;;###autoload
 ;;   (defun avy-goto-parens ()
 ;;     (interactive)
 ;;     (let* ((avy-command this-command) ; for look up in avy-orders-alist
@@ -1557,7 +1565,7 @@
 
 ;;   (add-to-list 'avy-orders-alist '(avy-goto-parens . avy-order-closest))
 
-;; ;;;###autoload
+;; ;;;;###autoload
 ;;   (defun sp-eval-current-in-mode ()
 ;;     "Evals current sexp in its dedicated mode evaluator."
 ;;     (interactive)
@@ -1670,10 +1678,10 @@
 ;;        :if (lambda () (derived-mode-p 'clojure-mode)))]])
 ;;   )
 
-;;;; transient : transient-window
+;;;;; transient : transient-window
 
 (progn
-;;;###autoload
+;;;;###autoload
   (transient-define-suffix transient-window--enlarge-v ()
     :transient t
     :key "k"
@@ -1681,7 +1689,7 @@
     (interactive)
     (call-interactively #'enlarge-window))
 
-;;;###autoload
+;;;;###autoload
   (transient-define-suffix transient-window--shrink-v ()
     :transient t
     :key "j"
@@ -1689,7 +1697,7 @@
     (interactive)
     (call-interactively #'shrink-window))
 
-;;;###autoload
+;;;;###autoload
   (transient-define-suffix transient-window--enlarge-h ()
     :transient t
     :key "l"
@@ -1697,7 +1705,7 @@
     (interactive)
     (call-interactively #'enlarge-window-horizontally))
 
-;;;###autoload
+;;;;###autoload
   (transient-define-suffix transient-window--shrink-h ()
     :transient t
     :key "h"
@@ -1705,21 +1713,21 @@
     (interactive)
     (call-interactively #'shrink-window-horizontally))
 
-;;;###autoload
+;;;;###autoload
   (transient-define-suffix transient-window--balance ()
     :key "="
     :description "balance"
     (interactive)
     (call-interactively #'balance-windows))
 
-;;;###autoload
+;;;;###autoload
   (transient-define-suffix transient-window--golden-ratio ()
     :key "g"
     :description "golden-ratio"
     (interactive)
     (call-interactively #'golden-ratio))
 
-;;;###autoload
+;;;;###autoload
   (transient-define-prefix window-transient ()
     "Window manipulations"
     ["Window"
@@ -1730,7 +1738,7 @@
       (transient-window--balance)
       (transient-window--golden-ratio)]])
 
-;;;###autoload
+;;;;###autoload
   (defun window-cleanup+ ()
     "Deletes duplicate windows. Leaves single window per buffer, removing all duplicates."
     (interactive)
@@ -1760,21 +1768,21 @@ window."
 
   )
 
-;; ;;;###autoload
+;; ;;;;###autoload
 ;; (defun +scroll-line-down-other-window (&optional count)
 ;;   "Scrolls in the window COUNT lines downwards."
 ;;   (interactive "P")
 ;;   (with-selected-window (other-window-for-scrolling)
 ;;     (funcall (doom-lookup-key (kbd "C-e")) (or count 1))))
 
-;; ;;;###autoload
+;; ;;;;###autoload
 ;; (defun +scroll-line-up-other-window (&optional count)
 ;;   "Scrolls in the window COUNT lines downwards."
 ;;   (interactive "P")
 ;;   (with-selected-window (other-window-for-scrolling)
 ;;     (funcall (doom-lookup-key (kbd "C-y")) (or count 1))))
 
-;; ;;;###autoload
+;; ;;;;###autoload
 ;; (defun display-buffer-window-equal-width (buffer alist)
 ;;   "Keep buffer window width proportional to other windows."
 ;;   (let* ((win (display-buffer-in-direction buffer alist)))
@@ -1785,7 +1793,7 @@ window."
 ;;      t t)
 ;;     win))
 
-;;;; transient : casual-anddo
+;;;;; transient : casual-anddo
 
 (when (locate-library "anddo")
   (require 'anddo)
@@ -1810,7 +1818,7 @@ window."
   (keymap-set anddo-mode-map "<f2>" #'casual-anddo-tmenu)
   )
 
-;;;; TODO casual-python
+;;;;; TODO casual-python
 
 ;; (when (locate-library "python")
 ;;   ;; (with-eval-after-load 'python
@@ -1860,12 +1868,12 @@ window."
 ;;   )
 
 
-;;;; aidermacs
+;;;;; aidermacs
 
 (when (locate-library "aidermacs")
   (global-set-key (kbd "C-c a") 'aidermacs-transient-menu))
 
-;;; EWS Map : 'M-c n', 'C-c n' and 'SPC RET'
+;;;; EWS Map : 'M-c n', 'C-c n' and 'SPC RET'
 
 ;; org-mode
 (defvar-keymap ews-org-noter-map
@@ -2048,7 +2056,7 @@ window."
   "I" #'my/denote-org-dblock-insert-backlinks
   "M-i" #'my/denote-org-dblock-insert-meta-links
 
-  "l" #'denote-link-or-create
+  "l" #'denote-link
   "L" #'denote-link-after-creating-with-command
 
   "n" #'consult-notes
