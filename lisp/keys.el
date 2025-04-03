@@ -332,7 +332,9 @@
 ;;;;; org-side-tree
 
 (when (locate-library "org-side-tree")
-  (global-set-key (kbd "M-g M-o") 'org-side-tree-toggle))
+  (global-set-key (kbd "M-<f7>") 'winum-select-window-2)
+  (global-set-key (kbd "<f7>") 'org-side-tree-toggle)
+  (global-set-key (kbd "M-g M-o") 'org-side-tree))
 
 ;;;;; markdown-mode-map
 

@@ -88,6 +88,27 @@
     (org-update-dblock)
     ))
 
+;; 2025-04-03
+;; (defun my/denote-org-dblock-insert-id-links  ()
+;;   (interactive)
+;;   (let* ((topics (mapcar (lambda (file)
+;;                            (denote-retrieve-front-matter-title-value file 'org))
+;;                          (denote-directory-files "_meta")))
+;;          (selected (completing-read-multiple "Select meta: " topics nil t)))
+
+;;     (org-create-dblock (list :name "denote-links"
+;;                              :regexp
+;;                              (mapconcat 'identity (mapcar (lambda (s) (replace-regexp-in-string "#" "" s)) selected) "\\|")
+;;                              :not-regexp nil
+;;                              :excluded-dirs-regexp
+;;                              "\\(meta\\|journal\\|screenshot\\|private\\|ekg\\)"
+;;                              :sort-by-component nil
+;;                              :reverse-sort t
+;;                              :id-only nil
+;;                              :include-date t))
+;;     (org-update-dblock)
+;;     ))
+
 ;;; store link to heading
 
 ;; should be denote-org-store-link-to-heading nil - default t

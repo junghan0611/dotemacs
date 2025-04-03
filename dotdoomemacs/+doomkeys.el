@@ -33,9 +33,9 @@
       :desc "window-1" "1" #'winum-select-window-1
       :desc "window-2" "2" #'winum-select-window-2
       :desc "window-3" "3" #'winum-select-window-3
-      :desc "window-4" "4" #'winum-select-window-4
+      :desc "window-4" "4" #'winum-select-window-4)
       ;; :desc "1st workspace" "1" #'+workspace/switch-to-0
-      )
+
 
 ;;;; SPC
 
@@ -44,11 +44,11 @@
   (map! (:when (modulep! :ui workspaces)
           :n "C-t"   #'nil
           :n "C-S-t" #'nil
-          :g "M-0"   #'switch-to-minibuffer
-          ))
+          :g "M-0"   #'switch-to-minibuffer))
+
   (global-set-key (kbd "C-s-[") '+workspace/switch-left)
-  (global-set-key (kbd "C-s-]") '+workspace/switch-right)
-  )
+  (global-set-key (kbd "C-s-]") '+workspace/switch-right))
+
 
 
 ;;;; DONT 'l' Layout keys - disable `SPC TAB' workspace prefix
@@ -73,10 +73,10 @@
        :desc "4th workspace" "4" #'+workspace/switch-to-3
        :desc "5th workspace" "5" #'+workspace/switch-to-4
        :desc "6th workspace" "6" #'+workspace/switch-to-5
-       :desc "7th workspace" "7" #'+workspace/switch-to-6
+       :desc "7th workspace" "7" #'+workspace/switch-to-6))
        ;; :desc "Switch to 8" "8" #'+workspace/switch-to-8
        ;; :desc "Switch to 9" "9" #'+workspace/switch-to-9
-       ))
+
 
 ;;;; popup
 
@@ -86,8 +86,8 @@
       ;; "`" nil
       ;; :desc "popup/toggle" "`" #'+popup/toggle
       :desc "popup/toggle" ";" #'+popup/toggle ; #'popper-toggle
-      :desc "popup/close-all" ":" #'+popup/close-all
-      )
+      :desc "popup/close-all" ":" #'+popup/close-all)
+
 
 ;; doom /modules/config/default/+evil-bindings.el
 (map! (:when (modulep! :ui popup)
@@ -101,8 +101,8 @@
 
 (map! :leader
       :desc "er/expand-region" "v" #'er/expand-region
-      :desc "expand-transient" "V" #'expand-transient
-      )
+      :desc "expand-transient" "V" #'expand-transient)
+
 
 ;;;; Replace Doom `/' highlight with buffer-search - consult-line
 
@@ -143,9 +143,9 @@
        :desc "Stitch to Scratch" "s" #'bh/switch-to-scratch
        :desc "Switch to Agenda" "a" #'bh/switch-to-agenda
        :desc "Save all *Org* buffers" "S" #'org-save-all-org-buffers
-       :desc "*evil* Write all buffers" "w" #'evil-write-all
+       :desc "*evil* Write all buffers" "w" #'evil-write-all))
        ;; :desc "Toggle Last" "TAB" #'evil-switch-to-windows-last-buffer)
-       ))
+
 
 ;; move/ swap buffer
 ;; (map! :leader
@@ -295,8 +295,8 @@
           :desc "Curly" "c" #'sp-wrap-curly
           :desc "Square" "s" #'sp-wrap-square
           :desc "Unwrap" "u" #'sp-unwrap-sexp)
-         :desc "Copy sexp" "y" #'sp-copy-sexp))
-  )
+         :desc "Copy sexp" "y" #'sp-copy-sexp)))
+
 
 ;;;; 'C' Capture
 
@@ -317,8 +317,8 @@
        "i" #'bh/insert-inactive-timestamp
        "o" #'org-pandoc-import-as-org
        :desc "org-remark-mark-line" "m" #'org-remark-mark-line
-       :desc "hypothesis: to archive" "h" #'hypothesis-to-archive
-       ))
+       :desc "hypothesis: to archive" "h" #'hypothesis-to-archive))
+
 
 ;;;; 'D' Diff/Compare
 
@@ -410,8 +410,8 @@
        :desc "gt-do-translate" "d" #'gt-do-translate
        :desc "consult-register" "r" #'consult-register
        :desc "consult-yasnippet" "s" #'consult-yasnippet
-       :desc "+default/yank-pop" "y" #'+default/yank-pop
-       ))
+       :desc "+default/yank-pop" "y" #'+default/yank-pop))
+
 
 ;;;; 'x' text
 
@@ -444,8 +444,8 @@
                         "m" #'gptel-menu
                         "e" #'+gptel-improve-text-transient
                         "p" #'gptel-save-as-org-with-denote-metadata
-                        "s" #'gptel-send))
-      )
+                        "s" #'gptel-send)))
+
 
 ;;;; 's' search/symbol
 
@@ -462,8 +462,8 @@
        :desc "search-github-with-lang" "g" #'+search-github-with-lang
        :desc "consult-omni-transient" "n" #'consult-omni-transient
        :desc "consult-locate" "M-l" #'consult-locate
-       :desc "imenu" "j" #'imenu)
-      )
+       :desc "imenu" "j" #'imenu))
+
 
 ;;;; 'S' Search Plus : Custom Search
 
@@ -498,8 +498,8 @@
                 "k" 'wiktionary-lookup-word-ko)
        (:prefix ("q" . "wikiquote")
                 "e" 'wikiquote-lookup-quote-en
-                "k" 'wikiquote-lookup-quote-ko)
-       ))
+                "k" 'wikiquote-lookup-quote-ko)))
+
 
 ;;;; 't' toggle
 
@@ -513,8 +513,8 @@
        :desc "CamelCase" "C" #'subword-mode
        :desc "Column Indicator" "I" #'display-fill-column-indicator-mode
        ;; :desc "Window dedication" "d" #'spacemacs/toggle-current-window-dedication
-       :desc "toggle-window-dedicated" "d" #'toggle-window-dedicated)
-      )
+       :desc "toggle-window-dedicated" "d" #'toggle-window-dedicated))
+
 
 ;;;; 'e' LLM - elysium/gptel
 
@@ -550,8 +550,8 @@
                  (:prefix ("=" . "diff")
                           "<" #'smerge-diff-base-upper
                           ">" #'smerge-diff-base-lower
-                          "=" #'smerge-diff-upper-lower)))
-  )
+                          "=" #'smerge-diff-upper-lower))))
+
 
 (map! :leader
       "e" nil
@@ -569,8 +569,8 @@
        "2" #'gptel-org-toggle-branching-context
        :desc "gptel: send default" :n "3" (cmd! (cashpw/gptel-send (alist-get 'default gptel-directives)))
        :desc "gptel: send chain-of-thought" :n "4" (cmd! (cashpw/gptel-send (alist-get 'chain-of-thought gptel-directives)))
-       :desc "gptel: send follow-up" :n "5" (cmd! (cashpw/gptel-send (alist-get 'follow-up gptel-directives)))
-       ))
+       :desc "gptel: send follow-up" :n "5" (cmd! (cashpw/gptel-send (alist-get 'follow-up gptel-directives)))))
+
 
 ;;;; '9' gptel
 
@@ -605,20 +605,20 @@
 
 (map! (:map copilot-mode-map
             "C-c M-f" #'copilot-complete
-            "M-<tab>" #'copilot-complete
-            )
+            "M-<tab>" #'copilot-complete)
+
       (:map copilot-completion-map
             "<tab>" nil ; jump-out-of-pair
-            "M-<tab>" #'copilot-accept-completion
-            ))
+            "M-<tab>" #'copilot-accept-completion))
+
 
 ;;;; 'o' open
 
 (map! :leader
       (:prefix ("o" . "open")
        :desc "elfeed" "l" #'elfeed
-       :desc "open workspaces" "o" #'my/open-workspaces
-       ))
+       :desc "open workspaces" "o" #'my/open-workspaces))
+
 
 ;;;; 'j' junghanacs hotkey
 
@@ -626,9 +626,9 @@
       (:prefix ("j" . "junghanacs")
        :desc "Mastodon" "m" #'mastodon
        :desc "Tmr" "t" #'tmr
-       :desc "Tmr-view" "v" #'tmr-tabulated-view
+       :desc "Tmr-view" "v" #'tmr-tabulated-view))
        ;; :desc "Anddo: Todos" "d" #'anddo
-       ))
+
 
 ;;;; 'r' remote / register
 
@@ -688,11 +688,11 @@
        :desc "consult-org-all"               "'" #'my/consult-org-all
 
        ;; :desc "ews-note-map"                  "n" ews-note-map
-       :desc "ews-denote-map"                  "n" ews-denote-map
+       :desc "ews-denote-map"                  "n" ews-denote-map))
 
        ;; :desc "my/denote-random-note"        "?" #'my/denote-random-note
        ;; :desc "org-roam-random-no-dates"        "?" #'ash/org-roam-node-random-no-dates
-       ))
+
 
 ;;;; 'N' consult-notes
 
@@ -753,11 +753,11 @@
        :n "k" #'string-inflection-kebab-case
        :n "_" #'string-inflection-underscore
        :n "u" #'string-inflection-underscore
-       :n "U" #'string-inflection-upcase)
+       :n "U" #'string-inflection-upcase))
 
       ;; "[b" #'evil-prev-buffer
       ;; "]b" #'evil-next-buffer
-      )
+
 
 ;;; Major-Mode Leader Keybindings
 
@@ -768,6 +768,8 @@
   (map! (:map vertico-map
               "`"   #'toggle-input-method)
         (:map prog-mode-map
+              "`"   #'toggle-input-method)
+        (:map text-mode-map
               "`"   #'toggle-input-method)
         (:map org-mode-map
               "`"   #'toggle-input-method)))
@@ -826,7 +828,7 @@
 (with-eval-after-load 'markdown-mode
   (map! :map markdown-mode-map
         :localleader
-        "y" #'yank-as-org
+        "y" #'yank-as-org))
         ;; (:prefix ("t" . "Table")
         ;;  :desc "Header" "h" #'markdown-table-hline-at-point-p
         ;;  :desc "Sort" "s" #'markdown-table-sort-lines
@@ -847,8 +849,8 @@
         ;;  :desc "Markup hiding"     "m" #'markdown-toggle-markup-hiding
         ;;  :desc "Wiki links"        "w" #'markdown-toggle-wiki-links
         ;;  :desc "GFM checkbox"      "x" #'markdown-toggle-gfm-checkbox)
-        )
-  )
+
+
 
 ;;;; eww-mode-map
 
@@ -883,9 +885,9 @@
                   "s" 'eww-view-source)
          (:prefix ("l" . "list")
                   "b" 'eww-list-buffers
-                  "o" 'eww-list-bookmarks)
-         ))
-  )
+                  "o" 'eww-list-bookmarks))))
+
+
 
 ;;;; corfu
 
@@ -894,8 +896,8 @@
         "<escape>" #'+corfu-quit-and-escape
         "M-i"    #'corfu-insert-separator
         ;; "C-/" #'+corfu-move-to-minibuffer  ; undo-fu-only-undo
-        "M-." #'+corfu-move-to-minibuffer ;; default 'C-S-s'
-        )
+        "M-." #'+corfu-move-to-minibuffer) ;; default 'C-S-s'
+
 
   ;; corfu-indexed like in Company, M+number - inserts the thing
   (map! :map corfu-map
@@ -908,8 +910,8 @@
         "M-6" (cmd! () (+corfu-insert-indexed 5))
         "M-7" (cmd! () (+corfu-insert-indexed 6))
         "M-8" (cmd! () (+corfu-insert-indexed 7))
-        "M-9" (cmd! () (+corfu-insert-indexed 8)))
-  )
+        "M-9" (cmd! () (+corfu-insert-indexed 8))))
+
 
 ;;;; TODO clojure-mode-map
 
@@ -926,6 +928,9 @@
 ;; TODO: review evaluation key bindings from Spacemacs
 (map! :after cider
       :map cider-mode-map
+      :in "<f9>"   #'+treemacs/toggle
+      :in "<C-f9>" #'treemacs-find-file
+      :in "<M-f9>" #'treemacs-select-window
       :i "M-9" #'insert-parentheses
       :i "M-j" #'bk/improve-last-parens
       :i "M-l" #'sp-forward-sexp
@@ -1133,8 +1138,8 @@
   (:map isearch-mode-map
         "M-e" #'consult-isearch-history ;; orig#'isearch-edit-string
         "M-s e" #'consult-isearch-history ;; orig#'isearch-edit-string
-        "M-s l" #'consult-line))
- )
+        "M-s l" #'consult-line)))
+
 
 ;;;; smartparens-mode-map
 
@@ -1162,10 +1167,10 @@
   "M-<up>"  #'sp-splice-sexp-killing-backward
   "M-<down>" #'sp-splice-sexp-killing-forward
 
-  "C-c (" #'sp-wrap-round
+  "C-c (" #'sp-wrap-round))
   ;; "C-c [" #'sp-wrap-square ; conflict org-mode-map
   ;; "C-c {" #'sp-wrap-curly
-  ))
+
 
 ;;;; treemacs - f9
 
@@ -1177,8 +1182,8 @@
    (:map treemacs-mode-map
          "." #'consult-line)
    (:map evil-treemacs-state-map
-         "." #'consult-line))
-  )
+         "." #'consult-line)))
+
 
 ;;;; dired-mode-map
 
@@ -1204,10 +1209,10 @@
       :desc "*casual-dired* menu" ";" #'casual-dired-tmenu
       "-" #'nerd-icons-dired-mode
       "P" #'my/dired-hugo-export-wim-to-md
-      :desc "denote-map" "n" ews-denote-map
+      :desc "denote-map" "n" ews-denote-map)
       ;; (:prefix ("y" . "copy")
       ;;          )
-      )
+
 
 ;;;; python-mode-map
 
@@ -1223,14 +1228,14 @@
                  "C" #'my/jupyter-cleanup-kernels
                  "r" #'my/jupyter-refresh-kernelspecs
                  "R" #'my/jupyter-refesh-langs
-                 "l" #'my/list-jupyter-kernel-files
+                 "l" #'my/list-jupyter-kernel-files)
                  ;; #'my/select-jupyter-kernel
                  ;; #'my/insert-jupyter-kernel
                  ;; #'my/jupyter-qtconsole
                  ;; #'my/jupyter-eval-region
                  ;; #'my/org-babel-jupyter-strip-ansi-escapes-block
                  ;; #'my/org-src-block-jupyter-eval-line-or-region
-                 )
+
         (:prefix ("h" . "help")
                  "l" #'pylookup-lookup
                  "h" #'pylookup-lookup-at-point)
@@ -1238,9 +1243,9 @@
                  "a" #'code-cells-eval-above
                  "c" #'code-cells-eval
                  "b" #'code-cells-backward-cell
-                 "f" #'code-cells-forward-cell)
-        )
-  )
+                 "f" #'code-cells-forward-cell)))
+
+
 
 
 ;; (after! python
@@ -1294,8 +1299,8 @@
       "p"  #'csv-backward-field
       "r"  #'csv-reverse-region
       "y" #'csv-yank-fields
-      "Y" #'csv-yank-as-new-table
-      )
+      "Y" #'csv-yank-as-new-table)
+
 
 ;;;; Info-mode-map
 
@@ -1370,8 +1375,8 @@
 
 (after! org
   (map! :map org-cdlatex-mode-map
-        "`" nil ; cdlatex-math-symbol
-        ))
+        "`" nil)) ; cdlatex-math-symbol
+
 
 (map! :after latex
       :map cdlatex-mode-map
@@ -1410,8 +1415,8 @@
  (:map citar-embark-citation-map
        "1" #'citar-denote-find-citation ; really useful
        "2" #'citar-denote-open-note
-       "3" #'citar-open-entry
-       ))
+       "3" #'citar-open-entry))
+
 
 ;;;; vertico-map
 
@@ -1428,7 +1433,7 @@
       "M-g" #'toggle-input-method
       "`"   #'toggle-input-method
       "M-8" #'tempel-insert
-      "M-*" #'tempel-insert
+      "M-*" #'tempel-insert)
       ;; "M-S-j" #'vertico-scroll-up
       ;; "M-S-k" #'vertico-scroll-down
 
@@ -1441,7 +1446,7 @@
       ;; "C-?" #'vertico-jump-sudo
       ;; "M-m" #'embark-select
       ;; "C-S-SPC" #'embark-preview+
-      )
+
 
 ;;;; gptel - fix transient menu
 
@@ -1453,8 +1458,8 @@
   ;; Two solutions:
   ;; - Press ~C-m~ instead of the return key. evil-ret
   ;; - Change the send key from return to a key of your choice:
-  (transient-suffix-put 'gptel-menu (kbd "RET") :key "M-RET")
-  )
+  (transient-suffix-put 'gptel-menu (kbd "RET") :key "M-RET"))
+
 
 ;;;; vterm-mode-map
 
@@ -1472,9 +1477,9 @@
         :nv "M-n" #'outline-next-heading
         :nv "M-p" #'outline-previous-heading
         :nv "C-S-p" #'outline-up-heading
-        :nv "z u"   #'outline-up-heading
+        :nv "z u"   #'outline-up-heading))
         ;; :i M-j default-indent-new-line
-        ))
+
 
 ;;;; evil-markdown-mode-map
 
@@ -1485,8 +1490,8 @@
         :nv "M-n" #'markdown-outline-next
         :nv "M-p" #'markdown-outline-previous
         :nv "C-S-p" #'outline-up-heading
-        :nv "z u"   #'outline-up-heading
-        ))
+        :nv "z u"   #'outline-up-heading))
+
 
 ;;;; imenu-list-mode-map
 
@@ -1504,8 +1509,21 @@
         :n "M-j"    #'imenu-list-next-entry-same-level
         :n "M-k"    #'imenu-list-previous-entry-same-level
         :n "M-n"    #'evil-next-line
-        :n "M-p"    #'evil-previous-line
-        ))
+        :n "M-p"    #'evil-previous-line))
+
+;;;; org-side-tree-mode-map
+
+(map! :map org-side-tree-mode-map
+      "RET"         #'push-button
+      "<return>"    #'push-button
+      "d"    #'push-button
+      "M-j"    #'org-side-tree-next-heading
+      "M-k"    #'org-side-tree-previous-heading
+      "M-n"    #'evil-next-line
+      "M-p"    #'evil-previous-line
+      "j"    #'evil-next-line
+      "k"    #'evil-previous-line
+      )
 
 ;;;; leetcode
 
@@ -1519,8 +1537,8 @@
 
 ;;;; aider
 
-(after! aider
-  (aider-doom-enable))
+;; (after! aider
+;;   (aider-doom-enable))
 
 ;;;; Experiments
 
@@ -1561,7 +1579,7 @@
         :i "<tab>" #'my/denote-try-to-complete-then-cycle
         ;; :n "ds" #'orgbox-schedule
 
-        "M--" #'denote-find-backlink
+        "M--" #'denote-find-backlink)
 
         ;; "C-c C-S-l"  #'+org/remove-link
         ;; "C-c C-i"    #'org-toggle-inline-images
@@ -1580,15 +1598,15 @@
         ;; ;; Org-aware C-a/C-e
         ;; [remap doom/backward-to-bol-or-indent]          #'org-beginning-of-line
         ;; [remap doom/forward-to-last-non-comment-or-eol] #'org-end-of-line
-        )
+
 
 ;;;;; localleader 1
 
   (map! :map org-mode-map
         :localleader
         (:prefix ("RET" . "LLM")
-                 "RET" #'gptel-menu
-                 )
+                 "RET" #'gptel-menu)
+
         "#" #'org-update-statistics-cookies
         "'" #'org-edit-special
         "*" #'org-ctrl-c-star
@@ -1801,17 +1819,17 @@
                  "o" 'my/open-external
                  "p" 'my/open-external-pdf
                  "q" 'my/unfill-paragraph-or-region
-                 "0" 'cc-todo-item
-                 )
+                 "0" 'cc-todo-item)
+
         (:prefix ("-" . "translate-mode")
                  "t" 'translate-mode
                  "p" 'translate/translate-current-reference-paragraph
                  "w" 'translate/translate-word-at-point
                  "f" 'translate-open-reference-file
                  "b" 'translate-select-reference-buffer
-                 "h" 'translate-toggle-highlight
-                 )
-        )
+                 "h" 'translate-toggle-highlight))
+
+
 
 ;;;;; after! org-journal
 
@@ -1862,9 +1880,9 @@
                        "y" #'org-journal-search-calendar-year))
         (:map org-journal-search-mode-map
               "n" #'org-journal-search-next
-              "p" #'org-journal-search-prev)
-        )
-  )
+              "p" #'org-journal-search-prev)))
+
+
 
 
 ;;;; embark
@@ -1885,8 +1903,8 @@
   ;;             :around #'embark-hide-which-key-indicator)
   (map!
    (:map embark-org-link-map
-    :desc "open-at-point-other-window" "o" #'my/org-open-at-point-other-window
-    ))
+    :desc "open-at-point-other-window" "o" #'my/org-open-at-point-other-window))
+
 
   (map!
    :after embark
@@ -1896,11 +1914,11 @@
          "/" #'+embark-project-search
          "[" #'gptel-quick
          "?" #'gptel-quick
-         "C-c C-e" #'+vertico/embark-export-write
+         "C-c C-e" #'+vertico/embark-export-write)
          ;; (:prefix
          ;;  ("x" . "text")
          ;;  "p" #'awesome-switch-to-prev-app-and-type)
-         )
+
    (:map embark-file-map
          "x" #'embark-open-externally+
          "5" #'embark-dired-merge-action
@@ -1925,23 +1943,23 @@
    (:map
     embark-org-heading-map
     (:prefix ("9" . "denote") ;; TODO add more denote function
-     :desc "denote add links" "u" #'denote-add-links)
+     :desc "denote add links" "u" #'denote-add-links))
     ;; (:prefix ("9" . "roam")
     ;;  :desc "add ref" "u" #'roam-ref-add-for-active-tab)
-    )
+
 
    (:map
     embark-url-map
     "E" #'+default-browse-url
     "e" #'+eww/open-in-other-window2 ;; +eww-browse-url
-    "v" #'forge-visit-topic-via-url
-    )
+    "v" #'forge-visit-topic-via-url)
+
 
    (:map embark-markdown-link-map
          "E" #'+default-browse-url
          "b" (cmd! () (browse-url (markdown-link-url)))
-         "v" #'forge-visit-topic-via-url
-         )
+         "v" #'forge-visit-topic-via-url)
+
 
    (:map embark-org-link-map
          "E" #'+default-browse-url
@@ -1949,8 +1967,8 @@
          "b" #'org-open-at-point
          "V" #'+open-link-in-vlc
          "v" #'forge-visit-topic-via-url
-         "x" #'embark-open-externally
-         )
+         "x" #'embark-open-externally)
+
 
    (:map
     embark-collect-mode-map
@@ -1972,9 +1990,9 @@
       :desc "en->ko2" "K" #'+google-translate-en->ko
       :desc "ko->en" "e" #'google-translate-query-translate
       :desc "ko->en2" "E" #'+google-translate-ko->en
-      :desc "translate-at-point" "g" #'google-translate-at-point)
-     ))
-   )
+      :desc "translate-at-point" "g" #'google-translate-at-point))))
+
+
 
   (add-hook! 'embark-collect-mode-hook
     (defun visual-line-mode-off-h ()
@@ -1989,8 +2007,8 @@
   (defadvice! embark-prev-next-recenter-a ()
     :after #'embark-previous-symbol
     :after #'embark-next-symbol
-    (recenter))
-  )
+    (recenter)))
+
 
 ;;; TODO ctl-x maps
 
