@@ -77,8 +77,6 @@
  vundo
  undo-fu-session
  elfeed-goodies
- org-superstar
- org-fancy-priorities
  solaire-mode
  ace-window
  flycheck-popup-tip) ; conflict
@@ -239,7 +237,6 @@
 (package! parse-csv :recipe (:host github :repo "junghan0611/el-csv")) ; for om-dash
 (package! om-dash :recipe (:host github :repo "gavv/om-dash" :files ("*.el" "*.org"))) ; org-based dashboards
 
-(package! org-modern)
 (package! org-modern-indent :recipe (:host github :repo "jdtsmith/org-modern-indent"))
 
 ;; (package! org-bookmark-heading)

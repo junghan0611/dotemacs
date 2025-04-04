@@ -771,6 +771,10 @@
               "`"   #'toggle-input-method)
         (:map text-mode-map
               "`"   #'toggle-input-method)
+        (:map minibuffer-mode-map
+              "`"   #'toggle-input-method)
+        (:map minibuffer-local-map
+              "`"   #'toggle-input-method)
         (:map org-mode-map
               "`"   #'toggle-input-method)))
 
@@ -1605,6 +1609,7 @@
   (map! :map org-mode-map
         :localleader
         (:prefix ("RET" . "LLM")
+                 "SPC" #'gptel-mode
                  "RET" #'gptel-menu)
 
         "#" #'org-update-statistics-cookies

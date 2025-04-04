@@ -94,7 +94,7 @@
  neotree ; a project drawer, like NERDTree for vim
  ophints           ; highlight the region an operation acts on
  popup    ; tame sudden yet inevitable temporary windows
- smooth-scroll     ; So smooth you won't believe it's not butter
+ (smooth-scroll +interpolate) ; So smooth you won't believe it's not butter
 
  ;; treemacs
  (treemacs +lsp) ;  a project drawer, like neotree but cooler
@@ -216,7 +216,7 @@
   +present                    ; using org-mode for presentations
   +contacts
   +journal
-  ;; +pretty
+  +pretty
   ;; +passwords
   ;; +pomodoro                 ; be fruitful with the tomato technique
   )                     ; wander around notes

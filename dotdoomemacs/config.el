@@ -3056,8 +3056,8 @@ ${content}"))
 
   (setq denote-org-front-matter
         "#+title:      %1$s
-#+hugo_lastmod: %2$s
 #+filetags:   %3$s
+#+hugo_lastmod: %2$s
 #+date:       %2$s
 #+identifier: %4$s
 #+export_file_name: %4$s.md
@@ -3402,8 +3402,8 @@ ${content}"))
         ;; Add metadata to the file
         (goto-char 0) (search-forward ":END:") (end-of-line)
         (insert (format "\n#+title: #LLM: %s\n" suffix))
-        (insert (format "#+hugo_lastmod: %s\n" (format-time-string "[%Y-%m-%d]")))
         (insert "#+filetags: :llmlog:\n")
+        (insert (format "#+hugo_lastmod: %s\n" (format-time-string "[%Y-%m-%d]")))
         (insert (format "#+date: %s\n" (format-time-string "[%Y-%m-%d %a %H:%M]")))
         (insert (format "#+identifier: %s\n" suffix))
         (insert (format "#+export_file_name: %s.md\n" suffix))
@@ -5789,7 +5789,7 @@ Suitable for `imenu-create-index-function'."
       ;; configurtaion
       (setq
        ;; Edit settings
-       org-auto-align-tags nil ; default t
+       ;; org-auto-align-tags nil ; default t
        org-tags-column 0 ; doom 0
        org-catch-invisible-edits 'show-and-error ; smart
        org-special-ctrl-a/e t
@@ -5887,13 +5887,8 @@ Suitable for `imenu-create-index-function'."
               ("DONT" :inverse-video t :inherit +org-todo-dont)
               ))
       )
-    ;; (progn
-    ;;   (add-hook 'org-mode-hook #'org-modern-mode)
-    ;;   (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
-
     ;;   (require 'org-modern-indent)
     ;;   (add-hook 'org-mode-hook #'org-modern-indent-mode 90)
-    ;;   )
     )
   )
 

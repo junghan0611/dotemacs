@@ -989,7 +989,7 @@ Also see `prot-window-delete-popup-frame'." command)
              . "#${datemodified:10} ${=type=:10} ${shorttitle:19} ${namea:16} ${url:19} ${tags keywords:*}") ; 2024-11-17 add url
             (preview
              .
-             "${title}\n ${shorttitle}\n ${author} ${translator} ${namea}\n ${abstract}\n ${year issued date:4}") ; citar-copy-reference
+             "${title}\n${shorttitle}\n${author} ${translator} ${namea}\n${abstract}\n${year issued date:4}") ; citar-copy-reference
             (note . "#+title: ${author translator:10}, ${title}")))
 
     ;; (note . "Notes on ${author:10 editor:%etal}, ${title}")
