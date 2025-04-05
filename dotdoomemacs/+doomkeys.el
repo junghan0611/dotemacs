@@ -1987,7 +1987,7 @@
      embark-region-map
      embark-sentence-map
      embark-paragraph-map)
-    (:desc "txl-translate" "M-t" #'txl-translate-insert)
+    (:desc "txl-translate" "M-t" #'my/txl-translate-insert)
     (:prefix
      ("x" . "text")
      (:prefix ("g" . "google-translate")

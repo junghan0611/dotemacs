@@ -930,6 +930,20 @@ Also see `prot-window-delete-popup-frame'." command)
     (add-hook 'org-mode-hook #'org-rainbow-tags-mode)
     ))
 
+;;;; org-sliced-images
+
+;; for smooth scroll of images in or mode
+(when (locate-library "org-sliced-images")
+  (with-eval-after-load 'org
+    (require 'org-sliced-images)
+    (org-sliced-images-mode)
+    ))
+
+;;;; oneko-macs eyecandy
+
+(when (locate-library "oneko-emacs")
+  (require 'oneko-macs)
+  )
 
 ;;;; ob-mermaid
 

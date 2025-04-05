@@ -231,7 +231,7 @@
 (package! org-ql)
 (package! org-kanban)
 
-(package! org-sliced-images)
+(package! org-sliced-images :recipe (:host github :repo "ElleNajt/org-sliced-images"))
 ;; (package! image-slicing :recipe (:host github :repo "ginqi7/image-slicing"))
 
 (package! parse-csv :recipe (:host github :repo "junghan0611/el-csv")) ; for om-dash
@@ -350,6 +350,12 @@
 (package! copilot-chat :recipe (:host github :repo "chep/copilot-chat.el" :files ("*.el"))) ; github copilot
 
 (package! whisper :recipe (:host github :repo "natrys/whisper.el"))
+
+(package! gpt-babel
+  :recipe (:host github
+           :repo "ElleNajt/gpt-babel"
+           :branch "main"
+           :files ("*.el")))
 
 ;; (package! codeium :recipe (:host github :repo "Exafunction/codeium.el"))
 
@@ -561,5 +567,7 @@
 (package! fireplace)
 (package! snow)
 ;; (package! selectric-mode)
+(package! oneko-macs :recipe (:host github :repo "ElleNajt/oneko-macs"))
+
 
 ;;; end-of file

@@ -4729,13 +4729,6 @@ For instance pass En as source for English."
     ;; (org-bookmarks-add-org-capture-template)
     )
 
-;;;;;; jh-org > packages > org-sliced-images
-
-  ;; for smooth scroll of images in or mode
-  (use-package org-sliced-images
-    :after org
-    :config (org-sliced-images-mode))
-
 ;;;;;; jh-org > packages > org-attach
 
   (use-package org-attach

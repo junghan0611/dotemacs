@@ -2042,33 +2042,28 @@ only those in the selected frame."
     (setq txl-deepl-api-url deeplx-url)
     (setq txl-deepl-api-key deeplx-key)
 
-    (global-set-key (kbd "M-g 0") 'txl-translate-insert)
-    (with-eval-after-load 'evil-org
-      (evil-define-key 'normal 'evil-org-mode-map (kbd "M-t") 'txl-translate-insert))
-    )
+    ;; (setq txl-deepl-split-sentences nil
+    ;;       txl-deepl-preserve-formatting nil)
+
+    (defun my/txl-translate-insert (&optional prefix-arg)
+      (interactive "P")
+      (setq txl-source-buffer (current-buffer))
+      (let* ((route (if prefix-arg
+                        (list "EN-US" "KO")  ; 영어 -> 한글
+                      (list "KO" "EN-US")))  ; 한글 -> 영어
+             (translation (apply 'txl-translate route)))
+        (with-current-buffer txl-source-buffer
+          (unless (derived-mode-p 'text-mode)
+            (text-mode))
+          (txl-insert-region-or-paragraph translation)
+          (unfill-paragraph))
+        (display-buffer txl-source-buffer)))
+
+      (global-set-key (kbd "M-g 0") 'my/txl-translate-insert)
+      (with-eval-after-load 'evil-org
+        (evil-define-key 'normal 'evil-org-mode-map (kbd "M-t") 'my/txl-translate-insert))
+      )
   )
-
-;; (setq txl-deepl-split-sentences nil
-;;       txl-deepl-preserve-formatting nil)
-
-;; (defun txl-translate-insert (&optional prefix-arg)
-;;   (interactive "P")
-;;   (require 'guess-language)
-;;   (setq txl-source-buffer (current-buffer))
-;;   (let* ((route (if prefix-arg
-;;                     (list (txl-other-language) (txl-guess-language))
-;;                   (list (txl-other-language))))
-;;          (translation (apply 'txl-translate route)))
-;;     (with-current-buffer txl-source-buffer
-;;       (unless (derived-mode-p 'text-mode)
-;;         (text-mode))
-;;       (txl-insert-region-or-paragraph translation)
-;;       (unfill-paragraph)
-;;       )
-;;     (display-buffer txl-source-buffer)
-;;     )
-;;   )
-
 
 
 ;;;;; TODO focus
@@ -2887,13 +2882,6 @@ ${content}"))
 (use-package! org-ql
   :after org
   :commands org-ql-search)
-
-;;;;;; org-sliced-images
-
-;; for smooth scroll of images in or mode
-(use-package! org-sliced-images
-  :after org
-  :config (org-sliced-images-mode))
 
 ;;;;;; org-marked-text-overview
 

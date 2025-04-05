@@ -656,6 +656,10 @@
                     org-protocol
                     ))
 
+(setq org-agenda-block-separator ?─
+      org-agenda-current-time-string
+      "◀── now ─────────────────────────────────────────────────") ; default ?─ 9472
+
 ;; (setq org-agenda-prefix-format
 ;;       '((agenda  . " %i %-14:c%?-12t% s")
 ;;         (todo  . " %i %-14:c")
