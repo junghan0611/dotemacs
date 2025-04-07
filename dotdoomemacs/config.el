@@ -2062,10 +2062,10 @@ only those in the selected frame."
           (unfill-paragraph))
         (display-buffer txl-source-buffer)))
 
-      (global-set-key (kbd "M-g 0") 'my/txl-translate-insert)
-      (with-eval-after-load 'evil-org
-        (evil-define-key 'normal 'evil-org-mode-map (kbd "M-t") 'my/txl-translate-insert))
-      )
+    (global-set-key (kbd "M-g 0") 'my/txl-translate-insert)
+    (with-eval-after-load 'evil-org
+      (evil-define-key 'normal 'evil-org-mode-map (kbd "M-t") 'my/txl-translate-insert))
+    )
   )
 
 
@@ -3474,12 +3474,12 @@ ${content}"))
   ;; sonar	127k	Chat Completion
   (setq gptel-model 'sonar
         gptel-backend (gptel-make-perplexity "Perplexity"
-    :host "api.perplexity.ai"
-    :key #'gptel-api-key
-    :endpoint "/chat/completions"
-    :stream t
-    :request-params '(:temperature 0.2) ; default 0.2
-    :models '(sonar sonar-pro sonar-reasoning)))
+                        :host "api.perplexity.ai"
+                        :key #'gptel-api-key
+                        :endpoint "/chat/completions"
+                        :stream t
+                        :request-params '(:temperature 0.2) ; default 0.2
+                        :models '(sonar sonar-pro sonar-reasoning)))
 
   ;; DeepSeek offers an OpenAI compatible API
   ;; The deepseek-chat model has been upgraded to DeepSeek-V3. deepseek-reasoner points to the new model DeepSeek-R1.
@@ -5640,8 +5640,8 @@ Suitable for `imenu-create-index-function'."
   (gt-default-translator
    (gt-translator
     :taker (gt-taker :langs '(en ko) :text (lambda () (replace-regexp-in-string
-                                                   "\\([^\n]\\)\n\\([^\n]\\)" "\\1 \\2"
-                                                   (thing-at-point 'paragraph)))
+                                                       "\\([^\n]\\)\n\\([^\n]\\)" "\\1 \\2"
+                                                       (thing-at-point 'paragraph)))
                      :prompt t
                      )
     :engines (gt-google-engine)
@@ -5838,46 +5838,6 @@ Suitable for `imenu-create-index-function'."
 
       ;; https://github.com/tecosaur/emacs-config/blob/master/config.org?plain=1#L7886
       (setq org-modern-keyword nil)
-      ;; (setq org-modern-keyword
-      ;;       '((t . t)
-      ;;         ("title" . "𝙏")
-      ;;         ("subtitle" . "𝙩")
-      ;;         ("author" . "𝘼")
-      ;;         ("email" . "")
-      ;;         ("date" . "𝘿")
-      ;;         ("property" . "󰠳")
-      ;;         ("options" . #("󰘵" 0 1 (display (height 0.75))))
-      ;;         ("startup" . "⏻")
-      ;;         ("macro" . "𝓜")
-      ;;         ("bind" . "󰌷")
-      ;;         ("bibliography" . "")
-      ;;         ("print_bibliography" . "󰌱")
-      ;;         ("cite_export" . "⮭")
-      ;;         ("print_glossary" . "󰌱ᴬᶻ")
-      ;;         ("glossary_sources" . "󰒻")
-      ;;         ("include" . "⇤")
-      ;;         ("setupfile" . "⇚")
-      ;;         ("html_head" . "🅷")
-      ;;         ("html" . "🅗")
-      ;;         ("latex_class" . "🄻")
-      ;;         ("latex_class_options" . "🄻󰒓")
-      ;;         ("latex_header" . "🅻")
-      ;;         ("latex_header_extra" . "🅻⁺")
-      ;;         ("latex" . "🅛")
-      ;;         ("beamer_theme" . "🄱")
-      ;;         ("beamer_color_theme" . "🄱󰏘")
-      ;;         ("beamer_font_theme" . "🄱𝐀")
-      ;;         ("beamer_header" . "🅱")
-      ;;         ("beamer" . "🅑")
-      ;;         ("attr_latex" . "🄛")
-      ;;         ("attr_html" . "🄗")
-      ;;         ("attr_org" . "⒪")
-      ;;         ("call" . "󰜎")
-      ;;         ("name" . "⁍")
-      ;;         ("header" . "›")
-      ;;         ("caption" . "☰")
-      ;;         ("results" . "🠶")))
-
       (setq org-modern-priority t)
       (setq org-modern-priority-faces
             '((?A :inverse-video t :inherit +org-todo-todo)
@@ -7354,43 +7314,43 @@ Suitable for `imenu-create-index-function'."
 ;;;;;; TODO imenu for clojure
 
   ;; 2025-03-26 확인 나중에
-;; (progn
-;;     (require 'consult-imenu)
+  ;; (progn
+  ;;     (require 'consult-imenu)
 
-;; ;;;###autoload
-;;     (defun add-clojure-imenu-regexp-h ()
-;;       "Hacky way to get imenu for root-level keywords. Useful in edn files."
-;;       (setq-local imenu-generic-expression
-;;                   `(
-;;                     ("Section" "^[ \t]*;;;+\\**[ \t]+\\([^\n]+\\)" 1)
-;;                     ("Functions" "^\\s-*\\(defn +\\([^ )\n]+\\)" 1)
-;;                     ("Macros" "^\\s-*\\(defmacro +\\([^ )\n]+\\)" 1)
-;;                     ("Structs" "^\\s-*\\(defstruct +\\([^ )\n]+\\)" 1)
-;;                     ("Namespaces" "^\\s-*\\(ns +\\([^ )\n]+\\)" 1)
-;;                     ("Protocols" "^\\s-*\\(defprotocol +\\([^ )\n]+\\)" 1)
-;;                     ("Records" "^\\s-*\\(defrecord +\\([^ )\n]+\\)" 1)
-;;                     ("Types" "^\\s-*\\(deftype +\\([^ )\n]+\\)" 1)
-;;                     ("Vars" "^\\s-*\\(def +\\([^ )\n]+\\)" 1)
-;;                     ("Special Forms" "^\\s-*\\(def\\(?:\\w+\\) +\\([^ )\n]+\\)" 1)
-;;                     ))
-;;       (when (string= "edn" (file-name-extension (or (buffer-file-name) "")))
-;;         (add-to-list 'imenu-generic-expression '(nil "^.?.?\\(:[^ ]+\\).*$" 1) t)))
+  ;; ;;;###autoload
+  ;;     (defun add-clojure-imenu-regexp-h ()
+  ;;       "Hacky way to get imenu for root-level keywords. Useful in edn files."
+  ;;       (setq-local imenu-generic-expression
+  ;;                   `(
+  ;;                     ("Section" "^[ \t]*;;;+\\**[ \t]+\\([^\n]+\\)" 1)
+  ;;                     ("Functions" "^\\s-*\\(defn +\\([^ )\n]+\\)" 1)
+  ;;                     ("Macros" "^\\s-*\\(defmacro +\\([^ )\n]+\\)" 1)
+  ;;                     ("Structs" "^\\s-*\\(defstruct +\\([^ )\n]+\\)" 1)
+  ;;                     ("Namespaces" "^\\s-*\\(ns +\\([^ )\n]+\\)" 1)
+  ;;                     ("Protocols" "^\\s-*\\(defprotocol +\\([^ )\n]+\\)" 1)
+  ;;                     ("Records" "^\\s-*\\(defrecord +\\([^ )\n]+\\)" 1)
+  ;;                     ("Types" "^\\s-*\\(deftype +\\([^ )\n]+\\)" 1)
+  ;;                     ("Vars" "^\\s-*\\(def +\\([^ )\n]+\\)" 1)
+  ;;                     ("Special Forms" "^\\s-*\\(def\\(?:\\w+\\) +\\([^ )\n]+\\)" 1)
+  ;;                     ))
+  ;;       (when (string= "edn" (file-name-extension (or (buffer-file-name) "")))
+  ;;         (add-to-list 'imenu-generic-expression '(nil "^.?.?\\(:[^ ]+\\).*$" 1) t)))
 
-;;     (add-hook! (clojure-mode clojure-ts-mode) #'add-clojure-imenu-regexp-h)
+  ;;     (add-hook! (clojure-mode clojure-ts-mode) #'add-clojure-imenu-regexp-h)
 
-;;     (dolist (clojure '(clojure-mode clojure-ts-mode))
-;;       (add-to-list 'consult-imenu-config
-;;                    `(,clojure
-;;                      :toplevel "Functions"
-;;                      :types (
-;;                              (?h "Section")
-;;                              (?f "Functions" font-lock-function-name-face)
-;;                              (?m "Macros" font-lock-type-face)
-;;                              (?p "Protocols" font-lock-constant-face)
-;;                              (?t "Types" font-lock-type-face)
-;;                              (?v "Vars" font-lock-variable-name-face)
-;;                              ))))
-;;     )
+  ;;     (dolist (clojure '(clojure-mode clojure-ts-mode))
+  ;;       (add-to-list 'consult-imenu-config
+  ;;                    `(,clojure
+  ;;                      :toplevel "Functions"
+  ;;                      :types (
+  ;;                              (?h "Section")
+  ;;                              (?f "Functions" font-lock-function-name-face)
+  ;;                              (?m "Macros" font-lock-type-face)
+  ;;                              (?p "Protocols" font-lock-constant-face)
+  ;;                              (?t "Types" font-lock-type-face)
+  ;;                              (?v "Vars" font-lock-variable-name-face)
+  ;;                              ))))
+  ;;     )
 
 ;;;;;; clj-deps-new
 
@@ -7775,15 +7735,15 @@ Suitable for `imenu-create-index-function'."
 ;;; org-side-tree
 
 (progn
- (require 'org-side-tree)
- (setq-local outline-regexp ";;;\\(;* [^ \t\n]\\)") ; for clojure lisp
- (setq org-side-tree-persistent nil) ; default nil
- ;; (setq org-side-tree-cursor 'box)
- ;; (setq org-side-tree-fontify nil)
- (setq org-side-tree-timer-delay 1) ; default 0.3
- ;; (add-hook 'emacs-lisp-mode-hook (lambda () (setq-local outline-regexp ";;;\\(;* [^   \t\n]\\)")))
- ;; (add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
- )
+  (require 'org-side-tree)
+  (setq-local outline-regexp ";;;\\(;* [^ \t\n]\\)") ; for clojure lisp
+  (setq org-side-tree-persistent nil) ; default nil
+  ;; (setq org-side-tree-cursor 'box)
+  ;; (setq org-side-tree-fontify nil)
+  (setq org-side-tree-timer-delay 1) ; default 0.3
+  ;; (add-hook 'emacs-lisp-mode-hook (lambda () (setq-local outline-regexp ";;;\\(;* [^   \t\n]\\)")))
+  ;; (add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
+  )
 
 ;;;; mb-depth
 
@@ -7801,70 +7761,73 @@ Suitable for `imenu-create-index-function'."
 ;; (add-to-list 'load-path "~/emacs/git/default/html2org/")
 ;; (require 'html2org)
 
-;;;; DONT eaf
+;;; Emacs Application Framework (EAF)
 
-;; Don't forget to run M-x eaf-install-dependencies
-;; (add-to-list 'load-path (concat user-dotemacs-dir "local/eaf/"))
-;; (require 'eaf)
-;; (require 'eaf-pdf-viewer)
-;; (require 'eaf-browser)
+;; check  'C-h v' eaf-var-list
 
-; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
-;; (browse-url-browser-function 'eaf-open-browser)
-;; (defalias 'browse-web #'eaf-open-browser)
-;; (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
+(progn
+  (setq eaf-python-command "/usr/bin/python")
 
-;;   (setq eaf-browser-enable-adblocker "true")
-;;   (setq eaf-browser-continue-where-left-off t)
-;;   (setq eaf-browser-default-zoom "3")
-;;   (when doom-big-font-mode)
-;;   (setq eaf-browser-default-zoom 1.5)
-;;   (setq eaf-mindmap-dark-mode "follow")
-;;   (setq eaf-browser-dark-mode "force")
-;;   (setq eaf-terminal-dark-mode "force")
-;;   (setq eaf-pdf-dark-mode "force"))
+  (require 'eaf)
+  (require 'eaf-browser)
+  (require 'eaf-pdf-viewer)
+  (require 'eaf-mind-elixir)
 
-;; (progn
-;; /home/junghan/sync/man/dotsamples/vanilla/gavinok-dotfiles/lisp/eaf-config.el
-;;   (defun slurp (f)
-;;     (with-temp-buffer
-;;       (insert-file-contents f)
-;;       (buffer-substring-no-properties
-;;        (point-min)
-;;        (point-max))))
-;;   (defun my/bm ()
-;;     (interactive)
-;;     (add-to-list 'load-path "~/.emacs.d/site-lisp/emacs-application-framework/app/browser/")
-;;     (require 'eaf-browser)
+  (progn
+    ;; https://github.com/emacs-eaf/emacs-application-framework/wiki/Evil
+    (require 'eaf-evil)
+    (define-key key-translation-map (kbd "SPC")
+                (lambda (prompt)
+                  (if (derived-mode-p 'eaf-mode)
+                      (pcase eaf--buffer-app-name
+                        ("browser" (if  eaf-buffer-input-focus
+                                       (kbd "SPC")
+                                     (kbd eaf-evil-leader-key)))
+                        ("pdf-viewer" (kbd eaf-evil-leader-key))
+                        ("mind-elixir" (kbd eaf-evil-leader-key))
+                        ;; ("image-viewer" (kbd eaf-evil-leader-key))
+                        (_  (kbd "SPC")))
+                    (kbd "SPC"))))
+    )
 
-;;     (let ((selected (completing-read
-;;                      "Select URL: " (split-string
-;;                                      (slurp "~/.config/bookmarks") "\n" t))))
-;;       (let ((url (car (split-string
-;;                        selected
-;;                        " " t))))
-;;         (if (string-match-p "\\http.*\\'" url)
-;;             ;; Open selected url
-;;             (eaf-open-browser url)
-;;           ;; Search entered text
-;;           (eaf-search-it selected)))))
-;;   (setq eaf-browser-continue-where-left-off t)
-;;   (setq eaf-browser-dnefault-search-engine "duckduckgo")
-;;   (setq eaf-browser-enable-adblocker "true")
-;;   ;; (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-;;   ;; (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-;;   ;; (eaf-bind-key take_photo "p" eaf-camera-keybinding)
-;;   ;; (dolist (keys '("i" "h" "j" "k" "l"
-;;   ;;              "d" "f" "x" ","
-;;   ;;              "-" "." "0" "1"
-;;   ;;              "2" "=" "B" "F"
-;;   ;;              "G" "H" "I" "J"
-;;   ;;              "K" "L" "P" "T"
-;;   ;;              "Y" "c" "d" "e"
-;;   ;;              "f" "g" "m" "n"
-;;   ;;              "o" "p" "r" "t"
-;;   ;;              "u" "v" "x" "y"
-;;   ;;              (eaf-bind-key nil key eaf-browser-keybinding))))
-;;   )
+  ;; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
+  (progn
+    (setq eaf-browser-translate-language "ko")
+
+    ;; make default browser
+    (setq browse-url-browser-function 'eaf-open-browser)
+    (defalias 'browse-web #'eaf-open-browser)
+    ;; (eaf-bind-key nil "M-q" eaf-browser-keybinding) ;; unbind, see more in the Wiki
+
+    ;; /home/junghan/sync/man/dotsamples/vanilla/gavinok-dotfiles/lisp/eaf-config.el
+    (defun slurp (f)
+      (with-temp-buffer
+        (insert-file-contents f)
+        (buffer-substring-no-properties
+         (point-min)
+         (point-max))))
+
+    ;; bookmark-default-file "~/emacs-bookmarks.el"
+    (defun my/bm ()
+      (interactive)
+      (require 'eaf-browser)
+      (let ((selected (completing-read
+                       "Select URL: " (split-string
+                                       (slurp "~/emacs-bookmarks.el") "\n" t))))
+        (let ((url (car (split-string
+                         selected
+                         " " t))))
+          (if (string-match-p "\\http.*\\'" url)
+              ;; Open selected url
+              (eaf-open-browser url)
+            ;; Search entered text
+            (eaf-search-it selected)))))
+    (setq eaf-browser-continue-where-left-off t)
+    (setq eaf-browser-dnefault-search-engine "duckduckgo")
+    (setq eaf-browser-enable-adblocker "true")
+    ;; (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+    ;; (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+    )
+  ) ; end-of eaf
 
 ;;; left blank on purpose

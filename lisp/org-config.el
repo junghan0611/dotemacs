@@ -381,13 +381,13 @@
 ;; (setq org-hide-macro-markers nil) ; nil
 
 (setq org-indent-mode-turns-off-org-adapt-indentation t) ; must t, default t
-;; (setq org-indent-mode-turns-on-hiding-stars nil) ; default t -- MINE
-;; (setq org-hide-leading-stars nil) ; doom t
+(setq org-indent-mode-turns-on-hiding-stars nil) ; default t -- MINE
+(setq org-hide-leading-stars nil) ; doom t
 
-;;;; DONT custom indentation
+;;;; custom indentation
 
 ;; (setq org-adapt-indentation t)
-(setq org-startup-indented t) ; doom t, spacemacs nil
+(setq org-startup-indented nil) ; doom t, spacemacs nil
 (setq org-src-preserve-indentation t) ; doom t, spacemacs nil
 (setq org-edit-src-content-indentation 0) ; default 2
 

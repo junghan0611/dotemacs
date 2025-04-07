@@ -923,20 +923,20 @@ Also see `prot-window-delete-popup-frame'." command)
 (when (locate-library "org-rainbow-tags")
   (with-eval-after-load 'org
     (require 'org-rainbow-tags)
-    (setq org-rainbow-tags-hash-start-index 0)
+    ;; (setq org-rainbow-tags-hash-start-index 8)
     (setq org-rainbow-tags-extra-face-attributes
-          '(:inverse-video t :box nil :weight 'bold))
-    (add-hook 'org-mode-hook #'org-rainbow-tags-mode)
+          '(:inverse-video t :box t :weight 'bold :height user-imenu-list-height))
+    ;; (add-hook 'org-mode-hook #'org-rainbow-tags-mode)
     ))
 
 ;;;; org-sliced-images
 
 ;; for smooth scroll of images in or mode
-;; (when (locate-library "org-sliced-images")
-;;   (with-eval-after-load 'org
-;;     (require 'org-sliced-images)
-;;     (org-sliced-images-mode)
-;;     ))
+(when (locate-library "org-sliced-images")
+  (with-eval-after-load 'org
+    (require 'org-sliced-images)
+    ;; (org-sliced-images-mode)
+    ))
 
 ;;;; oneko-macs eyecandy
 
@@ -1001,7 +1001,7 @@ Also see `prot-window-delete-popup-frame'." command)
              . "#${datemodified:10} ${=type=:10} ${shorttitle:19} ${namea:16} ${url:19} ${tags keywords:*}") ; 2024-11-17 add url
             (preview
              .
-             "${title}\n${shorttitle}\n${author} ${translator} ${namea}\n${abstract}\n${year issued date:4}") ; citar-copy-reference
+             "${title}\n${author} ${translator}\n${year issued date:4}\n${shorttitle}") ; citar-copy-reference ${namea} \n${abstract}
             (note . "#+title: ${author translator:10}, ${title}")))
 
     ;; (note . "Notes on ${author:10 editor:%etal}, ${title}")

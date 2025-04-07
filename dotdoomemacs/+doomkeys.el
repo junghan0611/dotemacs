@@ -133,8 +133,8 @@
        :desc "Ash-Goto-Agenda" "A" #'ash-goto-org-agenda
        ;; :desc "Dashboard" "h" #'+doom-dashboard/open
        :desc "switch-workspace-buffer" "b" #'+vertico/switch-workspace-buffer ; default
+       :desc "consult-buffer" "SPC" #'consult-buffer
        :desc "consult-buffer" "." #'consult-buffer
-       :desc "consult-buffer" "B" #'consult-buffer
        :desc "Kill all Dired buffers" "D" #'my/dired-kill-all-buffers
        :desc "Jump to Bookmark" "RET" #'consult-bookmark
        :desc "Kill buffer and window" "K" #'kill-buffer-and-window
@@ -145,7 +145,6 @@
        :desc "Save all *Org* buffers" "S" #'org-save-all-org-buffers
        :desc "*evil* Write all buffers" "w" #'evil-write-all))
        ;; :desc "Toggle Last" "TAB" #'evil-switch-to-windows-last-buffer)
-
 
 ;; move/ swap buffer
 ;; (map! :leader
