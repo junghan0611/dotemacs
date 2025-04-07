@@ -556,20 +556,19 @@ Also see `prot-window-delete-popup-frame'." command)
            (frame-height screen-height)
            (frame-left (- screen-width frame-width))
            (frame-top 0)
-           (chat-frame (make-frame `((window-system . x) ; macOS use "ns"
+           (chat-frame (make-frame `(
+                                     ;; (window-system . x) ; macOS use "ns"
                                      (top . ,frame-top)
                                      (left . ,frame-left)
                                      (width . (text-pixels . ,frame-width))
                                      (heigth . (text-pixels . ,frame-height))
                                      (minibuffer . t)))))
-
       (select-frame chat-frame))
 
     (gptel "My:AI Chat" gptel-api-key nil)
     (switch-to-buffer "My:AI Chat")
     (delete-other-windows))
   )
-
 
 ;;;;; use gptel citations utf8
 
@@ -933,17 +932,16 @@ Also see `prot-window-delete-popup-frame'." command)
 ;;;; org-sliced-images
 
 ;; for smooth scroll of images in or mode
-(when (locate-library "org-sliced-images")
-  (with-eval-after-load 'org
-    (require 'org-sliced-images)
-    (org-sliced-images-mode)
-    ))
+;; (when (locate-library "org-sliced-images")
+;;   (with-eval-after-load 'org
+;;     (require 'org-sliced-images)
+;;     (org-sliced-images-mode)
+;;     ))
 
 ;;;; oneko-macs eyecandy
 
-(when (locate-library "oneko-emacs")
-  (require 'oneko-macs)
-  )
+(when (locate-library "oneko-macs")
+  (require 'oneko-macs))
 
 ;;;; ob-mermaid
 

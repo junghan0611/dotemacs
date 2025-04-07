@@ -1698,10 +1698,10 @@ only those in the selected frame."
 
 ;;;;; org-supertag
 
-(use-package! org-supertag
-  :after org
-  ;; :config (org-supertag-setup)
-  )
+;(use-package! org-supertag
+;  :after org
+;  ;; :config (org-supertag-setup)
+;  )
 
 ;;;;; corg
 
@@ -2031,7 +2031,10 @@ only those in the selected frame."
       (if (eq use-deeplx t)
           (progn
             (setq txl-deepl-api-url "https://api-free.deepl.com/v2/translate")
-            (setq txl-deepl-api-key user-deepl-api-key)
+            (setq txl-deepl-api-key (auth-info-password
+                                     (car (auth-source-search
+                                           :host "api-free.deepl.com"
+                                           :user "apikey")))) ; user-deepl-api-key
             (setq use-deeplx nil))
         (progn  ; use deeplx for free
           (setq txl-deepl-api-url deeplx-url)
@@ -3358,13 +3361,10 @@ ${content}"))
 
 ;;;;;;;; 02 - default prompt
 
-  (progn
-    (setq gptel-model 'gpt-4o-mini) ; default 'gpt-4o-mini
-    (setq gptel-api-key user-openai-api-key)
-    )
-
-  ;; (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "*** [ME]: ")
-  ;; (setf (alist-get 'org-mode gptel-response-prefix-alist) "*** [AI]: ")
+  ;; (progn
+  ;;   (setq gptel-model 'gpt-4o-mini) ; default 'gpt-4o-mini
+  ;;   (setq gptel-api-key user-openai-api-key)
+  ;;   )
 
   (setf
    (cdr (assoc 'default gptel-directives))
@@ -3444,22 +3444,28 @@ ${content}"))
   ;; xAI offers an OpenAI compatible API
   (gptel-make-openai "xAI"
     :host "api.x.ai"
-    :key user-xai-api-key
+    :key #'gptel-api-key
     :endpoint "/v1/chat/completions"
     :stream t
-    ;; :request-params '(:temperature 0.2) ; default 0.2
+    :request-params '(:temperature 0.0)
     :models '(grok-2-1212
               grok-2-image-1212
               ))
 
   ;; Google - Gemini
   (gptel-make-gemini "Gemini"
-    :key user-gemini-api-key :stream t
-    :request-params '(:temperature 0.0) ; for coding
+    :key (auth-info-password
+          (car (auth-source-search
+                :host "generativelanguage.googleapis.com"
+                :user "apikey")))
+    :stream t
+    ;; :request-params '(:temperature 0.0) ; for coding
     )
 
   ;; Anthropic - Claude
-  (gptel-make-anthropic "Claude" :key user-claude-api-key :stream t)
+  (gptel-make-anthropic "Claude"
+    :key #'gptel-api-key
+    :stream t)
 
   ;; https://perplexity.mintlify.app/guides/pricing
   ;; Model	Context Length	Model Type
@@ -3469,7 +3475,7 @@ ${content}"))
   (setq gptel-model 'sonar
         gptel-backend (gptel-make-perplexity "Perplexity"
     :host "api.perplexity.ai"
-    :key user-perplexity-api-key
+    :key #'gptel-api-key
     :endpoint "/chat/completions"
     :stream t
     :request-params '(:temperature 0.2) ; default 0.2
@@ -3486,7 +3492,7 @@ ${content}"))
   ;; https://api-docs.deepseek.com/quick_start/parameter_settings
   (gptel-make-openai "DeepSeek"
     :host "api.deepseek.com"
-    :key user-deepseek-api-key
+    :key #'gptel-api-key
     :endpoint "/chat/completions"
     :stream t
     :request-params '(:temperature 0.0) ; 1.0 default
@@ -3496,7 +3502,7 @@ ${content}"))
   ;; https://developers.upstage.ai/docs/apis/chat
   (gptel-make-openai "Upstage"
     :host "api.upstage.ai/v1/solar"
-    :key user-upstageai-api-key
+    :key #'gptel-api-key
     :endpoint "/chat/completions"
     :stream t
     :request-params '(:temperature 0.5)
@@ -3509,7 +3515,7 @@ ${content}"))
   ;;   :host "openrouter.ai"
   ;;   :endpoint "/api/v1/chat/completions"
   ;;   :stream t
-  ;;   :key user-openrouter-api-key
+  ;;   :key #'gptel-api-key
   ;;   :request-params '(:temperature 0.5)
   ;;   :models '(
   ;;             google/gemini-flash-1.5
@@ -3520,12 +3526,14 @@ ${content}"))
   ;;             ))
 
   ;; Kagi’s FastGPT model and the Universal Summarizer are both supported. A couple of notes:
-  ;; (gptel-make-kagi "Kagi" :stream t :key user-kagi-api-key)
+  ;; (gptel-make-kagi "Kagi"
+  ;; :stream t
+  ;; :key #'gptel-api-key)
 
   ;; Together.ai offers an OpenAI compatible API
   ;; (gptel-make-openai "TogetherAI"
   ;;   :host "api.together.xyz"
-  ;;   :key user-togetherai-api-key
+  ;;   :key #'gptel-api-key
   ;;   :stream t
   ;;   :models '(;; has many more, check together.ai
   ;;             "meta-llama/Llama-3.2-11B-Vision-Instruct-Turbo" ;; Meta Llama 3.2 11B Vision Instruct Turbo $0.18
@@ -3538,9 +3546,8 @@ ${content}"))
   ;;   :host "models.inference.ai.azure.com"
   ;;   :endpoint "/chat/completions"
   ;;   :stream t
-  ;;   :key user-github-api-key
+  ;;   :key #'gptel-api-key
   ;;   :models '(gpt-4o-mini)) ;; low tier
-
   ) ; end-of gptel
 
 ;;;;;; cashpwd - gptel-send with prompt
@@ -3861,12 +3868,16 @@ ${content}"))
   :init
   (autoload 'aidermacs-transient-menu "aidermacs" nil t)
   :config
-  (setenv "ANTHROPIC_API_KEY" user-claude-api-key)
-  (setenv "OPENAI_API_KEY" user-openai-api-key)
-  (setenv "GEMINI_API_KEY" user-gemini-api-key)
-  (setenv "PERPLEXITYAI_API_KEY" user-perplexity-api-key)
-  (setenv "XAI_API_KEY" user-xai-api-key)
-  (setenv "DEEPSEEK_API_KEY" user-deepseek-api-key)
+  (setenv "XAI_API_KEY" (auth-info-password
+                         (car (auth-source-search
+                               :host "api.x.ai"
+                               :user "apikey"))))
+  ;; (setenv "ANTHROPIC_API_KEY" user-claude-api-key)
+  ;; (setenv "OPENAI_API_KEY" user-openai-api-key)
+  ;; (setenv "GEMINI_API_KEY" user-gemini-api-key)
+  ;; (setenv "PERPLEXITYAI_API_KEY" user-perplexity-api-key)
+  ;; (setenv "XAI_API_KEY" user-xai-api-key)
+  ;; (setenv "DEEPSEEK_API_KEY" user-deepseek-api-key)
 
 ;;;###autoload
   (defun aidermacs-buffer-name ()
@@ -5148,6 +5159,9 @@ Suitable for `imenu-create-index-function'."
   :if window-system
   :hook (dired-mode . nerd-icons-dired-mode))
 
+(use-package! oneko-macs
+  :if window-system)
+
 ;;;;; lin - hl-line
 
 ;;  “LIN locally remaps the hl-line face to a style that is optimal
@@ -5643,8 +5657,12 @@ Suitable for `imenu-create-index-function'."
   (:map embark-region-map ;; 覆盖 transpose-regions
         ("t" . douo/go-do-translate))
   :config
-  (setq gt-chatgpt-key user-openai-api-key)
-  ;; (setq gt-chatgpt-model "gpt-4o-mini")
+  (setq gt-chatgpt-key
+        (auth-info-password
+         (car (auth-source-search
+               :host "api.openai.com"
+               :user "apikey"))))
+  (setq gt-chatgpt-model "gpt-4o-mini")
 
   (require 'pdf-tools)
   ;; 自定义 pdf 翻译文本提取器
@@ -5975,7 +5993,7 @@ Suitable for `imenu-create-index-function'."
 
 ;;;; :ui
 
-(defvar user-imenu-list-height 0.95)
+(defvar user-imenu-list-height 0.90)
 
 ;;;;; savehist-auto-save-interval
 
@@ -7079,12 +7097,12 @@ Suitable for `imenu-create-index-function'."
   ;; (setq consult-omni-default-preview-function #'eww-browse-url)
 
   ;; ;; Set API KEYs. It is recommended to use a function that returns the string for better security.
-  (setq consult-omni-openai-api-key user-openai-api-key)
-  (setq consult-omni-brave-api-key user-brave-api-key)
+  (setq consult-omni-openai-api-key (auth-info-password (car (auth-source-search :host "api.openai.com" :user "apikey"))))
+  (setq consult-omni-brave-api-key (auth-info-password (car (auth-source-search :host "api.search.brave.com" :user "apikey"))))
+
   ;; Set API KEYs. It is recommended to use a function that returns the string for better security.
   ;; (setq consult-omni-google-customsearch-key "YOUR-GOOGLE-API-KEY-OR-FUNCTION")
   ;; (setq consult-omni-google-customsearch-cx "YOUR-GOOGLE-CX-NUMBER-OR-FUNCTION")
-
   ;; (consult-omni--set-api-keys) ; agzam
 
   (setq consult-omni-default-count 30
@@ -7782,5 +7800,71 @@ Suitable for `imenu-create-index-function'."
 
 ;; (add-to-list 'load-path "~/emacs/git/default/html2org/")
 ;; (require 'html2org)
+
+;;;; DONT eaf
+
+;; Don't forget to run M-x eaf-install-dependencies
+;; (add-to-list 'load-path (concat user-dotemacs-dir "local/eaf/"))
+;; (require 'eaf)
+;; (require 'eaf-pdf-viewer)
+;; (require 'eaf-browser)
+
+; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
+;; (browse-url-browser-function 'eaf-open-browser)
+;; (defalias 'browse-web #'eaf-open-browser)
+;; (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
+
+;;   (setq eaf-browser-enable-adblocker "true")
+;;   (setq eaf-browser-continue-where-left-off t)
+;;   (setq eaf-browser-default-zoom "3")
+;;   (when doom-big-font-mode)
+;;   (setq eaf-browser-default-zoom 1.5)
+;;   (setq eaf-mindmap-dark-mode "follow")
+;;   (setq eaf-browser-dark-mode "force")
+;;   (setq eaf-terminal-dark-mode "force")
+;;   (setq eaf-pdf-dark-mode "force"))
+
+;; (progn
+;; /home/junghan/sync/man/dotsamples/vanilla/gavinok-dotfiles/lisp/eaf-config.el
+;;   (defun slurp (f)
+;;     (with-temp-buffer
+;;       (insert-file-contents f)
+;;       (buffer-substring-no-properties
+;;        (point-min)
+;;        (point-max))))
+;;   (defun my/bm ()
+;;     (interactive)
+;;     (add-to-list 'load-path "~/.emacs.d/site-lisp/emacs-application-framework/app/browser/")
+;;     (require 'eaf-browser)
+
+;;     (let ((selected (completing-read
+;;                      "Select URL: " (split-string
+;;                                      (slurp "~/.config/bookmarks") "\n" t))))
+;;       (let ((url (car (split-string
+;;                        selected
+;;                        " " t))))
+;;         (if (string-match-p "\\http.*\\'" url)
+;;             ;; Open selected url
+;;             (eaf-open-browser url)
+;;           ;; Search entered text
+;;           (eaf-search-it selected)))))
+;;   (setq eaf-browser-continue-where-left-off t)
+;;   (setq eaf-browser-dnefault-search-engine "duckduckgo")
+;;   (setq eaf-browser-enable-adblocker "true")
+;;   ;; (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+;;   ;; (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+;;   ;; (eaf-bind-key take_photo "p" eaf-camera-keybinding)
+;;   ;; (dolist (keys '("i" "h" "j" "k" "l"
+;;   ;;              "d" "f" "x" ","
+;;   ;;              "-" "." "0" "1"
+;;   ;;              "2" "=" "B" "F"
+;;   ;;              "G" "H" "I" "J"
+;;   ;;              "K" "L" "P" "T"
+;;   ;;              "Y" "c" "d" "e"
+;;   ;;              "f" "g" "m" "n"
+;;   ;;              "o" "p" "r" "t"
+;;   ;;              "u" "v" "x" "y"
+;;   ;;              (eaf-bind-key nil key eaf-browser-keybinding))))
+;;   )
 
 ;;; left blank on purpose

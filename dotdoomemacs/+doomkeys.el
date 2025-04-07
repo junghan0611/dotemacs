@@ -505,7 +505,8 @@
 
 (map! :leader
       (:prefix ("t" . "toggle")
-       :desc "v-line nav" "w" #'+toggle-visual-line-navigation
+       :desc "visual-line-mode" "v" #'visual-line-mode
+       :desc "visual-mode" "V" #'visual-mode
        :desc "consult-minor-mode" "m" #'consult-minor-mode-menu
        :desc "tab-line mode" "T" #'tab-line-mode
        ;; "y" #'consult-yank-from-kill-ring
@@ -514,7 +515,6 @@
        :desc "Column Indicator" "I" #'display-fill-column-indicator-mode
        ;; :desc "Window dedication" "d" #'spacemacs/toggle-current-window-dedication
        :desc "toggle-window-dedicated" "d" #'toggle-window-dedicated))
-
 
 ;;;; 'e' LLM - elysium/gptel
 

@@ -52,7 +52,9 @@
 
 ;;; consult - consult-omni consult-gh
 
-(package! consult-omni :recipe (:host github :repo "armindarvish/consult-omni" :files (:defaults "sources/*.el")) :pin "d0a24058bf0dda823e5f1efcae5da7dc0efe6bda") ;; Feb 19, 2025
+(package! consult-omni :recipe (:host github :repo "armindarvish/consult-omni" :files (:defaults "sources/*.el")))
+;; :pin "d0a24058bf0dda823e5f1efcae5da7dc0efe6bda" ;; Feb 19, 2025
+;; (package! consult-omni)
 (package! consult-gh)
 
 ;;; DONT NEVER use built-in on emacs 30
@@ -469,7 +471,10 @@
 (package! org-marked-text-overview :recipe (:host github :repo "lijigang/org-marked-text-overview"))
 ;; (package! org-zettel-ref-mode :recipe (:host github :repo "junghan0611/org-zettel-ref-mode" :branch "ko"))
 
-(package! org-supertag :recipe (:host github :repo "yibie/org-supertag"))
+
+;; (package! epc)
+;; (package! org-supertag :recipe (:host github :repo "yibie/org-supertag")) ; require epc
+
 (package! docsim)
 
 ;;(package! org-books :recipe (:host github :repo "junghan0611/org-books" :branch "ko"))
@@ -561,13 +566,13 @@
 (package! webpaste)
 ;; (package! password-store-menu)
 
-
 ;;;;; misc
 
 (package! fireplace)
 (package! snow)
+(package! oneko-macs :recipe (:host github :repo "ElleNajt/oneko-macs")) ; sudo apt-get install oneko
 ;; (package! selectric-mode)
-(package! oneko-macs :recipe (:host github :repo "ElleNajt/oneko-macs"))
 
+;; (package! eaf :recipe (:local-repo "~/emacs/git/default/emacs-application-framework"))
 
 ;;; end-of file
