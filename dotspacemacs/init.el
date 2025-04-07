@@ -390,9 +390,9 @@
      ;; mu4e
 
      ;; fast, global-search and tag-based email system
-     ;; (notmuch
-     ;;  :variables
-     ;;  notmuch-messages-deleted-tags '("+deleted" "-inbox" "-unread"))
+     (notmuch
+      :variables
+      notmuch-messages-deleted-tags '("+deleted" "-inbox" "-unread"))
 
 ;;;;; Layer: jh-coding
 
@@ -5325,12 +5325,12 @@ For instance pass En as source for English."
   (when (locate-library "eaf")
     ;; [EAF] Please always ensure the following config are added to your init.el:
     (require 'eaf-pdf-viewer)
-    (require 'eaf-pyqterminal)
-    (require 'eaf-vue-tailwindcss)
-    (require 'eaf-mind-elixir)
-    (require 'eaf-map)
-    (require 'eaf-2048)
-    (require 'eaf-demo)
+    ;; (require 'eaf-pyqterminal)
+    ;; (require 'eaf-vue-tailwindcss)
+    ;; (require 'eaf-mind-elixir)
+    ;; (require 'eaf-map)
+    ;; (require 'eaf-2048)
+    ;; (require 'eaf-demo)
     (require 'eaf-browser)
     )
 
