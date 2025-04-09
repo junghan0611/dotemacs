@@ -34,8 +34,7 @@
       :desc "window-2" "2" #'winum-select-window-2
       :desc "window-3" "3" #'winum-select-window-3
       :desc "window-4" "4" #'winum-select-window-4)
-      ;; :desc "1st workspace" "1" #'+workspace/switch-to-0
-
+;; :desc "1st workspace" "1" #'+workspace/switch-to-0
 
 ;;;; SPC
 
@@ -48,8 +47,6 @@
 
   (global-set-key (kbd "C-s-[") '+workspace/switch-left)
   (global-set-key (kbd "C-s-]") '+workspace/switch-right))
-
-
 
 ;;;; DONT 'l' Layout keys - disable `SPC TAB' workspace prefix
 
@@ -74,9 +71,6 @@
        :desc "5th workspace" "5" #'+workspace/switch-to-4
        :desc "6th workspace" "6" #'+workspace/switch-to-5
        :desc "7th workspace" "7" #'+workspace/switch-to-6))
-       ;; :desc "Switch to 8" "8" #'+workspace/switch-to-8
-       ;; :desc "Switch to 9" "9" #'+workspace/switch-to-9
-
 
 ;;;; popup
 
@@ -144,7 +138,8 @@
        :desc "Switch to Agenda" "a" #'bh/switch-to-agenda
        :desc "Save all *Org* buffers" "S" #'org-save-all-org-buffers
        :desc "*evil* Write all buffers" "w" #'evil-write-all))
-       ;; :desc "Toggle Last" "TAB" #'evil-switch-to-windows-last-buffer)
+
+;; :desc "Toggle Last" "TAB" #'evil-switch-to-windows-last-buffer)
 
 ;; move/ swap buffer
 ;; (map! :leader
@@ -251,7 +246,7 @@
 (when (locate-library "smartparens")
   ;; A Spacemacs like Lisp state menu (without the transient state)
   (map! :leader
-      "k" nil
+        "k" nil
         (:prefix ("k". "Smartparens")
          :desc "Delete Pair" "D" #'delete-pair
          :desc "Slurp forward" "s" #'sp-forward-slurp-sexp
@@ -402,7 +397,7 @@
        :desc "hl-todo-insert" "t" #'hl-todo-insert
        :desc "add-global-abbrev" "a" #'add-global-abbrev
        :desc "list-unicode-display" "U" #'list-unicode-display
-       ;; :desc "txl-translate-insert" "i" #'txl-translate-insert
+       :desc "txl-translate" "i" #'txl-translate-region-or-paragraph
        :desc "wiki-summary-insert" "w" #'wiki-summary-insert
        :desc "immersive-translate-paragraph" "m" #'immersive-translate-paragraph
        :desc "immersive-translate-auto-mode" "M" #'immersive-translate-auto-mode
@@ -626,7 +621,7 @@
        :desc "Mastodon" "m" #'mastodon
        :desc "Tmr" "t" #'tmr
        :desc "Tmr-view" "v" #'tmr-tabulated-view))
-       ;; :desc "Anddo: Todos" "d" #'anddo
+;; :desc "Anddo: Todos" "d" #'anddo
 
 
 ;;;; 'r' remote / register
@@ -689,8 +684,8 @@
        ;; :desc "ews-note-map"                  "n" ews-note-map
        :desc "ews-denote-map"                  "n" ews-denote-map))
 
-       ;; :desc "my/denote-random-note"        "?" #'my/denote-random-note
-       ;; :desc "org-roam-random-no-dates"        "?" #'ash/org-roam-node-random-no-dates
+;; :desc "my/denote-random-note"        "?" #'my/denote-random-note
+;; :desc "org-roam-random-no-dates"        "?" #'ash/org-roam-node-random-no-dates
 
 
 ;;;; 'N' consult-notes
@@ -754,8 +749,8 @@
        :n "u" #'string-inflection-underscore
        :n "U" #'string-inflection-upcase))
 
-      ;; "[b" #'evil-prev-buffer
-      ;; "]b" #'evil-next-buffer
+;; "[b" #'evil-prev-buffer
+;; "]b" #'evil-next-buffer
 
 
 ;;; Major-Mode Leader Keybindings
@@ -832,26 +827,26 @@
   (map! :map markdown-mode-map
         :localleader
         "y" #'yank-as-org))
-        ;; (:prefix ("t" . "Table")
-        ;;  :desc "Header" "h" #'markdown-table-hline-at-point-p
-        ;;  :desc "Sort" "s" #'markdown-table-sort-lines
-        ;;  :desc "Region to table" "r" #'markdown-table-convert-region
-        ;;  :desc "Table insert" "t" #'markdown-insert-table
-        ;;  (:prefix ("d" . "Delete")
-        ;;   :desc "column" "c" #'markdown-table-delete-column
-        ;;   :desc "row" "r" #'markdown-table-delete-row)
-        ;;  (:prefix ("i" . "Insert")
-        ;;   :desc "Column" "c" #'markdown-table-insert-column
-        ;;   :desc "Row" "r" #'markdown-table-insert-row))
+;; (:prefix ("t" . "Table")
+;;  :desc "Header" "h" #'markdown-table-hline-at-point-p
+;;  :desc "Sort" "s" #'markdown-table-sort-lines
+;;  :desc "Region to table" "r" #'markdown-table-convert-region
+;;  :desc "Table insert" "t" #'markdown-insert-table
+;;  (:prefix ("d" . "Delete")
+;;   :desc "column" "c" #'markdown-table-delete-column
+;;   :desc "row" "r" #'markdown-table-delete-row)
+;;  (:prefix ("i" . "Insert")
+;;   :desc "Column" "c" #'markdown-table-insert-column
+;;   :desc "Row" "r" #'markdown-table-insert-row))
 
-        ;; (:prefix ("T" . "toggle")
-        ;;  :desc "Inline LaTeX"      "e" #'markdown-toggle-math
-        ;;  :desc "Code highlights"   "f" #'markdown-toggle-fontify-code-blocks-natively
-        ;;  :desc "Inline images"     "i" #'markdown-toggle-inline-images
-        ;;  :desc "URL hiding"        "l" #'markdown-toggle-url-hiding
-        ;;  :desc "Markup hiding"     "m" #'markdown-toggle-markup-hiding
-        ;;  :desc "Wiki links"        "w" #'markdown-toggle-wiki-links
-        ;;  :desc "GFM checkbox"      "x" #'markdown-toggle-gfm-checkbox)
+;; (:prefix ("T" . "toggle")
+;;  :desc "Inline LaTeX"      "e" #'markdown-toggle-math
+;;  :desc "Code highlights"   "f" #'markdown-toggle-fontify-code-blocks-natively
+;;  :desc "Inline images"     "i" #'markdown-toggle-inline-images
+;;  :desc "URL hiding"        "l" #'markdown-toggle-url-hiding
+;;  :desc "Markup hiding"     "m" #'markdown-toggle-markup-hiding
+;;  :desc "Wiki links"        "w" #'markdown-toggle-wiki-links
+;;  :desc "GFM checkbox"      "x" #'markdown-toggle-gfm-checkbox)
 
 
 
@@ -901,20 +896,26 @@
         ;; "C-/" #'+corfu-move-to-minibuffer  ; undo-fu-only-undo
         "M-." #'+corfu-move-to-minibuffer) ;; default 'C-S-s'
 
-
   ;; corfu-indexed like in Company, M+number - inserts the thing
-  (map! :map corfu-map
-        "M-0" (cmd! () (+corfu-insert-indexed 9))
-        "M-1" (cmd! () (+corfu-insert-indexed 0))
-        "M-2" (cmd! () (+corfu-insert-indexed 1))
-        "M-3" (cmd! () (+corfu-insert-indexed 2))
-        "M-4" (cmd! () (+corfu-insert-indexed 3))
-        "M-5" (cmd! () (+corfu-insert-indexed 4))
-        "M-6" (cmd! () (+corfu-insert-indexed 5))
-        "M-7" (cmd! () (+corfu-insert-indexed 6))
-        "M-8" (cmd! () (+corfu-insert-indexed 7))
-        "M-9" (cmd! () (+corfu-insert-indexed 8))))
+  ;; (map! :map corfu-map
+  ;;       "M-0" (cmd! () (+corfu-insert-indexed 9))
+  ;;       "M-1" (cmd! () (+corfu-insert-indexed 0))
+  ;;       "M-2" (cmd! () (+corfu-insert-indexed 1))
+  ;;       "M-3" (cmd! () (+corfu-insert-indexed 2))
+  ;;       "M-4" (cmd! () (+corfu-insert-indexed 3))
+  ;;       "M-5" (cmd! () (+corfu-insert-indexed 4))
+  ;;       "M-6" (cmd! () (+corfu-insert-indexed 5))
+  ;;       "M-7" (cmd! () (+corfu-insert-indexed 6))
+  ;;       "M-8" (cmd! () (+corfu-insert-indexed 7))
+  ;;       "M-9" (cmd! () (+corfu-insert-indexed 8)))
+  )
 
+
+;;;; TODO lsp-mode-map
+
+;; (map! :map lsp-mode-map
+;;       "C-M-." #'lsp-find-references
+;;       "C-c r" #'lsp-rename)
 
 ;;;; TODO clojure-mode-map
 
@@ -1171,8 +1172,8 @@
   "M-<down>" #'sp-splice-sexp-killing-forward
 
   "C-c (" #'sp-wrap-round))
-  ;; "C-c [" #'sp-wrap-square ; conflict org-mode-map
-  ;; "C-c {" #'sp-wrap-curly
+;; "C-c [" #'sp-wrap-square ; conflict org-mode-map
+;; "C-c {" #'sp-wrap-curly
 
 
 ;;;; treemacs - f9
@@ -1213,8 +1214,8 @@
       "-" #'nerd-icons-dired-mode
       "P" #'my/dired-hugo-export-wim-to-md
       :desc "denote-map" "n" ews-denote-map)
-      ;; (:prefix ("y" . "copy")
-      ;;          )
+;; (:prefix ("y" . "copy")
+;;          )
 
 
 ;;;; python-mode-map
@@ -1232,12 +1233,12 @@
                  "r" #'my/jupyter-refresh-kernelspecs
                  "R" #'my/jupyter-refesh-langs
                  "l" #'my/list-jupyter-kernel-files)
-                 ;; #'my/select-jupyter-kernel
-                 ;; #'my/insert-jupyter-kernel
-                 ;; #'my/jupyter-qtconsole
-                 ;; #'my/jupyter-eval-region
-                 ;; #'my/org-babel-jupyter-strip-ansi-escapes-block
-                 ;; #'my/org-src-block-jupyter-eval-line-or-region
+        ;; #'my/select-jupyter-kernel
+        ;; #'my/insert-jupyter-kernel
+        ;; #'my/jupyter-qtconsole
+        ;; #'my/jupyter-eval-region
+        ;; #'my/org-babel-jupyter-strip-ansi-escapes-block
+        ;; #'my/org-src-block-jupyter-eval-line-or-region
 
         (:prefix ("h" . "help")
                  "l" #'pylookup-lookup
@@ -1437,18 +1438,18 @@
       "`"   #'toggle-input-method
       "M-8" #'tempel-insert
       "M-*" #'tempel-insert)
-      ;; "M-S-j" #'vertico-scroll-up
-      ;; "M-S-k" #'vertico-scroll-down
+;; "M-S-j" #'vertico-scroll-up
+;; "M-S-k" #'vertico-scroll-down
 
-      ;; "C-e" #'vertico-scroll-up
-      ;; "C-y" #'vertico-scroll-down
-      ;; "]" #'vertico-next-group
-      ;; "[" #'vertico-previous-group
-      ;; "~" #'vertico-jump-to-home-dir-on~
-      ;; "C-/" #'vertico-jump-root
-      ;; "C-?" #'vertico-jump-sudo
-      ;; "M-m" #'embark-select
-      ;; "C-S-SPC" #'embark-preview+
+;; "C-e" #'vertico-scroll-up
+;; "C-y" #'vertico-scroll-down
+;; "]" #'vertico-next-group
+;; "[" #'vertico-previous-group
+;; "~" #'vertico-jump-to-home-dir-on~
+;; "C-/" #'vertico-jump-root
+;; "C-?" #'vertico-jump-sudo
+;; "M-m" #'embark-select
+;; "C-S-SPC" #'embark-preview+
 
 
 ;;;; gptel - fix transient menu
@@ -1481,7 +1482,7 @@
         :nv "M-p" #'outline-previous-heading
         :nv "C-S-p" #'outline-up-heading
         :nv "z u"   #'outline-up-heading))
-        ;; :i M-j default-indent-new-line
+;; :i M-j default-indent-new-line
 
 
 ;;;; evil-markdown-mode-map
@@ -1577,30 +1578,29 @@
         "M-n" #'org-next-link
         "M-p" #'org-previous-link
         "C-c d"  #'cape-dict
+        :i "<tab>" #'my/denote-try-to-complete-then-cycle ; denote-link
         ;; :i "<tab>"  #'completion-at-point ; 2025-02-03
         ;; :i "TAB"  #'completion-at-point
-        :i "<tab>" #'my/denote-try-to-complete-then-cycle
         ;; :n "ds" #'orgbox-schedule
-
         "M--" #'denote-find-backlink)
 
-        ;; "C-c C-S-l"  #'+org/remove-link
-        ;; "C-c C-i"    #'org-toggle-inline-images
-        ;; ;; textmate-esque newline insertion
-        ;; "S-RET"      #'+org/shift-return
-        ;; "C-RET"      #'+org/insert-item-below
-        ;; "C-S-RET"    #'+org/insert-item-above
-        ;; "C-M-RET"    #'org-insert-subheading
-        ;; [C-return]   #'+org/insert-item-below
-        ;; [C-S-return] #'+org/insert-item-above
-        ;; [C-M-return] #'org-insert-subheading
-        ;; (:when (featurep :system 'macos)
-        ;;   [s-return]   #'+org/insert-item-below
-        ;;   [s-S-return] #'+org/insert-item-above
-        ;;   [s-M-return] #'org-insert-subheading)
-        ;; ;; Org-aware C-a/C-e
-        ;; [remap doom/backward-to-bol-or-indent]          #'org-beginning-of-line
-        ;; [remap doom/forward-to-last-non-comment-or-eol] #'org-end-of-line
+  ;; "C-c C-S-l"  #'+org/remove-link
+  ;; "C-c C-i"    #'org-toggle-inline-images
+  ;; ;; textmate-esque newline insertion
+  ;; "S-RET"      #'+org/shift-return
+  ;; "C-RET"      #'+org/insert-item-below
+  ;; "C-S-RET"    #'+org/insert-item-above
+  ;; "C-M-RET"    #'org-insert-subheading
+  ;; [C-return]   #'+org/insert-item-below
+  ;; [C-S-return] #'+org/insert-item-above
+  ;; [C-M-return] #'org-insert-subheading
+  ;; (:when (featurep :system 'macos)
+  ;;   [s-return]   #'+org/insert-item-below
+  ;;   [s-S-return] #'+org/insert-item-above
+  ;;   [s-M-return] #'org-insert-subheading)
+  ;; ;; Org-aware C-a/C-e
+  ;; [remap doom/backward-to-bol-or-indent]          #'org-beginning-of-line
+  ;; [remap doom/forward-to-last-non-comment-or-eol] #'org-end-of-line
 
 
 ;;;;; localleader 1
@@ -1779,7 +1779,8 @@
         :desc "org-set-effot" "E" #'org-set-effort
         :desc "time-stamp" "1" #'time-stamp
         :desc "insert-inactive-timestamp" "2" #'bh/insert-inactive-timestamp
-        :desc "org-appear-mode" "8" #'org-appear-mode
+        :desc "focus-mode" "3" #'focus-mode
+        :desc "org-appear-mode" "4" #'org-appear-mode
 
         :desc "insert checkbox\|bracket" "]" #'cae-org-insert-checkbox-or-bracket
         :desc "convert syntax to lower" "L" #'cae-org-syntax-convert-keyword-case-to-lower
@@ -1919,9 +1920,9 @@
          "[" #'gptel-quick
          "?" #'gptel-quick
          "C-c C-e" #'+vertico/embark-export-write)
-         ;; (:prefix
-         ;;  ("x" . "text")
-         ;;  "p" #'awesome-switch-to-prev-app-and-type)
+   ;; (:prefix
+   ;;  ("x" . "text")
+   ;;  "p" #'awesome-switch-to-prev-app-and-type)
 
    (:map embark-file-map
          "x" #'embark-open-externally+
@@ -1930,8 +1931,8 @@
          (:prefix ("o" . "open")
                   "j" (embark-split-action find-file evil-window-split)
                   "k" (embark-split-action find-file +evil/window-split-and-follow)
-                  "l" (embark-split-action find-file evil-window-vsplit)
-                  "h" (embark-split-action find-file +evil/window-vsplit-and-follow)
+                  "h" (embark-split-action find-file evil-window-vsplit)
+                  "l" (embark-split-action find-file +evil/window-vsplit-and-follow)
                   "a" (embark-ace-action find-file)))
 
    (:map
@@ -1948,8 +1949,8 @@
     embark-org-heading-map
     (:prefix ("9" . "denote") ;; TODO add more denote function
      :desc "denote add links" "u" #'denote-add-links))
-    ;; (:prefix ("9" . "roam")
-    ;;  :desc "add ref" "u" #'roam-ref-add-for-active-tab)
+   ;; (:prefix ("9" . "roam")
+   ;;  :desc "add ref" "u" #'roam-ref-add-for-active-tab)
 
 
    (:map
@@ -1986,17 +1987,16 @@
      embark-region-map
      embark-sentence-map
      embark-paragraph-map)
-    (:desc "txl-translate" "M-t" #'my/txl-translate-insert)
+    (:desc "txl-translate" "M-t" #'txl-translate-region-or-paragraph)
     (:prefix
      ("x" . "text")
+     :desc "txl-translate" "t" #'txl-translate-region-or-paragraph
      (:prefix ("g" . "google-translate")
       :desc "en->ko" "k" #'google-translate-query-translate-reverse
       :desc "en->ko2" "K" #'+google-translate-en->ko
       :desc "ko->en" "e" #'google-translate-query-translate
       :desc "ko->en2" "E" #'+google-translate-ko->en
       :desc "translate-at-point" "g" #'google-translate-at-point))))
-
-
 
   (add-hook! 'embark-collect-mode-hook
     (defun visual-line-mode-off-h ()

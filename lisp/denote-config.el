@@ -287,9 +287,6 @@
       (completion-at-point)
       )))
 
-;; see +doom-keys.el
-;; (evil-define-key '(insert) org-mode-map (kbd "<tab>") 'my/denote-try-to-complete-then-cycle))
-
 ;;; org-link capf on this buffer
 
 ;; https://takeonrules.com/2023/05/07/completion-at-point-function-capf-for-org-mode-links/
@@ -413,9 +410,14 @@
 ;; Use a =journals/= subdirectory to integrate nicely with Logseq
 
 ;; (require 'denote-journal)
-;; (fmakunbound 'denote-journal-new-entry) ;; delete
-
+;; Use the "journal" subdirectory of the `denote-directory'.  Set this
+;; to nil to use the `denote-directory' instead.
+;; (setq denote-journal-directory (expand-file-name "journal" denote-directory))
+;; (add-hook 'calendar-mode-hook #'denote-journal-calendar-mode)
+;; (setq denote-journal-keyword "journal")
 ;; (setq denote-journal-title-format "%Y-%m-%d")
+
+;; (fmakunbound 'denote-journal-new-entry) ;; delete
 
 ;; Denote templates
 ;; (add-to-list 'denote-templates '(journal . "* Thoughts\n\n* Tasks (require a category)\n" ))

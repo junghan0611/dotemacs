@@ -165,16 +165,14 @@
   ;; 2024-11-10 C-9, C-0 직관적이다.
   ;; C-j/k C-n/p 는 직관적인 기본 설정이므로 건들이지 않는다.
   (with-eval-after-load 'corfu
-    (evil-define-key '(insert) prog-mode-map (kbd "C-0") 'jump-out-of-pair) ; useful
-    (evil-define-key '(insert) prog-mode-map (kbd "C-0") 'jump-out-of-pair)
-    (evil-define-key '(insert) prog-mode-map (kbd "C-9") 'jump-backward-pair)
-    (evil-define-key '(insert) prog-mode-map (kbd "C-9") 'jump-backward-pair)
+    (evil-define-key '(insert) prog-mode-map (kbd "M-=") 'jump-out-of-pair) ; useful
+    (evil-define-key '(insert) prog-mode-map (kbd "M--") 'jump-backward-pair)
 
-    ;; 기본 설정을 건들지 말자 왠만하면
-    (evil-define-key '(insert) prog-mode-map (kbd "<tab>") 'jump-out-of-pair)
-    (evil-define-key '(insert) prog-mode-map (kbd "TAB") 'jump-out-of-pair)
-    (evil-define-key '(insert) prog-mode-map (kbd "<backtab>") 'jump-backward-pair)
-    (evil-define-key '(insert) prog-mode-map (kbd "S-<iso-lefttab>") 'jump-backward-pair)
+    ;; DONT 기본 설정을 건들지 말자 왠만하면
+    ;; (evil-define-key '(insert) prog-mode-map (kbd "<tab>") 'jump-out-of-pair)
+    ;; (evil-define-key '(insert) prog-mode-map (kbd "TAB") 'jump-out-of-pair)
+    ;; (evil-define-key '(insert) prog-mode-map (kbd "<backtab>") 'jump-backward-pair)
+    ;; (evil-define-key '(insert) prog-mode-map (kbd "S-<iso-lefttab>") 'jump-backward-pair)
     ;;   ;; 엔터는 컴플리션 되거나 뉴라인 인덴트 되어야 한다.
     ;;   ;; (evil-define-key '(insert) corfu-map (kbd "<return>") 'corfu-insert)
     ;;   ;; (evil-define-key '(insert) prog-mode-map (kbd "<return>") 'newline-and-indent) ;; <return>
@@ -873,7 +871,7 @@
   (define-prefix-command 'my-translate-map)
   (define-key global-map (kbd "M-s t") 'my-translate-map)
   (let ((map my-translate-map))
-    (define-key map (kbd "i") 'txl-translate-insert)
+    (define-key map (kbd "i") 'txl-translate-region-or-paragraph)
     (define-key map (kbd "w") 'wiki-summary-insert)
     (define-key map (kbd "p") 'immersive-translate-paragraph)
     (define-key map (kbd "a") 'immersive-translate-auto-mode)

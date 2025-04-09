@@ -59,7 +59,7 @@
 
 (with-eval-after-load 'cape
   ;; /gopar-dotfiles-youtuber/README.org:1371
-  (setq cape-dabbrev-min-length 6) ; default 4
+  (setq cape-dabbrev-min-length 5) ; default 4
   ;; (setq cape-dabbrev-check-other-buffers 'some)
   )
 
@@ -988,9 +988,7 @@ Also see `prot-window-delete-popup-frame'." command)
 ;;;; custom citar-org
 
 (when (locate-library "citar")
-
   (with-eval-after-load 'citar
-
 ;;;;; citar-templates
     (setq citar-templates
           '((main
@@ -1001,7 +999,7 @@ Also see `prot-window-delete-popup-frame'." command)
              . "#${datemodified:10} ${=type=:10} ${shorttitle:19} ${namea:16} ${url:19} ${tags keywords:*}") ; 2024-11-17 add url
             (preview
              .
-             "${title}\n${author} ${translator}\n${year issued date:4}\n${shorttitle}") ; citar-copy-reference ${namea} \n${abstract}
+             "** ${title} ${shorttitle}\n${author} ${translator} ${namea} ${year issued date:4}\n\n${abstract}\n") ; citar-copy-reference
             (note . "#+title: ${author translator:10}, ${title}")))
 
     ;; (note . "Notes on ${author:10 editor:%etal}, ${title}")

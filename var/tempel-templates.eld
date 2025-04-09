@@ -237,6 +237,7 @@ org-mode
  "#+HUGO_AUTO_SET_LASTMOD: t" n>
  "#+HUGO_TAGS:" n>)
 
+(hugodraft "#+hugo_draft: t")
 (hugotags
  "#+description: 요약
 #+hugo_tags: notes

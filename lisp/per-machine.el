@@ -33,6 +33,10 @@
                                       (list (getenv "EPA_FILE_ENCRYPT_TO"))
                                     (list "ABCDEFGHIJKLMN")))
 
+;; Location of developer tokens - default ~/.authinfo
+(setq auth-sources '("~/.authinfo.gpg")
+      auth-source-cache-expiry nil) ; default is 7200 (2h)
+
 ;; (setq user-mail-address "junghanacs@gmail.com")
 ;; (setq-default epa-file-encrypt-to '("B5ADD9F47612A9DB"))
 

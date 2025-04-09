@@ -281,7 +281,9 @@
 (package! math-preview)
 
 (package! guess-language :recipe (:host github :repo "junghan0611/guess-language.el" :branch "master" :files ("*.el" "trigrams/*")))
-(package! txl :recipe (:host github :repo "junghan0611/txl.el" :branch "ko"))
+;; (package! txl :recipe (:host github :repo "junghan0611/txl.el" :branch "ko"))
+(package! txl :recipe (:local-repo "~/emacs/git/junghan0611/txl.el/"))
+(package! html2org :recipe (:local-repo "~/emacs/git/default/html2org/"))
 ;; (package! flymake-vale :recipe (:host github :repo "tpeacock19/flymake-vale"))
 
 ;;;; :pkm
@@ -293,7 +295,7 @@
 (package! denote-silo)
 (package! denote-sequence)
 (package! denote-markdown)
-(package! denote-journal)
+;; (package! denote-journal)
 
 (package! denote-explore)
 (package! denote-search)
@@ -469,16 +471,17 @@
 
 ;; filter marked text out
 (package! org-marked-text-overview :recipe (:host github :repo "lijigang/org-marked-text-overview"))
-;; (package! org-zettel-ref-mode :recipe (:host github :repo "junghan0611/org-zettel-ref-mode" :branch "ko"))
-
-
-;; (package! epc)
-;; (package! org-supertag :recipe (:host github :repo "yibie/org-supertag")) ; require epc
 
 (package! docsim)
 
 ;;(package! org-books :recipe (:host github :repo "junghan0611/org-books" :branch "ko"))
 (package! org-books :recipe (:local-repo "~/emacs/git/junghan0611/org-books"))
+
+;; (package! org-zettel-ref-mode :recipe (:host github :repo "junghan0611/org-zettel-ref-mode" :branch "ko"))
+(package! org-zettel-ref-mode :recipe (:local-repo "~/emacs/git/junghan0611/org-zettel-ref-mode/"))
+
+;; (package! org-supertag :recipe (:host github :repo "yibie/org-supertag")) ; require epc
+(package! org-supertag :recipe (:local-repo "~/emacs/git/junghan0611/org-supertag/"))
 
 ;;;; Workspace
 

@@ -773,7 +773,7 @@
      denote-silo
      denote-sequence
      denote-markdown
-     denote-journal
+     ;; denote-journal
 
      (consult-denote :location (recipe :fetcher github :repo "protesilaos/consult-denote"
                                        :files ("*.el" "*.org")))
@@ -1973,7 +1973,7 @@
     :ensure nil
     :init
     (setq whitespace-style '(face tabs trailing ;; lines-tail
-                                  empty  missing-newline-at-eof)
+                             empty  missing-newline-at-eof)
           whitespace-line-column 80)
     :hook (prog-mode . whitespace-mode)
     :diminish)
@@ -2181,7 +2181,7 @@
           calendar-location-name user-calendar-location-name
           calendar-time-display-form
           '(24-hours ":" minutes
-                     (if time-zone " (") time-zone (if time-zone ")")))
+            (if time-zone " (") time-zone (if time-zone ")")))
     )
 
 ;;;;; time
@@ -2799,13 +2799,13 @@
              :mode-line-inactive spacious-padding-subtle-mode-line-inactive))
     (setq spacious-padding-widths
           '(:header-line-width 4
-                               :mode-line-width 4 ; 6
-                               :tab-width 4 ; sync mode-line-width for keycast-tab-bar
-                               :internal-border-width 20 ; 15
-                               :right-divider-width 30 ; 30
-                               :scroll-bar-width 8
-                               :fringe-width 8
-                               ))
+            :mode-line-width 4 ; 6
+            :tab-width 4 ; sync mode-line-width for keycast-tab-bar
+            :internal-border-width 20 ; 15
+            :right-divider-width 30 ; 30
+            :scroll-bar-width 8
+            :fringe-width 8
+            ))
     :config
     (spacious-padding-mode +1)
     )
@@ -2939,9 +2939,9 @@
       )
 
     (spacemacs/set-leader-keys-for-major-mode 'dired-mode
-      "h" 'dired-hide-details-mode
-      "/" 'dired-narrow-regexp
-      "o" 'dired-omit-mode)
+                                              "h" 'dired-hide-details-mode
+                                              "/" 'dired-narrow-regexp
+                                              "o" 'dired-omit-mode)
     ;; (global-set-key (kbd "C-x /") #'dired-narrow-regexp)
     )
 
@@ -3711,11 +3711,11 @@
       ;; Key binding for modes you want edit
       ;; or simply bind ?global-map? for all.
       :bind (:map prog-mode-map
-                  ("C-c '" . separedit)
-                  :map minibuffer-local-map
-                  ("C-c '" . separedit)
-                  :map help-mode-map
-                  ("C-c '" . separedit))
+             ("C-c '" . separedit)
+             :map minibuffer-local-map
+             ("C-c '" . separedit)
+             :map help-mode-map
+             ("C-c '" . separedit))
       :init
       ;; Default major-mode for edit buffer
       ;; can also be other mode e.g. ?org-mode?.
@@ -3800,24 +3800,6 @@
       )
     ) ;; end-of progn
 
-;;;;; jh-writing > keybindings
-
-  (global-set-key (kbd "M-g 0") 'txl-translate-insert)
-
-  ;; (spacemacs/defer-until-after-user-config  ; otherwise, spacemacs-default layer would override the binding
-  ;;  (lambda ()                               ; and set it to `duplicate-line-or-region', and it's pretty useles for me
-  ;;    (spacemacs/set-leader-keys "xwi" #'define-it-at-point)
-  ;;    (spacemacs/set-leader-keys "xwb" #'wiktionary-bro-dwim)
-  ;;    (spacemacs/set-leader-keys "xww" #'define-word-at-point)
-  ;;    (spacemacs/set-leader-keys "xwl" #'lexic-search)
-  ;;    (spacemacs/set-leader-keys "xwe" #'external-dict-dwim)
-  ;;    (spacemacs/set-leader-keys "xwm" #'mw-thesaurus-lookup-dwim)
-  ;;    (spacemacs/set-leader-keys "xwp" #'powerthesaurus-transient)
-  ;;    (spacemacs/set-leader-keys "xwd" #'dictionary-search)
-  ;;    (spacemacs/set-leader-keys "xws" #'sdcv-search-pointer)
-  ;;    (spacemacs/set-leader-keys "xwk" #'my/wr-enko)
-  ;;    ))
-
 ;;;; jh-reading
 
 ;;;;; jh-reading > eww
@@ -3859,12 +3841,12 @@ Suitable for `imenu-create-index-function'."
     (spacemacs/set-leader-keys-for-major-mode 'eww-mode "y" 'eww-copy-page-url)
 
     (spacemacs|add-toggle eww-as-default-browser
-      :documentation "Eww as default browser."
-      :status (equal browse-url-browser-function 'eww-browse-url)
-      :on (setq browse-url-browser-function 'eww-browse-url)
-      ;; should have a var to store the original one
-      :off (setq browse-url-browser-function 'browse-url-default-browser)
-      :evil-leader "t e")
+                          :documentation "Eww as default browser."
+                          :status (equal browse-url-browser-function 'eww-browse-url)
+                          :on (setq browse-url-browser-function 'eww-browse-url)
+                          ;; should have a var to store the original one
+                          :off (setq browse-url-browser-function 'browse-url-default-browser)
+                          :evil-leader "t e")
 
     ;; https://github.com/alphapapa/unpackaged.el
     (add-hook 'eww-mode-hook (lambda () (setq-local imenu-create-index-function #'spacemacs/imenu-eww-headings)))
@@ -4505,9 +4487,9 @@ For instance pass En as source for English."
   (use-package clojure-essential-ref-nov
     :defer 8
     :bind (:map cider-mode-map
-                ("M-9" . clojure-essential-ref)
-                :map cider-repl-mode-map
-                ("M-9" . clojure-essential-ref))
+           ("M-9" . clojure-essential-ref)
+           :map cider-repl-mode-map
+           ("M-9" . clojure-essential-ref))
     :init
     (setq clojure-essential-ref-default-browse-fn #'clojure-essential-ref-nov-browse)
     (setq clojure-essential-ref-nov-epub-path "~/git/default/clj-essential-ref-v31.epub")

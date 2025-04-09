@@ -542,27 +542,8 @@
 ;; (setq bookmark-default-file (concat user-dotemacs-dir "assets/bookmarks"))
 (setq bookmark-use-annotations nil)
 (setq bookmark-automatically-show-annotations t)
-
 ;; Save the `bookmark-file' each time I modify a bookmark.
 (setq bookmark-save-flag 1)
-
-;; https://www.emacswiki.org/emacs/BookmarkPlus
-;;
-;; Enhancements to the built-in Emacs bookmarking feature.
-;; (use-package! bookmark+)
-;; (define-key bookmark-bmenu-mode-map (kbd "s-o") #'ace-window)
-;; when this is not set to `nil' explicitly, auto-save bookmarks
-;; gets itself into an infinite loop attempting to autosave and
-;; write the custom value to custom-file.el.  this happens only when
-;; the buffer associated with the bookmark has not been saved. (to
-;; reproduce the issue, remove the customize-set-value sexp, find a
-;; new file, and wait 30 seconds; it'll start printing messages like
-;; mad.  C-g will eventually break the loop.)  i only use one
-;; bookmark file so this isn't a problem but it really does seem
-;; like a bmkp bug.
-;; (customize-set-value 'bmkp-last-as-first-bookmark-file nil)
-;; auto-set bookmarks.
-;; (setq bmkp-automatic-bookmark-mode-delay 30))
 
 ;;;;; show-trainling-whitespace
 
@@ -949,10 +930,10 @@ These annotations are skipped for remote paths."
 
 (after! corfu
   ;; (setq corfu-auto-delay 0.5) ; doom 0.24
-  (setq corfu-auto-prefix 4) ; doom 2, default 3
-  (setq corfu-preselect 'valid) ; doom 'prompt
-  (setq tab-always-indent t) ; for jump-out-of-pair - doom 'complete
-  (setq +corfu-want-minibuffer-completion nil) ; doom t
+  (setq corfu-auto-prefix 3) ; doom 2, default 3
+  ;; (setq corfu-preselect 'valid) ; doom 'prompt
+  ;; (setq tab-always-indent t) ; for jump-out-of-pair - doom 'complete
+  ;; (setq +corfu-want-minibuffer-completion nil) ; doom t
 
   ;; (setq +corfu-want-tab-prefer-expand-snippets nil) ; 2024-11-06
   ;; (setq +corfu-want-tab-prefer-navigating-snippets nil)
@@ -975,7 +956,6 @@ These annotations are skipped for remote paths."
   ;; rarely. So opt for manual completion:
   ;; doom/hlissner-dot-doom/config.el
   ;; (setq corfu-auto nil)
-
   )
 
 ;;;;; DONT corfu-echo
@@ -988,7 +968,11 @@ These annotations are skipped for remote paths."
 ;;   (add-hook 'corfu-mode-hook 'corfu-echo-mode)
 ;;   )
 
-;;;;; cape with dabbrev
+;;;;; cape with dict
+
+(defun my/enable-cape-dict-on-completion ()
+  (interactive)
+  (add-to-list 'completion-at-point-functions #'cape-dict))
 
 ;; (map! :map some-mode-map
 ;;       "C-x e" #'cape-emoji)
@@ -1696,19 +1680,19 @@ only those in the selected frame."
 
 (use-package! org-web-tools)
 
-;;;;; org-supertag
-
-;(use-package! org-supertag
-;  :after org
-;  ;; :config (org-supertag-setup)
-;  )
-
 ;;;;; corg
 
 (use-package! corg
   :after org
   :config
   (add-hook 'org-mode-hook #'corg-setup))
+
+;;;;; focus on paragraph
+
+(use-package! focus
+  :after org
+  :config
+  (add-to-list 'focus-mode-to-thing '(org-mode . paragraph)))
 
 ;;;;; edit-indirect
 
@@ -1959,27 +1943,10 @@ only those in the selected frame."
 
 ;; ("C" org-pandoc-import-csv-as-org "Import CSV")
 
-;;;;; immersive-translate
-
-(use-package! immersive-translate
-  :if window-system
-  :init
-  ;; (setq immersive-translate-auto-idle 2.0) ; default 0.5
-  ;; wget git.io/trans; chmod +x trans; sudo mv trans /usr/local/bin
-  ;; ko         Korean                         한국어
-  (setq immersive-translate-backend 'trans)
-  (setq immersive-translate-trans-target-language "ko")
-  :config
-  (add-hook 'elfeed-show-mode-hook #'immersive-translate-setup)
-  (add-hook 'Info-mode-hook #'immersive-translate-setup)
-  (add-hook 'help-mode-hook #'immersive-translate-setup)
-  (add-hook 'helpful-mode-hook #'immersive-translate-setup)
-  ;; (add-hook 'nov-mode-hook #'immersive-translate-setup)
-  )
-
 ;;;;; redacted
 
 (use-package! redacted
+  :defer t
   :commands (redacted-mode))
 
 ;;;;; hypothesis
@@ -1989,6 +1956,7 @@ only those in the selected frame."
 ;; imports notations into hypothesis-archive. It will import up to 200
 ;; notations but will only import notations made after the last import.
 (use-package! hypothesis
+  :defer 5
   :commands hypothesis-to-org hypothesis-to-archive
   :config
   (setq hypothesis-username user-hypothesis-username)
@@ -2012,69 +1980,28 @@ only those in the selected frame."
   (setq guess-language-min-paragraph-length 35)
   )
 
-;;;;; txl
+;;;;; immersive-translate
 
-;; deeplx: deepl for free
-(progn
-  (setq use-deeplx t)
-  (setq deeplx-url "http://localhost:1188/v2/translate")
-  (setq deeplx-key "fd86e4d6-8227-995a-4258-b61a7ca1efcc:fx")
-
-  (use-package! txl
-    :defer 2
-    :config
-    (setq txl-languages '(EN-US . KO)) ; using guess-language
-    (setq txl-deepl-split-sentences nil)
-
-    (defun my/txl-deepl-toggle ()
-      (interactive)
-      (if (eq use-deeplx t)
-          (progn
-            (setq txl-deepl-api-url "https://api-free.deepl.com/v2/translate")
-            (setq txl-deepl-api-key (auth-info-password
-                                     (car (auth-source-search
-                                           :host "api-free.deepl.com"
-                                           :user "apikey")))) ; user-deepl-api-key
-            (setq use-deeplx nil))
-        (progn  ; use deeplx for free
-          (setq txl-deepl-api-url deeplx-url)
-          (setq txl-deepl-api-key deeplx-key)
-          (setq use-deeplx t))))
-
-    ;; default use deeplx
-    (setq txl-deepl-api-url deeplx-url)
-    (setq txl-deepl-api-key deeplx-key)
-
-    ;; (setq txl-deepl-split-sentences nil
-    ;;       txl-deepl-preserve-formatting nil)
-
-    (defun my/txl-translate-insert (&optional prefix-arg)
-      (interactive "P")
-      (setq txl-source-buffer (current-buffer))
-      (let* ((route (if prefix-arg
-                        (list "EN-US" "KO")  ; 영어 -> 한글
-                      (list "KO" "EN-US")))  ; 한글 -> 영어
-             (translation (apply 'txl-translate route)))
-        (with-current-buffer txl-source-buffer
-          (unless (derived-mode-p 'text-mode)
-            (text-mode))
-          (txl-insert-region-or-paragraph translation)
-          (unfill-paragraph))
-        (display-buffer txl-source-buffer)))
-
-    (global-set-key (kbd "M-g 0") 'my/txl-translate-insert)
-    (with-eval-after-load 'evil-org
-      (evil-define-key 'normal 'evil-org-mode-map (kbd "M-t") 'my/txl-translate-insert))
-    )
-  )
-
-
-;;;;; TODO focus
-
-(use-package! focus
-  :after org
+;; use trans-shell
+(use-package! immersive-translate
+  :defer 5
+  :init
+  (setq immersive-translate-backend 'trans)
+  (setq immersive-translate-failed-message "💢")
+  (setq immersive-translate-trans-target-language "ko")
+  ;; (setq immersive-translate-auto-idle 2.0) ; default 0.5
+  ;; wget git.io/trans; chmod +x trans; sudo mv trans /usr/local/bin
+  ;; ko         Korean                         한국어
   :config
-  (add-to-list 'focus-mode-to-thing '(org-mode . paragraph)))
+  (add-hook 'elfeed-show-mode-hook #'immersive-translate-setup)
+  (add-hook 'Info-mode-hook #'immersive-translate-setup)
+  (add-hook 'help-mode-hook #'immersive-translate-setup)
+  (add-hook 'helpful-mode-hook #'immersive-translate-setup)
+  ;; ;; (add-hook 'nov-mode-hook #'immersive-translate-setup)
+  ;; (setq immersive-translate-backend 'chatgpt) ; 2025-04-08 not working
+  ;; (setq immersive-translate-chatgpt-host "api.x.ai")
+  ;; (setq immersive-translate-chatgpt-model "grok-2-latest")
+  )
 
 ;;;; :workspace
 
@@ -2224,11 +2151,6 @@ only those in the selected frame."
 ;;;; :tools magit vc
 
 ;;;;; magit
-
-;; Location of developer tokens - default ~/.authinfo
-;; Use XDG_CONFIG_HOME location or HOME
-(setq auth-source-cache-expiry nil)   ; default is 7200 (2h)
-;; (setq auth-sources (list (concat (getenv "XDG_CONFIG_HOME") "/authinfo.gpg") "~/.authinfo.gpg"))
 
 ;; hilsner
 (setq magit-save-repository-buffers nil
@@ -3033,7 +2955,6 @@ ${content}"))
   (setq denote-directory user-org-directory)
   (require 'denote-silo)
   (require 'denote-sequence)
-  ;; (require 'denote-journal)
   (require 'denote-org)
   (require 'denote-markdown) ; markdown-obsidian
   (setq denote-file-type 'org)
@@ -3344,7 +3265,6 @@ ${content}"))
 ;;;;;;;; 01 - gptel
 
 (use-package! gptel
-  :defer 1
   :commands (gptel gptel-send)
   :init
   ;; (add-to-list 'yank-excluded-properties 'gptel)
@@ -3674,14 +3594,14 @@ ${content}"))
              (gptel-use-curl)
              (gptel-use-context (and gptel-quick-use-context 'system)))
         (gptel-request
-            query-text
-          ;; :system (format "Explain in %d words or fewer using Korean" count)
-          :system (format "1) Translate the question to English. 2) Respond in %d words or fewer using Korean." count)
-          :context
-          (list
-           query-text count
-           (posn-at-point (and (use-region-p) (region-beginning))))
-          :callback #'gptel-quick--callback-posframe)))
+         query-text
+         ;; :system (format "Explain in %d words or fewer using Korean" count)
+         :system (format "1) Translate the question to English. 2) Respond in %d words or fewer using Korean." count)
+         :context
+         (list
+          query-text count
+          (posn-at-point (and (use-region-p) (region-beginning))))
+         :callback #'gptel-quick--callback-posframe)))
 
     ;; keymap
     ;; (map! :n "C-k" #'gptel-quick)
@@ -4959,20 +4879,19 @@ x×X .,·°;:¡!¿?`'‘’   ÄAÃÀ TODO
   (setq eww-browse-url-new-window-is-tab nil ; doom tab-bar
         shr-max-image-proportion 0.6 ; 0.8
         shr-discard-aria-hidden t ; nil
-        shr-bullet "• "
-        ;; shr-image-animate nil
+        shr-bullet "* " ; default "* "
+        shr-image-animate nil ; default nil
         ;; shr-inhibit-images t
         eww-header-line-format " %u"
         eww-buffer-name-length 80 ; 40
-        eww-form-checkbox-selected-symbol "☒" ; default "[X]"
         eww-readable-urls '("yes24"
+                            "hada"
                             "naver"
-                            "daum")
-        )
+                            "daum"))
 
-  ;;  shr-use-fonts nil ; I go back and forth on this one
-  ;;  shr-use-colors nil
-  ;;  ;; shr-folding-mode nil
+  (setq eww-bookmarks-directory (concat org-directory "resources/"))
+  (setq eww-form-checkbox-selected-symbol "[X]") ;; "☒"
+  (setq eww-form-checkbox-symbol "[ ]")
 
   ;; Sometimes EWW makes web pages unreadable by adding a bright background.
   ;; Do not colorize backgrounds at all.
@@ -5134,6 +5053,9 @@ Suitable for `imenu-create-index-function'."
               (hl-line-mode 1)))
   (add-hook 'dired-mode-hook 'dired-hide-details-mode)
   (remove-hook 'dired-mode-hook 'dired-omit-mode)
+
+  ;; prot-dired-grep-marked-files
+  (require 'prot-dired)
   )
 
 ;;;;; dired-preview
@@ -6050,10 +5972,10 @@ Suitable for `imenu-create-index-function'."
     ;; the base font size (e.g. 1.5), and a `WEIGHT'.
     (setq modus-themes-headings
           '(
-            (0                . (bold 1.3)) ;; variable-pitch
-            (1                . (bold 1.2))
-            (2                . (bold 1.1))
-            (3                . (semibold 1.05))
+            (0                . (bold 1.2)) ;; variable-pitch
+            (1                . (bold 1.1))
+            (2                . (bold 1.05))
+            (3                . (semibold 1.0))
             (4                . (medium 1.0))
             (5                . (medium 1.0))
             (6                . (medium 1.0))
@@ -6179,63 +6101,63 @@ Suitable for `imenu-create-index-function'."
     (interactive)
     ;; (message "ef-themes-post-load-hook : my-ef-themes-custom-faces")
     (ef-themes-with-colors
-     (custom-set-faces
-      `(consult-separator ((,c :inherit default :foreground ,yellow)))
-      `(consult-notes-time ((,c :inherit default :foreground ,cyan)))
+      (custom-set-faces
+       `(consult-separator ((,c :inherit default :foreground ,yellow)))
+       `(consult-notes-time ((,c :inherit default :foreground ,cyan)))
 
-      `(org-side-tree-heading-face ((,c :inherit variable-pitch :foreground ,fg-alt :height ,user-imenu-list-height)))
+       `(org-side-tree-heading-face ((,c :inherit variable-pitch :foreground ,fg-alt :height ,user-imenu-list-height)))
 
-      `(imenu-list-entry-face-0 ((,c :inherit variable-pitch :foreground ,rainbow-1 :height ,user-imenu-list-height)))
-      `(imenu-list-entry-face-1 ((,c :inherit variable-pitch :foreground ,rainbow-2 :height ,user-imenu-list-height)))
-      `(imenu-list-entry-face-2 ((,c :inherit variable-pitch :foreground ,rainbow-3 :height ,user-imenu-list-height)))
-      `(imenu-list-entry-face-3 ((,c :inherit variable-pitch :foreground ,rainbow-4 :height ,user-imenu-list-height)))
-      `(imenu-list-entry-subalist-face-0 ((,c :inherit variable-pitch :foreground ,rainbow-1 :underline t :height ,user-imenu-list-height)))
-      `(imenu-list-entry-subalist-face-1 ((,c :inherit variable-pitch :foreground ,rainbow-2 :underline t :height ,user-imenu-list-height)))
-      `(imenu-list-entry-subalist-face-2 ((,c :inherit variable-pitch :foreground ,rainbow-3 :underline t :height ,user-imenu-list-height)))
-      `(imenu-list-entry-subalist-face-3 ((,c :inherit variable-pitch :foreground ,rainbow-4 :underline t :height ,user-imenu-list-height)))
+       `(imenu-list-entry-face-0 ((,c :inherit variable-pitch :foreground ,rainbow-1 :height ,user-imenu-list-height)))
+       `(imenu-list-entry-face-1 ((,c :inherit variable-pitch :foreground ,rainbow-2 :height ,user-imenu-list-height)))
+       `(imenu-list-entry-face-2 ((,c :inherit variable-pitch :foreground ,rainbow-3 :height ,user-imenu-list-height)))
+       `(imenu-list-entry-face-3 ((,c :inherit variable-pitch :foreground ,rainbow-4 :height ,user-imenu-list-height)))
+       `(imenu-list-entry-subalist-face-0 ((,c :inherit variable-pitch :foreground ,rainbow-1 :underline t :height ,user-imenu-list-height)))
+       `(imenu-list-entry-subalist-face-1 ((,c :inherit variable-pitch :foreground ,rainbow-2 :underline t :height ,user-imenu-list-height)))
+       `(imenu-list-entry-subalist-face-2 ((,c :inherit variable-pitch :foreground ,rainbow-3 :underline t :height ,user-imenu-list-height)))
+       `(imenu-list-entry-subalist-face-3 ((,c :inherit variable-pitch :foreground ,rainbow-4 :underline t :height ,user-imenu-list-height)))
 
-      ;; `(org-link ((,c :inherit link :weight bold)))
-      ;; `(denote-faces-link ((,c :inherit link :weight bold :slant italic)))
-      ;; `(org-agenda-diary ((,c :inherit org-agenda-calendar-sexp :foreground ,fg-main :weight semibold)))
+       ;; `(org-link ((,c :inherit link :weight bold)))
+       ;; `(denote-faces-link ((,c :inherit link :weight bold :slant italic)))
+       ;; `(org-agenda-diary ((,c :inherit org-agenda-calendar-sexp :foreground ,fg-main :weight semibold)))
 
-      `(org-list-dt ((,c :foreground ,fg-main :weight bold))) ;; 2025-01-14
-      ;; `(org-tag ((,c :background ,bg-yellow-subtle :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
-      `(diredp-file-name ((,c :foreground ,fg-main)))
+       `(org-list-dt ((,c :foreground ,fg-main :weight bold))) ;; 2025-01-14
+       ;; `(org-tag ((,c :background ,bg-yellow-subtle :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
+       `(diredp-file-name ((,c :foreground ,fg-main)))
 
-      `(tab-bar ((,c :background ,bg-tab-bar)))
-      `(tab-bar-tab-group-current ((,c :inherit bold :background ,bg-tab-current :box (:line-width -2 :color ,bg-tab-current) :foreground ,fg-alt)))
-      `(tab-bar-tab-group-inactive ((,c :background ,bg-tab-bar :box (:line-width -2 :color ,bg-tab-bar) :foreground ,fg-alt)))
-      `(tab-bar-tab ((,c :inherit bold :box (:line-width -2 :color ,bg-tab-current) :background ,bg-tab-current)))
-      `(tab-bar-tab-inactive ((,c :box (:line-width -2 :color ,bg-tab-other) :background ,bg-tab-other)))
-      `(tab-bar-tab-ungrouped ((,c :inherit tab-bar-tab-inactive)))
+       `(tab-bar ((,c :background ,bg-tab-bar)))
+       `(tab-bar-tab-group-current ((,c :inherit bold :background ,bg-tab-current :box (:line-width -2 :color ,bg-tab-current) :foreground ,fg-alt)))
+       `(tab-bar-tab-group-inactive ((,c :background ,bg-tab-bar :box (:line-width -2 :color ,bg-tab-bar) :foreground ,fg-alt)))
+       `(tab-bar-tab ((,c :inherit bold :box (:line-width -2 :color ,bg-tab-current) :background ,bg-tab-current)))
+       `(tab-bar-tab-inactive ((,c :box (:line-width -2 :color ,bg-tab-other) :background ,bg-tab-other)))
+       `(tab-bar-tab-ungrouped ((,c :inherit tab-bar-tab-inactive)))
 
-      ;; `(keycast-command ((,c :inherit ef-themes-ui-variable-pitch :background ,bg-main :foreground ,fg-main :weight semibold)))
-      ;; `(keycast-command ((,c :inherit default :height 0.9)))
-      `(fringe ((,c :background ,bg-dim)))
-      `(org-mode-line-clock ((,c :inherit bold :foreground ,modeline-info)))
-      `(org-mode-line-clock-overrun ((,c :inherit bold :foreground ,modeline-err)))
-      `(jinx-misspelled ((,c :underline (:style wave :color ,magenta-cooler))))
-      ;; `(ten-id-face ((,c :inherit font-lock-keyword-face :underline (:style double-line :color ,cyan))))
-      )
-     (setq hl-todo-keyword-faces
-           `(("HOLD" . ,yellow)
-             ("TODO" . ,red)
-             ("NEXT" . ,blue)
-             ("THEM" . ,magenta)
-             ("PROG" . ,cyan-warmer)
-             ("OKAY" . ,green-warmer)
-             ("DONT" . ,yellow-warmer)
-             ("FAIL" . ,red-warmer)
-             ("BUG" . ,red-warmer)
-             ("DONE" . ,green)
-             ("NOTE" . ,blue-warmer)
-             ("KLUDGE" . ,cyan)
-             ("HACK" . ,cyan)
-             ("TEMP" . ,red)
-             ("FIXME" . ,red-warmer)
-             ("XXX+" . ,red-warmer)
-             ("REVIEW" . ,red)
-             ("DEPRECATED" . ,yellow))))
+       ;; `(keycast-command ((,c :inherit ef-themes-ui-variable-pitch :background ,bg-main :foreground ,fg-main :weight semibold)))
+       ;; `(keycast-command ((,c :inherit default :height 0.9)))
+       `(fringe ((,c :background ,bg-dim)))
+       `(org-mode-line-clock ((,c :inherit bold :foreground ,modeline-info)))
+       `(org-mode-line-clock-overrun ((,c :inherit bold :foreground ,modeline-err)))
+       `(jinx-misspelled ((,c :underline (:style wave :color ,magenta-cooler))))
+       ;; `(ten-id-face ((,c :inherit font-lock-keyword-face :underline (:style double-line :color ,cyan))))
+       )
+      (setq hl-todo-keyword-faces
+            `(("HOLD" . ,yellow)
+              ("TODO" . ,red)
+              ("NEXT" . ,blue)
+              ("THEM" . ,magenta)
+              ("PROG" . ,cyan-warmer)
+              ("OKAY" . ,green-warmer)
+              ("DONT" . ,yellow-warmer)
+              ("FAIL" . ,red-warmer)
+              ("BUG" . ,red-warmer)
+              ("DONE" . ,green)
+              ("NOTE" . ,blue-warmer)
+              ("KLUDGE" . ,cyan)
+              ("HACK" . ,cyan)
+              ("TEMP" . ,red)
+              ("FIXME" . ,red-warmer)
+              ("XXX+" . ,red-warmer)
+              ("REVIEW" . ,red)
+              ("DEPRECATED" . ,yellow))))
 
     (when (display-graphic-p) ; gui
       (when (locate-library "spacious-padding")
@@ -6583,33 +6505,6 @@ Suitable for `imenu-create-index-function'."
 (use-package! dslide :defer t)
 (use-package! default-text-scale :defer t)
 (use-package! moc :after default-text-scale :defer t)
-
-;;;; :custom 'Local' Packages
-
-;;;;; TODO elot : literate ontology tools
-
-;; (add-to-list 'load-path "~/sync/emacs/forked-pkgs/elot")
-;; (use-package! elot ; better
-;;   :defer t)
-
-;;;;; TODO emacs-bluesky
-
-;; (add-to-list 'load-path "~/sync/emacs/git/junghan0611/emacs-bluesky/")
-;; (load-file "~/sync/emacs/git/junghan0611/emacs-bluesky/bluesky.el")
-
-;;;;; pylookup
-
-(use-package! pylookup
-  :commands (pylookup-lookup pylookup-update pylookup-update-all)
-  :config
-  (setq pylookup-dir (concat user-dotemacs-dir "local/pylookup/")
-        pylookup-program (concat pylookup-dir "pylookup.py")
-        pylookup-db-file (concat pylookup-dir "pylookup.db"))
-  (setq pylookup-html-locations '("http://docs.python.org/ko/3.12")))
-
-;;;;; prot-dired-grep-marked-files
-
-(require 'prot-dired)
 
 ;;;; persp-mode with tab-bar for open-workspaces
 
@@ -7749,17 +7644,11 @@ Suitable for `imenu-create-index-function'."
 
 ;; from prot
 (use-package! mb-depth
-  :ensure nil
   :hook (after-init . minibuffer-depth-indicate-mode)
   :config
   (setq read-minibuffer-restore-windows nil) ; doom t
   ;; (setq enable-recursive-minibuffers t) ; conflict vertico-multiform
   )
-
-;;;; html2org
-
-;; (add-to-list 'load-path "~/emacs/git/default/html2org/")
-;; (require 'html2org)
 
 ;;; Emacs Application Framework (EAF)
 
@@ -7767,11 +7656,12 @@ Suitable for `imenu-create-index-function'."
 
 (progn
   (setq eaf-python-command "/usr/bin/python")
-
   (require 'eaf)
   (require 'eaf-browser)
   (require 'eaf-pdf-viewer)
   (require 'eaf-mind-elixir)
+
+  (add-hook 'eaf-mode-hook #'doom-mark-buffer-as-real-h)
 
   (progn
     ;; https://github.com/emacs-eaf/emacs-application-framework/wiki/Evil
@@ -7795,9 +7685,9 @@ Suitable for `imenu-create-index-function'."
     (setq eaf-browser-translate-language "ko")
 
     ;; make default browser
-    (setq browse-url-browser-function 'eaf-open-browser)
-    (defalias 'browse-web #'eaf-open-browser)
-    ;; (eaf-bind-key nil "M-q" eaf-browser-keybinding) ;; unbind, see more in the Wiki
+    ;; (setq browse-url-browser-function 'eaf-open-browser)
+    ;; (defalias 'browse-web #'eaf-open-browser)
+    (eaf-bind-key nil "M-q" eaf-browser-keybinding) ;; unbind, see more in the Wiki
 
     ;; /home/junghan/sync/man/dotsamples/vanilla/gavinok-dotfiles/lisp/eaf-config.el
     (defun slurp (f)
@@ -7807,13 +7697,13 @@ Suitable for `imenu-create-index-function'."
          (point-min)
          (point-max))))
 
-    ;; bookmark-default-file "~/emacs-bookmarks.el"
+    ;; https://www.abc.com abc
     (defun my/bm ()
       (interactive)
       (require 'eaf-browser)
       (let ((selected (completing-read
                        "Select URL: " (split-string
-                                       (slurp "~/emacs-bookmarks.el") "\n" t))))
+                                       (slurp "~/url-bookmarks.el") "\n" t))))
         (let ((url (car (split-string
                          selected
                          " " t))))
@@ -7829,5 +7719,65 @@ Suitable for `imenu-create-index-function'."
     ;; (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
     )
   ) ; end-of eaf
+
+;;;; :custom 'Local' Packages
+
+;;;;; TODO elot : literate ontology tools
+
+;; (add-to-list 'load-path "~/sync/emacs/forked-pkgs/elot")
+;; (use-package! elot ; better
+;;   :defer t)
+
+;;;;; TODO emacs-bluesky
+
+;; (add-to-list 'load-path "~/sync/emacs/git/junghan0611/emacs-bluesky/")
+;; (load-file "~/sync/emacs/git/junghan0611/emacs-bluesky/bluesky.el")
+
+;;;;; pylookup
+
+(use-package! pylookup
+  :commands (pylookup-lookup pylookup-update pylookup-update-all)
+  :config
+  (setq pylookup-dir (concat user-dotemacs-dir "local/pylookup/")
+        pylookup-program (concat pylookup-dir "pylookup.py")
+        pylookup-db-file (concat pylookup-dir "pylookup.db"))
+  (setq pylookup-html-locations '("http://docs.python.org/ko/3.12")))
+
+;;;;; txl.el
+
+;; 2025-04-08 use local branch
+(use-package! txl
+  :defer 2
+  :config
+  ;; (setq txl-deepl-split-sentences nil)
+  (setq txl-languages '(EN-US . KO)) ; using guess-language
+  (setq txl-deepl-api-url "https://api-free.deepl.com/v2/translate")
+  (setq txl-deepl-api-key (auth-info-password
+                           (car (auth-source-search
+                                 :host "api-free.deepl.com"
+                                 :user "apikey"))))
+  (global-set-key (kbd "M-g 0") 'txl-translate-region-or-paragraph)
+  (with-eval-after-load 'evil-org
+    (evil-define-key 'normal 'evil-org-mode-map (kbd "M-t") 'txl-translate-region-or-paragraph))
+  )
+
+;;;;; html2org
+
+(use-package! html2org
+  :defer 2
+  ;; :init
+  ;; (setq html2org-shift-heading-level 1)
+  :commands (html2org-fetch-url html2org))
+
+;;;;; org-zettel
+
+;; (use-package! org-zettel-ref-mode)
+
+;;;;; org-supertag
+
+;(use-package! org-supertag
+;  :after org
+;  ;; :config (org-supertag-setup)
+;  )
 
 ;;; left blank on purpose
