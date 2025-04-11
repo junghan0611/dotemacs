@@ -549,7 +549,8 @@
 
 ;; https://idiomdrottning.org/show-trailing-whitespace
 ;; `show-trailing-whitespace' is my friend.
-(setq-hook! (text-mode prog-mode conf-mode) show-trailing-whitespace t)
+;; (setq-hook! (text-mode prog-mode conf-mode) show-trailing-whitespace t)
+(setq show-trailing-whitespace t) ; globally on
 
 ;; White space cleanup, without obtrusive white space removal.
 ;; Whitespaces at EOL and EOF are trimmed upon file save, and only for lines modified by you.
@@ -2384,27 +2385,26 @@ ${content}"))
   (add-to-list 'savehist-additional-variables 'consult-gh--known-repos-list)
 
   ;; Install `consult-gh-embark' for embark actions
-  (use-package consult-gh-embark
-    :config
+  (with-eval-after-load 'embark
+    (require 'consult-gh-embark)
     (consult-gh-embark-mode +1))
 
   ;; Install `consult-gh-forge' for forge actions
-  (use-package consult-gh-forge
-    :config
+  (with-eval-after-load 'forge
+    (require 'consult-gh-forge)
     (consult-gh-forge-mode +1)
     (setq consult-gh-forge-timeout-seconds 20))
   )
 
 ;;;;; TODO magit-blame-color-by-age
 
-;; (use-package! magit-blame-color-by-age
-;;   :after magit
-;;   :init
-;;   ;; (setq magit-blame-color-by-age-full-heading t)
-;;   ;; if you'd like date first on heading lines:
-;;   ;; :config (setf (alist-get 'heading-format (alist-get 'headings magit-blame-styles)) "%C %-20a %s\n")
-;;   ;; For full heading coloring
-;;   )
+(use-package! magit-blame-color-by-age
+  :after magit
+  ;; :init
+  ;; (setq magit-blame-color-by-age-full-heading t)
+  ;; if you'd like date first on heading lines:
+  ;; :config (setf (alist-get 'heading-format (alist-get 'headings magit-blame-styles)) "%C %-20a %s\n")
+  )
 
 ;;;; :lang org
 
@@ -2974,7 +2974,7 @@ ${content}"))
 #+identifier: %4$s
 #+export_file_name: %4$s.md
 #+description:
-#+hugo_tags: temp
+#+hugo_tags: notes
 #+hugo_categories: Noname
 
 #+print_bibliography:
@@ -3316,7 +3316,7 @@ ${content}"))
         (insert (format "#+identifier: %s\n" suffix))
         (insert (format "#+export_file_name: %s.md\n" suffix))
         (insert (format "#+description:\n"))
-        (insert (format "#+hugo_tags: temp\n"))
+        (insert (format "#+hugo_tags: notes\n"))
         (insert (format "#+hugo_categories: Noname\n\n"))
 
         ;; add bib and history
@@ -3974,11 +3974,11 @@ Prefers existing sessions closer to current directory."
 
 (use-package! elysium
   :after gptel
+  :commands (elysium-toggle-window)
   :init
   ;; Below are the default values
   (setq elysium-window-size 0.33) ; The elysium buffer will be 1/3 your screen
   (setq elysium-window-style 'vertical) ; Can be customized to horizontal
-  :config
   ;; Use `smerge-mode` to then merge in the changes
   (require 'smerge-mode)
   (add-hook 'prog-mode-hook 'smerge-mode)
@@ -4447,6 +4447,13 @@ Called with a PREFIX, resets the context buffer list before opening"
 
 ;;;; :format
 
+;;;;; elisp-autofmt
+
+(use-package! elisp-autofmt
+  :commands (elisp-autofmt-mode elisp-autofmt-buffer)
+  ;; :hook (emacs-lisp-mode . elisp-autofmt-mode)
+  )
+
 ;;;;; apheleia + format-with-lsp
 
 ;; +onsave -- global
@@ -4886,6 +4893,7 @@ x×X .,·°;:¡!¿?`'‘’   ÄAÃÀ TODO
         eww-buffer-name-length 80 ; 40
         eww-readable-urls '("yes24"
                             "hada"
+                            "junghanacs"
                             "naver"
                             "daum"))
 
@@ -7520,6 +7528,10 @@ Suitable for `imenu-create-index-function'."
   ;; /home/junghan/sync/man/dotsamples/dotall/yqrashawn-dot-doom-clj/.doom.d/org.el
 
   (use-package! org-todoist
+    :defer 5
+    :init
+    (setq org-todoist-priority-default 67)
+    (setq org-todoist-deleted-keyword "DONT")
     :config
     (setq org-todoist-api-token user-todoist-token)
     (setq org-todoist-storage-dir (concat org-directory ".cache")) ; for cache
@@ -7649,8 +7661,7 @@ Suitable for `imenu-create-index-function'."
   (setq read-minibuffer-restore-windows nil) ; doom t
   ;; (setq enable-recursive-minibuffers t) ; conflict vertico-multiform
   )
-
-;;; Emacs Application Framework (EAF)
+;;;; Emacs Application Framework (EAF)
 
 ;; check  'C-h v' eaf-var-list
 

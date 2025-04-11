@@ -804,6 +804,8 @@
         :n "x" 'delete-forward-char
         :n "X" 'delete-backward-char
 
+        :ni "M-t" #'txl-translate-region-or-paragraph
+
         ;; :niv "M-j" #'org-meta-down ; M-<up>
         ;; :niv "M-k" #'org-meta-up ; M-<down>
         :nv "M-S-p" #'outline-up-heading

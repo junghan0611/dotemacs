@@ -1919,16 +1919,20 @@ window."
   :doc "Bibliograpic functions keymap."
 
   "b" #'org-cite-insert
-  ;; "c" #'citar-denote-create-silo-note
-  "c" #'citar-open
-  "d" #'citar-create-note
+  "c" #'citar-create-note
+  "C" #'citar-denote-create-silo-note
   "n" #'citar-denote-open-note
   "o" #'citar-open
+
 
   "e" #'citar-open-entry
 
   "a" #'citar-denote-add-reference
+  "0" #'my/citar-org-to-reading-list
   "1" #'citar-denote-find-citation ;; grep [cite @xxx]
+  "2" #'citar-denote-nocite
+  "3" #'citar-denote-nobib
+  "4" #'citar-denote-cite-nocite
 
   "i" #'citar-insert-citation
   "O" #'citar-open-links
@@ -1942,8 +1946,6 @@ window."
   "r" #'citar-denote-open-reference-entry
 
   "SPC" #'citar-denote-dwim
-
-  "0" #'my/citar-org-to-reading-list
   )
 
 (defvar-keymap ews-annotate-map
@@ -2001,6 +2003,11 @@ window."
 (defvar-keymap ews-denote-extra-map
   :doc "Denote-extrea keybindings"
 
+  "1" #'denote-random-notes
+  "2" #'denote-random-bib
+  "3" #'denote-random-meta
+  "4" #'denote-explore-random-note
+
   "0" #'my/denote-info
   "a" #'my/denote-attach
   "e" #'prot-eshell-export
@@ -2039,10 +2046,7 @@ window."
 
   ;;   "F" #'+default/browse-notes
 
-  "1" #'denote-random-notes
-  "2" #'denote-random-bib
-  "3" #'denote-random-meta
-  "4" #'denote-explore-random-note
+  "1" #'org-cite-insert
 
   "e" ews-denote-extra-map
   "E" #'my/denote-assign-evergreen

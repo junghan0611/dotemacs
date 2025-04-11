@@ -458,6 +458,7 @@
 ;;; my/update-export-garden all
 
 ;; mapcar를 사용하여 각 디렉토리에 함수 a 적용
+;; (my/update-export-garden "~/org/notes/")
 (defun my/update-export-garden (dir)
   (interactive)
   (message "path %s:" dir)

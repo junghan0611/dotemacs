@@ -55,7 +55,8 @@
 (package! consult-omni :recipe (:host github :repo "armindarvish/consult-omni" :files (:defaults "sources/*.el")))
 ;; :pin "d0a24058bf0dda823e5f1efcae5da7dc0efe6bda" ;; Feb 19, 2025
 ;; (package! consult-omni)
-(package! consult-gh)
+(package! consult-gh :recipe (:host github :repo "armindarvish/consult-gh"
+                              :files ("*")))
 
 ;;; DONT NEVER use built-in on emacs 30
 
@@ -208,6 +209,7 @@
 (package! orgabilize :recipe (:host github :repo "akirak/orgabilize.el"))
 (package! org-cv :recipe (:host github :repo "ohyecloudy/org-cv"))
 (package! org-glossary :recipe (:host github :repo "tecosaur/org-glossary" :files ("*.el" "*.org" "*.texi")))
+(package! autocorrect :recipe (:host github :repo "tecosaur/autocorrect" :files ("*.el" "*.org")))
 (package! org-pandoc-import :recipe (:host github :repo "tecosaur/org-pandoc-import" :files ("*.el" "*.org" "filters" "preprocessors")))
 (package! org-web-tools)
 (package! org-index) ;; 색인 지원
@@ -385,7 +387,7 @@
 
 ;;;; Coding
 
-;; (package! blamer)
+(package! elisp-autofmt)
 (package! sideline-blame)
 (package! git-messenger)
 

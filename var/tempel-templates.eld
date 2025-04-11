@@ -376,43 +376,56 @@ alias:
 
 ;;;; quartz quote-block
 
-(qnote "#+begin_quote" n> "[!note]" n> n> r> n> "#+end_quote")
+(quartz-callout-note "#+begin_quote" n> "[!note]" n> n> r> n> "#+end_quote")
+(callout-note "#+begin_quote" n> "[!note]" n> n> r> n> "#+end_quote")
 
-(qtldr "#+begin_quote" n> "[!tldr]" n> n> r> n> "#+end_quote")
-(qsummary "#+begin_quote" n> "[!summary]" n> n> r> n> "#+end_quote")
-(qabstract "#+begin_quote" n> "[!abstract] abstract" n> n> r> n> "#+end_quote")
+(callout-tldr "#+begin_quote" n> "[!tldr]" n> n> r> n> "#+end_quote")
+(callout-summary "#+begin_quote" n> "[!summary]" n> n> r> n> "#+end_quote")
+(callout-abstract "#+begin_quote" n> "[!abstract] abstract" n> n> r> n> "#+end_quote")
 
-(qtodo "#+begin_quote" n> "[!todo]" n> n> r> n> "#+end_quote")
+(callout-todo "#+begin_quote" n> "[!todo]" n> n> r> n> "#+end_quote")
 
 ;; [!tip] tip hint important
-(qtip "#+begin_quote" n> "[!tip]" n> n> r> n> "#+end_quote")
+(callout-tip "#+begin_quote" n> "[!tip]" n> n> r> n> "#+end_quote")
+(callout-hint "#+begin_quote" n> "[!hint]" n> n> r> n> "#+end_quote")
+(callout-important "#+begin_quote" n> "[!important]" n> n> r> n> "#+end_quote")
 
 ;; [!done] done check success
-(qdone "#+begin_quote" n> "[!done]" n> n> r> n> "#+end_quote")
+(callout-done "#+begin_quote" n> "[!done]" n> n> r> n> "#+end_quote")
+(callout-success "#+begin_quote" n> "[!success]" n> n> r> n> "#+end_quote")
 
 ;; [!question] question help faq
-(qquestion "#+begin_quote" n> "[!question]" n> n> r> n> "#+end_quote")
+(callout-question "#+begin_quote" n> "[!question]" n> n> r> n> "#+end_quote")
+(callout-faq "#+begin_quote" n> "[!faq]" n> n> r> n> "#+end_quote")
+(callout-help "#+begin_quote" n> "[!help]" n> n> r> n> "#+end_quote")
 
 ;; [!warning] warning caution attention
-(qwarning "#+begin_quote" n> "[!warning]" n> n> r> n> "#+end_quote")
+(callout-warning "#+begin_quote" n> "[!warning]" n> n> r> n> "#+end_quote")
+(callout-caution "#+begin_quote" n> "[!caution]" n> n> r> n> "#+end_quote")
+(callout-attention "#+begin_quote" n> "[!attention]" n> n> r> n> "#+end_quote")
 
 ;; [!failure] failure fail missing
-(qfail "#+begin_quote" n> "[!fail]" n> n> r> n> "#+end_quote")
+(callout-fail "#+begin_quote" n> "[!fail]" n> n> r> n> "#+end_quote")
+(callout-failure "#+begin_quote" n> "[!failure]" n> n> r> n> "#+end_quote")
+(callout-missing "#+begin_quote" n> "[!missing]" n> n> r> n> "#+end_quote")
 
 ;; [!error] error danger
-(qerror "#+begin_quote" n> "[!error]" n> n> r> n> "#+end_quote")
+(callout-error "#+begin_quote" n> "[!error]" n> n> r> n> "#+end_quote")
+(callout-danger "#+begin_quote" n> "[!danger]" n> n> r> n> "#+end_quote")
 
 ;; [!bug]
-(qbug "#+begin_quote" n> "[!bug]" n> n> r> n> "#+end_quote")
+(callout-bug "#+begin_quote" n> "[!bug]" n> n> r> n> "#+end_quote")
 
 ;; [!example]
-(qexample "#+begin_quote" n> "[!example]" n> n> r> n> "#+end_quote")
+(callout-example "#+begin_quote" n> "[!example]" n> n> r> n> "#+end_quote")
 
 ;; [!quote] cite quote
-(qquote "#+begin_quote" n> "[!quote] quote" n> n> r> n> "
+(calloutquote "#+begin_quote" n> "[!quote] quote" n> n> r> n> "
 
 ― 저자명, 『책』
 #+end_quote")
+
+(calloutquotesimple "#+begin_quote" n> "[!quote] quote" n> n> r> n> " #+end_quote")
 
 ;;;; python
 
