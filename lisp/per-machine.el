@@ -238,6 +238,10 @@
         ))
 (setq user-ten-tags-file (concat user-org-directory "dict/ten-TAGS"))
 
+;;; dict-file
+
+(setq user-dict-file "~/dotemacs/var/core-words.txt")
+
 ;;; garden-directory-list
 
 (setq garden-directory-lists '("~/org/meta" "~/org/bib" "~/org/notes"))

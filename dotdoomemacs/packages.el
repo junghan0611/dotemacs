@@ -285,7 +285,7 @@
 (package! guess-language :recipe (:host github :repo "junghan0611/guess-language.el" :branch "master" :files ("*.el" "trigrams/*")))
 ;; (package! txl :recipe (:host github :repo "junghan0611/txl.el" :branch "ko"))
 (package! txl :recipe (:local-repo "~/emacs/git/junghan0611/txl.el/"))
-(package! html2org :recipe (:local-repo "~/emacs/git/default/html2org/"))
+;; (package! html2org :recipe (:local-repo "~/emacs/git/default/html2org/"))
 ;; (package! flymake-vale :recipe (:host github :repo "tpeacock19/flymake-vale"))
 
 ;;;; :pkm
@@ -334,6 +334,7 @@
 
 ;; (package! aidermacs)
 (package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs" :files ("*.el")))
+(package! emigo :recipe (:host github :repo "MatthewZMD/emigo"))
 
 (package! llm)
 
@@ -502,6 +503,7 @@
 (package! lorem-ipsum)
 (package! go-translate)
 (package! youtube-sub-extractor)
+;; (package! jira)
 
 ;; (package! ready-player)
 ;; Very large files mode loads large files in chunks to open ridiculously large files.
@@ -551,13 +553,10 @@
 
 ;;;; TODO waiting
 
-(package! default-text-scale :recipe (:host github :repo "purcell/default-text-scale"))
-(package! moc :recipe (:host github :repo "positron-solutions/moc"))
-(package! dslide :recipe (:host github :repo "positron-solutions/dslide"))
-
+;; (package! default-text-scale :recipe (:host github :repo "purcell/default-text-scale"))
+;; (package! moc :recipe (:host github :repo "positron-solutions/moc"))
+;; (package! dslide :recipe (:host github :repo "positron-solutions/dslide"))
 ;; (package! anddo :recipe (:host github :repo "junghan0611/anddo.el"))
-
-(package! jira)
 
 ;; A method for blocking access to emacs commands based on time.
 ;; https://git.sr.ht/~swflint/time-block-command

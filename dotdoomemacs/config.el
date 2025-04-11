@@ -2339,7 +2339,6 @@ ${content}"))
 
 (use-package! consult-gh
   :after consult
-  :defer t
   :commands (consult-gh-search-repos
              consult-gh-search-code
              consult-gh-search-prs
@@ -3781,23 +3780,30 @@ ${content}"))
 ;; Optional: Set a key binding for the transient menu
 ;; (global-set-key (kbd "C-c a") 'aider-transient-menu)
 
+;;;;; llmclient: emigo
+
+(use-package! emigo
+  :config
+  (emigo-enable) ;; Starts the background process automatically
+  ;; :custom
+  ;; Encourage using OpenRouter with Deepseek
+  ;; openrouter/quasar-alpha
+  ;; (emigo-model "openrouter/deepseek/deepseek-chat-v3-0324")
+  ;; (emigo-base-url "https://openrouter.ai/api/v1")
+  ;; (emigo-api-key (getenv "OPENROUTER_API_KEY"))
+  )
+
 ;;;;; llmclient: aidermacs
 
 (use-package! aidermacs
   :defer 3
   :init
   (autoload 'aidermacs-transient-menu "aidermacs" nil t)
-  :config
-  (setenv "XAI_API_KEY" (auth-info-password
-                         (car (auth-source-search
-                               :host "api.x.ai"
-                               :user "apikey"))))
-  ;; (setenv "ANTHROPIC_API_KEY" user-claude-api-key)
-  ;; (setenv "OPENAI_API_KEY" user-openai-api-key)
-  ;; (setenv "GEMINI_API_KEY" user-gemini-api-key)
-  ;; (setenv "PERPLEXITYAI_API_KEY" user-perplexity-api-key)
-  ;; (setenv "XAI_API_KEY" user-xai-api-key)
-  ;; (setenv "DEEPSEEK_API_KEY" user-deepseek-api-key)
+  ;;:config
+  ;; (setenv "XAI_API_KEY" (auth-info-password
+  ;;                        (car (auth-source-search
+  ;;                              :host "api.x.ai"
+  ;;                              :user "apikey"))))
 
 ;;;###autoload
   (defun aidermacs-buffer-name ()
@@ -5665,6 +5671,95 @@ Suitable for `imenu-create-index-function'."
 ;;               (cape-company-to-capf 'notmuch-company)
 ;;               nil t)))
 
+
+;;;;; :app consult-omni
+
+(use-package! consult-omni
+  :after (consult embark)
+  :commands (consult-omni-multi)
+  :custom
+  (consult-omni-show-preview t) ;; show previews
+  (consult-omni-default-page 0) ;; set the default page (default is 0 for the first page)
+  :config
+  (setq consult-omni-preview-key "M-m") ;; set the preview key to M-m
+  (require 'consult-omni-sources)
+  (require 'consult-omni-embark)
+  ;; (require 'my-consult-omni)
+
+  (setq consult-omni-default-count 30 ; default 5
+        consult-omni-dynamic-input-debounce 0.7
+        consult-omni-dynamic-refresh-delay 0.5)
+  (setq consult-omni-default-browse-function #'eaf-open-browser) ; browse-url
+
+  (progn
+    ;; (require 'consult-omni-apps)
+    ;; (require 'consult-omni-bing)
+    ;; (require 'consult-omni-brave-autosuggest)
+    ;; (require 'consult-omni-brave)
+    ;; (require 'consult-omni-browser-history)
+    ;; (require 'consult-omni-buffer)
+    ;; (require 'consult-omni-calc)
+    ;; (require 'consult-omni-chatgpt)
+    ;; (require 'consult-omni-consult-notes)
+    ;; (require 'consult-omni-dict)
+    ;; (require 'consult-omni-doi)
+    ;; (require 'consult-omni-duckduckgo)
+    ;; (require 'consult-omni-elfeed)
+    ;; (require 'consult-omni-fd)
+    ;; (require 'consult-omni-find)
+    ;; (require 'consult-omni-gh)
+    ;; (require 'consult-omni-git-grep)
+    (require 'consult-omni-google)
+    (require 'consult-omni-wikipedia)
+    (require 'consult-omni-youtube)
+    ;; (require 'consult-omni-notes)
+    ;; (require 'consult-omni-google-autosuggest)
+    ;; (require 'consult-omni-gptel)
+    ;; (require 'consult-omni-grep)
+    ;; (require 'consult-omni-invidious)
+    ;; (require 'consult-omni-line-multi)
+    ;; (require 'consult-omni-locate)
+    ;; (require 'consult-omni-man)
+    ;; (require 'consult-omni-mdfind)
+    ;; (require 'consult-omni-mu4e)
+    ;; (require 'consult-omni-notmuch)
+    ;; (require 'consult-omni-numi)
+    ;; (require 'consult-omni-org-agenda)
+    ;; (require 'consult-omni-pubmed)
+    ;; (require 'consult-omni-projects)
+    ;; (require 'consult-omni-ripgrep)
+    ;; (require 'consult-omni-ripgrep-all)
+    )
+
+  ;; "Brave" "DuckDuckGo AP/" "Browser History" "gptel" "elfeed" "notmuch"
+  (setq consult-omni-multi-sources '("Google" "Wikipedia" "YouTube")) ; "GitHub"
+  ;; (setq consult-omni-default-preview-function #'eww-browse-url)
+  ;; (setq consult-omni-openai-api-key (auth-info-password (car (auth-source-search :host "api.openai.com" :user "apikey"))))
+  )
+
+;; (after! consult-gh
+;;   ;; https://www.armindarvish.com/post/web_omni_search_in_emacs_with_consult-web/
+;;   (defun consult-omni-embark-open-consult-gh (cand)
+;;     "Search github for repo in candidate by using `consult-gh-search-repos'."
+;;     (when-let ((url (and (stringp cand) (get-text-property 0 :url cand))))
+;;       (if (string-match ".*github.*" url nil nil)
+;;           (let* ((urlobj (url-generic-parse-url url))
+;;                  (path (url-filename urlobj))
+;;                  (repo (string-join (take 2 (cdr (string-split path "/"))) "/"))
+;;                  (issue (if (string-match ".*\/issues\/\\([[:digit:]]*\\)" path)
+;;                             (substring-no-properties (match-string 1 path))))
+;;                  (pr (if (string-match ".*\/pull\/\\(?1:[[:digit:]]*\\)" path)
+;;                          (substring-no-properties (match-string 1 path))))
+;;                  )
+;;             (cond
+;;              (pr (consult-gh-search-prs pr repo))
+;;              (issue (consult-gh-search-issues issue repo))
+;;              (repo (consult-gh-search-repos repo))
+;;              (t (consult-gh-search-repos)))
+;;             (message "not a github link"))
+;;         )))
+;;   )
+
 ;;;; :os tty
 
 ;;;;; term-keys
@@ -5980,10 +6075,10 @@ Suitable for `imenu-create-index-function'."
     ;; the base font size (e.g. 1.5), and a `WEIGHT'.
     (setq modus-themes-headings
           '(
-            (0                . (bold 1.2)) ;; variable-pitch
-            (1                . (bold 1.1))
-            (2                . (bold 1.05))
-            (3                . (semibold 1.0))
+            (0                . (bold 1.3)) ;; variable-pitch
+            (1                . (bold 1.2))
+            (2                . (bold 1.1))
+            (3                . (semibold 1.05))
             (4                . (medium 1.0))
             (5                . (medium 1.0))
             (6                . (medium 1.0))
@@ -6345,8 +6440,9 @@ Suitable for `imenu-create-index-function'."
   :if window-system
   :defer 4
   :commands (atomic-chrome-start-server)
-  :config
-  (atomic-chrome-start-server))
+  ;; :config
+  ;; (atomic-chrome-start-server)
+  )
 
 ;;;;; google-translte
 
@@ -6455,6 +6551,8 @@ Suitable for `imenu-create-index-function'."
 ;;;;; browse-hist
 
 (use-package! browser-hist
+  :defer t
+  :commands (browser-hist-search)
   :init
   (require 'embark) ; load Embark before the command (if you're using it)
   :config
@@ -6473,8 +6571,7 @@ Suitable for `imenu-create-index-function'."
           (brave       "title"    "url"    "urls"          "ORDER BY last_visit_time desc")
           (firefox     "title"    "url"    "moz_places"    "ORDER BY last_visit_date desc")
           ))
-  (setq browser-hist-default-browser 'edge)
-  :commands (browser-hist-search)
+  (setq browser-hist-default-browser 'firefox) ; edge
   )
 
 ;;;;; DONT dictionary-overlay
@@ -6482,22 +6579,6 @@ Suitable for `imenu-create-index-function'."
 ;; 수정이 필요할 듯
 ;; https://github.com/ginqi7/dictionary-overlay
 ;; (use-package! dictionary-overlay)
-
-;;;;; TODO cfw: my-open-calendar
-
-;; init.el :app calendar
-;; (defun my-open-calendar ()
-;;   (interactive)
-;;   (cfw:open-calendar-buffer
-;;    :contents-sources
-;;    (list
-;;     (cfw:org-create-source "Green")  ; org-agenda source
-;;     (cfw:org-create-file-source "cal" "/path/to/cal.org" "Cyan")  ; other org source
-;;     (cfw:howm-create-source "Blue")  ; howm source
-;;     (cfw:cal-create-source "Orange") ; diary source
-;;     (cfw:ical-create-source "Moon" "~/moon.ics" "Gray")  ; ICS source1
-;;     (cfw:ical-create-source "gcal" "https://..../basic.ics" "IndianRed") ; google calendar ICS
-;;     )))
 
 ;;;;; TODO paw
 
@@ -6508,11 +6589,6 @@ Suitable for `imenu-create-index-function'."
 ;; (set-popup-rules! '(("^\\*paw-view-note*" :size 0.35 :side right :quit t :modeline t :select nil :ttl nil :vslot 2 :slot 1)
 ;;                     ("^\\*paw-sub-note*" :height 0.5 :side right :quit t :modeline t :select t :ttl nil :vslot 2 :slot 2)))
 
-;;;;; TODO presentation - dslide and moc
-
-(use-package! dslide :defer t)
-(use-package! default-text-scale :defer t)
-(use-package! moc :after default-text-scale :defer t)
 
 ;;;; persp-mode with tab-bar for open-workspaces
 
@@ -6825,182 +6901,6 @@ Suitable for `imenu-create-index-function'."
   (require 'citar-citeproc)
   (setq org-cite-csl-link-cites nil) ; default t
   (setq org-cite-export-processors '((latex biblatex) (t csl))))
-
-;;;; NOTE consult-omni with extra
-
-;; /home/junghan/sync/man/dotsamples/vanilla/sachac-dotfiles/Sacha.org
-(progn
-  (defun my-insert-or-replace-link (url &optional title)
-    "Insert a link, wrap the current region in a link, or replace the current link."
-    (cond
-     ((derived-mode-p 'org-mode)
-      (cond
-       ((org-in-regexp org-link-bracket-re 1)
-        (when (match-end 2) (setq title (match-string-no-properties 2)))
-        (delete-region (match-beginning 0) (match-end 0)))
-       ((org-in-regexp org-link-any-re 1)
-        (delete-region (match-beginning 0) (match-end 0)))
-       ((region-active-p)
-        (setq title (buffer-substring-no-properties (region-beginning) (region-end)))
-        (delete-region (region-beginning) (region-end))))
-      ;; update link
-      (insert (org-link-make-string url title)))
-     ((derived-mode-p 'org-mode)		 ; not in a link
-      (insert (org-link-make-string url title)))
-     ((and (region-active-p) (derived-mode-p 'markdown-mode))
-      (setq title (buffer-substring-no-properties (region-beginning) (region-end)))
-      (delete-region (region-beginning) (region-end))
-      (insert (format "[%s](%s)" title url)))
-     ((derived-mode-p 'markdown-mode)
-      (insert (format "[%s](%s)" title url)))
-     (t
-      (insert (format "%s (%s)" title url)))))
-
-  ;; override the embark actions
-  (defun my-consult-omni-embark-copy-url-as-kill (cand)
-    "Don't add spaces."
-    (when-let ((s (and (stringp cand) (get-text-property 0 :url cand))))
-      (kill-new (string-trim s))))
-
-  (defun my-consult-omni-embark-insert-url (cand)
-    "Don't add spaces."
-    (when-let ((s (and (stringp cand) (get-text-property 0 :url cand))))
-      (insert (string-trim s))))
-
-  (defun my-consult-omni-embark-copy-title-as-kill (cand)
-    "Don't add spaces."
-    (when-let ((s (and (stringp cand) (get-text-property 0 :title cand))))
-      (kill-new (string-trim s))))
-
-  (defun my-consult-omni-embark-insert-title (cand)
-    "Don't add spaces."
-    (when-let ((s (and (stringp cand) (get-text-property 0 :title cand))))
-      (insert (string-trim s))))
-
-  (defun my-consult-omni-embark-insert-link (cand)
-    "Don't add spaces."
-    (let ((url (and (stringp cand) (get-text-property 0 :url cand )))
-          (title (and (stringp cand) (get-text-property 0 :title cand))))
-      (my-insert-or-replace-link url title)))
-  )
-
-(use-package! consult-omni
-  :after consult
-  :commands (consult-omni-transient consult-omni-multi)
-  :custom
-  (consult-omni-show-preview t) ;;;; show previews
-  (consult-omni-preview-key "M-m") ;;;; set the preview key to M-m
-  (consult-omni-default-page 0) ;;;; set the default page (default is 0 for the first page)
-  :bind (:map consult-omni-embark-general-actions-map
-              ("I l" .  #'my-consult-omni-embark-insert-link)
-              ("I u" .  #'my-consult-omni-embark-insert-url)
-              ("I t" .  #'my-consult-omni-embark-insert-title)
-              ("W u" . #'my-consult-omni-embark-copy-url-as-kill)
-              ("W t" . #'my-consult-omni-embark-copy-title-as-kill))
-  :config
-  (require 'consult-omni-sources)
-  (require 'consult-omni-embark)
-
-  (progn
-    ;; (require 'consult-omni-apps)
-    ;; (require 'consult-omni-bing)
-    ;; (require 'consult-omni-brave-autosuggest)
-    (require 'consult-omni-brave)
-    (require 'consult-omni-browser-history)
-    (require 'consult-omni-buffer)
-    (require 'consult-omni-calc)
-    ;; (require 'consult-omni-chatgpt)
-    (require 'consult-omni-consult-notes)
-    ;; (require 'consult-omni-dict)
-    ;; (require 'consult-omni-doi)
-    (require 'consult-omni-duckduckgo)
-    (require 'consult-omni-elfeed)
-    (require 'consult-omni-fd)
-    ;; (require 'consult-omni-find)
-    (require 'consult-omni-gh)
-    (require 'consult-omni-git-grep)
-    (require 'consult-omni-google)
-    ;; (require 'consult-omni-google-autosuggest)
-    (require 'consult-omni-gptel)
-    ;; (require 'consult-omni-grep)
-    (require 'consult-omni-invidious)
-    ;; (require 'consult-omni-line-multi)
-    ;; (require 'consult-omni-locate)
-    ;; (require 'consult-omni-man)
-    ;; (require 'consult-omni-mdfind)
-    ;; (require 'consult-omni-mu4e)
-    (require 'consult-omni-notes)
-    (require 'consult-omni-notmuch)
-    ;; (require 'consult-omni-numi)
-    ;; (require 'consult-omni-org-agenda)
-    ;; (require 'consult-omni-pubmed)
-    (require 'consult-omni-projects)
-    (require 'consult-omni-ripgrep)
-    ;; (require 'consult-omni-ripgrep-all)
-    ;; (require 'consult-omni-scopus)
-    ;; (require 'consult-omni-stackoverflow)
-    (require 'consult-omni-wikipedia)
-    (require 'consult-omni-youtube)
-    )
-
-  ;; load agzam
-  (require 'my-consult-omni)
-
-  (setq consult-omni-multi-sources '(
-                                     ;; "DuckDuckGo AP/"
-                                     "Google"
-                                     "Brave"
-                                     "Wikipedia"
-                                     ;; "Browser History"
-                                     "gptel"
-                                     "GitHub"
-                                     "elfeed"
-                                     ;; "notmuch"
-                                     "YouTube"))
-  ;; (setq consult-omni-default-preview-function #'eww-browse-url)
-
-  ;; ;; Set API KEYs. It is recommended to use a function that returns the string for better security.
-  (setq consult-omni-openai-api-key (auth-info-password (car (auth-source-search :host "api.openai.com" :user "apikey"))))
-  (setq consult-omni-brave-api-key (auth-info-password (car (auth-source-search :host "api.search.brave.com" :user "apikey"))))
-
-  ;; Set API KEYs. It is recommended to use a function that returns the string for better security.
-  ;; (setq consult-omni-google-customsearch-key "YOUR-GOOGLE-API-KEY-OR-FUNCTION")
-  ;; (setq consult-omni-google-customsearch-cx "YOUR-GOOGLE-CX-NUMBER-OR-FUNCTION")
-  ;; (consult-omni--set-api-keys) ; agzam
-
-  (setq consult-omni-default-count 30
-        consult-omni-dynamic-input-debounce 0.7
-        consult-omni-dynamic-refresh-delay 0.5)
-
-  (defadvice! consult-omni-use-thing-at-point-a
-    (fn &optional initial no-cb &rest args)
-    :around #'consult-omni-multi
-    :around #'consult-omni-google
-    :around #'consult-omni-wikipedia
-    :around #'consult-omni-youtube
-    :around #'consult-omni-github
-    :around #'consult-omni-gptel
-    :around #'consult-omni-browser-history
-    :around #'consult-omni-notmuch
-    :around #'consult-omni-elfeed
-    (let ((init (or initial
-                    (if (use-region-p)
-                        (buffer-substring (region-beginning) (region-end))
-                      (thing-at-point 'symbol :no-props)))))
-      (apply fn init no-cb args)))
-
-  (defadvice! consult-omni--multi-dynamic-no-match-a (orig-fn &rest args)
-    "Require no match for omni searches."
-    :around #'consult-omni--multi-dynamic
-    (apply orig-fn (plist-put args :require-match nil)))
-
-  (defun consult-omni-embark-video-process (cand)
-    (if-let* ((url (and (stringp cand) (get-text-property 0 :url cand))))
-        (+process-external-url url)))
-
-  (map! :map consult-omni-embark-video-actions-map
-        "e" #'consult-omni-embark-video-process)
-  )
 
 ;;;; TODO Load +llm summarize-buffer
 
@@ -7771,14 +7671,6 @@ Suitable for `imenu-create-index-function'."
   (with-eval-after-load 'evil-org
     (evil-define-key 'normal 'evil-org-mode-map (kbd "M-t") 'txl-translate-region-or-paragraph))
   )
-
-;;;;; html2org
-
-(use-package! html2org
-  :defer 2
-  ;; :init
-  ;; (setq html2org-shift-heading-level 1)
-  :commands (html2org-fetch-url html2org))
 
 ;;;;; org-zettel
 

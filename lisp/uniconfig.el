@@ -60,6 +60,7 @@
 (with-eval-after-load 'cape
   ;; /gopar-dotfiles-youtuber/README.org:1371
   (setq cape-dabbrev-min-length 5) ; default 4
+  (setq cape-dict-file user-dict-file)
   ;; (setq cape-dabbrev-check-other-buffers 'some)
   )
 

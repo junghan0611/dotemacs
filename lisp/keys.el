@@ -819,6 +819,7 @@
 
 ; consult-omni
 (when (locate-library "consult-omni")
+  (global-set-key (kbd "M-g w") 'consult-omni)
   (global-set-key (kbd "M-s n") 'consult-omni))
 
 ;; rg
@@ -830,10 +831,10 @@
   (global-set-key (kbd "M-s v") 'deadgrep)
   )
 
-(when (locate-library "blamer")
-  (global-set-key (kbd "M-g M-i") 'blamer-show-posframe-commit-info)
-  ;; (global-set-key (kbd "M-g M-I") 'blamer-mode)
-  )
+;; (when (locate-library "blamer")
+;;   (global-set-key (kbd "M-g M-i") 'blamer-show-posframe-commit-info)
+;;   ;; (global-set-key (kbd "M-g M-I") 'blamer-mode)
+;;   )
 
 (when (locate-library "sideline-blame")
   (global-set-key (kbd "M-g M-i") 'sideline-mode)

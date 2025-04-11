@@ -315,8 +315,8 @@ alias:
 ;; #+attr_html: :width 100% :align center
 ;; #+caption: noname
 ;; [[https://raw.githubusercontent.com/junghan0611/graphic-design/main/practicalli-desktop-redux.png]]")
-(imglink "#+attr_html: :width 100% :align left" n "#+caption: " p n "#+attr_org: :width 640px" n "[[file:" p "]]" n)
-(imgcaption "#+attr_html: :width 100% :align left" n "#+caption: " p n "#+attr_org: :width 640px" n)
+(imglink "#+attr_html: :width 100% :align center" n "#+caption: " p n "#+attr_org: :width 640px" n "[[file:" p "]]")
+(imgcaption "#+attr_html: :width 100% :align center" n "#+caption: " p n "#+attr_org: :width 640px")
 
 (filelink "[[file:" p "][" p "]]" n )
 (filelinkline "[[file:" p "::" p "][" p "]]" n )
@@ -458,6 +458,8 @@ alias:
 ;; (elispt "#+BEGIN_SRC emacs-lisp :tangle yes" n> r> n> "#+END_SRC") ; tangle yes
 
 (src "#+begin_src" p n> r> n> "#+end_src")
+(srcedit "#+begin_src " n> r> n "#+end_src" :post (org-edit-src-code))
+
 ;; (src "#+BEGIN_SRC" p n> r> n> "#+END_SRC" :post (org-edit-src-code))
 ;; (elisp "#+BEGIN_SRC emacs-lisp" n> r> n "#+END_SRC" :post (org-edit-src-code))
 (clisp "#+BEGIN_SRC common-lisp" n> r> n "#+END_SRC" :post (org-edit-src-code))
@@ -544,6 +546,7 @@ text-mode
 
 ;;;; web-mode
 web-mode
+
 (bye "<% byebug %>" n)
 (db "<% require \"debug\"; binding.break %>" n)
 (tor "<cite><a href=\"https://takeonrules.com\">Take on Rules</a></cite>")

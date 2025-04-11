@@ -454,10 +454,9 @@
        :desc "eww-search-words" "1" #'eww-search-words
        :desc "find-name-dired" "2" #'find-name-dired
        :desc "search-github-with-lang" "g" #'+search-github-with-lang
-       :desc "consult-omni-transient" "n" #'consult-omni-transient
+       ;; :desc "consult-omni-transient" "n" #'consult-omni-transient
        :desc "consult-locate" "M-l" #'consult-locate
        :desc "imenu" "j" #'imenu))
-
 
 ;;;; 'S' Search Plus : Custom Search
 
@@ -522,6 +521,7 @@
 ;; | `smerge-keep-other`                     | keep this set of changes                           |
 ;; | `smerge-keep-mine`                      | discard this set of changes                        |
 ;; | `elysium-toggle-window`                 | toggle the chat window                             |
+
 
 (progn
   (require 'smerge-mode)
@@ -1423,6 +1423,25 @@
        "2" #'citar-denote-open-note
        "3" #'citar-open-entry))
 
+;;;; DONT consult-omni
+
+;; (map!
+;;  :after consult-omni
+;;  (:prefix ("i" . "insert")
+;;           (:map consult-omni-embark-general-actions-map
+;;            :desc "insert-url-link" "u" #'consult-omni-embark-insert-url-link
+;;            :desc "insert-title" "t" #'consult-omni-embark-insert-title
+;;            :desc "my/insert-link" "l" #'my-consult-omni-embark-insert-link
+;;            :desc "my/insert-url" "1" #'my-consult-omni-embark-insert-url
+;;            :desc "my/insert-title" "2" #'my-consult-omni-embark-insert-title
+;;            ))
+;;  (:prefix ("w" . "copy")
+;;           (:map consult-omni-embark-general-actions-map
+;;            :desc "my/copy-url" "1" #'my-consult-omni-embark-copy-url-as-kill
+;;            :desc "my/copy-title" "2" #'my-consult-omni-embark-copy-title-as-kill
+;;            :desc "copy-url" "u" #'consult-omni-embark-copy-url-as-kill
+;;            :desc "copy-title" "t" #'consult-omni-embark-copy-title-as-kill))
+;;  )
 
 ;;;; vertico-map
 
@@ -1610,8 +1629,8 @@
   (map! :map org-mode-map
         :localleader
         (:prefix ("RET" . "LLM")
-                 "SPC" #'gptel-mode
-                 "RET" #'gptel-menu)
+                 "RET" #'gptel-mode
+                 "SPC" #'gptel-menu)
 
         "#" #'org-update-statistics-cookies
         "'" #'org-edit-special
