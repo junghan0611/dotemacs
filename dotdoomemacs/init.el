@@ -222,7 +222,7 @@
   )                     ; wander around notes
 
  ;;php               ; perl's insecure younger brother
- ;; plantuml ; diagrams for confusing people more
+ plantuml ; diagrams for confusing people more
  graphviz
  ;;purescript        ; javascript, but functional
  (python +conda +lsp +pyright +tree-sitter) ; +poetry +conda beautiful is better than ugly

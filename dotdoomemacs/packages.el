@@ -199,8 +199,8 @@
 
 ;;;; :lang org-mode
 
-(package! org-todoist :recipe (:host github :repo "lillenne/org-todoist" :branch "main"))
-;; (package! todoist)
+(package! org-headline-card :recipe (:host github :repo "yibie/org-headline-card")) ; plantuml
+(package! org-todoist :recipe (:host github :repo "lillenne/org-todoist" :branch "main")) ;; (package! todoist)
 (package! orgbox)
 (package! org-side-tree)
 
@@ -250,7 +250,7 @@
 ;; (package! org-linenote) ; require lsp-mode
 ;; (package! org-linenote :recipe (:local-repo "local/org-linenote"))
 (package! org-linenote :recipe (:host github :repo "junghan0611/org-linenote" :branch "main")) ; eglot
-(package! language-detection) ; html2org
+;; (package! language-detection) ; html2org
 
 ;;;; :tools
 

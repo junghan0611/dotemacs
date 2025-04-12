@@ -60,7 +60,6 @@
 
 ;; /doom/high-school-macos-emacs-dev-env/doom/init.el
 (setq-default x-stretch-cursor t) ; make the cursor wide over tabs, etc.
-(setq undo-limit 80000000) ; Raise undo-limit to 80Mb
 (setq truncate-string-ellipsis "…") ; Unicode ellispis are nicer than "...", and also save /precious/ space
 
 ;;;;; startup and dashboard
@@ -2812,6 +2811,36 @@ ${content}"))
 (use-package! org-marked-text-overview
   :after org
   :bind ("M-g l" . org-marked-text-overview-mode))
+
+;;;;;; org-headline-card
+
+(use-package! org-headline-card
+  :after org
+  :commands (org-headline-card-at-point)
+  :config
+  (setq org-headline-card-directory "~/org/temp/card/") ;; set output path
+  (setq plantuml-default-exec-mode 'jar)
+  ;; (setq plantuml-jar-path "~/Documents/emacs/package/plantuml.jar") ;; to replace your plantuml.jar path with it.
+  (setq org-headline-card-base-theme
+        '((dpi . "300") (defaultMonospacedFontSize . "26") (padding . "40")
+          (roundCorner . "40") (shadowing . "false") (handwritten . "false")
+          (lineHeight . "1.4") (rectangleBorderThickness . "1") (titleFontSize . "32")
+          (contentFontSize . "26")))
+  ;; '((dpi . "300")                     ; Image resolution
+  ;;   (padding . "40")                  ; Padding
+  ;;   (roundCorner . "40")             ; Corner radius
+  ;;   (titleFontSize . "32")           ; Title font size
+  ;;   (contentFontSize . "26")))       ; Content font size
+  ;; Add a light purple theme
+  (setq org-headline-card-current-theme 'purple-light)
+  (add-to-list 'org-headline-card-themes
+               '(purple-light . ((defaultFontName . "Hahmlet")
+                                 (defaultFontSize . "16")
+                                 (backgroundColor . "#F8F5FF")
+                                 (rectangleBorderColor . "#E6E0F3")
+                                 (rectangleFontColor . "#2C2C2C")
+                                 (rectangleBackgroundColor . "#FDFAFF"))))
+  )
 
 ;;;; :tools biblio : citar
 

@@ -169,7 +169,7 @@ org-mode
  "#+END:" n)
 
 (d-meta-only
- "#+BEGIN: denote-links :regexp \"202502..T*" p
+ "#+BEGIN: denote-links :regexp \"" p
  "\" :excluded-dirs-regexp \"\\\\(bib\\\\|screenshot\\\\|journal\\\\|notes\\\\|docs\\\\|posts\\\\|ekg\\\\)\" :sort-by-component identifier :reverse-sort t :include-date t" n
  "#+END:" n)
 
