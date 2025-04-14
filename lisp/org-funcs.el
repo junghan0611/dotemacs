@@ -13,12 +13,12 @@
 
 ;;; Code:
 
-;;; fixing files at once
+;;;; fixing files at once
 
 ;; 매우 중요한 개념이다.
 ;; 인덴트, 이름, 포멧, 형식 등 한번에 일괄 수정하는 방법
 
-;;;; Indentation
+;;;;; Indentation
 
 ;; https://stackoverflow.com/questions/2551632/how-to-format-all-files-under-a-dir-in-emacs
 
@@ -65,9 +65,10 @@
     (save-buffer)
     (kill-buffer nil)))
 
-;;; my/org-store-link-id-optional for org-transclusion
+;;;; my/org-store-link-id-optional for org-transclusion
 
 ;; agzam-dot-spacemacs/layers/ag-org/funcs.el
+
 ;;;###autoload
 (defun my/org-store-link-id-optional (&optional arg)
   "Stores a link, reversing the value of `org-id-link-to-org-use-id'.
@@ -77,7 +78,7 @@ and if it is set to nil, then it would forcefully create the ID."
   (let ((org-id-link-to-org-use-id (not org-id-link-to-org-use-id)))
     (org-store-link arg :interactive)))
 
-;;; org-rich-yank : format paste
+;;;; org-rich-yank : format paste
 
 ;; https://github.com/unhammer/org-rich-yank If you want to change how the
 ;; source block or link is formatted, you can do so by setting
@@ -99,9 +100,9 @@ and if it is set to nil, then it would forcefully create the ID."
             link))
   (customize-set-variable 'org-rich-yank-format-paste #'my/org-rich-yank-format-paste))
 
-;;; doom : cae functions
+;;;; doom : cae functions
 
-;; ;;;###autoload
+;; ;;;;###autoload
 ;; (defun cae-org-rich-yank ()
 ;;   (interactive)
 ;;   (require 'org-rich-yank)
@@ -150,7 +151,7 @@ and if it is set to nil, then it would forcefully create the ID."
 ;;            (format "\n#+end_src\n"))))
 ;;     (insert paste)))
 
-;;;###autoload
+;;;;###autoload
 (defun cae-org-insert-checkbox-or-bracket (arg)
   (interactive "p")
   (if (and (= arg 1)
@@ -176,13 +177,13 @@ and if it is set to nil, then it would forcefully create the ID."
     (org-self-insert-command arg)))
 
 
-;;;###autoload
+;;;;###autoload
 (defun cae-org-insert-file-link ()
   "Insert a file link.  At the prompt, enter the filename."
   (interactive)
   (insert (format "[[%s]]" (org-link-complete-file))))
 
-;;;###autoload
+;;;;###autoload
 (defun cae-org-syntax-convert-keyword-case-to-lower ()
   "Convert all #+KEYWORDS to #+keywords."
   (interactive)
@@ -196,8 +197,8 @@ and if it is set to nil, then it would forcefully create the ID."
           (setq count (1+ count))))
       (message "Replaced %d occurances" count))))
 
-;;; eliies functions
-;;;; my/genfile-timestamp
+;;;; eliies functions
+;;;;; my/genfile-timestamp
 
 ;; 중국어 문장 부호를 인식하도록 문장 끝을 설정합니다. 채우기에서 마침표 뒤에 두
 ;; 개의 공백을 삽입할 필요가 없습니다.
@@ -324,7 +325,7 @@ and if it is set to nil, then it would forcefully create the ID."
     (copy-region-as-kill (point-min) (point-max))
     (message "buffer copied")))
 
-;;;; my/rename-file-and-buffer
+;;;;; my/rename-file-and-buffer
 
 ;; copy from http://stackoverflow.com/questions/384284/how-do-i-rename-an-open-file-in-emacs
 ;; http://emacsredux.com/blog/2013/05/04/rename-file-and-buffer/
@@ -355,7 +356,7 @@ and if it is set to nil, then it would forcefully create the ID."
   (interactive)
   (grep-find (concat grep-find-command (buffer-substring-no-properties (region-beginning) (region-end)))))
 
-;;;; my/open-external
+;;;;; my/open-external
 
 (defun my/open-external (&optional file)
   "Open the current file or dired marked files in external app.
@@ -385,7 +386,7 @@ copy from xah lee: http://ergoemacs.org/emacs/emacs_dired_open_file_in_ext_apps.
        ((string-equal system-type "cygwin")
         (mapc (lambda (path) (let ((process-connection-type nil)) (start-process "" nil "xdg-open" path)) ) flist))))))
 
-;;;; my/open-external-pdf
+;;;;; my/open-external-pdf
 
 (defun my/open-external-pdf ()
   (interactive)
@@ -394,10 +395,10 @@ copy from xah lee: http://ergoemacs.org/emacs/emacs_dired_open_file_in_ext_apps.
     (file-name-sans-extension (buffer-file-name))
     ".pdf")))
 
-;;; gr-functions
-;;;; DONT Dily Notes with org-journal
+;;;; gr-functions
+;;;;; DONT Dily Notes with org-journal
 
-;;;###autoload
+;;;;###autoload
 ;; (defun gr/daily-notes (p)
 ;;   "Pop up dailynotes.org."
 ;;   (interactive "P")
@@ -451,7 +452,7 @@ copy from xah lee: http://ergoemacs.org/emacs/emacs_dired_open_file_in_ext_apps.
 ;;   (org-journal-new-entry nil nil)
 ;;   (goto-char (point-max)))
 
-;;;; word count
+;;;;; word count
 
 (defun gr/word-count-subtree ()
   "Count words in org subtree at point."
@@ -574,7 +575,7 @@ copy from xah lee: http://ergoemacs.org/emacs/emacs_dired_open_file_in_ext_apps.
       (kill-new filename)
       (message "Copied buffer file name '%s' to the clipboard." filename))))
 
-;;;; capitalize, upcase, downcase dwim
+;;;;; capitalize, upcase, downcase dwim
 
 (defun title-case-region ()
   "Render string in region in title case."
@@ -642,7 +643,7 @@ URL: https://christiantietze.de/posts/2021/03/change-case-of-word-at-point/"
 
 
 
-;;;; convert docx to org
+;;;;; convert docx to org
 
 (defun gr/flush-properties-drawers ()
   (interactive)
@@ -667,7 +668,7 @@ Navigate to files in dired, mark files, and execute command."
                        'gr/flush-properties-drawers)
   )
 
-;;;; my/pandoc--convert-buffer-from-markdown-to-org-in-place
+;;;;; my/pandoc--convert-buffer-from-markdown-to-org-in-place
 
 ;; from cashpw
 (defun my/pandoc--convert-buffer-from-markdown-to-org-in-place ()
@@ -696,7 +697,7 @@ Navigate to files in dired, mark files, and execute command."
        " | sed -E '/^[[:space:]]*:/d'")))
     (org-mode)))
 
-;;;; "Better Return" edited
+;;;;; "Better Return" edited
 
 ;; a better return; inserts list item with RET instead of M-RET
 
@@ -803,11 +804,11 @@ Navigate to files in dired, mark files, and execute command."
 ;;      (t
 ;;       (org-return)))))
 
-;;; karthink-dotfiles-popper/lisp/utilities.el
+;;;; karthink-dotfiles-popper/lisp/utilities.el
 
-;;;; COUNT-WORDS-REGION: USING `while'
+;;;;; COUNT-WORDS-REGION: USING `while'
 
-;; ;;;###autoload
+;; ;;;;###autoload
 (defun my/count-words-region (beginning end)
   "Print number of words in the region."
   (interactive "r")
@@ -834,7 +835,7 @@ Navigate to files in dired, mark files, and execute command."
 ;; count words in region
 ;; (global-set-key (kbd "C-=") 'my/count-words-region)
 
-;; ;;;###autoload
+;; ;;;;###autoload
 (defun my/count-words-buffer ()
   "Print number of words in the region."
   ;; 1. Set up appropriate conditions.
@@ -852,9 +853,9 @@ Navigate to files in dired, mark files, and execute command."
             ((= 1 count) (message "1 word"))
             (t  (message  (format "%d words" count)))))))
 
-;;;; PRINT ASCII TABLE
+;;;;; PRINT ASCII TABLE
 
-;; ;;;###autoload
+;; ;;;;###autoload
 (defun ascii-table ()
   "Display basic ASCII table (0 thru 127)"
   (interactive)
@@ -872,9 +873,9 @@ Navigate to files in dired, mark files, and execute command."
                       (setq i (- i 96)))))
   (special-mode))
 
-;;;; INSERT FUNCTION DEFINITION AT POINT
+;;;;; INSERT FUNCTION DEFINITION AT POINT
 
-;; ;;;###autoload
+;; ;;;;###autoload
 (defun insert-definition-at-point ()
   "Function to find the definition of the defun at point and insert it there."
   (interactive)
@@ -897,19 +898,19 @@ Navigate to files in dired, mark files, and execute command."
   (beginning-of-defun))
 ;; (global-set-key (kbd "C-x C-M-y") 'insert-definition-at-point)
 
-;;; org funcs
+;;;; org funcs
 
 
-;;;; org-open-at-point-other-window
+;;;;; org-open-at-point-other-window
 
 ;; ohyecloudy-dot-doom/doom.d/config.org
-;;;###autoload
+;;;;###autoload
 (defun my/org-open-at-point-other-window ()
   (interactive)
   (let ((org-link-frame-setup (cons (cons 'file 'find-file-other-window) org-link-frame-setup)))
     (org-open-at-point)))
 
-;;;; repeated words
+;;;;; repeated words
 
 (defun my/the-the ()
   "Search forward for for a duplicated word."
@@ -926,7 +927,7 @@ Navigate to files in dired, mark files, and execute command."
 ;;   ;; Bind 'the-the' to  C-c \
 ;;   (bind-key "C-c \\" 'the-the)
 
-;;;; add-newlines-between-paragraphs
+;;;;; add-newlines-between-paragraphs
 
 (defun my/add-newlines-between-paragraphs ()
   (interactive)
@@ -936,9 +937,9 @@ Navigate to files in dired, mark files, and execute command."
       (move-end-of-line nil)
       (newline)
       (next-line))))
-;;;; org-capture and org-id
+;;;;; org-capture and org-id
 
-;;;;; my/org-insert-magic-link
+;;;;;; my/org-insert-magic-link
 
 (defun my/org-insert-magic-link (url)
   "Auto create org links to Wikipedia URL."
@@ -951,7 +952,7 @@ Navigate to files in dired, mark files, and execute command."
      (t (error "I have no idea what to do with this")))
     (org-insert-link nil url title)))
 
-;;;;; my/org-capture-goto-link
+;;;;;; my/org-capture-goto-link
 
 ;; /home/junghan/.emacs.tshu/lisp/lang-org.el
 (defun my/org-capture-goto-link ()
@@ -973,7 +974,7 @@ Navigate to files in dired, mark files, and execute command."
         (insert "[[" link "]]\n")
         (point)))))
 
-;;;;; my/get-id-to-clipboard
+;;;;;; my/get-id-to-clipboard
 
 (defun my/get-id-to-clipboard() "Copy an ID link with the
   headline to killring, if no ID is there then create a new unique
@@ -996,7 +997,7 @@ Navigate to files in dired, mark files, and execute command."
 ;; (let ((map global-map))
 ;;     (define-key map (kbd "C-c j g") 'my/get-id-to-clipboard))
 
-;;;; split and indirect orgtree
+;;;;; split and indirect orgtree
 
 ;; copy from writers-dot-spacemaccs
 (defun my/split-and-indirect-orgtree ()
@@ -1012,14 +1013,14 @@ Navigate to files in dired, mark files, and execute command."
   (kill-this-buffer)
   (delete-window))
 
-;;;; org-toggle-emphasis-markers
+;;;;; org-toggle-emphasis-markers
 
 (defun my/org-toggle-emphasis-markers ()
   (interactive)
   (setq org-hide-emphasis-markers (not org-hide-emphasis-markers))
   (font-lock-fontify-buffer :interactively))
 
-;;;; align-comments
+;;;;; align-comments
 
 (defun my/align-comments (beginning end)
   "Align comments in region."
@@ -1027,14 +1028,7 @@ Navigate to files in dired, mark files, and execute command."
   (align-regexp beginning end (concat "\\(\\s-*\\)"
                                       (regexp-quote comment-start)) nil 2))
 
-;;;; indent-buffer
-
-(defun my/indent-buffer ()
-  "Indent buffer."
-  (interactive)
-  (indent-region (point-min) (point-max)))
-
-;;;; comment-or-uncomment-region
+;;;;; comment-or-uncomment-region
 
 (defun my/comment-or-uncomment-region ()
   "Comment or uncomment region with just a character (e.g. '/'). If a region is
@@ -1044,15 +1038,22 @@ active call comment-or-uncomment-region, otherwise just insert the given char."
                           'comment-or-uncomment-region
                         'self-insert-command)))
 
-;;;; org-indent-src-block
+;;;;; indent-buffer
 
-;; (defun my/org-modern-indent-src-block ()
-;;   (interactive)
-;;   (org-edit-special)
-;;   (my/indent-buffer)
-;;   (org-edit-src-exit))
+(defun my/indent-buffer ()
+  "Indent buffer."
+  (interactive)
+  (indent-region (point-min) (point-max)))
 
-;;;; org-sort-by-priority
+;;;;; org-indent-src-block
+
+(defun my/org-indent-src-block ()
+  (interactive)
+  (org-edit-special)
+  (my/indent-buffer)
+  (org-edit-src-exit))
+
+;;;;; org-sort-by-priority
 
 ;; (defun my/org-modern-sort-by-priority ()
 ;;   "Sort entries in level=2 by priority."
@@ -1063,7 +1064,7 @@ active call comment-or-uncomment-region, otherwise just insert the given char."
 ;;                    "LEVEL=1")
 ;;   (org-set-startup-visibility))
 
-;;;; org-delete-link
+;;;;; org-delete-link
 
 (defun org-delete-link ()
   "Remove the link part of an org-mode link at point and keep
@@ -1080,14 +1081,14 @@ active call comment-or-uncomment-region, otherwise just insert the given char."
             (delete-region link-begin link-end)
             (insert (concat content " "))))))))
 
-;;;; org-insert-file-link
+;;;;; org-insert-file-link
 
 (defun org-insert-file-link ()
   "Insert a file link.  At the prompt, enter the filename."
   (interactive)
   (insert (format "[[%s]]" (org-link-complete-file))))
 
-;;;; org-random-heading
+;;;;; org-random-heading
 
 (defun my/org-random-heading ()
   "Jump to a random org heading in the current org file."
@@ -1100,7 +1101,7 @@ active call comment-or-uncomment-region, otherwise just insert the given char."
       (goto-char (nth (random (length headings)) headings))
       (org-reveal))))
 
-;;;; org-insert-link-dwim
+;;;;; org-insert-link-dwim
 
 (defun org-insert-link-dwim ()
   "Like `org-insert-link' but with personal dwim preferences."
@@ -1127,7 +1128,7 @@ active call comment-or-uncomment-region, otherwise just insert the given char."
           (t
            (call-interactively 'org-insert-link)))))
 
-;;;; org-show-level
+;;;;; org-show-level
 
 (defun org-show-level-1 ()
   (interactive)
@@ -1145,7 +1146,7 @@ active call comment-or-uncomment-region, otherwise just insert the given char."
   (interactive)
   (org-content 4))
 
-;;;; show-duplicate-lines
+;;;;; show-duplicate-lines
 
 (defun show-duplicate-lines ()
   "Display all duplicate lines in the current buffer."
@@ -1163,7 +1164,7 @@ active call comment-or-uncomment-region, otherwise just insert the given char."
             (princ (concat line "\n"))))
       (message "No duplicate lines found."))))
 
-;;;; get/insert heading-title / category
+;;;;; get/insert heading-title / category
 
 ;; (defun cc-todo-item () ; from choi
 ;;   (interactive)
@@ -1204,7 +1205,7 @@ active call comment-or-uncomment-region, otherwise just insert the given char."
               )))
   )
 
-;;;; org-narrow-to-item
+;;;;; org-narrow-to-item
 
 ;; https://emacs-china.org/t/org-mode-narrow-to-sublist/24682/5
 (defun my/org-narrow-to-item ()
@@ -1216,7 +1217,7 @@ Throw an error when not in a list."
      (progn (org-beginning-of-item) (point))
      (progn (org-end-of-item) (1- (point))))))
 
-;;;; my/view-text-file-as-info-manual
+;;;;; my/view-text-file-as-info-manual
 
 ;; View ‘info’, ‘texi’, ‘org’ and ‘md’ files as ‘Info’ manual
 (defun my/view-text-file-as-info-manual ()
@@ -1242,7 +1243,7 @@ Throw an error when not in a list."
       (_ (user-error "Don't know how to convert `%s' to an `info' file"
                      (file-name-extension (buffer-file-name)))))))
 
-;;;; my/org-outdent-or-promote
+;;;;; my/org-outdent-or-promote
 
 (defun my/org-outdent-or-promote ()
   "Run either org-outdent-item-tree or org-promote-subtree,
@@ -1268,7 +1269,7 @@ depending on which one is appropriate based on the context."
    ;; Otherwise, do nothing and show a message
    (t (message "Not at an item or a headline"))))
 
-;;;; my/unfill-paragraph-or-region
+;;;;; my/unfill-paragraph-or-region
 
 ;; unfill paragraph: the opposite of fill-paragraph
 (defun my/unfill-paragraph-or-region (&optional region)
@@ -1304,7 +1305,7 @@ depending on which one is appropriate based on the context."
           (unfill-region-keep-formatting pos next-pos))
         (setq pos next-pos)))))
 
-;;;; my/region-to-numbered-list
+;;;;; my/region-to-numbered-list
 
 (defun my/region-to-numbered-list (start end)
   "Turn a region into a numbered list."
@@ -1319,7 +1320,7 @@ depending on which one is appropriate based on the context."
     (delete-region start end)
     (insert (mapconcat 'identity numbered-strings "\n"))))
 
-;;;; my/extract-hyperlinks-from-file
+;;;;; my/extract-hyperlinks-from-file
 
 (defun my/extract-hyperlinks-from-file (file)
   "Extracts all hyperlinks from the text file FILE."
@@ -1333,7 +1334,7 @@ depending on which one is appropriate based on the context."
     (message "Hyperlinks extracted: %s" hyperlinks)
     hyperlinks))
 
-;;;; my/extract-hyperlinks-from-buffer
+;;;;; my/extract-hyperlinks-from-buffer
 
 (defun my/extract-hyperlinks-from-buffer ()
   "Extracts all hyperlinks from the current buffer."
@@ -1346,7 +1347,7 @@ depending on which one is appropriate based on the context."
     (message "Hyperlinks extracted: %s" hyperlinks)
     hyperlinks))
 
-;;;; Capitalize level 1 headings use correct rules of capitalizing titles
+;;;;; Capitalize level 1 headings use correct rules of capitalizing titles
 
 (defun my/org-titlecase-level-1 ()
   "Convert all Level 1 org-mode headings to title case."
@@ -1356,14 +1357,14 @@ depending on which one is appropriate based on the context."
     (while (re-search-forward "^\\* " nil t)
       (titlecase-line))))
 
-;;;; my/iloveyou
+;;;;; my/iloveyou
 
 (defun my/iloveyou (args)
   (interactive "P")
   (message "%s" (propertize "I love you!" 'Face '(:foreground "red")))
   )
 
-;;;; my/daily-log
+;;;;; my/daily-log
 
 (defun my/daily-log ()
   "Insert a new daily log entry with the current date."
@@ -1384,31 +1385,31 @@ depending on which one is appropriate based on the context."
   (insert "  - Task 1\n")
   (insert "  - Task 2\n"))
 
-;;;; my/consult-org-screenshot
+;;;;; my/consult-org-screenshot
 
-;;;###autoload
+;;;;###autoload
 (defun my/consult-org-screenshot ()
   (interactive)
   (consult-fd org-screenshot-path))
 
-;;;; org-procratinate
+;;;;; org-procratinate
 
-;;;###autoload
+;;;;###autoload
 (defun org-procrastinate ()
   "Set the scheduled date on an Org agenda item to tomorrow."
   (interactive)
   (org-agenda-schedule nil "+1d"))
 
-;;;; add-to-org-user-agenda-files
+;;;;; add-to-org-user-agenda-files
 
 ;; (setq org-agenda-files (append org-user-agenda-files org-agenda-files))
-;;;###autoload
+;;;;###autoload
 (defun add-to-org-user-agenda-files (file)
   "다음 파일을 org-agenda-files에 추가합니다: FILE"
   (unless (member file org-user-agenda-files)
     (add-to-list 'org-user-agenda-files file)))
 
-;;; pkm func
+;;;; pkm func
 
 ;; /injae-dotfiles/module/+util.el
 ;; text random
@@ -1614,7 +1615,7 @@ depending on which one is appropriate based on the context."
     (shell-command-to-string "find ~/org/oldseq/pages -type f | shuf -n 1")
     0 -1)))
 
-;;; consult rg search
+;;;; consult rg search
 
 ;; Full text search the whole org directory
 (defun my/consult-ripgrep-org-directory ()
@@ -1636,11 +1637,11 @@ depending on which one is appropriate based on the context."
   (let ((consult-ripgrep-command "rg --ignore-case --type org --type md --line-buffered --color=always --max-columns=500 --no-heading --line-number . -e ARG OPTS"))
     (consult-ripgrep "~/nosync/clone-notes/ko/")))
 
-;;; Logos focus editing toggle
+;;;; Logos focus editing toggle
 
 (progn
 
-  ;;;###autoload
+  ;;;;###autoload
   (defun my/logos-focus-editing-on ()
     ;; hide current global centaur-tabs
     ;; (centaur-tabs-local-mode t)
@@ -1666,7 +1667,7 @@ depending on which one is appropriate based on the context."
     (diff-hl-mode -1)
     )
 
-  ;;;###autoload
+  ;;;;###autoload
   (defun my/logos-focus-editing-off ()
     (logos-focus-mode -1)
     ;; (centered-cursor-mode -1)
@@ -1692,7 +1693,7 @@ depending on which one is appropriate based on the context."
     ;; (centaur-tabs-local-mode -1)
     )
 
-  ;;;###autoload
+  ;;;;###autoload
   (defun my/logos-focus-editing-toggle ()
     (interactive)
     (if (eq logos-focus-mode t)
@@ -1700,7 +1701,7 @@ depending on which one is appropriate based on the context."
       (my/logos-focus-editing-on)))
   )
 
-;;; eww-to-org
+;;;; eww-to-org
 
 ;; Link: https://jao.io/blog/eww-to-org.html
 
@@ -1754,7 +1755,7 @@ If DEST, a buffer, is provided, insert the markup there."
     (pop-to-buffer buff)
     (goto-char (point-min))))
 
-;;; org-ql
+;;;; shuffle-todo with org-ql - sacha
 
 ;; https://sachachua.com/blog/2024/10/shuffling-my-org-mode-unscheduled-tasks
 (when (locate-library "org-ql")
@@ -1787,7 +1788,44 @@ If DEST, a buffer, is provided, insert the markup there."
       :sort 'random))
   )
 
-;;; provide
+;;;; list item move to DESTINATION - sacha
+
+(defun my/org-move-line-to-destination ()
+  "Moves the current list item to DESTINATION in the current buffer.
+If no DESTINATION is found, move it to the end of the list
+and indent it one level."
+  (interactive)
+  (save-window-excursion
+    (save-excursion
+      (let ((string
+             (buffer-substring-no-properties
+              (line-beginning-position) (line-end-position)))
+            (case-fold-search nil)
+            found)
+        (delete-region (line-beginning-position) (1+ (line-end-position)))
+        (save-excursion
+          (goto-char (point-min))
+          (when (re-search-forward "DESTINATION" nil t)
+            (insert "\n" (make-string (- (match-beginning 0) (line-beginning-position)) ?\ ) (s-trim string))
+            (setq found t)))
+        (unless found
+          (org-end-of-item-list)
+          (insert string "\n"))))))
+;; Moving lines around:1 ends here
+
+;; [[file:Sacha.org::#destination][Moving lines around:2]]
+(defun my/org-move-line-to-end-of-list ()
+  "Move the current list item to the end of the list."
+  (interactive)
+  (save-excursion
+    (let ((string (buffer-substring-no-properties (line-beginning-position)
+                                                  (line-end-position))))
+      (delete-region (line-beginning-position) (1+ (line-end-position)))
+      (org-end-of-item-list)
+      (insert string))))
+;; Moving lines around:2 ends here
+
+;;;; provide
 
 (provide 'org-funcs)
 

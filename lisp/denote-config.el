@@ -459,25 +459,43 @@
 
 ;; mapcar를 사용하여 각 디렉토리에 함수 a 적용
 ;; (my/update-export-garden "~/org/notes/")
-(defun my/update-export-garden (dir)
-  (interactive)
-  (message "path %s:" dir)
-  (message "update dblocks")
-  (my/org-update-all-dblocks-on-directory dir)
-  (message "save-org-buffers")
-  (org-save-all-org-buffers)
-  (message "hugo-export-diectory")
-  (my/org-hugo-export-directory dir)
-  (message "kill-all-buffers")
-  ;; (doom/kill-all-buffers) ; never
-  (my/kill-all-buffers-except-toolbox)
-  (garbage-collect)
-  (setq which-key-replacement-alist nil)
-  )
+(progn
 
-(defun my/update-export-garden-all ()
-  (interactive)
-  (mapcar 'my/update-export-garden garden-directory-lists)
+  (defun my/update-dblock-garden (dir)
+    (interactive)
+    (message "path %s:" dir)
+    (message "update dblocks")
+    (my/org-update-all-dblocks-on-directory dir)
+    (message "save-org-buffers")
+    (org-save-all-org-buffers)
+    (setq which-key-replacement-alist nil)
+    )
+
+  (defun my/update-export-garden (dir)
+    (interactive)
+    (message "path %s:" dir)
+    ;; (message "update dblocks")
+    ;; (my/org-update-all-dblocks-on-directory dir)
+    ;; (message "save-org-buffers")
+    ;; (org-save-all-org-buffers)
+    (message "hugo-export-diectory")
+    (my/org-hugo-export-directory dir)
+    (message "kill-all-buffers")
+    ;; (doom/kill-all-buffers) ; never
+    (my/kill-all-buffers-except-toolbox)
+    (garbage-collect)
+    (setq which-key-replacement-alist nil)
+    )
+
+  (defun my/update-dblock-garden-all ()
+    (interactive)
+    (mapcar 'my/update-dblock-garden garden-directory-lists)
+    )
+
+  (defun my/update-export-garden-all ()
+    (interactive)
+    (mapcar 'my/update-export-garden garden-directory-lists)
+    )
   )
 
 ;;; provide

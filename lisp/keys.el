@@ -2188,7 +2188,7 @@ window."
 ;; (global-set-key (kbd "C-c A") #'consult-org-agenda)
 ;; (global-set-key (kbd "C-c N") #'my/consult-org-all)
 
-(global-set-key (kbd "M-i") ews-map)
+;; (global-set-key (kbd "M-i") ews-map)
 
 (keymap-set global-map "C-c n" ews-denote-map)
 (keymap-set global-map "M-e" ews-denote-map) ; ews-denote-map

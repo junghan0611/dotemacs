@@ -26,6 +26,22 @@
   (let ((filename (denote-file-prompt)))
     (find-file filename)))
 
+;;;; my/refile-to-denote-file
+
+;; 2025-04-14
+(defun my/refile-heading-to-denote-file (arg)
+  "Refile current heading to a particular denote file.
+If prefix ARG, move instead of copy.
+Adds refile metadata to the heading."
+  (interactive "P")
+  (let ((selected-file (denote-file-prompt)))
+    (when selected-file
+      (+org/refile-to-current-file
+       (not arg) ; Invert ARG for org-refile: nil means move, non-nil means copy
+       selected-file)
+      (org-set-property "REFILED" (format-time-string "%Y-%m-%d %H:%M:%S"))
+      (org-set-property "REFILED_TO" selected-file))))
+
 ;;;; my/denote-grep
 
 ;;;###autoload

@@ -52,11 +52,22 @@
 
 ;;; consult - consult-omni consult-gh
 
-(package! consult-omni :recipe (:host github :repo "armindarvish/consult-omni" :files (:defaults "sources/*.el")))
+;; (package! consult-omni :recipe (:host github :repo "armindarvish/consult-omni" :files (:defaults "sources/*.el")))
+
+(package! consult :pin "03fa8f6b7482eab1dee85d32ab604f0b7312cf82") ; 2.0 stable
+;; "93cf368a676da1072f141e298908be05e2968f60" ; 1.9 stable
+(package! consult-omni :recipe (:host github :repo "armindarvish/consult-omni" :files (:defaults "sources/*.el")) :pin "f0c5f07b9ffe25d0deca42b650f6e0c1c85e9759") ;; Jan 4, 2025
+(package! consult-mu :recipe (:host github :repo "armindarvish/consult-mu" :files (:defaults "extras/*.el")))
+
+(package! consult-omni :recipe
+  (:host github :repo "armindarvish/consult-omni"
+   :branch "develop"
+   :files (:defaults "sources/*.el"))
+  :pin "017ba1b4e13c5515b88f588d22f0bfea83fb9b3e")
 ;; :pin "d0a24058bf0dda823e5f1efcae5da7dc0efe6bda" ;; Feb 19, 2025
+
 ;; (package! consult-omni)
-(package! consult-gh :recipe (:host github :repo "armindarvish/consult-gh"
-                              :files ("*")))
+(package! consult-gh :recipe (:host github :repo "armindarvish/consult-gh" :files ("*")))
 
 ;;; DONT NEVER use built-in on emacs 30
 
@@ -471,6 +482,10 @@
 (package! subed :recipe (:host github :repo "sachac/subed" :files ("subed/*.el")))
 ;; (package! dwim-shell-command)
 ;; (package! bm) ; visible bookmark
+
+(package! hnreader :recipe (:host github :repo "agzam/emacs-hnreader" :branch "major-mode"))
+(package! consult-hn :recipe (:host github :repo "agzam/consult-hn"))
+(package! reddigg :recipe (:host github :repo "agzam/emacs-reddigg" :branch "major-mode"))
 
 ;; filter marked text out
 (package! org-marked-text-overview :recipe (:host github :repo "lijigang/org-marked-text-overview"))

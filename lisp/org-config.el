@@ -513,15 +513,16 @@
 ;; https://emacs.stackexchange.com/questions/37526/add-note-to-clock-entry-after-clocking-out
 ;; (setq org-log-note-clock-out t)
 
-;;;; DONT 4 priorities to model Eisenhower's matrix.
+;;;; 4 priorities to model Eisenhower's matrix.
 
+;; 2025-04-14 todoist style
 ;; 4 priorities to model Eisenhower's matrix.
 ;; - [#A] means +important +urgent
 ;; - [#B] means +important -urgent
 ;; - [#C] means -important +urgent
 ;; - [#D] means -important -urgent
-;; (setq org-priority-default 68
-;;       org-priority-lowest 68)
+(setq org-priority-default 68 ; 68 #D
+      org-priority-lowest 68)
 
 ;;;; diary-file
 
@@ -580,8 +581,8 @@
         ("STYLE_ALL" . "habit"))))
 
 ;; Include the file name into the path in refile target.
-;; (setq org-refile-use-outline-path 'file) ; default nil
-;; (setq org-outline-path-complete-in-steps nil) ; default t
+;; (setq org-refile-use-outline-path 'file) ; default 'file
+;; (setq org-outline-path-complete-in-steps nil) ; default nil
 
 ;; (setq org-refile-targets
 ;;       `((nil :maxlevel . 2)

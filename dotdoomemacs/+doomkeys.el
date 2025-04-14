@@ -1908,9 +1908,6 @@
               "n" #'org-journal-search-next
               "p" #'org-journal-search-prev)))
 
-
-
-
 ;;;; embark
 
 ;; ~/sync/man/dotsamples/doom/agzam-dot-doom/modules/custom/completion/config.el
@@ -1929,8 +1926,9 @@
   ;;             :around #'embark-hide-which-key-indicator)
   (map!
    (:map embark-org-link-map
-    :desc "open-at-point-other-window" "o" #'my/org-open-at-point-other-window))
-
+    :desc "open-at-point-other-window" "o" #'my/org-open-at-point-other-window)
+   (:map embark-org-src-block-map
+         "=" #'my/org-indent-src-block))
 
   (map!
    :after embark
