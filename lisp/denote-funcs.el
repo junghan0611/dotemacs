@@ -1,8 +1,8 @@
 ;;; lisp/denote-funcs.el -*- lexical-binding: t; -*-
 
 
-;;; consult my/denote-find-file, my/denote-grep
-;;;; my/denote-find-file
+;;;; consult my/denote-find-file, my/denote-grep
+;;;;; my/denote-find-file
 
 ;; sync/man/dotsamples/vanilla/damiencassou-dotfiles-meow/init.el
 ;; (defun my/denote-find-file (filename)
@@ -16,7 +16,7 @@
 ;;      ))
 ;;   (find-file filename))
 
-;;;###autoload
+;;;;###autoload
 (defun my/denote-find-file ()
   "Open a denote file. Interactively ask which file to open with completion."
   (interactive)
@@ -26,7 +26,7 @@
   (let ((filename (denote-file-prompt)))
     (find-file filename)))
 
-;;;; my/refile-to-denote-file
+;;;;; my/refile-to-denote-file
 
 ;; 2025-04-14
 (defun my/refile-heading-to-denote-file (arg)
@@ -44,16 +44,16 @@ Adds refile metadata to the heading."
       (org-set-property "REFILED" (format-time-string "%Y-%m-%d %H:%M:%S"))
       (org-set-property "REFILED_TO" selected-file))))
 
-;;;; my/denote-grep
+;;;;; my/denote-grep
 
-;;;###autoload
+;;;;###autoload
 (defun my/denote-grep ()
   "Search within my notes."
   (interactive)
   (consult-ripgrep denote-directory))
 ;; (consult-ripgrep denote-directory "") ; 무슨 차이?
 
-;;; TODO my/denote-org-dblock-insert
+;;;; TODO my/denote-org-dblock-insert
 
 ;; 2025-01-21 include-date t and keybindings
 
@@ -127,18 +127,18 @@ Adds refile metadata to the heading."
 ;;     (org-update-dblock)
 ;;     ))
 
-;;; store link to heading
+;;;; store link to heading
 
 ;; should be denote-org-store-link-to-heading nil - default t
-;;;###autoload
+;;;;###autoload
 (defun my/denote-org-store-link-to-heading (&optional arg)
   (interactive "P")
   (let ((denote-org-store-link-to-heading
          (not denote-org-store-link-to-heading)))
     (org-store-link arg :interactive)))
 
-;;; Split and Capture
-;;;; 13.3. Split an Org subtree into its own note
+;;;; Split and Capture
+;;;;; 13.3. Split an Org subtree into its own note
 
 
 (defun my/denote-org-extract-subtree (&optional silo)
@@ -177,8 +177,8 @@ Delete the original subtree."
         (insert text))
     (user-error "No subtree to extract; aborting")))
 
-;;; TODO signature - replaced with 'denote-sequence'
-;;;; DONT efls/denote-signature-buffer
+;;;; TODO signature - replaced with 'denote-sequence'
+;;;;; DONT efls/denote-signature-buffer
 
 ;; (defun efls/denote-signature-buffer ()
 ;;   (interactive)
@@ -192,8 +192,8 @@ Delete the original subtree."
 ;;   (denote-dired-mode +1)
 ;;   (auto-revert-mode -1))
 
-;;; Dired integration
-;;;; 13.5. Use =dired-virtual-mode= for arbitrary file listings
+;;;; Dired integration
+;;;;; 13.5. Use =dired-virtual-mode= for arbitrary file listings
 
 (defcustom prot-eshell-output-buffer "*Exported Eshell output*"
   "Name of buffer with the last output of Eshell command.
@@ -216,7 +216,7 @@ and after it."
     (when (derived-mode-p 'eshell-mode)
       (buffer-substring-no-properties beg (eshell-end-of-output)))))
 
-;;;###autoload
+;;;;###autoload
 (defun prot-eshell-export ()
   "Produce a buffer with output of the last Eshell command.
 If `prot-eshell-output-buffer' does not exist, create it.  Else
@@ -233,11 +233,11 @@ append to it, while separating multiple outputs with
         (insert eshell-output)
         (switch-to-buffer-other-window (current-buffer))))))
 
-;;;; my/denote-link-dired-marked-notes
+;;;;; my/denote-link-dired-marked-notes
 
 ;; dired denote integration
 ;; (setq denote-link--prepare-links-format "- %s\n")
-;;;###autoload
+;;;;###autoload
 (defun my/denote-link-dired-marked-notes (files buffer &optional ID-ONLY)
   (interactive
    (list
@@ -268,15 +268,15 @@ append to it, while separating multiple outputs with
       (insert "\n")
       )))
 
-;;;; my/open-dired-denote-directory
+;;;;; my/open-dired-denote-directory
 
 (defun my/open-dired-denote-directory ()
   "Open dired at denote-directory"
   (interactive)
   (dired denote-directory))
 
-;;; find grep attach info
-;;;; my/denote-random-note
+;;;; find grep attach info
+;;;;; my/denote-random-note
 
 (defun my/denote-random-note-from-directory (directory)
   "Open a random denote from a specific denote directory."
@@ -290,7 +290,7 @@ append to it, while separating multiple outputs with
   (interactive)
   (my/denote-random-note-from-directory denote-directory))
 
-;;;; my/denote-attach
+;;;;; my/denote-attach
 
 (defun my/denote-attach (file &optional description)
   "Save FILE in .attach directory and add a link in current buffer.
@@ -309,7 +309,7 @@ The link will contain DESCRIPTION as text."
       (when (yes-or-no-p "Delete the initial file? ")
         (delete-file file t)))))
 
-;;;; my/denote-info
+;;;;; my/denote-info
 
 ;; ;; ###autoload
 (defun my/denote-info ()
@@ -338,8 +338,8 @@ The link will contain DESCRIPTION as text."
 ;;     (insert "#+TITLE: " meet "\n")
 ;;     (tempel-insert 'meeting)))
 
-;;; Header
-;;;; customize header
+;;;; Header
+;;;;; customize header
 
 (defun mho-insert-denote-identifier ()
   "Get the file's creation date and time and u se it to create a denote identifier."
@@ -350,7 +350,7 @@ The link will contain DESCRIPTION as text."
   "Get the file's creation date and time and use it to insert the date using an org format."
   (interactive)
   (insert (format-time-string "#+date: [%Y-%m-%d %a %H:%M]" (nth 5 (file-attributes buffer-file-name)))))
-;;;; org-create-id-by-denote-identifier at-once
+;;;;; org-create-id-by-denote-identifier at-once
 
 (defun my/denote-identifier-retrieve ()
   (let* ((file (or (buffer-file-name) (dired-get-filename))))
@@ -370,7 +370,7 @@ The link will contain DESCRIPTION as text."
     (save-buffer)
     (kill-buffer nil)))
 
-;;;; my/org-find-time-file-property
+;;;;; my/org-find-time-file-property
 
 ;; https://github.com/zaeph/.emacs.d/blob/615ac37be6bd78c37e967fdb43d28897a4116583/lisp/zp-org.el#L194
 (defun my/org-find-time-file-property (property &optional anywhere)
@@ -386,7 +386,7 @@ When ANYWHERE is non-nil, search beyond the preamble."
                                t)
         (point)))))
 
-;;;; org-id-headlines : custom_id
+;;;;; org-id-headlines : custom_id
 
 ;; https://writequit.org/articles/emacs-org-mode-generate-ids.html
 
@@ -419,32 +419,32 @@ CUSTOM_ID of the entry is returned."
 ;; And add a helper function that's interactive to add custom ids to all headlines in the buffer if they don't already have one.
 ;; 또한 버퍼의 모든 헤드라인에 사용자 지정 아이디가 없는 경우 대화형 도우미 기능을 추가하여 사용자 지정 아이디를 추가할 수 있습니다.
 
-;;;###autoload
+;;;;###autoload
 (defun prot-org-id-headlines ()
   "Add missing CUSTOM_ID to all headlines in current file."
   (interactive)
   (org-map-entries
    (lambda () (prot-org--id-get (point) t))))
 
-;;;###autoload
+;;;;###autoload
 (defun prot-org-id-headline ()
   "Add missing CUSTOM_ID to headline at point."
   (interactive)
   (prot-org--id-get (point) t))
 
-;;;###autoload
+;;;;###autoload
 (defun prot-org-ox-html ()
   "Streamline HTML export."
   (interactive)
   (org-html-export-as-html nil nil nil t nil))
 
-;;;###autoload
+;;;;###autoload
 (defun prot-org-ox-texinfo ()
   "Streamline Info export."
   (interactive)
   (org-texinfo-export-to-info))
 
-;;; Sort
+;;;; Sort
 
 (progn
   ;; (denote-explore-random-note)
@@ -466,9 +466,9 @@ CUSTOM_ID of the entry is returned."
 
   )
 
-;;;; DONT denote-dired - sort
+;;;;; DONT denote-dired - sort
 
-;; ;;;###autoload
+;; ;;;;###autoload
 ;; (defun my/goto-denote-dired (&optional _)
 ;;   (interactive)
 ;;   (let ((buf (get-buffer "*denote-dired*")))
@@ -604,12 +604,12 @@ CUSTOM_ID of the entry is returned."
 ;;   (interactive)
 ;;   (format "\\(==[0-9]-\\)"))
 
-;;; EWS : Emacs Writing Studio
+;;;; EWS : Emacs Writing Studio
 
 ;; Series of convenience functions for Emacs Writing Studio
 ;; https://lucidmanager.org/tags/emacs
 
-;;;; ews-denote-assign-para
+;;;;; ews-denote-assign-para
 
 ;; List of keywords to use for implementing the PARA method with Denote.
 (setq ews-denote-para-keywords '("projects" "areas" "resources" "archives"))
@@ -632,7 +632,7 @@ CUSTOM_ID of the entry is returned."
        (denote-retrieve-filename-signature file))
     (message "Current buffer is not a Denote file.")))
 
-;;;; ews-dired-narrow : Narrow Dired to Regular Expression
+;;;;; ews-dired-narrow : Narrow Dired to Regular Expression
 
 (defun ews-dired-narrow (selection)
   "Mark files in denote-firectory using a regular expression."
@@ -642,7 +642,7 @@ CUSTOM_ID of the entry is returned."
   (dired-toggle-marks)
   (dired-do-kill-lines))
 
-;;;; ews-olivetti
+;;;;; ews-olivetti
 
 (defun ews-olivetti ()
   "Distraction-free writing environment enhancing Olivetti mode."
@@ -659,9 +659,9 @@ CUSTOM_ID of the entry is returned."
       (olivetti-mode 0)
       (text-scale-set 0))))
 
-;;;; ews-org-insert-notes-drawer
+;;;;; ews-org-insert-notes-drawer
 
-;;;###autoload
+;;;;###autoload
 (defun ews-org-insert-notes-drawer ()
   "Generate or open a NOTES drawer under the current heading.
 If a drawer exists for this section, a new line is created at the end of the
@@ -680,9 +680,9 @@ current note."
     (org-insert-drawer nil "NOTES"))
   (org-unlogged-message "Press <C-u C-SPACE> to return to the previous position."))
 
-;;;; ews-org-count-words
+;;;;; ews-org-count-words
 
-;;;###autoload
+;;;;###autoload
 (defun ews-org-count-words ()
   "Add word count to each heading property drawer in an Org mode buffer."
   (interactive)
@@ -693,9 +693,9 @@ current note."
             (word-count (count-words start end)))
        (org-set-property "WORDCOUNT" (number-to-string word-count))))))
 
-;;;; ews-org-insert-screenshot
+;;;;; ews-org-insert-screenshot
 
-;;;###autoload
+;;;;###autoload
 (defun ews-org-insert-screenshot ()
   "Take a screenshot with ImageMagick and insert as an Org mode link."
   (interactive)
@@ -707,8 +707,82 @@ current note."
     (insert (format "[[file:%s]]" filename))
     (org-redisplay-inline-images)))
 
-;;; Notused
-;;;; my/org-set-time-file-property
+;;;; Update Link Descriptions
+
+;; 2025-04-15 krisbalintona-dotfiles-zettels/lisp/krisb-denote-ext.el
+
+(defun my/denote-update-link-descriptions (confirmp)
+  "Recreate denote link descriptions in the current buffer.
+If called with CONFIMP, then prompt user to confirm a replacement. When
+interactively called, CONFIRMP is non-nil by default, flipping the value
+with `prefix-arg'."
+  (interactive (list (not current-prefix-arg)))
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward (denote-org--get-link-type-regexp 'denote) nil :no-error)
+      (condition-case err
+          (save-match-data
+            (let* ((link-beg (match-beginning 0))
+                   (link-end (match-end 0))
+                   (s (match-string-no-properties 0))
+                   (link (with-temp-buffer
+                           (let ((org-inhibit-startup nil))
+                             (insert s)
+                             (org-mode)
+                             (goto-char (point-min))
+                             (org-element-link-parser))))
+                   (type (org-element-property :type link))
+                   (path (org-element-property :path link))
+                   (file (denote-get-path-by-id (car (string-split path "::"))))
+                   (heading-custom-id (cadr (string-split path "::")))
+                   (new-link-text
+                    ;; TODO 2024-03-04: This is a brittle way to create the
+                    ;; link. Changes to Denote might break this. Avoid that.
+                    (if (and denote-org-store-link-to-heading heading-custom-id)
+                        (format "[[denote:%s::#%s][%s]]"
+                                (denote-retrieve-filename-identifier file)
+                                (string-remove-prefix "#" heading-custom-id)
+                                (concat (denote--link-get-description file)
+                                        "::"
+                                        (save-excursion
+                                          (with-current-buffer (find-file-noselect file)
+                                            (org-link-search heading-custom-id)
+                                            (org-link-display-format
+                                             (denote-link-ol-get-heading))))))
+                      (format "[[denote:%s][%s]]"
+                              (denote-retrieve-filename-identifier file)
+                              (denote--link-get-description file))))
+                   (current-link-text (buffer-substring link-beg link-end)))
+              (when (and (not (string= (substring-no-properties current-link-text) new-link-text))
+                         (or (not confirmp)
+                             (yes-or-no-p (concat "Replace this link? " current-link-text))))
+                (goto-char link-beg)
+                (delete-region link-beg link-end)
+                (insert new-link-text))))
+        (error (message "[krisb-denote-update-link-descriptions] Error encountered:  %s"
+                        (error-message-string err))))))
+  (message "Corrected links in %s"
+           (propertize (denote-retrieve-front-matter-title-value
+                        (buffer-file-name)
+                        (denote-filetype-heuristics (buffer-file-name)))
+                       'face 'denote-faces-title)))
+
+(defun my/denote-update-link-descriptions-globally (dir confirmp)
+  "Update the link description of all notes in DIR.
+If CONFIRMP is non-nil, then prompt the user to confirm each
+replacement."
+  (interactive (list (denote-subdirectory-prompt) current-prefix-arg))
+  (save-window-excursion
+    (dolist (f (denote-directory-files (concat (file-name-nondirectory dir) "/") nil t))
+      (save-excursion
+        (let* ((live-buffer (get-file-buffer f)))
+          (with-current-buffer (find-file-noselect f)
+            (krisb-denote-update-link-descriptions confirmp))
+          (unless live-buffer (kill-buffer live-buffer))))))
+  (message "Updated all links in %s!" dir))
+
+;;;; DONT Notused
+;;;;; my/org-set-time-file-property
 
 ;; (defun my/org-set-time-file-property (property &optional anywhere pos)
 ;;   "Set the time file PROPERTY in the preamble.
@@ -727,7 +801,7 @@ current note."
 ;;       (let* ((now (format-time-string "[%Y-%m-%d %a %H:%M]")))
 ;;         (insert now)))))
 
-;;;; my/org-set-date
+;;;;; my/org-set-date
 
 ;; https://github.com/zaeph/.emacs.d/blob/615ac37be6bd78c37e967fdb43d28897a4116583/lisp/zp-org.el#L212
 ;; (defun my/org-set-date ()
@@ -738,7 +812,7 @@ current note."
 
 ;; (add-hook 'before-save-hook 'my/org-set-date)
 
-;;;; get my/reading-list
+;;;;; get my/reading-list
 
 ;; Get reading list from books directory for org-clock report.
 ;; The org-clock report scope can be a function.
@@ -748,7 +822,7 @@ current note."
 ;;     (append reading-list
 ;;             (file-expand-wildcards (expand-file-name "bib/*.org" org-directory)))))
 
-;;;; mho/ denote functions
+;;;;; mho/ denote functions
 
 ;;   (defun +denote-open-note-directory ()
 ;;     (interactive)
@@ -783,7 +857,7 @@ current note."
 ;;   (let ((denote-prompts '(title keywords date subdirectory)))
 ;;     (call-interactively #'denote)))
 
-;;;; DONT autocalc-clocktable
+;;;;; DONT autocalc-clocktable
 
 ;; https://200ok.ch/posts/2022-12-07_streamline_your_org_mode_workflow_with_automatic_clock_table_recalculation.html
 ;; Need add #+AUTOCALC_CLOCK_TABLES to org file.
@@ -807,7 +881,7 @@ current note."
 ;; (add-hook 'before-save-hook 'autocalc-clocktable)
 
 
-;;;; Rename 'screenshot': rename-all-files-to-denote-id
+;;;;; Rename 'screenshot': rename-all-files-to-denote-id
 
 (progn
 
@@ -875,7 +949,7 @@ denote ID 형식의 파일명은 건너뜀. 중복 파일명이 있으면 숫자
         (rename-to-denote-id file))))
   )
 
-;;;; my/rename-old-journal-to-denote-files
+;;;;; my/rename-old-journal-to-denote-files
 
 ;; 2022-02-22.org -> 20220222T000000--2022-02-22__archive_journal.org
 (progn
@@ -924,8 +998,8 @@ denote ID 형식의 파일명은 건너뜀. 중복 파일명이 있으면 숫자
         (rename-journal-to-denote-id file))))
   )
 
-;;; provide
+;;;; provide
 
 (provide 'denote-funcs)
 
-;;; end-of-line
+;;;; end-of-line

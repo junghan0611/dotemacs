@@ -1,10 +1,10 @@
-;;; lisp/denote-config.el -*- lexical-binding: t; -*-
+;;;; lisp/denote-config.el -*- lexical-binding: t; -*-
 
-;;; comments
+;;;; comments
 
 ;; 2024-08-26 use denote only
 
-;;; DONT deregister the ':denote' link type
+;;;; DONT deregister the ':denote' link type
 
 ;; (progn
 ;;   ;; 'id' 를 사용해야 org-roam-buffer 가 유용하다.
@@ -28,7 +28,7 @@
 ;;         "\\[.*?](id:\\(?1:\\([0-9]\\{8\\}\\)\\(T[0-9]\\{6\\}\\)\\))")
 ;;   )
 
-;;; Extensions : category and project agenda
+;;;; Extensions : category and project agenda
 
 (progn
   (setq denote-known-keywords
@@ -87,7 +87,7 @@
   ;;       (denote (format-time-string "%A, %B %e, %Y")
   ;;               '("daily")))))
 
-;;; Extensions : agenda
+;;;; Extensions : agenda
 
   ;; Update agenda files after notes are created or renamed
   (add-hook 'denote-after-rename-file-hook #'my/refresh-agenda-files)
@@ -105,7 +105,7 @@
   ;; (defun dw/org-path (path)
   ;;   (expand-file-name path org-directory))
 
-;;;###autoload
+;;;;###autoload
   (defun my/refresh-agenda-files ()
     (interactive)
     (setq org-agenda-files
@@ -204,7 +204,7 @@
       (denote-keywords-prompt)))
   )
 
-;;; my/denote-assign-evergreen : blog - Essays
+;;;; my/denote-assign-evergreen : blog - Essays
 
 ;; All Growth Stages : Seedling, Budding, Evergreen
 (progn
@@ -230,7 +230,7 @@
       (message "Current buffer is not a Denote file.")))
   )
 
-;;; my/denote-assign-zettel
+;;;; my/denote-assign-zettel
 
 (progn
   ;; List of keywords to use for implementing the zettelkasten method with Denote.
@@ -255,7 +255,7 @@
       (message "Current buffer is not a Denote file.")))
   )
 
-;;; simple command with denote-links
+;;;; simple command with denote-links
 
 ;; (progn
 ;;   ;; (( -> <tab> for completion
@@ -287,7 +287,7 @@
       (completion-at-point)
       )))
 
-;;; org-link capf on this buffer
+;;;; org-link capf on this buffer
 
 ;; https://takeonrules.com/2023/05/07/completion-at-point-function-capf-for-org-mode-links/
 ;; super capf
@@ -371,7 +371,7 @@
 
 ;; check
 
-;;; DONT denote sort : Luhmann-style signatures
+;;;; DONT denote sort : Luhmann-style signatures
 
 ;; check denote-sequence
 ;; https://protesilaos.com/codelog/2024-08-01-emacs-denote-luhmann-signature-sort/
@@ -405,7 +405,7 @@
 ;;   (setq denote-sort-signature-comparison-function #'my-denote-sort-for-signatures) ; default - string-collate-lessp
 ;;   )
 
-;;; DONT denote journal
+;;;; DONT denote journal
 
 ;; Use a =journals/= subdirectory to integrate nicely with Logseq
 
@@ -450,12 +450,12 @@
 ;;     (save-buffer) ;; gotta save immediately to avoid creating duplicate dailies
 ;;     ))
 
-;;; DONT org-id-link-to-org-use-id nil
+;;;; DONT org-id-link-to-org-use-id nil
 
 ;; (setq org-id-link-to-org-use-id 'use-existing) ; default nil
 ;; (setq org-hide-emphasis-markers t)
 
-;;; my/update-export-garden all
+;;;; my/update-export-garden all
 
 ;; mapcar를 사용하여 각 디렉토리에 함수 a 적용
 ;; (my/update-export-garden "~/org/notes/")
@@ -498,8 +498,8 @@
     )
   )
 
-;;; provide
+;;;; provide
 
 (provide 'denote-config)
 
-;;; end-of-file
+;;;; end-of-file

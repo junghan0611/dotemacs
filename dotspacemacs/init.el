@@ -5006,8 +5006,7 @@ For instance pass En as source for English."
     (require 'denote-markdown) ; markdown-obsidian
     (setq denote-file-type 'org)
     (setq denote-sort-components '(signature title keywords identifier))
-    (setq denote-backlinks-show-context t)
-    (setq denote-sort-keywords t)
+    (setq denote-sort-keywords nil)
     (setq denote-infer-keywords t)
 
     (setq denote-excluded-directories-regexp "screenshot")
@@ -5199,8 +5198,8 @@ For instance pass En as source for English."
   (with-eval-after-load 'denote
     (message "Load: custom denote")
     ;; no dependency on org-roam, use default's org-id
-    (load-file (concat user-dotemacs-dir "lisp/denote-funcs.el"))
     (load-file (concat user-dotemacs-dir "lisp/denote-config.el"))
+    (load-file (concat user-dotemacs-dir "lisp/denote-funcs.el"))
     (load-file (concat user-dotemacs-dir "lisp/denote-hugo.el"))
     )
 

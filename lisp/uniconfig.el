@@ -1179,11 +1179,25 @@ Also see `prot-window-delete-popup-frame'." command)
       (replace-regexp-in-string " " "" text)))
   (add-to-list 'org-export-filter-final-output-functions #'+org-export-remove-white-space t))
 
-
-
 ;;;; insert unicode for notetaking
 
 (with-eval-after-load 'org
+  ;; [[denote:20250415T174028][#LLM: 20250415T174028]]
+  (defun my/insert-nbsp-between-latin-and-hangul ()
+    (interactive)
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward "\\([A-Za-z*+=_]\\)\\([가-힣]\\)" nil t)
+        (unless (save-excursion
+                  (goto-char (match-beginning 1))
+                  (looking-back "\\s-" 1))
+          (goto-char (match-beginning 2))
+          (insert " ")
+          (goto-char (match-end 2))))))
+
+  ;; (add-hook 'org-mode-hook
+  ;;           (lambda ()
+  ;;             (add-hook 'before-save-hook #'my/insert-nbsp-between-latin-and-hangul nil t)))
 
   (defun my/insert-white-space ()
     (interactive)
@@ -1197,8 +1211,9 @@ Also see `prot-window-delete-popup-frame'." command)
   ;; 0x002015	―	QUOTATION DASH
   ;; 0x002015	―	HORIZONTAL BAR
 
+  ;; 2025-04-15 remove "⊨"
   (setq my/unicode-notetaking '( " " "§"
-                                 "¶" "†" "‡" "№" "↔" "←" "→" "⊢" "⊨" "∉"
+                                 "¶" "†" "‡" "№" "↔" "←" "→" "⊢" "∉"
                                  "『겹낫표』"
                                  "≪겹화살괄호≫"
                                  "｢홑낫표｣"
@@ -1210,12 +1225,12 @@ Also see `prot-window-delete-popup-frame'." command)
     (interactive)
     (insert (completing-read "Select unicode: " my/unicode-notetaking)))
 
-  (evil-define-key '(insert normal) text-mode-map (kbd "M-M") #'my/insert-unicode-notetaking)
-  (evil-define-key '(insert normal) text-mode-map (kbd "M-m") #'my/insert-white-space)
+  (evil-define-key '(insert normal) text-mode-map (kbd "M-m") #'my/insert-unicode-notetaking)
+  (evil-define-key '(insert normal) text-mode-map (kbd "M-M") #'my/insert-nbsp-between-latin-and-hangul) ; my/insert-white-space
 
   (with-eval-after-load 'vertico
-    (define-key minibuffer-mode-map (kbd "M-M") #'my/insert-unicode-notetaking)
-    (define-key vertico-map (kbd "M-M") #'my/insert-unicode-notetaking))
+    (define-key minibuffer-mode-map (kbd "M-m") #'my/insert-unicode-notetaking)
+    (define-key vertico-map (kbd "M-m") #'my/insert-unicode-notetaking))
   )
 
 ;;;; TODO Org-Hugo Links

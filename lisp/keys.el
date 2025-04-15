@@ -1988,13 +1988,16 @@ window."
 (defvar-keymap ews-org-publish-map
   :doc "org-publish keybindings"
 
-  "l" #'my/insert-hugo-lastmod-time-stamp
+  "1" #'my/insert-hugo-lastmod-time-stamp
   "o" #'my/org-open-exported-markdown-in-hugo-content
   "E" #'my/org-hugo-export-directory
   "u" #'my/org-update-all-dblocks
   "U" #'my/org-update-all-dblocks-on-directory
   "c" #'my/denote-convert-note-to-blog-draft
   "p" #'my/denote-convert-blog-ready-to-hugo
+
+  "l" #'my/denote-update-link-descriptions
+  ;; #'my/denote-update-link-descriptions-globally
 
   ;; "r" 'org-reveal-export-to-html
   "r" #'org-re-reveal-export-to-html-and-browse

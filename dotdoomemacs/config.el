@@ -2987,8 +2987,7 @@ ${content}"))
   (require 'denote-markdown) ; markdown-obsidian
   (setq denote-file-type 'org)
   (setq denote-sort-components '(signature title keywords identifier))
-  ;; (setq denote-backlinks-show-context nil) ; default nil
-  (setq denote-sort-keywords t)
+  (setq denote-sort-keywords nil) ; denote-sort-keywords-comparison-function - default string-collate-lessp
   (setq denote-infer-keywords t)
   (setq denote-excluded-directories-regexp "screenshot")
   ;; Automatically rename Denote buffers using the `denote-rename-buffer-format'.
@@ -3403,7 +3402,6 @@ ${content}"))
   ;; Google - Gemini
   (gptel-make-gemini "Gemini"
     :key #'gptel-api-key
-    ;; :request-params '(:temperature 0.0) ; for coding
     :stream t)
 
   ;; Anthropic - Claude
@@ -5958,12 +5956,13 @@ See `consult-omni-multi' for more details.
 
        ;; Org styling, hide markup etc.
        ;; org-ellipsis "…"
-       org-hide-emphasis-markers t ; nil
+       org-hide-emphasis-markers nil ; nil
        org-pretty-entities t ; nil
        org-agenda-tags-column 0)
 
+      (setq org-modern-tag t)
+
       (setq org-modern-table nil) ; org-modern-indent
-      (setq org-modern-tag nil)
       ;;  org-modern-todo t
       ;;  org-modern-timestamp t
       ;;  org-modern-priority t
@@ -5998,7 +5997,7 @@ See `consult-omni-multi' for more details.
             '((?A :inverse-video t :inherit +org-todo-todo)
               (?B :inverse-video t :inherit +org-todo-next)
               (?C :inverse-video t :inherit +org-todo-dont)
-              ;; (?D :inverse-video t :inherit +org-todo-done)
+              (?D :inverse-video t :inherit +org-todo-done)
               ))
 
       (setq org-modern-todo-faces
@@ -6531,8 +6530,8 @@ See `consult-omni-multi' for more details.
 
 (after! denote
   (message "Load: custom denote")
-  (require 'denote-funcs)
   (require 'denote-config)
+  (require 'denote-funcs)
   (require 'denote-hugo) ; for publish
   ;; (add-hook 'doom-first-input-hook #'my/refresh-agenda-files)
   )
