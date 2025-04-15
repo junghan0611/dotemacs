@@ -34,6 +34,8 @@
 If prefix ARG, move instead of copy.
 Adds refile metadata to the heading."
   (interactive "P")
+  (org-todo "DONE") ; set time marker
+  (org-archive-set-tag) ; hidden
   (let ((selected-file (denote-file-prompt)))
     (when selected-file
       (+org/refile-to-current-file

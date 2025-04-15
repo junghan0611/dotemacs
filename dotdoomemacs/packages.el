@@ -55,18 +55,11 @@
 ;; (package! consult-omni :recipe (:host github :repo "armindarvish/consult-omni" :files (:defaults "sources/*.el")))
 
 (package! consult :pin "03fa8f6b7482eab1dee85d32ab604f0b7312cf82") ; 2.0 stable
-;; "93cf368a676da1072f141e298908be05e2968f60" ; 1.9 stable
-(package! consult-omni :recipe (:host github :repo "armindarvish/consult-omni" :files (:defaults "sources/*.el")) :pin "f0c5f07b9ffe25d0deca42b650f6e0c1c85e9759") ;; Jan 4, 2025
-(package! consult-mu :recipe (:host github :repo "armindarvish/consult-mu" :files (:defaults "extras/*.el")))
 
+;; from agzam
 (package! consult-omni :recipe
-  (:host github :repo "armindarvish/consult-omni"
-   :branch "develop"
-   :files (:defaults "sources/*.el"))
-  :pin "017ba1b4e13c5515b88f588d22f0bfea83fb9b3e")
-;; :pin "d0a24058bf0dda823e5f1efcae5da7dc0efe6bda" ;; Feb 19, 2025
+  (:host github :repo "armindarvish/consult-omni" :branch "develop" :files (:defaults "sources/*.el")) :pin "017ba1b4e13c5515b88f588d22f0bfea83fb9b3e")
 
-;; (package! consult-omni)
 (package! consult-gh :recipe (:host github :repo "armindarvish/consult-gh" :files ("*")))
 
 ;;; DONT NEVER use built-in on emacs 30

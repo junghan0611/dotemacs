@@ -1729,7 +1729,7 @@ only those in the selected frame."
                   markdown-mode-hook
                   TeX-mode-hook
                   rst-mode-hook
-                  mu4e-compose-mode-hook
+                  ;; mu4e-compose-mode-hook
                   message-mode-hook
                   ;; git-commit-mode-hook
                   )
@@ -3402,16 +3402,14 @@ ${content}"))
 
   ;; Google - Gemini
   (gptel-make-gemini "Gemini"
-    :key (auth-info-password
-          (car (auth-source-search
-                :host "generativelanguage.googleapis.com"
-                :user "apikey")))
-    :request-params '(:temperature 0.0) ; for coding
+    :key #'gptel-api-key
+    ;; :request-params '(:temperature 0.0) ; for coding
     :stream t)
 
   ;; Anthropic - Claude
   (gptel-make-anthropic "Claude"
     :key #'gptel-api-key
+    ;; :request-params '(:temperature 0.0) ; for coding
     :stream t)
 
   ;; https://perplexity.mintlify.app/guides/pricing
@@ -3425,7 +3423,7 @@ ${content}"))
                         :key #'gptel-api-key
                         :endpoint "/chat/completions"
                         :stream t
-                        :request-params '(:temperature 0.2) ; default 0.2
+                        :request-params '(:temperature 0.2) ; sonar's default 0.2
                         :models '(sonar sonar-pro sonar-reasoning)))
 
   ;; DeepSeek offers an OpenAI compatible API
@@ -5699,14 +5697,12 @@ Suitable for `imenu-create-index-function'."
 ;;               (cape-company-to-capf 'notmuch-company)
 ;;               nil t)))
 
-
 ;;;;; :app consult-omni
 
 (use-package! consult-omni
-  :defer 5
   :after (consult gptel)
   :custom
-  ;;; General settings that apply to all sources
+  ;; General settings that apply to all sources
   (consult-omni-show-preview t) ;;; show previews
   (consult-omni-preview-key "M-m") ;;; set the preview key to C-o
   (consult-omni-highlight-matches-in-minibuffer t) ;;; highlight matches in minibuffer
@@ -5723,15 +5719,29 @@ Suitable for `imenu-create-index-function'."
   ;; Optionally set backend for http request (either 'url, 'request, or 'plz)
   (consult-omni-http-retrieve-backend 'url)
   :config
-  ;;; Load Sources Core code
+  ;; Load Sources Core code
   (require 'consult-omni-sources)
 
-  ;;; Load Embark Actions
+  ;; Load Embark Actions
   (require 'consult-omni-embark)
 
-  ;;; Either load all source modules or a selected list
+  ;; Either load all source modules or a selected list
   ;; Select a list of modules you want to aload, otherwise all sources all laoded
-; (setq consult-omni-sources-modules-to-load (list 'consult-omni-wkipedia 'consult-omni-notes))
+  (setq consult-omni-sources-modules-to-load
+        '(consult-omni-man
+          ;; consult-omni-mdfind
+          consult-omni-locate
+          consult-omni-line-multi consult-omni-invidious
+          consult-omni-gptel consult-omni-google-autosuggest
+          consult-omni-google consult-omni-git-grep consult-omni-grep
+          consult-omni-gh consult-omni-find consult-omni-fd
+          consult-omni-elfeed consult-omni-duckduckgo
+          consult-omni-doi
+          consult-omni-dict consult-omni-consult-notes
+          consult-omni-chatgpt consult-omni-calc consult-omni-buffer
+          consult-omni-browser-history consult-omni-brave
+          consult-omni-brave-autosuggest consult-omni-bing
+          consult-omni-apps))
   (consult-omni-sources-load-modules)
 
   ;; set multiple sources for consult-omni-multi command. Change these lists as needed for different interactive commands. Keep in mind that each source has to be a key in `consult-omni-sources-alist'.
@@ -5739,7 +5749,7 @@ Suitable for `imenu-create-index-function'."
                                      ;; "File"
                                      ;; "Buffer"
                                      ;; "Bookmark"
-                                     "Apps"
+                                     ;; "Apps"
                                      ;; "gptel"
                                      "Brave"
                                      "Dictionary"
@@ -5755,7 +5765,10 @@ Suitable for `imenu-create-index-function'."
                                      ;; "Invidious"
                                      ))
 
-  ;;; Per source customization
+;;;;;; consult-omni - Per source customization
+
+  (require 'auth-source)
+  (require 'gptel)
 
   ;; Set API KEYs. It is recommended to use a function that returns the string for better security.
   ;; (setq consult-omni-google-customsearch-key "YOUR-GOOGLE-API-KEY-OR-FUNCTION")

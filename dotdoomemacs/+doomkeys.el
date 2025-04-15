@@ -1764,6 +1764,7 @@
                  "o" #'+org/refile-to-other-window
                  "O" #'+org/refile-to-other-buffer
                  "v" #'+org/refile-to-visible
+                 "d" #'my/refile-heading-to-denote-file
                  "r" #'org-refile
                  "R" #'org-refile-reverse) ; to all `org-refile-targets'
         (:prefix ("s" . "tree/subtree")
