@@ -1139,7 +1139,7 @@ Also see `prot-window-delete-popup-frame'." command)
 
   ;; org-export-dictionary 에 Figure, Table 에 한글 번역을 넣으면
   ;; 한글로 바뀌어 export 될 것이다.
-  (setq org-hugo-link-desc-insert-type t)
+  ;; (setq org-hugo-link-desc-insert-type t)
 
   ;; 내보낼 때는 fill-column 끈다.
   ;; 개행문자는 조직모드에서 \\ 를 뒤에 넣으라
@@ -1182,6 +1182,7 @@ Also see `prot-window-delete-popup-frame'." command)
 ;;;; insert unicode for notetaking
 
 (with-eval-after-load 'org
+  ;; (unless (org-at-table-p)
   ;; [[denote:20250415T174028][#LLM: 20250415T174028]]
   (defun my/insert-nbsp-between-latin-and-hangul ()
     (interactive)
@@ -1192,12 +1193,13 @@ Also see `prot-window-delete-popup-frame'." command)
                   (goto-char (match-beginning 1))
                   (looking-back "\\s-" 1))
           (goto-char (match-beginning 2))
-          (insert " ")
+          (insert " ") ;  ㅇㅇ
           (goto-char (match-end 2))))))
 
-  ;; (add-hook 'org-mode-hook
+  ;; (add-hook 'before-save-hook
   ;;           (lambda ()
-  ;;             (add-hook 'before-save-hook #'my/insert-nbsp-between-latin-and-hangul nil t)))
+  ;;             (when (derived-mode-p 'org-mode)
+  ;;               (my/insert-nbsp-between-latin-and-hangul))))
 
   (defun my/insert-white-space ()
     (interactive)
@@ -1225,12 +1227,13 @@ Also see `prot-window-delete-popup-frame'." command)
     (interactive)
     (insert (completing-read "Select unicode: " my/unicode-notetaking)))
 
-  (evil-define-key '(insert normal) text-mode-map (kbd "M-m") #'my/insert-unicode-notetaking)
-  (evil-define-key '(insert normal) text-mode-map (kbd "M-M") #'my/insert-nbsp-between-latin-and-hangul) ; my/insert-white-space
+  (evil-define-key '(insert normal) text-mode-map (kbd "M-M") #'my/insert-unicode-notetaking)
+  (evil-define-key '(insert normal) text-mode-map (kbd "M-m") #'my/insert-white-space)
+  ;; (evil-define-key '(insert normal) text-mode-map (kbd "M-M") #'my/insert-nbsp-between-latin-and-hangul)
 
   (with-eval-after-load 'vertico
-    (define-key minibuffer-mode-map (kbd "M-m") #'my/insert-unicode-notetaking)
-    (define-key vertico-map (kbd "M-m") #'my/insert-unicode-notetaking))
+    ;; (define-key minibuffer-mode-map (kbd "M-m") #'my/insert-unicode-notetaking)
+    (define-key vertico-map (kbd "M-M") #'my/insert-unicode-notetaking))
   )
 
 ;;;; TODO Org-Hugo Links

@@ -458,7 +458,8 @@
 ;;;; my/update-export-garden all
 
 ;; mapcar를 사용하여 각 디렉토리에 함수 a 적용
-;; (my/update-export-garden "~/org/notes/")
+;; (my/update-export-garden "~/org/meta/")
+;; (my/update-export-garden "~/org/bib/")
 (progn
 
   (defun my/update-dblock-garden (dir)

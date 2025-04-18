@@ -29,13 +29,16 @@
 ;;;;; my/refile-to-denote-file
 
 ;; 2025-04-14
+(require 'org-archive)
+
 (defun my/refile-heading-to-denote-file (arg)
   "Refile current heading to a particular denote file.
 If prefix ARG, move instead of copy.
 Adds refile metadata to the heading."
   (interactive "P")
+  ;; (org-set-tags "REFILED")
   (org-todo "DONE") ; set time marker
-  (org-archive-set-tag) ; hidden
+  ;; (org-archive-set-tag) ; hidden
   (let ((selected-file (denote-file-prompt)))
     (when selected-file
       (+org/refile-to-current-file
@@ -880,123 +883,121 @@ replacement."
 
 ;; (add-hook 'before-save-hook 'autocalc-clocktable)
 
+;;;;; DONT Rename 'screenshot': rename-all-files-to-denote-id
 
-;;;;; Rename 'screenshot': rename-all-files-to-denote-id
+;; (progn
+;;   (defun denote-id-p (file-name)
+;;     "FILE-NAME이 이미 denote ID 형식(YYYYMMDDTHHMMSS)인지 확인."
+;;     (string-match-p "\\`[0-9]\\{8\\}T[0-9]\\{6\\}\\'" (file-name-base file-name)))
 
-(progn
+;;   (defun generate-unique-file-name (directory file-name ext)
+;;     "DIRECTORY 내에서 FILE-NAME과 동일한 이름이 있으면 숫자를 증가시켜 고유한 파일명 생성."
+;;     (let ((counter 1)
+;;           (new-file-name (concat file-name "." ext)))
+;;       ;; 파일이 존재하는지 확인하고, 존재하면 숫자를 증가
+;;       (while (file-exists-p (expand-file-name new-file-name directory))
+;;         (setq new-file-name (format "%s-%d.%s" file-name counter ext))
+;;         (setq counter (1+ counter)))
+;;       new-file-name))
 
-  (defun denote-id-p (file-name)
-    "FILE-NAME이 이미 denote ID 형식(YYYYMMDDTHHMMSS)인지 확인."
-    (string-match-p "\\`[0-9]\\{8\\}T[0-9]\\{6\\}\\'" (file-name-base file-name)))
+;;   (defun rename-to-denote-id (file-name)
+;;     "FILE-NAME에서 날짜와 시간을 추출해 denote 형식으로 파일명을 변경.
+;; denote ID 형식의 파일명은 건너뜀. 중복 파일명이 있으면 숫자를 증가시킴."
+;;     (let* ((base-name (file-name-base file-name))
+;;            (ext (file-name-extension file-name))
+;;            (directory (file-name-directory file-name))
+;;            ;; 날짜와 시간을 추출하는 여러 정규 표현식 (다양한 형식 대응)
+;;            (date-time-regex-list
+;;             '("\\([0-9]\\{8\\}\\)[-_T]?\\([0-9]\\{6\\}\\)?"         ;; YYYYMMDD-HHMMSS
+;;               "\\([0-9]\\{8\\}\\)[-_T]?\\([0-9]\\{4\\}\\)"           ;; YYYYMMDD-HHMM
+;;               "\\([0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\)_\\([0-9]\\{2\\}-[0-9]\\{2\\}\\)" ;; YYYY-MM-DD_HH-MM
+;;               "\\([0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\)" ;; YYYY-MM-DD
+;;               "\\([0-9]\\{13\\}\\)"                                  ;; Unix timestamp
+;;               "Pasted image \\([0-9]\\{8\\}\\)\\([0-9]\\{6\\}\\)"    ;; Pasted image YYYYMMDDHHMMSS
+;;               ))
+;;            new-file-name)
+;;       ;; denote 형식인 파일은 건너뜀
+;;       (if (denote-id-p base-name)
+;;           (message "File %s is already in denote format, skipping." file-name)
+;;         ;; 날짜 및 시간 추출 시도
+;;         (catch 'done
+;;           (dolist (regex date-time-regex-list)
+;;             (when (string-match regex base-name)
+;;               (let ((date (replace-regexp-in-string "-" "" (match-string 1 base-name)))
+;;                     (time (match-string 2 base-name)))
+;;                 ;; 시간 형식이 없으면 기본값 "000000" 또는 "0000"일 경우에 "0000" -> "000000"으로 변환
+;;                 (setq time (cond
+;;                             ((not time) "000000")   ;; 시간 없으면 000000
+;;                             ((= (length time) 4) (concat time "00"))  ;; HHMM -> HHMMSS 변환
+;;                             (t time)))
+;;                 ;; 새로운 파일명 작성 (denote 형식)
+;;                 (setq new-file-name (format "%sT%s" date time))
+;;                 ;; 동일한 파일명이 있는 경우 고유한 파일명 생성
+;;                 (setq new-file-name (generate-unique-file-name directory new-file-name ext))
+;;                 ;; 파일명 변경
+;;                 (rename-file file-name (expand-file-name new-file-name directory))
+;;                 (message "Renamed %s to %s" file-name new-file-name)
+;;                 (throw 'done t)))))
+;;         (message "No valid date-time found in %s" file-name))))
 
-  (defun generate-unique-file-name (directory file-name ext)
-    "DIRECTORY 내에서 FILE-NAME과 동일한 이름이 있으면 숫자를 증가시켜 고유한 파일명 생성."
-    (let ((counter 1)
-          (new-file-name (concat file-name "." ext)))
-      ;; 파일이 존재하는지 확인하고, 존재하면 숫자를 증가
-      (while (file-exists-p (expand-file-name new-file-name directory))
-        (setq new-file-name (format "%s-%d.%s" file-name counter ext))
-        (setq counter (1+ counter)))
-      new-file-name))
-
-  (defun rename-to-denote-id (file-name)
-    "FILE-NAME에서 날짜와 시간을 추출해 denote 형식으로 파일명을 변경.
-denote ID 형식의 파일명은 건너뜀. 중복 파일명이 있으면 숫자를 증가시킴."
-    (let* ((base-name (file-name-base file-name))
-           (ext (file-name-extension file-name))
-           (directory (file-name-directory file-name))
-           ;; 날짜와 시간을 추출하는 여러 정규 표현식 (다양한 형식 대응)
-           (date-time-regex-list
-            '("\\([0-9]\\{8\\}\\)[-_T]?\\([0-9]\\{6\\}\\)?"         ;; YYYYMMDD-HHMMSS
-              "\\([0-9]\\{8\\}\\)[-_T]?\\([0-9]\\{4\\}\\)"           ;; YYYYMMDD-HHMM
-              "\\([0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\)_\\([0-9]\\{2\\}-[0-9]\\{2\\}\\)" ;; YYYY-MM-DD_HH-MM
-              "\\([0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\)" ;; YYYY-MM-DD
-              "\\([0-9]\\{13\\}\\)"                                  ;; Unix timestamp
-              "Pasted image \\([0-9]\\{8\\}\\)\\([0-9]\\{6\\}\\)"    ;; Pasted image YYYYMMDDHHMMSS
-              ))
-           new-file-name)
-      ;; denote 형식인 파일은 건너뜀
-      (if (denote-id-p base-name)
-          (message "File %s is already in denote format, skipping." file-name)
-        ;; 날짜 및 시간 추출 시도
-        (catch 'done
-          (dolist (regex date-time-regex-list)
-            (when (string-match regex base-name)
-              (let ((date (replace-regexp-in-string "-" "" (match-string 1 base-name)))
-                    (time (match-string 2 base-name)))
-                ;; 시간 형식이 없으면 기본값 "000000" 또는 "0000"일 경우에 "0000" -> "000000"으로 변환
-                (setq time (cond
-                            ((not time) "000000")   ;; 시간 없으면 000000
-                            ((= (length time) 4) (concat time "00"))  ;; HHMM -> HHMMSS 변환
-                            (t time)))
-                ;; 새로운 파일명 작성 (denote 형식)
-                (setq new-file-name (format "%sT%s" date time))
-                ;; 동일한 파일명이 있는 경우 고유한 파일명 생성
-                (setq new-file-name (generate-unique-file-name directory new-file-name ext))
-                ;; 파일명 변경
-                (rename-file file-name (expand-file-name new-file-name directory))
-                (message "Renamed %s to %s" file-name new-file-name)
-                (throw 'done t)))))
-        (message "No valid date-time found in %s" file-name))))
-
-  (defun my/rename-all-screenshot-images-to-denote-id (directory)
-    "DIRECTORY 내의 모든 JPG, PNG, GIF 파일을 Denote 형식으로 파일명 변경.
-이미 denote 형식인 파일은 건너뛰며, 날짜/시간이 없으면 처리하지 않음."
-    (interactive "DDirectory: ")
-    (dolist (file (directory-files directory t "^[^.].*")) ;; 숨김 파일 제외
-      (when (and (file-regular-p file)
-                 (member (file-name-extension file) '("jpg" "png" "gif")))
-        (rename-to-denote-id file))))
-  )
+;;   (defun my/rename-all-screenshot-images-to-denote-id (directory)
+;;     "DIRECTORY 내의 모든 JPG, PNG, GIF 파일을 Denote 형식으로 파일명 변경.
+;; 이미 denote 형식인 파일은 건너뛰며, 날짜/시간이 없으면 처리하지 않음."
+;;     (interactive "DDirectory: ")
+;;     (dolist (file (directory-files directory t "^[^.].*")) ;; 숨김 파일 제외
+;;       (when (and (file-regular-p file)
+;;                  (member (file-name-extension file) '("jpg" "png" "gif")))
+;;         (rename-to-denote-id file))))
+;;   )
 
 ;;;;; my/rename-old-journal-to-denote-files
 
 ;; 2022-02-22.org -> 20220222T000000--2022-02-22__archive_journal.org
-(progn
-  (defun rename-journal-to-denote-id (file-name)
-    "FILE-NAME에서 날짜와 시간을 추출해 denote 형식으로 파일명을 변경.
-denote ID 형식의 파일명은 건너뜀. 중복 파일명이 있으면 숫자를 증가시킴."
-    (let* ((base-name (file-name-base file-name))
-           (ext (file-name-extension file-name))
-           (directory (file-name-directory file-name))
-           ;; 날짜와 시간을 추출하는 여러 정규 표현식 (다양한 형식 대응)
-           (date-time-regex-list
-            '("\\([0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\)" ;; YYYY-MM-DD
-              ))
-           new-file-name)
-      ;; denote 형식인 파일은 건너뜀
-      (if (denote-id-p base-name)
-          (message "File %s is already in denote format, skipping." file-name)
-        ;; 날짜 및 시간 추출 시도
-        (catch 'done
-          (dolist (regex date-time-regex-list)
-            (when (string-match regex base-name)
-              (let ((date (replace-regexp-in-string "-" "" (match-string 1 base-name)))
-                    (time (match-string 2 base-name)))
-                ;; 시간 형식이 없으면 기본값 "000000" 또는 "0000"일 경우에 "0000" -> "000000"으로 변환
-                (setq time (cond
-                            ((not time) "000000")   ;; 시간 없으면 000000
-                            ((= (length time) 4) (concat time "00"))  ;; HHMM -> HHMMSS 변환
-                            (t time)))
-                ;; 새로운 파일명 작성 (denote 형식)
-                (setq new-file-name (format "%sT%s--%s__archive_journal" date time base-name))
-                ;; 동일한 파일명이 있는 경우 고유한 파일명 생성
-                (setq new-file-name (generate-unique-file-name directory new-file-name ext))
-                ;; 파일명 변경
-                (rename-file file-name (expand-file-name new-file-name directory))
-                (message "Renamed %s to %s" file-name new-file-name)
-                (throw 'done t)))))
-        (message "No valid date-time found in %s" file-name))))
+;; (progn
+;;   (defun rename-journal-to-denote-id (file-name)
+;;     "FILE-NAME에서 날짜와 시간을 추출해 denote 형식으로 파일명을 변경.
+;; denote ID 형식의 파일명은 건너뜀. 중복 파일명이 있으면 숫자를 증가시킴."
+;;     (let* ((base-name (file-name-base file-name))
+;;            (ext (file-name-extension file-name))
+;;            (directory (file-name-directory file-name))
+;;            ;; 날짜와 시간을 추출하는 여러 정규 표현식 (다양한 형식 대응)
+;;            (date-time-regex-list
+;;             '("\\([0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\)" ;; YYYY-MM-DD
+;;               ))
+;;            new-file-name)
+;;       ;; denote 형식인 파일은 건너뜀
+;;       (if (denote-id-p base-name)
+;;           (message "File %s is already in denote format, skipping." file-name)
+;;         ;; 날짜 및 시간 추출 시도
+;;         (catch 'done
+;;           (dolist (regex date-time-regex-list)
+;;             (when (string-match regex base-name)
+;;               (let ((date (replace-regexp-in-string "-" "" (match-string 1 base-name)))
+;;                     (time (match-string 2 base-name)))
+;;                 ;; 시간 형식이 없으면 기본값 "000000" 또는 "0000"일 경우에 "0000" -> "000000"으로 변환
+;;                 (setq time (cond
+;;                             ((not time) "000000")   ;; 시간 없으면 000000
+;;                             ((= (length time) 4) (concat time "00"))  ;; HHMM -> HHMMSS 변환
+;;                             (t time)))
+;;                 ;; 새로운 파일명 작성 (denote 형식)
+;;                 (setq new-file-name (format "%sT%s--%s__archive_journal" date time base-name))
+;;                 ;; 동일한 파일명이 있는 경우 고유한 파일명 생성
+;;                 (setq new-file-name (generate-unique-file-name directory new-file-name ext))
+;;                 ;; 파일명 변경
+;;                 (rename-file file-name (expand-file-name new-file-name directory))
+;;                 (message "Renamed %s to %s" file-name new-file-name)
+;;                 (throw 'done t)))))
+;;         (message "No valid date-time found in %s" file-name))))
 
-  (defun my/rename-old-journal-to-denote-files (directory)
-    "DIRECTORY 내의 모든 저널 org 파일을 Denote 형식으로 파일명 변경.
-이미 denote 형식인 파일은 건너뛰며, 날짜/시간이 없으면 처리하지 않음."
-    (interactive "DDirectory: ")
-    (dolist (file (directory-files directory t "^[^.].*")) ;; 숨김 파일 제외
-      (when (and (file-regular-p file)
-                 (member (file-name-extension file) '("org")))
-        (rename-journal-to-denote-id file))))
-  )
+;;   (defun my/rename-old-journal-to-denote-files (directory)
+;;     "DIRECTORY 내의 모든 저널 org 파일을 Denote 형식으로 파일명 변경.
+;; 이미 denote 형식인 파일은 건너뛰며, 날짜/시간이 없으면 처리하지 않음."
+;;     (interactive "DDirectory: ")
+;;     (dolist (file (directory-files directory t "^[^.].*")) ;; 숨김 파일 제외
+;;       (when (and (file-regular-p file)
+;;                  (member (file-name-extension file) '("org")))
+;;         (rename-journal-to-denote-id file))))
+;;   )
 
 ;;;; provide
 

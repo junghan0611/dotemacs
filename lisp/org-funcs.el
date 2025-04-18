@@ -1825,6 +1825,55 @@ and indent it one level."
       (insert string))))
 ;; Moving lines around:2 ends here
 
+
+;;;; my/insert-screenshot-links-by-date
+
+;; [[denote:20250416T131632][#LLM: 데일리 스크린샷 파일링크 생성]]
+
+(defun my/insert-screenshot-links-by-date ()
+  "Insert org-mode links for screenshot files on selected date.
+Replace spaces in filenames with underscores."
+  (interactive)
+  (require 'calendar)
+  (let* ((date (calendar-read-date))
+         (date-str (format "%04d%02d%02d" (nth 2 date) (nth 0 date) (nth 1 date)))
+         (dir "../screenshot/")
+         (files (directory-files dir t (format ".*%s.*\\.\\(jpg\\|png\\|gif\\)" date-str))))
+
+    (unless files
+      (error "No screenshot files found for date: %s" date-str))
+
+    (insert (format "** Screenshots for %s\n" date-str))
+    (dolist (file files)
+      (let* ((old-filename (file-name-nondirectory file))
+             (new-filename (replace-regexp-in-string " " "_" old-filename))
+             (new-filepath (expand-file-name new-filename dir)))
+
+        ;; Rename file if filename contains spaces
+        (when (string-match " " old-filename)
+          (rename-file file new-filepath t)
+          (message "Renamed: %s → %s" old-filename new-filename))
+
+        (let ((display-name (file-name-sans-extension new-filename)))
+          ;; (insert "#+caption: " display-name "\n")
+          ;; (insert "#+name: fig-" display-name "\n")
+          ;; (insert "#+attr_html: :width 80% :align center\n")
+          ;; (insert "#+attr_latex: :width \\\\textwidth\n")
+          ;; (insert "#+attr_org: :width 320px :align center\n")
+          (insert (format "*** %s\n" display-name))
+          (insert (format ";# [[file:%s%s]]\n" dir new-filename))
+          (insert (format "#+begin_export html\n![[../images/%s|320]]\n#+end_export\n" new-filename))
+          )))))
+
+;;;; my/delete-multiple-blank-lines
+
+(defun my/delete-multiple-blank-lines ()
+  "두 줄 이상의 연속된 빈 줄을 하나로 만든다."
+  (interactive)
+  (goto-char (point-min))
+  (while (re-search-forward "\n\\s-*\n\\s-*\n" nil t)
+    (replace-match "\n\n" nil nil)))
+
 ;;;; provide
 
 (provide 'org-funcs)

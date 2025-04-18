@@ -80,8 +80,8 @@
 (doom!
  :completion
  (corfu +orderless +icons) ;; +dabbrev - custom dabbrev
- ;; (vertico +childframe) search engine of the future ; +icons
- vertico
+ (vertico +childframe) search engine of the future ; +icons
+ ;; vertico
 
  :ui
  doom              ; what makes DOOM look the way it does
@@ -153,7 +153,7 @@
  (:unless IS-TERMUX (pdf)) ; pdf enhancements
  ;;terraform         ; infrastructure as code
  ;;tmux              ; an API for interacting with tmux
- tree-sitter ;; syntax and parsing, sitting in a tree...
+ ;; tree-sitter ;; syntax and parsing, sitting in a tree...
  upload            ; map local to remote projects via ssh/ftp
 
  :os
@@ -164,8 +164,8 @@
  ;;agda              ; types of types of types of types...
  beancount         ; mind the GAAP
  ;;(cc +lsp)         ; C > C++ == 1
- (clojure +lsp +tree-sitter) ; java with a lisp
- common-lisp ; if you've seen one lisp, you've seen them all
+ (clojure +lsp) ; +tree-sitter java with a lisp
+ ;; common-lisp ; if you've seen one lisp, you've seen them all
  ;; (:unless IS-TERMUX (coq)) ; proofs-as-programs
  ;;crystal           ; ruby at the speed of c
  ;;csharp            ; unity, .NET, and mono shenanigans
@@ -177,7 +177,7 @@
  emacs-lisp        ; drown in parentheses
  ;;erlang            ; an elegant language for a more civilized age
 
- ess
+ ess ; for quarto
  ;; (:unless IS-TERMUX (ess +tree-sitter +lsp)) ; speaks statistics
  ;;factor
  ;;faust             ; dsp, but you get to keep your soul
@@ -194,10 +194,10 @@
  ;;idris             ; a language you can depend on
 
  json  ; At least it ain't XML
- (javascript +tree-sitter +lsp) ;; all(hope(abandon(ye(who(enter(here))))))
+ (javascript +lsp) ;; +tree-sitter all(hope(abandon(ye(who(enter(here))))))
  ;;(java +lsp)       ; the poster child for carpal tunnel syndrome
  ;;julia             ; a better, faster MATLAB
- (kotlin +lsp)       ; a better, slicker Java(Script)
+ ;; (kotlin +lsp)       ; a better, slicker Java(Script)
  (latex +latexmk +cdlatex) ; writing papers in Emacs has never been so fun
  ;;lean              ; for folks with too much to prove
  ledger            ; be audit you can be

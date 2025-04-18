@@ -316,7 +316,7 @@
 
 ;;;; org-export
 
-(setq org-export-headline-levels 5) ; default 3
+(setq org-export-headline-levels 3) ; default 3
 (setq org-export-with-toc nil) ; default t - turn off on hugo toc
 
 (progn
@@ -324,7 +324,8 @@
   (setq org-export-with-section-numbers t) ; default t
   (setq org-export-with-timestamps t) ; default t
   ;; (setq org-export-with-drawers '(not "LOGBOOK")) ; default (not "LOGBOOK")
-  (setq org-export-with-todo-keywords nil) ; default t
+  (setq org-export-with-todo-keywords t) ; default t
+;; (setq org-export-with-smart-quotes nil) ; convert "this" to « this » ; doom t
   )
 
 ;; ;; (setq org-export-preserve-breaks t) ; default nil
@@ -339,8 +340,6 @@
 ;; (setq org-edit-src-auto-save-idle-delay auto-save-timeout) ; use the defaults
 ;; (setq org-edit-src-turn-on-auto-save t) ; auto-save org-edit-src , doom nil
 ;; (setq org-export-in-background t) ; run export processes in external emacs process
-
-(setq org-export-with-smart-quotes nil) ; convert "this" to « this » ; doom t
 
 ;; (setq org-export-with-sub-superscripts '{}) ; Only explicit _{} ^{} are interpreted as sub/superscripts
 ;; (setq org-fold-catch-invisible-edits 'smart) ; try not to accidentally do weird stuff in invisible regions - doom 'smart
@@ -633,11 +632,10 @@
                             ("WORKLOG" . ?o)
                             ("DEPRECATED" . ?D)
                             ("KLUDGE" . ?K)
-                            ("198x" . ?8) ;; 1980~1989
-                            ("199x" . ?9) ;; 1990~1999
-                            ("200x" . ?0) ;; 2000~2009
-                            ("201x" . ?1) ;; 2010~2019
-                            ("202x" . ?2) ;; 2022~2029
+                            ("REFILED" . ?R)
+                            ("2020" . ?0) ;; 2000~2009
+                            ("2021" . ?1) ;; 2010~2019
+                            ("2022" . ?2) ;; 2022
                             ("2023" . ?3) ;; 2023
                             ("2024" . ?4) ;; 2024
                             ("2025" . ?5) ;; 2025
@@ -729,6 +727,7 @@
             ;; (evil-define-key 'motion evil-org-agenda-mode-map "gT" 'tab-line-switch-to-prev-tab)
             (evil-define-key 'motion evil-org-agenda-mode-map "F" 'org-agenda-follow-mode)))
 
+(require 'org-archive)
 ;; (setq org-archive-location "archives/%s_archive::")
 (setq org-archive-location (file-name-concat org-directory "archives/%s_archive::"))
 

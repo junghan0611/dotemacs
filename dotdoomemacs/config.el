@@ -729,23 +729,38 @@
 (when (modulep! :completion vertico +childframe)
   (remove-hook 'vertico-mode-hook #'vertico-posframe-mode))
 
-;;;;; vertico on TOP
+;;;;; vertico-buffer on TOP
 
-(unless (or IS-TERMUX IS-DEMO)
-  (require 'vertico-buffer)
-  (setq vertico-resize 'grow-only) ; doom nil
+;; vertico-buffer on-top
+;; (unless (or IS-TERMUX IS-DEMO)
+;;   (progn
+;;     (require 'vertico-buffer)
+;;     (setq vertico-resize 'grow-only) ; doom nil
 
-  ;; vertico on Top
-  (setq vertico-buffer-display-action
-        `(display-buffer-in-side-window
-          (window-height . ,(+ 3 vertico-count)) (side . top)))
-  (vertico-mode +1)
-  (vertico-buffer-mode +1)
+;;     ;; vertico on Top
+;;     (setq vertico-buffer-display-action
+;;           `(display-buffer-in-side-window
+;;             (window-height . ,(+ 3 vertico-count)) (side . top)))
+;;     (vertico-mode +1)
+;;     (vertico-buffer-mode +1)
+;;     )
 
-  ;; sachac-dotfiles/Sacha.org
-  (with-eval-after-load 'vertico-multiform
-    (add-to-list 'vertico-multiform-categories '(embark-keybinding grid)))
-  )
+;;   (defun my/vertico-posframe-toggle ()
+;;     (interactive)
+;;     (if (bound-and-true-p vertico-buffer-mode)
+;;         (progn
+;;           ;; (vertico-buffer-mode -1)
+;;           (vertico-posframe-mode 1))
+;;       (progn
+;;         ;; (vertico-buffer-mode 1)
+;;         (vertico-posframe-mode -1))))
+;;   )
+
+;;;;; vertico-multiform
+
+;; sachac-dotfiles/Sacha.org
+(with-eval-after-load 'vertico-multiform
+  (add-to-list 'vertico-multiform-categories '(embark-keybinding grid)))
 
 ;;;;; DONT vertico hangul
 
@@ -1711,8 +1726,8 @@ only those in the selected frame."
 ;; polymode
 ;; (use-package! quarto-mode
 ;;   :mode (("\\.Rmd" . poly-quarto-mode)))
-(use-package!  quarto-mode
-  :mode (("\\.[qQ][mM][dD]" . poly-quarto-mode)))
+;(use-package!  quarto-mode
+;  :mode (("\\.[qQ][mM][dD]" . poly-quarto-mode)))
 
 ;;;;; checkers : spelling
 
@@ -2394,14 +2409,32 @@ ${content}"))
     (setq consult-gh-forge-timeout-seconds 20))
   )
 
-;;;;; TODO magit-blame-color-by-age
+;;;;; magit-blame-color-by-age
 
+;; (require 'magit-blame-color-by-age)
 (use-package! magit-blame-color-by-age
+  :defer t :after-call magit-blame-mode-hook :config
+  ;; Double-check that nothing else has modified the Git Blame header before
+  ;; modifying it.
+  (when (string= "%-20a %C %s\n"
+                 (alist-get 'heading-format
+                            (alist-get 'headings magit-blame-styles)))
+    (setf (alist-get 'heading-format (alist-get 'headings magit-blame-styles))
+          "%C %-20a %s\n"))
+  (setq magit-blame-color-by-age-full-heading nil)
+  (magit-blame-color-by-age-mode +1))
+
+;;;;; magit-gptcommit
+
+(use-package! magit-gptcommit
   :after magit
-  ;; :init
-  ;; (setq magit-blame-color-by-age-full-heading t)
-  ;; if you'd like date first on heading lines:
-  ;; :config (setf (alist-get 'heading-format (alist-get 'headings magit-blame-styles)) "%C %-20a %s\n")
+  :bind (:map git-commit-mode-map
+              ("C-c C-g" . magit-gptcommit-commit-accept))
+  ;; :custom
+  ;; (magit-gptcommit-llm-provider ash/llm-claude)
+  ;; :config
+  ;; ;; Eval (transient-remove-suffix 'magit-commit '(1 -1)) to remove gptcommit transient commands
+  ;; (magit-gptcommit-status-buffer-setup)
   )
 
 ;;;; :lang org
@@ -5960,8 +5993,7 @@ See `consult-omni-multi' for more details.
        org-pretty-entities t ; nil
        org-agenda-tags-column 0)
 
-      (setq org-modern-tag t)
-
+      (setq org-modern-tag nil)
       (setq org-modern-table nil) ; org-modern-indent
       ;;  org-modern-todo t
       ;;  org-modern-timestamp t

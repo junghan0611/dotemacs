@@ -281,7 +281,7 @@
 (package! focus)
 
 ;; (package! quarto-mode :recipe (:host github :repo "quarto-dev/quarto-emacs" )) ; require polymode
-(package! quarto-mode :pin "a7b974f7d22ef939eaed8b9919434bcf20b1438f")
+;; (package! quarto-mode :pin "a7b974f7d22ef939eaed8b9919434bcf20b1438f")
 (package! ox-quarto :recipe (:host github :repo "jrgant/ox-quarto"))
 
 (package! math-preview)
@@ -458,6 +458,7 @@
 (package! consult-git-log-grep)
 (package! magit-todos)
 (package! magit-blame-color-by-age :recipe (:host github :repo "jdtsmith/magit-blame-color-by-age"))
+(package! magit-gptcommit)
 
 ;;;; Reading
 
@@ -530,6 +531,8 @@
 (package! p-search :recipe (:host github :repo "zkry/p-search"))
 
 (package! git-grep-transient)
+
+(package! transient-posframe)
 
 ;;;; Forked PKGs
 

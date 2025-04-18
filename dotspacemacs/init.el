@@ -4038,12 +4038,6 @@ For instance pass En as source for English."
   (setq compilation-scroll-output t) ; 'first-error can be a good option
   (add-hook 'compilation-mode-hook 'goto-address-mode)
 
-;;;;;; Make Script Files Executable Automatically
-
-  ;; Make script files (with shebang like #!/bin/bash, #!/bin/sh) executable automatically. See this blog post from Emacs Redux.
-  (add-hook 'after-save-hook
-            'executable-make-buffer-file-executable-if-script-p)
-
 ;;;;; jh-coding > lsp-mode with corfu
 
   (with-eval-after-load 'lsp-mode

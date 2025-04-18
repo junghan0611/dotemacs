@@ -2015,6 +2015,7 @@ window."
   "0" #'my/denote-info
   "a" #'my/denote-attach
   "e" #'prot-eshell-export
+  "M-s" #'my/insert-screenshot-links-by-date
 
   ;; "s" #'denote-subdirectory
 
@@ -2022,8 +2023,7 @@ window."
   ;; "z" #'denote-signature ; "zettelkasten" mnemonic
 
   "M-i" #'denote-org-dblock-insert-files
-  "M-r" #'my/rename-all-screenshot-images-to-denote-id
-
+  ;; "M-r" #'my/rename-all-screenshot-images-to-denote-id
   ;; "S" #'my/denote-sort-with-days
   ;; "n" #'my/goto-denote-dired
   ;; "s" #'denote-sort-dired
