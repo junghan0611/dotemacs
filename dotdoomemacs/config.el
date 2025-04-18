@@ -3034,7 +3034,6 @@ ${content}"))
 #+identifier: %4$s
 #+export_file_name: %4$s.md
 #+description:
-#+hugo_tags: notes
 #+hugo_categories: Noname
 
 #+print_bibliography:
@@ -3376,7 +3375,7 @@ ${content}"))
         (insert (format "#+identifier: %s\n" suffix))
         (insert (format "#+export_file_name: %s.md\n" suffix))
         (insert (format "#+description:\n"))
-        (insert (format "#+hugo_tags: notes\n"))
+        ;; (insert (format "#+hugo_tags: notes\n"))
         (insert (format "#+hugo_categories: Noname\n\n"))
 
         ;; add bib and history

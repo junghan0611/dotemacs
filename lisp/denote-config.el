@@ -473,19 +473,12 @@
     )
 
   (defun my/update-export-garden (dir)
-    (interactive)
     (message "path %s:" dir)
     ;; (message "update dblocks")
     ;; (my/org-update-all-dblocks-on-directory dir)
     ;; (message "save-org-buffers")
     ;; (org-save-all-org-buffers)
-    (message "hugo-export-diectory")
     (my/org-hugo-export-directory dir)
-    (message "kill-all-buffers")
-    ;; (doom/kill-all-buffers) ; never
-    (my/kill-all-buffers-except-toolbox)
-    (garbage-collect)
-    (setq which-key-replacement-alist nil)
     )
 
   (defun my/update-dblock-garden-all ()

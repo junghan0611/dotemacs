@@ -245,7 +245,12 @@ If USE-RELREF is non-nil, format it as a Hugo relref link."
   (let ((org-files (directory-files-recursively directory "\\.org\\'")))
     (dolist (org-file org-files)
       (with-current-buffer (find-file-noselect org-file)
-        (org-hugo-export-to-md)))))
+        (org-hugo-export-to-md))))
+
+  (my/kill-all-buffers-except-toolbox)
+  (garbage-collect)
+  (setq which-key-replacement-alist nil)
+  )
 
 ;;;; my/open-hugo-markdown-file
 

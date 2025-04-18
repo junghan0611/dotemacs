@@ -1993,8 +1993,8 @@ window."
   "E" #'my/org-hugo-export-directory
   "u" #'my/org-update-all-dblocks
   "U" #'my/org-update-all-dblocks-on-directory
-  "c" #'my/denote-convert-note-to-blog-draft
-  "p" #'my/denote-convert-blog-ready-to-hugo
+  ;; "c" #'my/denote-convert-note-to-blog-draft
+  ;; "p" #'my/denote-convert-blog-ready-to-hugo
 
   "l" #'my/denote-update-link-descriptions
   ;; #'my/denote-update-link-descriptions-globally
