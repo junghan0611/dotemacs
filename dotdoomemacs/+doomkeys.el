@@ -1797,7 +1797,8 @@
         :desc "@org-transclusion-map" "u" ews-org-transclusion-map
         ;; :desc "@org-noter-map" "o" ews-org-noter-map
         "o" #'my/denote-howmish-find-file
-
+        ";" #'my/insert-nbsp-all
+        ":" #'my/insert-nbsp-all-with-wordlist-and-tags
         :desc "org-set-effot" "E" #'org-set-effort
         :desc "time-stamp" "1" #'time-stamp
         :desc "insert-inactive-timestamp" "2" #'bh/insert-inactive-timestamp

@@ -1179,27 +1179,87 @@ Also see `prot-window-delete-popup-frame'." command)
       (replace-regexp-in-string " " "" text)))
   (add-to-list 'org-export-filter-final-output-functions #'+org-export-remove-white-space t))
 
-;;;; insert unicode for notetaking
+;;;; my/insert-nbsp-all, my/insert-white-space my/insert-unicode-notetaking
 
 (with-eval-after-load 'org
-  ;; (unless (org-at-table-p)
   ;; [[denote:20250415T174028][#LLM: 20250415T174028]]
-  (defun my/insert-nbsp-between-latin-and-hangul ()
+  ;; [[denote:20250418T050908][#조직모드: 한국어 조사 공백문자 삽입 - 코드 통합]]
+  (defun my/insert-nbsp-all ()
+    "한글 조사, 라틴-한글, 기호-텍스트 사이에 NBSP 삽입 (3가지 패턴 통합)"
     (interactive)
     (save-excursion
       (goto-char (point-min))
+      ;; 1. 라틴 문자와 한글 사이 NBSP 삽입
+      ;; 2. 조직모드 기호(=,*,_,+) 뒤 한글 또는 라틴 문자에 NBSP 삽입
       (while (re-search-forward "\\([A-Za-z*+=_]\\)\\([가-힣]\\)" nil t)
         (unless (save-excursion
                   (goto-char (match-beginning 1))
                   (looking-back "\\s-" 1))
           (goto-char (match-beginning 2))
-          (insert " ") ;  ㅇㅇ
-          (goto-char (match-end 2))))))
+          (insert " ")
+          (goto-char (match-end 2))))
+
+      ;; 3. 한글 조사 NBSP 삽입
+      (goto-char (point-min))
+      (while (re-search-forward
+              "\\([가-힣]\\{2,\\}\\)\\(이\\|가\\|은\\|는\\|을\\|를\\|에서\\|으로\\|와\\)\\([[:space:]]\\)"
+              nil t)
+        (replace-match "\\1 \\2\\3"))
+      )
+    )
+
+  (defun my/insert-nbsp-all-with-wordlist-and-tags ()
+    "한글 조사, 라틴-한글, 기호-텍스트 사이에 NBSP 삽입 (3가지 패턴 통합)"
+    (interactive)
+    (let ((word-list '()))
+      (save-excursion
+        (goto-char (point-min))
+        ;; 1. 라틴 문자와 한글 사이 NBSP 삽입
+        ;; 2. 조직모드 기호(=,*,_,+) 뒤 한글 또는 라틴 문자에 NBSP 삽입
+        (while (re-search-forward "\\([A-Za-z*+=_]\\)\\([가-힣]\\)" nil t)
+          (unless (save-excursion
+                    (goto-char (match-beginning 1))
+                    (looking-back "\\s-" 1))
+            (goto-char (match-beginning 2))
+            (insert " ")
+            (goto-char (match-end 2))))
+
+        ;; 3. 한글 조사 NBSP 삽입
+        (goto-char (point-min))
+        (while (re-search-forward
+                "\\([가-힣]\\{2,\\}\\)\\(이\\|가\\|은\\|는\\|을\\|를\\|에서\\|으로\\|와\\)\\([[:space:]]\\)"
+                nil t)
+          (push (match-string 1) word-list)
+          (replace-match "\\1 \\2\\3")))
+      ;; 중복 제거 전 word-list 출력
+      (message "중복 제거 전 word-list: %s" word-list)
+      ;; 중복 제거 및 WORDLIST 헤딩 아래에 목록 추가
+      (setq word-list (delete-dups word-list))
+      ;; 중복 제거 후 word-list 출력
+      (message "중복 제거 후 word-list: %s" word-list)
+      (goto-char (point-max))
+      (unless (re-search-backward "^* WORDLIST$" nil t)
+        (insert "\n* WORDLIST\n"))
+      (forward-line)
+      (dolist (word word-list)
+        (let ((tag-exists (condition-case nil
+                              (progn
+                                (message "디버깅: find-tag-noselect 호출 - %s" word)
+                                (with-current-buffer (get-buffer-create "ten-TAGS")
+                                  (let ((buffer-read-only nil))
+                                    (find-tag-noselect word nil))))
+                            ;; (error
+                            ;;  (message "디버깅: find-tag-noselect 에러 - %s" word)
+                            ;;  nil)
+                            )))
+          (insert (format "- %s %s\n" word (if tag-exists "O" "X")))
+          ))))
 
   ;; (add-hook 'before-save-hook
   ;;           (lambda ()
   ;;             (when (derived-mode-p 'org-mode)
-  ;;               (my/insert-nbsp-between-latin-and-hangul))))
+  ;;               (unless (org-at-table-p)
+  ;;                 (my/insert-nbsp-all)))))
 
   (defun my/insert-white-space ()
     (interactive)
@@ -1229,10 +1289,9 @@ Also see `prot-window-delete-popup-frame'." command)
 
   (evil-define-key '(insert normal) text-mode-map (kbd "M-M") #'my/insert-unicode-notetaking)
   (evil-define-key '(insert normal) text-mode-map (kbd "M-m") #'my/insert-white-space)
-  ;; (evil-define-key '(insert normal) text-mode-map (kbd "M-M") #'my/insert-nbsp-between-latin-and-hangul)
 
   (with-eval-after-load 'vertico
-    ;; (define-key minibuffer-mode-map (kbd "M-m") #'my/insert-unicode-notetaking)
+    (define-key minibuffer-mode-map (kbd "M-M") #'my/insert-unicode-notetaking) ; needed
     (define-key vertico-map (kbd "M-M") #'my/insert-unicode-notetaking))
   )
 

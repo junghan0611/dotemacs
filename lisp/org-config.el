@@ -319,6 +319,8 @@
 (setq org-export-headline-levels 3) ; default 3
 (setq org-export-with-toc nil) ; default t - turn off on hugo toc
 
+(setq org-export-exclude-tags '("private" "noexport" "LLMLOG" "ignore" "crypt"))
+
 (progn
   (setq org-publish-use-timestamps-flag t) ; default t
   (setq org-export-with-section-numbers t) ; default t

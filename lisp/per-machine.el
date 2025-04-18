@@ -216,7 +216,7 @@
                       (string-lines
                        (shell-command-to-string
                         "fortune -c 90% advice 10% .")))))
-                ("\nLearn how to take a 20-minute power nap without embarrassment.
+                ("\n Learn how to take a 20-minute power nap without embarrassment.
 - 부끄러워 하지 않고 20분동안 Power Nap(에너지를 보충하는 짧은 낮잠) 자는 법을 익히세요.\n"))
               "\n"))
 
@@ -237,6 +237,7 @@
         ;;,(concat org-directory "dict/20240913T145640--general__glossary.txt")
         ))
 (setq user-ten-tags-file (concat user-org-directory "dict/ten-TAGS"))
+(setq user-ten-glossary-files "~/sync/org/dict/20240913T145640--general__glossary.txt")
 
 ;;; dict-file
 

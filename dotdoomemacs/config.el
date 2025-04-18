@@ -70,7 +70,7 @@
 (setq doom-scratch-initial-major-mode 'emacs-lisp-mode)
 
 ;; Set initial buffer to org
-(setq initial-major-mode #'text-mode)
+(setq initial-major-mode #'emacs-lisp-mode); text-mode
 
 ;;;;; gc-cons : gcmh
 
@@ -3427,7 +3427,8 @@ ${content}"))
     :endpoint "/v1/chat/completions"
     :stream t
     :request-params '(:temperature 0.0)
-    :models '(grok-2-1212
+    :models '(grok-3 ; grok-3-fast
+              grok-3-mini ; grok-3-mini-fast
               grok-2-image-1212
               ))
 
@@ -6007,11 +6008,12 @@ See `consult-omni-multi' for more details.
       (setq org-modern-star nil) ; org-modern-indent
       (setq org-modern-hide-stars nil) ; adds extra indentation
       (setq org-modern-list
-            '((?+ . "➤") ; ◦
-              (?- . "–") ; ‣, – endash
-              (?* . "•")))
+            '((?+ . "•") ; ◦
+              (?- . "◦") ; ‣, – endash
+              (?* . "⭑")))
 
       (setq org-modern-block-fringe 0) ; default 2
+      (setq org-modern-block-name nil)
       ;; (setq org-modern-block-name
       ;;       '((t . t)
       ;;         ("src" "»" "«")
