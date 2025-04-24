@@ -560,14 +560,14 @@
        "e" #'elysium-toggle-window
 
        :desc "gptel: gptel-mode" "1" #'gptel-mode
+       :desc "gptel: gptel-mode" "SPC" #'gptel-mode
        "2" #'gptel-org-toggle-branching-context
        :desc "gptel: send default" :n "3" (cmd! (cashpw/gptel-send (alist-get 'default gptel-directives)))
        :desc "gptel: send chain-of-thought" :n "4" (cmd! (cashpw/gptel-send (alist-get 'chain-of-thought gptel-directives)))
-       :desc "gptel: send follow-up" :n "5" (cmd! (cashpw/gptel-send (alist-get 'follow-up gptel-directives)))))
-
+       :desc "gptel: send follow-up" :n "5" (cmd! (cashpw/gptel-send (alist-get 'follow-up gptel-directives))))
+      )
 
 ;;;; '9' gptel
-
 
 ;; (map! :leader
 ;;       "9" nil
@@ -611,8 +611,14 @@
 (map! :leader
       (:prefix ("o" . "open")
        :desc "elfeed" "l" #'elfeed
-       :desc "open workspaces" "o" #'my/open-workspaces))
-
+       :desc "open workspaces" "o" #'my/open-workspaces
+       (:prefix ("g" . "gptel")
+        "SPC" #'gptel-mode
+        "g" #'gptel
+        ;; "q" 'gptel-lookup
+        :nv "a" 'gptel-add
+        :nv "r" 'gptel-rewrite
+        )))
 
 ;;;; 'j' junghanacs hotkey
 
@@ -1679,6 +1685,8 @@
                    "P" #'org-download-yank))
         (:prefix ("b" . "tables")
                  "-" #'org-table-insert-hline
+                 "w" #'org-table-wrap-region
+                 "j" #'+org/table-insert-row-below
                  "a" #'org-table-align
                  "b" #'org-table-blank-field
                  "c" #'org-table-create-or-convert-from-region

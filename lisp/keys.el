@@ -1901,9 +1901,18 @@ window."
   "r" #'org-transclusion-refresh
   "g" #'org-transclusion-move-to-source)
 
+(defvar-keymap denote-sequence-map
+  :doc "Emacs denote-sequence keymap."
+  "s" 'denote-sequence
+  "f" 'denote-sequence-find
+  "l" 'denote-sequence-link
+  "d" 'denote-sequence-dired
+  "r" 'denote-sequence-reparent
+  "c" 'denote-sequence-convert
+  )
+
 (defvar-keymap denote-search-map
   :doc "Emacs denote-search keymap."
-
   "s" #'denote-search
   "d" #'denote-search-marked-dired-files
   "r" #'denote-search-files-referenced-in-region
@@ -1918,13 +1927,11 @@ window."
 
 (defvar-keymap ews-bibliography-map
   :doc "Bibliograpic functions keymap."
-
-  "b" #'org-cite-insert
+  "b" #'citar-insert-citation ;; org-cite-insert
   "c" #'citar-create-note
   "C" #'citar-denote-create-silo-note
   "n" #'citar-denote-open-note
   "o" #'citar-open
-
 
   "e" #'citar-open-entry
 
@@ -1947,6 +1954,8 @@ window."
   "r" #'citar-denote-open-reference-entry
 
   "SPC" #'citar-denote-dwim
+
+  "M-i" #'my/insert-citations-by-date
   )
 
 (defvar-keymap ews-annotate-map
@@ -1996,6 +2005,13 @@ window."
   ;; "c" #'my/denote-convert-note-to-blog-draft
   ;; "p" #'my/denote-convert-blog-ready-to-hugo
 
+  "M-p" #'my/update-dblock-export-garden-all
+
+  "M-s" #'my/insert-screenshot-links-by-date
+  "M-i" #'my/insert-citations-by-date
+
+  "M-d" #'my/delete-multiple-blank-lines
+
   "l" #'my/denote-update-link-descriptions
   ;; #'my/denote-update-link-descriptions-globally
 
@@ -2015,8 +2031,6 @@ window."
   "0" #'my/denote-info
   "a" #'my/denote-attach
   "e" #'prot-eshell-export
-  "M-s" #'my/insert-screenshot-links-by-date
-
   ;; "s" #'denote-subdirectory
 
   "P" #'ews-denote-assign-para
@@ -2050,7 +2064,7 @@ window."
 
   ;;   "F" #'+default/browse-notes
 
-  "1" #'org-cite-insert
+  "1" #'citar-insert-citation
 
   "e" ews-denote-extra-map
   "E" #'my/denote-assign-evergreen
@@ -2076,8 +2090,8 @@ window."
   "M" #'my/denote-create-meta-note
 
   "s" denote-search-map
+  "M-s" denote-sequence-map
   ;; "s" #'denote-silo-open-or-create
-  "S" #'denote-silo-select-silo-then-command
 
   "t" #'denote-type
 
@@ -2231,7 +2245,9 @@ window."
       "x" `("Denote-Explore" . ,ews-denote-explore-map)
       ;; "o" `("Org-noter" . ,ews-org-noter-map)
       "u" `("Org-Transclusion" . ,ews-org-transclusion-map)
-      "e" `("Denote-Extra" . ,ews-denote-extra-map)
+      "e" `("denote-extra" . ,ews-denote-extra-map)
+      "s" `("denote-search" . ,denote-search-map)
+      "M-s" `("denote-sequence" . ,denote-sequence-map)
       "p" `("Org-Publish" . ,ews-org-publish-map)
       )
     ))

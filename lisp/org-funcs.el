@@ -1874,6 +1874,65 @@ Replace spaces in filenames with underscores."
   (while (re-search-forward "\n\\s-*\n\\s-*\n" nil t)
     (replace-match "\n\n" nil nil)))
 
+;;;; my/insert-citations-by-search
+
+;; [[denote:20250422T110316]]
+(defun my/insert-citations-by-date (&optional date-field-name date)
+  "특정 날짜에 추가된 BibTeX 항목을 org-cite 형식으로 삽입합니다.
+DATE가 nil이면 오늘 날짜를 사용하며, YYYY-MM-DD 형식이어야 합니다.
+인용은 레벨 3 헤딩 아래 개별 줄에 삽입됩니다."
+  (interactive
+   (list
+    (when current-prefix-arg
+      (read-string "날짜 필드 이름 (기본값: dateadded): " nil nil "dateadded"))
+    (when current-prefix-arg
+      (read-string "날짜 (YYYY-MM-DD, 기본 오늘): "))))
+  (let* ((date-field (or date-field-name "dateadded"))
+         (date-str (or date (format-time-string "%Y-%m-%d")))
+         (bib-file (expand-file-name (car org-cite-global-bibliography)))
+         (keys '())
+         (entry-count 0)
+         (found-count 0))
+    (unless (and bib-file (file-exists-p bib-file))
+      (error "Bib 파일 없음: %s" bib-file))
+    (with-temp-buffer
+      (insert-file-contents bib-file)
+      (goto-char (point-min))
+      (let ((case-fold-search t))
+        (while (re-search-forward "^@\\w+{\\([^,]+\\)," nil t)
+          (setq entry-count (1+ entry-count))
+          (let ((key (match-string 1))
+                (entry-end (save-excursion
+                             (if (re-search-forward "^@" nil t)
+                                 (match-beginning 0)
+                               (point-max)))))
+            (when (re-search-forward (format "^\\s-*%s\\s-*=\\s-*{\\s-*\\([^}]+\\)\\s-*}"
+                                             (regexp-quote date-field))
+                                     entry-end t)
+              (let* ((date-value (replace-regexp-in-string "[\\\\\"]" "" (match-string 1)))
+                     (parsed-time (ignore-errors (date-to-time (string-trim date-value))))
+                     (entry-date (when parsed-time
+                                   (format-time-string "%Y-%m-%d" parsed-time))))
+                (when (string= entry-date date-str)
+                  (push key keys)
+                  (setq found-count (1+ found-count)))))))))
+    (insert (format "*** %s\n" date-str))
+    (if keys
+        (dolist (k (reverse keys))
+          (insert (format "[cite:@%s]\n" k)))
+      (insert "이 날짜에 추가된 인용이 없습니다.\n"))))
+
+(defun my/insert-citations-by-date-with-calendar (&optional date-field-name)
+  "캘린더에서 날짜를 선택하여 해당 일자의 인용을 삽입합니다."
+  (interactive
+   (list
+    (when current-prefix-arg
+      (read-string "날짜 필드 이름 (기본값: dateadded): " nil nil "dateadded"))))
+  (require 'calendar)
+  (let* ((date (calendar-read-date))
+         (date-str (format "%04d-%02d-%02d" (nth 2 date) (nth 0 date) (nth 1 date))))
+    (insert-citations-by-date date-field-name date-str)))
+
 ;;;; provide
 
 (provide 'org-funcs)

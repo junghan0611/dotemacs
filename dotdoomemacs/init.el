@@ -216,7 +216,7 @@
   +present                    ; using org-mode for presentations
   +contacts
   +journal
-  +pretty
+  ;; +pretty
   ;; +passwords
   ;; +pomodoro                 ; be fruitful with the tomato technique
   )                     ; wander around notes

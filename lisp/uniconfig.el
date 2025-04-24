@@ -6,7 +6,7 @@
 ;; ㉽ :: U+327D
 ;; ㉼ :: U+327C
 
-;; 이맥스 배포판에 호환하는 통합 설정
+;; 이맥스 배포판에 호환 하는 통합 설정
 ;; 목적 : 둠 스페이스맥스 등 관계 없이 패키지가 있다면
 ;; 여기 설정에 따라서 동작하도록 함.
 
@@ -125,7 +125,7 @@
 (setenv "LANG" "ko_KR.UTF-8")
 (setenv "LC_ALL" "ko_KR.UTF-8")
 
-;; 날짜 표시를 영어로한다. org mode에서 time stamp 날짜에 영향을 준다.
+;; 날짜 표시를 영어로한다. org mode 에서 time stamp 날짜에 영향을 준다.
 (setq system-time-locale "C")
 
 (setq
@@ -377,7 +377,7 @@
   ;; (my/convert-hangul-jamo-to-syllable)
 
   (defun my/process-files-by-extension (directory extension process-func)
-    "주어진 디렉토리에서 특정 확장자를 가진 파일들에 대해 처리 함수를 적용합니다."
+    "주어진 디렉토리 에서 특정 확장자를 가진 파일들에 대해 처리 함수를 적용합니다."
     (interactive
      (list (read-directory-name "처리할 디렉토리: ")
            (read-string "파일 확장자 (예: txt): ")
@@ -392,7 +392,7 @@
 ;;;; my/replace-latex-delimiters-with-dollar
 
 (defun my/replace-latex-delimiters-with-dollar ()
-  "현재 버퍼에서 \\[와 \\]를 $로 바꿉니다."
+  "현재 버퍼 에서 \\[와 \\]를 $로 바꿉니다."
   (interactive)
   (goto-char (point-min))
   (while (search-forward "\\[" nil t)
@@ -574,7 +574,7 @@ Also see `prot-window-delete-popup-frame'." command)
 ;;;;; use gptel citations utf8
 
 (defun my/url-decode-to-korean (url)
-  "URL을 디코딩하고 한글로 표시합니다."
+  "URL 을 디코딩하고 한글로 표시합니다."
   (decode-coding-string (url-unhex-string url t) 'utf-8))
 
 ;; (when (locate-library "gptel")
@@ -1031,7 +1031,7 @@ Also see `prot-window-delete-popup-frame'." command)
             (with-temp-buffer
               ;; BibTeX 엔트리를 버퍼에 삽입
               (citar--insert-bibtex citekey)
-              ;; org-bibtex 형식으로 변환
+              ;; org-bibtex 형식 으로 변환
               (org-bibtex-read)
               ;; 변환된 내용을 reading list 파일에 추가
               (with-current-buffer (find-file-noselect reading-list-file)
@@ -1142,9 +1142,9 @@ Also see `prot-window-delete-popup-frame'." command)
   ;; (setq org-hugo-link-desc-insert-type t)
 
   ;; 내보낼 때는 fill-column 끈다.
-  ;; 개행문자는 조직모드에서 \\ 를 뒤에 넣으라
+  ;; 개행문자는 조직모드 에서 \\ 를 뒤에 넣으라
   (setq org-hugo-preserve-filling nil) ; important
-  ;; (setq org-hugo-delete-trailing-ws nil) ; default t for quartz
+  (setq org-hugo-delete-trailing-ws nil) ; default t for quartz
 
   (setq org-hugo-allow-spaces-in-tags t) ; default t
   (setq org-hugo-prefer-hyphen-in-tags t) ; default t
@@ -1184,30 +1184,31 @@ Also see `prot-window-delete-popup-frame'." command)
 (with-eval-after-load 'org
   ;; [[denote:20250415T174028][#LLM: 20250415T174028]]
   ;; [[denote:20250418T050908][#조직모드: 한국어 조사 공백문자 삽입 - 코드 통합]]
-  (defun my/insert-nbsp-all ()
-    "한글 조사, 라틴-한글, 기호-텍스트 사이에 NBSP 삽입 (3가지 패턴 통합)"
-    (interactive)
-    (save-excursion
-      (goto-char (point-min))
-      ;; 1. 라틴 문자와 한글 사이 NBSP 삽입
-      ;; 2. 조직모드 기호(=,*,_,+) 뒤 한글 또는 라틴 문자에 NBSP 삽입
-      (while (re-search-forward "\\([A-Za-z*+=_]\\)\\([가-힣]\\)" nil t)
-        (unless (save-excursion
-                  (goto-char (match-beginning 1))
-                  (looking-back "\\s-" 1))
-          (goto-char (match-beginning 2))
-          (insert " ")
-          (goto-char (match-end 2))))
+  ;; (defun my/insert-nbsp-all ()
+  ;;   "한글 조사, 라틴-한글, 기호-텍스트 사이에 NBSP 삽입 (3가지 패턴 통합)"
+  ;;   (interactive)
+  ;;   (save-excursion
+  ;;     (goto-char (point-min))
+  ;;     ;; 1. 라틴 문자와 한글 사이 NBSP 삽입
+  ;;     ;; 2. 조직모드 기호(=,*,_,+) 뒤 한글 또는 라틴 문자에 NBSP 삽입
+  ;;     (while (re-search-forward "\\([A-Za-z*+=_]\\)\\([가-힣]\\)" nil t)
+  ;;       (unless (save-excursion
+  ;;                 (goto-char (match-beginning 1))
+  ;;                 (looking-back "\\s-" 1))
+  ;;         (goto-char (match-beginning 2))
+  ;;         (insert " ")
+  ;;         (goto-char (match-end 2))))
 
-      ;; 3. 한글 조사 NBSP 삽입
-      (goto-char (point-min))
-      (while (re-search-forward
-              "\\([가-힣]\\{2,\\}\\)\\(이\\|가\\|은\\|는\\|을\\|를\\|에서\\|으로\\|와\\)\\([[:space:]]\\)"
-              nil t)
-        (replace-match "\\1 \\2\\3"))
-      )
-    )
+  ;;     ;; 3. 한글 조사 NBSP 삽입
+  ;;     (goto-char (point-min))
+  ;;     (while (re-search-forward
+  ;;             "\\([가-힣]\\{2,\\}\\)\\(이\\|가\\|은\\|는\\|을\\|를\\|에서\\|으로\\|와\\)\\([[:space:]]\\)"
+  ;;             nil t)
+  ;;       (replace-match "\\1 \\2\\3"))
+  ;;     )
+  ;;   )
 
+  ;; [[denote:20250419T123138][정규식의 우선순위]]
   (defun my/insert-nbsp-all-with-wordlist-and-tags ()
     "한글 조사, 라틴-한글, 기호-텍스트 사이에 NBSP 삽입 (3가지 패턴 통합)"
     (interactive)
@@ -1224,13 +1225,25 @@ Also see `prot-window-delete-popup-frame'." command)
             (insert " ")
             (goto-char (match-end 2))))
 
-        ;; 3. 한글 조사 NBSP 삽입
+        ;; 3. 한글 조사 NBSP 삽입 '2단어'
         (goto-char (point-min))
         (while (re-search-forward
-                "\\([가-힣]\\{2,\\}\\)\\(이\\|가\\|은\\|는\\|을\\|를\\|에서\\|으로\\|와\\)\\([[:space:]]\\)"
+                "\\([가-힣]\\{1,\\}\\)\\(이는\\|다는\\|하는\\|했을\\|와는\\|들의\\|들이\\|였을\\|와의\\|오는\\|에는\\|에서\\|으로\\)\\([[:space:]]\\)"
                 nil t)
-          (push (match-string 1) word-list)
-          (replace-match "\\1 \\2\\3")))
+          (when (>= (length (match-string 1)) 2)
+            (push (match-string 1) word-list))
+          (replace-match "\\1 \\2\\3"))
+
+        ;; 4. 한글 조사 NBSP 삽입 - '1단어'
+        (goto-char (point-min))
+        (while (re-search-forward
+                "\\([가-힣]\\{2,\\}\\)\\(이\\|가\\|은\\|는\\|을\\|의\\|를\\|와\\)\\([[:space:]]\\)"
+                nil t)
+          (when (>= (length (match-string 1)) 2)
+            (push (match-string 1) word-list))
+          (replace-match "\\1 \\2\\3"))
+        ) ; end save-excursion
+
       ;; 중복 제거 전 word-list 출력
       (message "중복 제거 전 word-list: %s" word-list)
       ;; 중복 제거 및 WORDLIST 헤딩 아래에 목록 추가
@@ -1244,16 +1257,34 @@ Also see `prot-window-delete-popup-frame'." command)
       (dolist (word word-list)
         (let ((tag-exists (condition-case nil
                               (progn
-                                (message "디버깅: find-tag-noselect 호출 - %s" word)
+                                ;; (message "디버깅: find-tag-noselect 호출 - %s" word)
                                 (with-current-buffer (get-buffer-create "ten-TAGS")
                                   (let ((buffer-read-only nil))
                                     (find-tag-noselect word nil))))
-                            ;; (error
-                            ;;  (message "디버깅: find-tag-noselect 에러 - %s" word)
-                            ;;  nil)
+                            (error
+                             (message "디버깅: find-tag-noselect 에러 - %s" word)
+                             nil)
                             )))
           (insert (format "- %s %s\n" word (if tag-exists "O" "X")))
           ))))
+
+  (defun my/add-to-glossary ()
+    (interactive)
+    (let ((glossary-file user-ten-glossary-files))
+      (save-excursion
+        (goto-char (point-min))
+        (when (re-search-forward "^* WORDLIST$" nil t)
+          (forward-line)
+          (while (re-search-forward "^- \\([가-힣]+\\) \\(.*\\)$" nil t)
+            (let* ((word (match-string 1))
+                   (meaning (match-string 2))
+                   (entry (format "<<%s>> :: %s\n" word meaning)))
+              (message "디버깅: 단어 - %s, 의미 - %s" word meaning)
+              (with-temp-file glossary-file
+                (insert-file-contents glossary-file)
+                (goto-char (point-max))
+                (insert entry)
+                (message "디버깅: %s 파일에 %s 항목 추가 완료" glossary-file entry))))))))
 
   ;; (add-hook 'before-save-hook
   ;;           (lambda ()

@@ -460,6 +460,7 @@
 ;; mapcar를 사용하여 각 디렉토리에 함수 a 적용
 ;; (my/update-export-garden "~/org/meta/")
 ;; (my/update-export-garden "~/org/bib/")
+;; (my/update-export-garden "~/org/notes/")
 (progn
 
   (defun my/update-dblock-garden (dir)
@@ -483,13 +484,16 @@
 
   (defun my/update-dblock-garden-all ()
     (interactive)
-    (mapcar 'my/update-dblock-garden garden-directory-lists)
-    )
+    (mapcar 'my/update-dblock-garden garden-directory-lists))
 
   (defun my/update-export-garden-all ()
     (interactive)
-    (mapcar 'my/update-export-garden garden-directory-lists)
-    )
+    (mapcar 'my/update-export-garden garden-directory-lists))
+
+  (defun my/update-dblock-export-garden-all ()
+    (interactive)
+    (my/update-dblock-garden-all)
+    (my/update-export-garden-all))
   )
 
 ;;;; provide

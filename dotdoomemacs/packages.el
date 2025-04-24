@@ -260,11 +260,8 @@
 
 ;;;;; :tools biblio
 
-(package! citar)
-(package! citar-embark)
-(package! parsebib)
-(package! citeproc)
-
+;(package! org-ref :recipe (:files (:defaults "citeproc" (:exclude "*ivy*" "*helm*"))))
+;
 ;;;; :tools writing
 
 (package! hypothesis :recipe (:host github :repo "EFLS/hypothesis"))
@@ -505,7 +502,7 @@
 (package! atomic-chrome)
 (package! empv) ;; TODO mpv frontend
 (package! djvu)
-(package! calibredb)
+(package! calibredb :recipe (:files (:defaults (:exclude "*ivy*" "*helm*"))))
 (package! nov)
 (package! osm) ; OpenStreetMaps
 (package! gif-screencast)

@@ -36,7 +36,7 @@
 If prefix ARG, move instead of copy.
 Adds refile metadata to the heading."
   (interactive "P")
-  ;; (org-set-tags "REFILED")
+  (org-set-tags "REFILED")
   (org-todo "DONE") ; set time marker
   ;; (org-archive-set-tag) ; hidden
   (let ((selected-file (denote-file-prompt)))
@@ -710,7 +710,7 @@ current note."
     (insert (format "[[file:%s]]" filename))
     (org-redisplay-inline-images)))
 
-;;;; Update Link Descriptions
+;;;; my/denote-update-link-descriptions
 
 ;; 2025-04-15 krisbalintona-dotfiles-zettels/lisp/krisb-denote-ext.el
 

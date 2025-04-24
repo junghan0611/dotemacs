@@ -240,8 +240,8 @@
 ;; 0x00262F ☯ YIN YANG
 ;; 0x0029BE ⦼ CIRCLED ANTICLOCKWISE-ROTATED DIVISION SIGN
 ;; § ◉ ⚡, ▼, ↴, † ‡ № ¶
-;; (when (display-graphic-p) ; gui
-;;   (setq org-ellipsis " ◉"))
+(when (display-graphic-p) ; gui
+  (setq org-ellipsis " ◉"))
 
 ;;;; pretty-entities / bullet lists / image-width
 
@@ -319,7 +319,7 @@
 (setq org-export-headline-levels 3) ; default 3
 (setq org-export-with-toc nil) ; default t - turn off on hugo toc
 
-(setq org-export-exclude-tags '("private" "noexport" "LLMLOG" "ignore" "crypt"))
+(setq org-export-exclude-tags '("private" "noexport" "ignore" "crypt")) ;; "LLMLOG"
 
 (progn
   (setq org-publish-use-timestamps-flag t) ; default t
@@ -388,7 +388,7 @@
 ;;;; custom indentation
 
 ;; (setq org-adapt-indentation t)
-(setq org-startup-indented nil) ; doom t, spacemacs nil
+;; (setq org-startup-indented nil) ; doom t, spacemacs nil
 (setq org-src-preserve-indentation t) ; doom t, spacemacs nil
 (setq org-edit-src-content-indentation 0) ; default 2
 
@@ -406,18 +406,17 @@
                 jit-lock-stealth-time 1)))
 (add-hook 'org-mode-hook #'locally-defer-font-lock)
 
-;;;; org-blank-before-new-entry : heading and plain-list
-
-;; 순서 없는 목록(unordered list)에서 bullet으로 들여쓰기를 할 때마다 +, -를 번갈아 사용한다
-(setq org-list-demote-modify-bullet '(("+" . "-") ("-" . "+")))
-
-(setq org-blank-before-new-entry
-      '((heading . t) (plain-list-item . nil)))
+;;;; TODO org-blank-before-new-entry : heading and plain-list
 
 ;; /ohyecloudy-dot-doom/doom.d/config.org
+;; 순서 없는 목록(unordered list)에서 bullet으로 들여쓰기를 할 때마다 +, -를 번갈아 사용한다
+;; (setq org-list-demote-modify-bullet '(("+" . "-") ("-" . "+")))
+
+;; (setq org-blank-before-new-entry
+;;       '((heading . t) (plain-list-item . nil)))
 
 ;; =M-RET= 키로 라인을 분리할 수 있게 한다. org module에서 nil 값을 바인딩한 걸 디폴트 값으로 돌림.
-(setq org-M-RET-may-split-line '((default . t))) ; doom nil
+;; (setq org-M-RET-may-split-line '((default . t))) ; doom nil
 
 ;;;; org-table
 
@@ -427,8 +426,8 @@
 ;;;; org-columns
 
 ;; vedang's style from org-mode-crate
-(setq org-columns-default-format
-      "%50ITEM(Task) %5Effort(Effort){:} %5CLOCKSUM %3PRIORITY %20DEADLINE %20SCHEDULED %20TIMESTAMP %TODO %CATEGORY(Category) %TAGS")
+;; (setq org-columns-default-format
+;;       "%50ITEM(Task) %5Effort(Effort){:} %5CLOCKSUM %3PRIORITY %20DEADLINE %20SCHEDULED %20TIMESTAMP %TODO %CATEGORY(Category) %TAGS")
 
 ;;; org-agenda
 

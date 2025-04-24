@@ -1950,8 +1950,8 @@ only those in the selected frame."
 ;;;;; org-pandoc-import
 
 (use-package! org-pandoc-import
-  :defer t
   :after org
+  :defer 10
   :commands (org-pandoc-import-as-org)
   :config
   (require 'org-pandoc-import))
@@ -2904,6 +2904,8 @@ ${content}"))
   ;;    ("file" "Link to a document file." "" )))
   (add-hook 'bibtex-mode-hook 'display-line-numbers-mode)
   (add-hook 'bibtex-mode-hook 'visual-line-mode)
+  (add-hook 'bibtex-mode-hook 'smartparens-mode)
+
   (setq bibtex-dialect 'biblatex)
   (setq bibtex-align-at-equal-sign t)
   (setq bibtex-text-indentation 20)
@@ -3013,7 +3015,6 @@ ${content}"))
   (denote denote-create-note denote-insert-link denote-show-backlinks-buffer denote-link-ol-store)
   ;; :hook (dired-mode . denote-dired-mode)
   :init
-  (setq denote-directory user-org-directory)
   (require 'denote-silo)
   (require 'denote-sequence)
   (require 'denote-org)
@@ -3055,10 +3056,21 @@ ${content}"))
         denote-save-buffers t) ; default nil
 
   (add-hook 'org-mode-hook (lambda ()
-                             (setq denote-rename-buffer-backlinks-indicator "¶")
-                             (setq denote-rename-buffer-format "%t%b")
+                             ;; (setq denote-rename-buffer-backlinks-indicator "¶")
+                             ;; (setq denote-rename-buffer-format "%t%b")
+                             (setq denote-rename-buffer-backlinks-indicator "")
+                             (setq denote-rename-buffer-format "%b %t")
                              (denote-rename-buffer-mode +1)))
 
+  (setq denote-directory (expand-file-name user-org-directory))
+  (setq denote-dired-directories
+        (list denote-directory
+        (thread-last denote-directory (expand-file-name "meta"))
+        (thread-last denote-directory (expand-file-name "bib"))
+        (thread-last denote-directory (expand-file-name "notes"))
+        (thread-last denote-directory (expand-file-name "tmp"))
+        ;; (thread-last denote-directory (expand-file-name "ekg"))
+        ))
   :config
   (set-register ?n (cons 'file (concat org-directory "notes")))
 
@@ -3066,41 +3078,33 @@ ${content}"))
   ;; (add-hook 'markdown-mode-hook #'denote-fontify-links-mode-maybe) ; from 3.0
   (add-hook 'dired-mode-hook #'denote-dired-mode-in-directories)
 
-  (progn ;; vedangs tips
-    (setq denote-silo-directories
-          (list (expand-file-name denote-directory)))
+  ;; (progn ;; vedangs tips
+  ;;   (unless IS-TERMUX
+  ;;     (add-to-list
+  ;;      'denote-silo-directories
+  ;;      (expand-file-name "~/git/jh-blogookpub/org"))
+  ;;     ;; (add-to-list
+  ;;     ;;  'denote-silo-directories
+  ;;     ;;  (expand-file-name "~/Documents/org")) ; book
+  ;;     ;; (add-to-list
+  ;;     ;;  'denote-silo-directories (expand-file-name "~/sync/winmacs/org"))
+  ;;     )
 
-    (unless IS-TERMUX
-      (add-to-list
-       'denote-silo-directories
-       (expand-file-name "~/git/jh-blogookpub/org"))
-      (add-to-list
-       'denote-silo-directories
-       (expand-file-name "~/Documents/org"))
-      ;; (add-to-list
-      ;;  'denote-silo-directories (expand-file-name "~/sync/winmacs/org"))
-      )
+  ;;   ;; I use Yasnippet to expand these into a better template.
+  ;;   (add-to-list 'denote-templates '(reference-note . "reference"))
+  ;;   (add-to-list 'denote-templates '(morning . "morningpage"))
+  ;;   (add-to-list 'denote-templates '(emotion . "emotion"))
+  ;;   (add-to-list 'denote-templates '(insight . "insight"))
+  ;;   (add-to-list 'denote-templates '(weekly_intentions . "weekint"))
+  ;;   (add-to-list 'denote-templates '(weekly_report . "weekrpt"))
 
-    ;; I use Yasnippet to expand these into a better template.
-    (add-to-list 'denote-templates '(reference-note . "reference"))
-    (add-to-list 'denote-templates '(morning . "morningpage"))
-    (add-to-list 'denote-templates '(emotion . "emotion"))
-    (add-to-list 'denote-templates '(insight . "insight"))
-    (add-to-list 'denote-templates '(weekly_intentions . "weekint"))
-    (add-to-list 'denote-templates '(weekly_report . "weekrpt"))
-
-    (setq
-     denote-dired-directories-include-subdirectories t
-     denote-dired-directories denote-silo-directories)
-
-    ;; Also check the commands `denote-link-after-creating',
-    ;; `denote-link-or-create'.  You may want to bind them to keys as well.
-
-    ;; If you want to have Denote commands available via a right click
-    ;; context menu, use the following and then enable
-    ;; `context-menu-mode'.
-    ;; (add-hook 'context-menu-functions #'denote-context-menu)
-    ) ;; end-of progn from vedang's custom
+  ;;   (setq denote-dired-directories-include-subdirectories t)
+  ;;   ;; If you want to have Denote commands available via a right click
+  ;;   ;; context menu, use the following and then enable
+  ;;   ;; `context-menu-mode'.
+  ;;   ;; (add-hook 'context-menu-functions #'denote-context-menu)
+  ;;   )
+  ;; end-of progn from vedang's custom
 
 ;;;;;; DONT add denote-file-types for quarto - qmd
 
@@ -3336,7 +3340,10 @@ ${content}"))
   (set-popup-rule! "^\\*gptel\\*$" :side 'right :size 84 :vslot 100 :quit t) ; size 0.4
   (set-popup-rule! "^\\*Deepseek\\*$" :side 'right :size 84 :vslot 100 :quit t) ; size 0.4
   (set-popup-rule! "^\\*xAI\\*$" :side 'right :size 84 :vslot 100 :quit t) ; size 0.4
-  :config
+  ;; :config
+  )
+
+(after! gptel
 
 ;;;;;;;; 02 - default prompt
 
@@ -3352,13 +3359,13 @@ ${content}"))
 
 ;;;;;;;; 03 - gptel-save-as-org-with-denote-metadata
 
-;;;;###autoload
+;;;###autoload
   (defun gptel-save-as-org-with-denote-metadata ()
     "Save buffer to disk when starting gptel with metadata."
     (interactive)
     (unless (buffer-file-name (current-buffer))
       (let* ((suffix (format-time-string "%Y%m%dT%H%M%S"))
-             (chat-dir (concat org-directory "/temp"))
+             (chat-dir (concat org-directory "/tmp"))
              (ext (replace-regexp-in-string "-mode$" "" (symbol-name gptel-default-mode)))
              (filename (concat suffix "__llmlog" "." ext))
              (full-path (expand-file-name filename chat-dir)))
@@ -3396,27 +3403,29 @@ ${content}"))
 
 ;;;;;;;; 04 - gptel-org-toggle-branching-context
 
-  (progn
-    (require 'gptel-org)
-    (defun gptel-org-toggle-branching-context ()
-      "Toggle gptel context between doc and subheading."
-      (interactive)
-      (if gptel-org-branching-context
-          (progn
-            (setq-local gptel-org-branching-context nil)
-            (message "Context: whole doc"))
-        (setq-local gptel-org-branching-context t)
-        (message "Context: subheading")))
 
-    ;; (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "*Prompt*: "
-    ;;       (alist-get 'org-mode gptel-response-prefix-alist) "*Response*:\n") ; karthink
-    (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "@user\n"
-          (alist-get 'org-mode gptel-response-prefix-alist) "@assistant\n"
-          (alist-get 'markdown-mode gptel-prompt-prefix-alist) "#### ")
+  (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "*** @user ")
+  (setf (alist-get 'org-mode gptel-response-prefix-alist) "@assistant\n")
 
-    (with-eval-after-load 'gptel-org
-      (setq-default gptel-org-branching-context t))
-    )
+  (require 'gptel-org)
+
+;;;###autoload
+  (defun gptel-org-toggle-branching-context ()
+    "Toggle gptel context between doc and subheading."
+    (interactive)
+    (if gptel-org-branching-context
+        (progn
+          (setq-local gptel-org-branching-context nil)
+          (message "Context: whole doc"))
+      (setq-local gptel-org-branching-context t)
+      (message "Context: subheading")))
+
+  ;; (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "@user\n"
+  ;;       (alist-get 'org-mode gptel-response-prefix-alist) "@assistant\n"
+  ;;       (alist-get 'markdown-mode gptel-prompt-prefix-alist) "#### ")
+
+  ;; (with-eval-after-load 'gptel-org
+  ;;   (setq-default gptel-org-branching-context t)) ; default nil
 
 ;;;;;;;; 05 - gptel backend configurations
 
@@ -3440,7 +3449,6 @@ ${content}"))
   ;; Anthropic - Claude
   (gptel-make-anthropic "Claude"
     :key #'gptel-api-key
-    ;; :request-params '(:temperature 0.0) ; for coding
     :stream t)
 
   ;; https://perplexity.mintlify.app/guides/pricing
@@ -3920,9 +3928,9 @@ Prefers existing sessions closer to current directory."
   ;; Optional: Set specific model for code generation
   ;; (setq aidermacs-editor-model "deepseek/deepseek-chat")
 
-  (setq aidermacs-default-model "xai/grok-2-latest")
-  (setq aidermacs-editor-model "xai/grok-2-latest")
-  (setq aidermacs-architect-model "xai/grok-2-latest")
+  (setq aidermacs-default-model "xai/grok-3-beta")
+  (setq aidermacs-editor-model "xai/grok-3-beta")
+  (setq aidermacs-architect-model "xai/grok-3-mini-beta")
 
   ;; Comint backend:
   ;; (setq aidermacs-comint-multiline-newline-key "S-<return>")
@@ -5974,76 +5982,80 @@ See `consult-omni-multi' for more details.
 
   ;; 2024-06-24 performance issue
   ;; (remove-hook 'org-mode-hook 'org-eldoc-load)
-
-  (when (locate-library "org-modern")
-    (require 'org-modern)
-    (progn
-      ;; configurtaion
-      (setq
-       ;; Edit settings
-       ;; org-auto-align-tags nil ; default t
-       org-tags-column 0 ; doom 0
-       org-catch-invisible-edits 'show-and-error ; smart
-       org-special-ctrl-a/e t
-       ;; org-insert-heading-respect-content t ; prefer nil
-
-       ;; Org styling, hide markup etc.
-       ;; org-ellipsis "…"
-       org-hide-emphasis-markers nil ; nil
-       org-pretty-entities t ; nil
-       org-agenda-tags-column 0)
-
-      (setq org-modern-tag nil)
-      (setq org-modern-table nil) ; org-modern-indent
-      ;;  org-modern-todo t
-      ;;  org-modern-timestamp t
-      ;;  org-modern-priority t
-      ;;  org-modern-checkbox t
-      ;;  org-modern-block-name t
-      ;;  org-modern-footnote nil
-      ;;  org-modern-internal-target nil
-      ;;  org-modern-radio-target nil
-      ;;  org-modern-progress nil)
-
-      (setq org-modern-star nil) ; org-modern-indent
-      (setq org-modern-hide-stars nil) ; adds extra indentation
-      (setq org-modern-list
-            '((?+ . "•") ; ◦
-              (?- . "◦") ; ‣, – endash
-              (?* . "⭑")))
-
-      (setq org-modern-block-fringe 0) ; default 2
-      (setq org-modern-block-name nil)
-      ;; (setq org-modern-block-name
-      ;;       '((t . t)
-      ;;         ("src" "»" "«")
-      ;;         ("example" "»–" "–«")
-      ;;         ("quote" "❝" "❞")
-      ;;         ("export" "⏩" "⏪")))
-
-      (setq org-modern-progress nil)
-
-      ;; https://github.com/tecosaur/emacs-config/blob/master/config.org?plain=1#L7886
-      (setq org-modern-keyword nil)
-      (setq org-modern-priority t)
-      (setq org-modern-priority-faces
-            '((?A :inverse-video t :inherit +org-todo-todo)
-              (?B :inverse-video t :inherit +org-todo-next)
-              (?C :inverse-video t :inherit +org-todo-dont)
-              (?D :inverse-video t :inherit +org-todo-done)
-              ))
-
-      (setq org-modern-todo-faces
-            '(("TODO" :inverse-video t :inherit +org-todo-todo)
-              ("DONE" :inverse-video t :inherit +org-todo-done)
-              ("NEXT"  :inverse-video t :inherit +org-todo-next)
-              ("DONT" :inverse-video t :inherit +org-todo-dont)
-              ))
-      )
-    ;;   (require 'org-modern-indent)
-    ;;   (add-hook 'org-mode-hook #'org-modern-indent-mode 90)
-    )
   )
+
+;;;;; DONT org-modern
+
+;; (after! org
+;; (when (locate-library "org-modern")
+;;   (require 'org-modern)
+;;   (progn
+;;     ;; configurtaion
+;;     (setq
+;;      ;; Edit settings
+;;      ;; org-auto-align-tags nil ; default t
+;;      org-tags-column 0 ; doom 0
+;;      org-catch-invisible-edits 'show-and-error ; smart
+;;      org-special-ctrl-a/e t
+;;      ;; org-insert-heading-respect-content t ; prefer nil
+
+;;      ;; Org styling, hide markup etc.
+;;      ;; org-ellipsis "…"
+;;      org-hide-emphasis-markers nil ; nil
+;;      org-pretty-entities t ; nil
+;;      org-agenda-tags-column 0)
+
+;;     (setq org-modern-tag nil)
+;;     (setq org-modern-table nil) ; org-modern-indent
+;;     ;;  org-modern-todo t
+;;     ;;  org-modern-timestamp t
+;;     ;;  org-modern-priority t
+;;     ;;  org-modern-checkbox t
+;;     ;;  org-modern-block-name t
+;;     ;;  org-modern-footnote nil
+;;     ;;  org-modern-internal-target nil
+;;     ;;  org-modern-radio-target nil
+;;     ;;  org-modern-progress nil)
+
+;;     (setq org-modern-star nil) ; org-modern-indent
+;;     (setq org-modern-hide-stars nil) ; adds extra indentation
+;;     (setq org-modern-list
+;;           '((?+ . "•") ; ◦
+;;             (?- . "–") ; ‣, – endash
+;;             (?* . "⭑")))
+
+;;     (setq org-modern-block-fringe 0) ; default 2
+;;     (setq org-modern-block-name nil)
+;;     ;; (setq org-modern-block-name
+;;     ;;       '((t . t)
+;;     ;;         ("src" "»" "«")
+;;     ;;         ("example" "»–" "–«")
+;;     ;;         ("quote" "❝" "❞")
+;;     ;;         ("export" "⏩" "⏪")))
+
+;;     (setq org-modern-progress nil)
+
+;;     ;; https://github.com/tecosaur/emacs-config/blob/master/config.org?plain=1#L7886
+;;     (setq org-modern-keyword nil)
+;;     (setq org-modern-priority t)
+;;     (setq org-modern-priority-faces
+;;           '((?A :inverse-video t :inherit +org-todo-todo)
+;;             (?B :inverse-video t :inherit +org-todo-next)
+;;             (?C :inverse-video t :inherit +org-todo-dont)
+;;             (?D :inverse-video t :inherit +org-todo-done)
+;;             ))
+
+;;     (setq org-modern-todo-faces
+;;           '(("TODO" :inverse-video t :inherit +org-todo-todo)
+;;             ("DONE" :inverse-video t :inherit +org-todo-done)
+;;             ("NEXT"  :inverse-video t :inherit +org-todo-next)
+;;             ("DONT" :inverse-video t :inherit +org-todo-dont)
+;;             ))
+;;     )
+;;   (require 'org-modern-indent)
+;;   (add-hook 'org-mode-hook #'org-modern-indent-mode 90)
+;;   )
+;; )
 
 ;;;;; TODO org-src-mode-map
 
@@ -7479,8 +7491,8 @@ See `consult-omni-multi' for more details.
 (when (display-graphic-p) ;; gui
   (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
 
-;; (when (display-graphic-p) ;; gui
-;;   (require 'ccmenu))
+(when (display-graphic-p) ;; gui
+  (require 'ccmenu))
 
 ;;;;; Terminal Mode - (unless (display-graphic-p)
 
@@ -7844,5 +7856,16 @@ See `consult-omni-multi' for more details.
 ;  :after org
 ;  ;; :config (org-supertag-setup)
 ;  )
+
+;;;;; org-ref
+
+;(use-package! org-ref
+;  :after (org)
+;  :commands (org-ref-insert-link-hydra/body
+;             org-ref-bibtex-hydra/body)
+;  :config
+;  (setq org-ref-insert-cite-function
+;        (lambda ()
+;          (call-interactively #'citar-insert-citation))))
 
 ;;; left blank on purpose
