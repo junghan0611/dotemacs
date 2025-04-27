@@ -5306,9 +5306,8 @@ Suitable for `imenu-create-index-function'."
 
 ;; (use-package! tp)
 
-;;  "――――――――――――"
-;;  "======================================================================"
-;; (use-package! mastodon)
+(use-package! mastodon)
+
 ;;   ;;:init
 ;;   ;; (require 'mastodon-toot)
 ;;   ;; (setq mastodon-tl--horiz-bar "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")

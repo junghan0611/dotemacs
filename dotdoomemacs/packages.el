@@ -460,7 +460,7 @@
 ;;;; Reading
 
 (package! tp)
-;; (package! mastodon)
+(package! mastodon)
 ;; (package! adoc-mode)
 
 (package! yeetube :recipe (:host github :repo "Boruch-Baum/emacs-yeetube.el"))
