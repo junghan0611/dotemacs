@@ -1931,7 +1931,7 @@ DATE가 nil이면 오늘 날짜를 사용하며, YYYY-MM-DD 형식이어야 합�
   (require 'calendar)
   (let* ((date (calendar-read-date))
          (date-str (format "%04d-%02d-%02d" (nth 2 date) (nth 0 date) (nth 1 date))))
-    (insert-citations-by-date date-field-name date-str)))
+    (my/insert-citations-by-date date-field-name date-str)))
 
 ;;;; provide
 
