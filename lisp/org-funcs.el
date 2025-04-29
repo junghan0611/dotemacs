@@ -1837,8 +1837,8 @@ Replace spaces in filenames with underscores."
   (require 'calendar)
   (let* ((date (calendar-read-date))
          (date-str (format "%04d%02d%02d" (nth 2 date) (nth 0 date) (nth 1 date)))
-         (dir "../screenshot/")
-         (files (directory-files dir t (format ".*%s.*\\.\\(jpg\\|png\\|gif\\)" date-str))))
+         (dir "~/screenshot/")
+         (files (directory-files dir t (format ".*%s.*\\.\\(jpg\\|png\\|mp4\\|gif\\)" date-str))))
 
     (unless files
       (error "No screenshot files found for date: %s" date-str))
@@ -1919,7 +1919,7 @@ DATE가 nil이면 오늘 날짜를 사용하며, YYYY-MM-DD 형식이어야 합�
     (insert (format "*** %s\n" date-str))
     (if keys
         (dolist (k (reverse keys))
-          (insert (format "[cite:@%s]\n" k)))
+          (insert (format "- [cite:@%s]\n" k)))
       (insert "이 날짜에 추가된 인용이 없습니다.\n"))))
 
 (defun my/insert-citations-by-date-with-calendar (&optional date-field-name)

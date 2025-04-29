@@ -140,10 +140,10 @@
 ;; directory
 (defun my/org-calendar-directory () (my/expand-org-file-name ".calendar/"))
 (defun my/org-attachment-directory () (my/expand-org-file-name ".attach/"))
-(defun my/org-screenshot-directory () (my/expand-org-file-name "screenshot"))
+;; (defun my/org-screenshot-directory () "~/screenshot")
 
 (defvar org-user-agenda-files (list user-org-directory))
-(defvar org-screenshot-path (concat user-org-directory "screenshot/"))
+(defvar org-screenshot-path  "~/screenshot/")
 
 ;; bib
 (setq citar-notes-paths (list (concat user-org-directory "bib/")))

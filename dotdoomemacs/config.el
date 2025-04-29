@@ -2530,9 +2530,9 @@ ${content}"))
   :config
   (setq-default org-download-heading-lvl nil)
   (setq org-download-method 'directory) ; doom 'attach
-  (setq-default org-download-image-dir (concat org-directory "screenshot" )) ;; share all devieces
+  (setq-default org-download-image-dir "~/screenshot" ) ;; share all devieces
   (setq org-download-display-inline-images nil)
-  (setq org-download-timestamp"%Y%m%dT%H%M%S--") ;; denote id
+  (setq org-download-timestamp"%Y%m%dT%H%M%S-") ;; denote id
 
   ;; #+caption: "
   ;; #+name: fig-"
