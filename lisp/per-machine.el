@@ -224,8 +224,6 @@
 
 ;; M-x ten-tags-create, ten-update-all
 ;; "~/sync/emacs/git/default/ten/test/Glossary-philosophy.txt"
-;; "20241109T120830--physics-all__glossary.txt"
-;; "20241109T123635--math-all__glossary.txt"
 ;; "20241112T121555--it-terms-all__glossary.txt"
 (setq ten-glossary-files-and-directories
       (mapcar (lambda (filename)
@@ -234,7 +232,11 @@
                 "20240913T150903--philosophy__glossary.txt"
                 "20240913T150904--philosophy-all__glossary.txt"
                 "20241109T120829--physics__glossary.txt"
+                "20241109T120830--physics-all__glossary.txt"
+                ;; "20241109T120831--physics-all-enko__glossary.txt"
                 "20241109T123634--math__glossary.txt"
+                "20241109T123635--math-all__glossary.txt"
+                ;; "20241109T123636--math-all-enko__glossary.txt"
                 "20241112T121549--it-terms__glossary.txt")))
 (setq user-ten-tags-file (concat user-org-directory "dict/ten-TAGS"))
 (setq user-ten-glossary-files

@@ -1953,16 +1953,18 @@
    ;;  ("x" . "text")
    ;;  "p" #'awesome-switch-to-prev-app-and-type)
 
-   (:map embark-file-map
-         "x" #'embark-open-externally+
-         "5" #'embark-dired-merge-action
-         "o" nil
-         (:prefix ("o" . "open")
-                  "j" (embark-split-action find-file evil-window-split)
-                  "k" (embark-split-action find-file +evil/window-split-and-follow)
-                  "h" (embark-split-action find-file evil-window-vsplit)
-                  "l" (embark-split-action find-file +evil/window-vsplit-and-follow)
-                  "a" (embark-ace-action find-file)))
+   (:map
+    embark-file-map
+    "x" #'embark-open-externally+
+    "1" #'embark-open-externally+
+    "5" #'embark-dired-merge-action
+    "o" nil
+    (:prefix ("o" . "open")
+             "j" (embark-split-action find-file evil-window-split)
+             "k" (embark-split-action find-file +evil/window-split-and-follow)
+             "h" (embark-split-action find-file evil-window-vsplit)
+             "l" (embark-split-action find-file +evil/window-vsplit-and-follow)
+             "a" (embark-ace-action find-file)))
 
    (:map
     embark-buffer-map
