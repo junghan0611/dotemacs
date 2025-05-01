@@ -1916,7 +1916,7 @@ DATE가 nil이면 오늘 날짜를 사용하며, YYYY-MM-DD 형식이어야 합�
                 (when (string= entry-date date-str)
                   (push key keys)
                   (setq found-count (1+ found-count)))))))))
-    (insert (format "*** %s\n" date-str))
+    (insert (format "** %s\n" date-str))
     (if keys
         (dolist (k (reverse keys))
           (insert (format "- [cite:@%s]\n" k)))

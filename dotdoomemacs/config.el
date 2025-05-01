@@ -5248,6 +5248,11 @@ Suitable for `imenu-create-index-function'."
 
 ;;;; :app
 
+;;;;; :app wiki-summary
+
+(require 'wiki-summary)
+(setq wiki-summary-language-string "ko")
+
 ;;;;; :app calendar
 
 ;; calendar
@@ -5771,18 +5776,34 @@ Suitable for `imenu-create-index-function'."
   ;; Select a list of modules you want to aload, otherwise all sources all laoded
   (setq consult-omni-sources-modules-to-load
         '(consult-omni-man
-          ;; consult-omni-mdfind
+          consult-omni-wikipedia
+          consult-omni-notes
+          ;; consult-omni-numi ; calculator
           consult-omni-locate
-          consult-omni-line-multi consult-omni-invidious
-          consult-omni-gptel consult-omni-google-autosuggest
-          consult-omni-google consult-omni-git-grep consult-omni-grep
-          consult-omni-gh consult-omni-find consult-omni-fd
-          consult-omni-elfeed consult-omni-duckduckgo
-          consult-omni-doi
-          consult-omni-dict consult-omni-consult-notes
-          consult-omni-chatgpt consult-omni-calc consult-omni-buffer
-          consult-omni-browser-history consult-omni-brave
-          consult-omni-brave-autosuggest consult-omni-bing
+          consult-omni-line-multi
+          consult-omni-youtube
+          consult-omni-invidious
+          consult-omni-gptel
+          consult-omni-google-autosuggest
+          consult-omni-google
+          consult-omni-git-grep
+          consult-omni-grep
+          consult-omni-ripgrep
+          consult-omni-gh
+          consult-omni-find
+          consult-omni-fd
+          consult-omni-elfeed
+          consult-omni-duckduckgo
+          ;; consult-omni-doi
+          consult-omni-dict
+          consult-omni-notes
+          ;; consult-omni-chatgpt
+          consult-omni-calc
+          consult-omni-buffer
+          consult-omni-browser-history
+          consult-omni-brave
+          consult-omni-brave-autosuggest
+          ;; consult-omni-bing
           consult-omni-apps))
   (consult-omni-sources-load-modules)
 
@@ -5835,44 +5856,67 @@ Suitable for `imenu-create-index-function'."
   ;; pretty prompt for launcher
   (setq consult-omni-open-with-prompt "  ")
 
-  ;;; Pick your favorite autosuggest command.
+  ;; Pick your favorite autosuggest command.
   (setq consult-omni-default-autosuggest-command #'consult-omni-dynamic-brave-autosuggest) ;;or any other autosuggest source you define
 
-  ;;; Set your shorthand favorite interactive command
+  ;; Set your shorthand favorite interactive command
   (setq consult-omni-default-interactive-command #'consult-omni-multi)
 
-  ;;; Optionally Set back-end for notes search to ripgrep-all (requires ripgrep-all)
+  ;; Optionally Set back-end for notes search to ripgrep-all (requires ripgrep-all)
   ;; (setq consult-omni-notes-backend-command "rga")
 
-  ;;; Optionally add more interactive commands
+;;;;;; Optionally add more interactive commands
 
-  ;; consult-omni-web
-  (defvar consult-omni-web-sources (list "gptel"
-                                         "Brave"
-                                         "elfeed"
-                                         ;; "mu4e"
-                                         "Wikipedia"
-                                         "GitHub"
-                                         "Invidious"
-                                         ))
-  (defun consult-omni-web (&optional initial prompt sources no-callback &rest args)
-    "Interactive web search”
+;;;;;;; my/consult-omni-web
+
+  (progn
+    (defvar consult-omni-web-sources (list "gptel"
+                                           "Brave"
+                                           "elfeed"
+                                           ;; "mu4e"
+                                           "Wikipedia"
+                                           ;; "GitHub"
+                                           ))
+    (defun my/consult-omni-web (&optional initial prompt sources no-callback &rest args)
+      "Interactive web search”
 
 This is similar to `consult-omni-multi', but runs the search on
 web sources defined in `consult-omni-web-sources'.
 See `consult-omni-multi' for more details.
 "
-    (interactive "P")
-    (let ((prompt (or prompt (concat "[" (propertize "consult-omni-web" 'face 'consult-omni-prompt-face) "]" " Search:  ")))
-          (sources (or sources consult-omni-web-sources)))
-      (consult-omni-multi initial prompt sources no-callback args)))
+      (interactive "P")
+      (let ((prompt (or prompt (concat "[" (propertize "my/consult-omni-web" 'face 'consult-omni-prompt-face) "]" " Search:  ")))
+            (sources (or sources consult-omni-web-sources)))
+        (consult-omni-multi initial prompt sources no-callback args)))
+    )
 
-  ;; consult-omni-local
+;;;;;;; my/consult-omni-video
+
+(progn
+    (defvar consult-omni-video-sources (list "gptel"
+                                           "Invidious"
+                                           ))
+    (defun my/consult-omni-video (&optional initial prompt sources no-callback &rest args)
+      "Interactive video search”
+
+This is similar to `consult-omni-multi', but runs the search on
+web sources defined in `consult-omni-video-sources'.
+See `consult-omni-multi' for more details.
+"
+      (interactive "P")
+      (let ((prompt (or prompt (concat "[" (propertize "my/consult-omni-video" 'face 'consult-omni-prompt-face) "]" " Search:  ")))
+            (sources (or sources consult-omni-video-sources)))
+        (consult-omni-multi initial prompt sources no-callback args)))
+    )
+
+;;;;;;; my/consult-omni-local
+
   (defvar consult-omni-local-sources (list "ripgrep"
                                            "Notes Search"
-                                           "Apps"
-                                           "Org Agenda"))
-  (defun consult-omni-local (&optional initial prompt sources no-callback &rest args)
+                                           ;; "Apps"
+                                           "Org Agenda"
+                                           ))
+  (defun my/consult-omni-local (&optional initial prompt sources no-callback &rest args)
     "Interactive local search”
 
 This is similar to `consult-omni-multi', but runs the search on
@@ -5880,34 +5924,39 @@ local sources defined in `consult-omni-local-sources'.
 See `consult-omni-multi' for more details.
 "
     (interactive "P")
-    (let ((prompt (or prompt (concat "[" (propertize "consult-omni-local" 'face 'consult-omni-prompt-face) "]" " Search:  ")))
+    (let ((prompt (or prompt (concat "[" (propertize "my/consult-omni-local" 'face 'consult-omni-prompt-face) "]" " Search:  ")))
           (sources (or sources consult-omni-local-sources)))
       (consult-omni-multi initial prompt sources no-callback args)))
 
-  ;; consult-omni-scholar
-  (setq consult-omni-scholar-sources (list "PubMed" "Scopus" "Notes Search" "gptel"))
+;;;;;;; DONT my/consult-omni-scholar
 
-  (defun consult-omni-scholar (&optional initial prompt sources no-callback &rest args)
-    "Interactive “multi-source acadmic literature” search
+  ;; (progn
+;;     (setq consult-omni-scholar-sources (list "PubMed" "Scopus" "Notes Search" "gptel"))
 
-This is similar to `consult-omni-multi', but runs the search on
-academic literature sources defined in `consult-omni-scholar-sources'.
-See `consult-omni-multi' for more details.
-"
-    (interactive "P")
-    (let ((prompt (or prompt (concat "[" (propertize "consult-omni-multi" 'face 'consult-omni-prompt-face) "]" " Search:  ")))
-          (sources (or sources consult-omni-scholar-sources)))
-      (consult-omni-multi initial prompt sources no-callback args)))
+;;     (defun consult-omni-scholar (&optional initial prompt sources no-callback &rest args)
+;;       "Interactive “multi-source acadmic literature” search
+
+;; This is similar to `consult-omni-multi', but runs the search on
+;; academic literature sources defined in `consult-omni-scholar-sources'.
+;; See `consult-omni-multi' for more details.
+;; "
+;;       (interactive "P")
+;;       (let ((prompt (or prompt (concat "[" (propertize "consult-omni-multi" 'face 'consult-omni-prompt-face) "]" " Search:  ")))
+;;             (sources (or sources consult-omni-scholar-sources)))
+;;         (consult-omni-multi initial prompt sources no-callback args)))
+;;     )
+
+;;;;;;; my/consult-omni-autosuggest-at-point
 
   ;; AutoSuggest at point
-  (defun consult-omni-autosuggest-at-point ()
+  (defun my/consult-omni-autosuggest-at-point ()
     (interactive)
     (let ((input (or (thing-at-point 'url) (thing-at-point 'filename) (thing-at-point 'symbol) (thing-at-point 'sexp) (thing-at-point 'word))))
       (when (and (minibuffer-window-active-p (selected-window))
                  (equal (substring input 0 1) (consult--async-split-initial nil)))
         (setq input (substring input 1)))
       (consult-omni-brave-autosuggest input)))
-  )
+  ) ; end-of consult-omni
 
 ;; (after! consult-gh
 ;;   ;; https://www.armindarvish.com/post/web_omni_search_in_emacs_with_consult-web/

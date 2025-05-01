@@ -561,6 +561,7 @@
 
        :desc "gptel: gptel-mode" "1" #'gptel-mode
        :desc "gptel: gptel-mode" "SPC" #'gptel-mode
+       :desc "gptel: gptel-mode" "RET" #'gptel-mode
        "2" #'gptel-org-toggle-branching-context
        :desc "gptel: send default" :n "3" (cmd! (cashpw/gptel-send (alist-get 'default gptel-directives)))
        :desc "gptel: send chain-of-thought" :n "4" (cmd! (cashpw/gptel-send (alist-get 'chain-of-thought gptel-directives)))

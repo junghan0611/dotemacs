@@ -315,6 +315,8 @@
 ;; (package! ekg)
 
 (package! binder)
+(package! astute :recipe (:host github :repo "rnkn/astute"))
+
 (package! ten :recipe (:host sourcehut :repo "nobiot/ten")) ;; https://git.sr.ht/~nobiot/ten
 (package! chu :recipe (:host sourcehut :repo "nobiot/chu")) ;; https://git.sr.ht/~nobiot/chu
 (package! obsidian)
@@ -584,6 +586,8 @@
 (package! snow)
 (package! oneko-macs :recipe (:host github :repo "ElleNajt/oneko-macs")) ; sudo apt-get install oneko
 ;; (package! selectric-mode)
+
+(package! wiki-summary :recipe (:host github :repo "rnkn/wiki-summary.el"))
 
 ;;;; Emacs Application Framework (EAF)
 

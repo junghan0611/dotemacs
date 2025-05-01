@@ -115,37 +115,37 @@
 ;;                    (if fn (funcall fn ps)
 ;;                      ps)))))))))
 
-;;;###autoload
-(defun consult-omni-load-sources+ ()
-  (dolist (m '(consult-omni-brave
-               consult-omni-browser-history
-               consult-omni-duckduckgo
-               consult-omni-elfeed
-               consult-omni-gh
-               consult-omni-google
-               consult-omni-gptel
-               consult-omni-invidious
-               consult-omni-line-multi
-               consult-omni-notmuch
-               consult-omni-wikipedia
-               consult-omni-youtube))
-    (require m nil t)))
+;; ;;;###autoload
+;; (defun consult-omni-load-sources+ ()
+;;   (dolist (m '(consult-omni-brave
+;;                consult-omni-browser-history
+;;                consult-omni-duckduckgo
+;;                consult-omni-elfeed
+;;                consult-omni-gh
+;;                consult-omni-google
+;;                consult-omni-gptel
+;;                consult-omni-invidious
+;;                consult-omni-line-multi
+;;                consult-omni-notmuch
+;;                consult-omni-wikipedia
+;;                consult-omni-youtube))
+;;     (require m nil t)))
 
-;;;###autoload
-(transient-define-prefix consult-omni-transient ()
-  ["consult-omni"
-   [("/" "multi" consult-omni-multi)
-    ("go" "google" consult-omni-google)
-    ("w" "wiki" consult-omni-wikipedia)
-    ("y" "youtube" consult-omni-youtube)
-    ("gh" "code search" +search-github-with-lang)
-    ("gH" "github" consult-omni-github)]
-   [("bh" "browser-hist" consult-omni-browser-history)
-    ("el" "elfeed" consult-omni-elfeed)
-    ("no" "notmuch" consult-omni-notmuch)
-    ("gp" "gptel" consult-omni-gptel)]])
+;; ;;;###autoload
+;; (transient-define-prefix consult-omni-transient ()
+;;   ["consult-omni"
+;;    [("/" "multi" consult-omni-multi)
+;;     ("go" "google" consult-omni-google)
+;;     ("w" "wiki" consult-omni-wikipedia)
+;;     ("y" "youtube" consult-omni-youtube)
+;;     ("gh" "code search" +search-github-with-lang)
+;;     ("gH" "github" consult-omni-github)]
+;;    [("bh" "browser-hist" consult-omni-browser-history)
+;;     ("el" "elfeed" consult-omni-elfeed)
+;;     ("no" "notmuch" consult-omni-notmuch)
+;;     ("gp" "gptel" consult-omni-gptel)]])
 
-(advice-add 'consult-omni-transient :before #'consult-omni-load-sources+)
+;; (advice-add 'consult-omni-transient :before #'consult-omni-load-sources+)
 
 ;;;; privode
 

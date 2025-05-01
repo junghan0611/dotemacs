@@ -961,9 +961,10 @@ Also see `prot-window-delete-popup-frame'." command)
   (add-hook 'org-journal-mode-hook (lambda () (setq-local tab-width 8)))
 
   (defun my/org-journal-add-custom-id ()
-    ;;  :CUSTOM_ID: h:20250321
+    ;;  :CUSTOM_ID: 2025-03-21 Mon
     (unless (org-journal--daily-p)
-      (org-set-property "CUSTOM_ID" (format-time-string "h:%Y-%m-%d"))))
+      (org-set-property "CUSTOM_ID"
+                        (downcase (format-time-string "%Y-%m-%d-%a")))))
 
   (add-hook 'org-journal-after-header-create-hook #'my/org-journal-add-custom-id)
   )
@@ -1237,7 +1238,7 @@ Also see `prot-window-delete-popup-frame'." command)
         ;; 4. 한글 조사 NBSP 삽입 - '1단어'
         (goto-char (point-min))
         (while (re-search-forward
-                "\\([가-힣]\\{2,\\}\\)\\(이\\|가\\|은\\|는\\|을\\|의\\|를\\|와\\)\\([[:space:]]\\)"
+                "\\([가-힣]\\{2,\\}\\)\\(이\\|가\\|은\\|는\\|을\\|의\\|를\\|와\\|과\\)\\([[:space:]]\\)"
                 nil t)
           (when (>= (length (match-string 1)) 2)
             (push (match-string 1) word-list))
@@ -1303,10 +1304,15 @@ Also see `prot-window-delete-popup-frame'." command)
   ;; 0x002014	—	EM DASH
   ;; 0x002015	―	QUOTATION DASH
   ;; 0x002015	―	HORIZONTAL BAR
+  ;; 0x0007F7	߷	NKO SYMBOL GBAKURUNEN
+  ;; 0x000809	ࠉ SAMARITAN LETTER YUT
+  ;; 0x003179	ㅹ	HANGUL LETTER SSANG BIEUB SUN GYEONG EUM
 
   ;; 2025-04-15 remove "⊨"
   (setq my/unicode-notetaking '( " " "§"
                                  "¶" "†" "‡" "№" "↔" "←" "→" "⊢" "∉"
+                                 "ㅹ" "ㆅ" "ㅺ" "㉼" "㉽"
+                                 ;; "Ж" ; Greek αβγδεζηθικλμνξοπρςτυφχψω
                                  "『겹낫표』"
                                  "≪겹화살괄호≫"
                                  "｢홑낫표｣"
