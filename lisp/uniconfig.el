@@ -841,7 +841,7 @@ Also see `prot-window-delete-popup-frame'." command)
    'markdown-mode-hook
    (lambda ()
      "Beautify Markdown em-dash and checkbox Symbol"
-     (push '("--" . "—") prettify-symbols-alist)
+     ;; (push '("--" . "—") prettify-symbols-alist)
      (push '("->" . "→" ) prettify-symbols-alist)
      (push '("=>" . "⟹") prettify-symbols-alist)
      (prettify-symbols-mode)))
@@ -1117,7 +1117,6 @@ Also see `prot-window-delete-popup-frame'." command)
           time-stamp-end "$"
           time-stamp-format "\[%Y-%m-%d\]"))
 
-
   (setq org-hugo-front-matter-format 'yaml)
 
   ;; My blog is created using Hugo and ox-hugo. It generates better markdown than what you would get using org-md-export!
@@ -1180,158 +1179,7 @@ Also see `prot-window-delete-popup-frame'." command)
       (replace-regexp-in-string " " "" text)))
   (add-to-list 'org-export-filter-final-output-functions #'+org-export-remove-white-space t))
 
-;;;; my/insert-nbsp-all, my/insert-white-space my/insert-unicode-notetaking
-
-(with-eval-after-load 'org
-  ;; [[denote:20250415T174028][#LLM: 20250415T174028]]
-  ;; [[denote:20250418T050908][#조직모드: 한국어 조사 공백문자 삽입 - 코드 통합]]
-  ;; (defun my/insert-nbsp-all ()
-  ;;   "한글 조사, 라틴-한글, 기호-텍스트 사이에 NBSP 삽입 (3가지 패턴 통합)"
-  ;;   (interactive)
-  ;;   (save-excursion
-  ;;     (goto-char (point-min))
-  ;;     ;; 1. 라틴 문자와 한글 사이 NBSP 삽입
-  ;;     ;; 2. 조직모드 기호(=,*,_,+) 뒤 한글 또는 라틴 문자에 NBSP 삽입
-  ;;     (while (re-search-forward "\\([A-Za-z*+=_]\\)\\([가-힣]\\)" nil t)
-  ;;       (unless (save-excursion
-  ;;                 (goto-char (match-beginning 1))
-  ;;                 (looking-back "\\s-" 1))
-  ;;         (goto-char (match-beginning 2))
-  ;;         (insert " ")
-  ;;         (goto-char (match-end 2))))
-
-  ;;     ;; 3. 한글 조사 NBSP 삽입
-  ;;     (goto-char (point-min))
-  ;;     (while (re-search-forward
-  ;;             "\\([가-힣]\\{2,\\}\\)\\(이\\|가\\|은\\|는\\|을\\|를\\|에서\\|으로\\|와\\)\\([[:space:]]\\)"
-  ;;             nil t)
-  ;;       (replace-match "\\1 \\2\\3"))
-  ;;     )
-  ;;   )
-
-  ;; [[denote:20250419T123138][정규식의 우선순위]]
-  (defun my/insert-nbsp-all-with-wordlist-and-tags ()
-    "한글 조사, 라틴-한글, 기호-텍스트 사이에 NBSP 삽입 (3가지 패턴 통합)"
-    (interactive)
-    (let ((word-list '()))
-      (save-excursion
-        (goto-char (point-min))
-        ;; 1. 라틴 문자와 한글 사이 NBSP 삽입
-        ;; 2. 조직모드 기호(=,*,_,+) 뒤 한글 또는 라틴 문자에 NBSP 삽입
-        (while (re-search-forward "\\([A-Za-z*+=_]\\)\\([가-힣]\\)" nil t)
-          (unless (save-excursion
-                    (goto-char (match-beginning 1))
-                    (looking-back "\\s-" 1))
-            (goto-char (match-beginning 2))
-            (insert " ")
-            (goto-char (match-end 2))))
-
-        ;; 3. 한글 조사 NBSP 삽입 '2단어'
-        (goto-char (point-min))
-        (while (re-search-forward
-                "\\([가-힣]\\{1,\\}\\)\\(이는\\|다는\\|하는\\|했을\\|와는\\|들의\\|들이\\|였을\\|와의\\|오는\\|에는\\|에서\\|으로\\)\\([[:space:]]\\)"
-                nil t)
-          (when (>= (length (match-string 1)) 2)
-            (push (match-string 1) word-list))
-          (replace-match "\\1 \\2\\3"))
-
-        ;; 4. 한글 조사 NBSP 삽입 - '1단어'
-        (goto-char (point-min))
-        (while (re-search-forward
-                "\\([가-힣]\\{2,\\}\\)\\(이\\|가\\|은\\|는\\|을\\|의\\|를\\|와\\|과\\)\\([[:space:]]\\)"
-                nil t)
-          (when (>= (length (match-string 1)) 2)
-            (push (match-string 1) word-list))
-          (replace-match "\\1 \\2\\3"))
-        ) ; end save-excursion
-
-      ;; 중복 제거 전 word-list 출력
-      (message "중복 제거 전 word-list: %s" word-list)
-      ;; 중복 제거 및 WORDLIST 헤딩 아래에 목록 추가
-      (setq word-list (delete-dups word-list))
-      ;; 중복 제거 후 word-list 출력
-      (message "중복 제거 후 word-list: %s" word-list)
-      (goto-char (point-max))
-      (unless (re-search-backward "^* WORDLIST$" nil t)
-        (insert "\n* WORDLIST\n"))
-      (forward-line)
-      (dolist (word word-list)
-        (let ((tag-exists (condition-case nil
-                              (progn
-                                ;; (message "디버깅: find-tag-noselect 호출 - %s" word)
-                                (with-current-buffer (get-buffer-create "ten-TAGS")
-                                  (let ((buffer-read-only nil))
-                                    (find-tag-noselect word nil))))
-                            (error
-                             (message "디버깅: find-tag-noselect 에러 - %s" word)
-                             nil)
-                            )))
-          (insert (format "- %s %s\n" word (if tag-exists "O" "X")))
-          ))))
-
-  (defun my/add-to-glossary ()
-    (interactive)
-    (let ((glossary-file user-ten-glossary-files))
-      (save-excursion
-        (goto-char (point-min))
-        (when (re-search-forward "^* WORDLIST$" nil t)
-          (forward-line)
-          (while (re-search-forward "^- \\([가-힣]+\\) \\(.*\\)$" nil t)
-            (let* ((word (match-string 1))
-                   (meaning (match-string 2))
-                   (entry (format "<<%s>> :: %s\n" word meaning)))
-              (message "디버깅: 단어 - %s, 의미 - %s" word meaning)
-              (with-temp-file glossary-file
-                (insert-file-contents glossary-file)
-                (goto-char (point-max))
-                (insert entry)
-                (message "디버깅: %s 파일에 %s 항목 추가 완료" glossary-file entry))))))))
-
-  ;; (add-hook 'before-save-hook
-  ;;           (lambda ()
-  ;;             (when (derived-mode-p 'org-mode)
-  ;;               (unless (org-at-table-p)
-  ;;                 (my/insert-nbsp-all)))))
-
-  (defun my/insert-white-space ()
-    (interactive)
-    (insert " "))
-
-  ;; "⊢" prove, "⊨" entail , "∉" notin
-  ;;  『 』(겹낫표), ≪ ≫(겹화살괄호) / ｢ ｣(홑낫표) - https://wikidocs.net/79912
-  ;; 0x002012	‒	FIGURE DASH
-  ;; 0x002013	–	EN DASH
-  ;; 0x002014	—	EM DASH
-  ;; 0x002015	―	QUOTATION DASH
-  ;; 0x002015	―	HORIZONTAL BAR
-  ;; 0x0007F7	߷	NKO SYMBOL GBAKURUNEN
-  ;; 0x000809	ࠉ SAMARITAN LETTER YUT
-  ;; 0x003179	ㅹ	HANGUL LETTER SSANG BIEUB SUN GYEONG EUM
-
-  ;; 2025-04-15 remove "⊨"
-  (setq my/unicode-notetaking '( " " "§"
-                                 "¶" "†" "‡" "№" "↔" "←" "→" "⊢" "∉"
-                                 "ㅹ" "ㆅ" "ㅺ" "㉼" "㉽"
-                                 ;; "Ж" ; Greek αβγδεζηθικλμνξοπρςτυφχψω
-                                 "『겹낫표』"
-                                 "≪겹화살괄호≫"
-                                 "｢홑낫표｣"
-                                 "― QUOTADASH"
-                                 ))
-
-  (defun my/insert-unicode-notetaking ()
-    "Insert Unicode for NoteTaking."
-    (interactive)
-    (insert (completing-read "Select unicode: " my/unicode-notetaking)))
-
-  (evil-define-key '(insert normal) text-mode-map (kbd "M-M") #'my/insert-unicode-notetaking)
-  (evil-define-key '(insert normal) text-mode-map (kbd "M-m") #'my/insert-white-space)
-
-  (with-eval-after-load 'vertico
-    (define-key minibuffer-mode-map (kbd "M-M") #'my/insert-unicode-notetaking) ; needed
-    (define-key vertico-map (kbd "M-M") #'my/insert-unicode-notetaking))
-  )
-
+;;;;
 ;;;; TODO Org-Hugo Links
 
 ;; lambda-setup/lem-setup-org-extensions.el

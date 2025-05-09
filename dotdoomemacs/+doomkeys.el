@@ -611,15 +611,8 @@
 
 (map! :leader
       (:prefix ("o" . "open")
-       :desc "elfeed" "l" #'elfeed
        :desc "open workspaces" "o" #'my/open-workspaces
-       (:prefix ("g" . "gptel")
-        "SPC" #'gptel-mode
-        "g" #'gptel
-        ;; "q" 'gptel-lookup
-        :nv "a" 'gptel-add
-        :nv "r" 'gptel-rewrite
-        )))
+       ))
 
 ;;;; 'j' junghanacs hotkey
 
@@ -629,7 +622,6 @@
        :desc "Tmr" "t" #'tmr
        :desc "Tmr-view" "v" #'tmr-tabulated-view))
 ;; :desc "Anddo: Todos" "d" #'anddo
-
 
 ;;;; 'r' remote / register
 
@@ -1806,8 +1798,12 @@
         :desc "@org-transclusion-map" "u" ews-org-transclusion-map
         ;; :desc "@org-noter-map" "o" ews-org-noter-map
         "o" #'my/denote-howmish-find-file
-        ";" #'my/insert-nbsp-all
+
+        ";" #'my/clear-nbsp-and-ascii-punctuations
         ":" #'my/insert-nbsp-all-with-wordlist-and-tags
+        "M-;" #'my/add-to-glossary
+        "M-'" #'my/add-newlines-between-paragraphs
+
         :desc "org-set-effot" "E" #'org-set-effort
         :desc "time-stamp" "1" #'time-stamp
         :desc "insert-inactive-timestamp" "2" #'bh/insert-inactive-timestamp
@@ -1864,9 +1860,8 @@
                  "w" 'translate/translate-word-at-point
                  "f" 'translate-open-reference-file
                  "b" 'translate-select-reference-buffer
-                 "h" 'translate-toggle-highlight))
-
-
+                 "h" 'translate-toggle-highlight)
+        )
 
 ;;;;; after! org-journal
 

@@ -119,15 +119,15 @@ backend."
   "Retrieve the value of #+export_file_name from the Org file at FILEPATH in an efficient way."
   (if (file-exists-p filepath)
       (with-temp-buffer
-        (insert-file-contents filepath nil 0 1000) ; 파일의 처음 1000바이트만 삽입
+        (insert-file-contents filepath nil 0 2000) ; 파일의 처음 2000바이트만 삽입
         ;; (message "File found: %s" filepath)
-        (goto-char (point-min))
+        (goto-char 0)
         (if (re-search-forward "^#\\+export_file_name: \\(.*\\)$" nil t)
             (match-string 1)
           (progn
-            ;; (message "^#\\+export_file_name not found: %s" filepath)
+            (message "^#\\+export_file_name not found: %s" filepath)
             ;; nil
-            "notfound39219129.md"
+            "notfound39219199.md"
             )))
     (progn
       (message "File not found: %s" filepath) nil)))
@@ -257,8 +257,8 @@ If USE-RELREF is non-nil, format it as a Hugo relref link."
 (defun my/get-export-file-name-from-buffer ()
   "Retrieve the value of #+EXPORT_FILE_NAME from the current buffer."
   (save-excursion
-    (goto-char (point-min))
-    (if (re-search-forward "^#\\+EXPORT_FILE_NAME: \\(.*\\)$" nil t)
+    (goto-char 0)
+    (if (re-search-forward "^#\\+export_file_name: \\(.*\\)$" nil t)
         (match-string 1)
       nil)))
 
@@ -294,7 +294,6 @@ If USE-RELREF is non-nil, format it as a Hugo relref link."
   "Add metadata to current org-mode file marking it as a Hugo draft."
   (interactive)
   (save-excursion
-    (goto-char 0)
     (search-forward "filetags")
     (end-of-line)
     (insert "\n#+hugo_draft: t ")))

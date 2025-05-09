@@ -274,7 +274,7 @@
 ;; 2024-03-07 기호를 활용하면 관계를 표현할 수 있다.
 ;; M-x list-unicode-display
 (add-hook 'org-mode-hook (lambda ()
-                           (push '("--" . "—") prettify-symbols-alist) ; 0x2014 EMDASH
+                           ;; (push '("--" . "—") prettify-symbols-alist) ; 0x2014 EMDASH
                            (push '("->" . "→" ) prettify-symbols-alist)
                            (push '("<-" . "←" ) prettify-symbols-alist)
                            (push '("<->" . "↔" ) prettify-symbols-alist)
@@ -630,6 +630,7 @@
                             ;; ("LATEST" . ?t) ;; latest version
                             ("LLMLOG" . ?m)
                             ("WEBLOG" . ?w)
+                            ("WIKIPEDIA" . ?k)
                             ("WORKLOG" . ?o)
                             ("DEPRECATED" . ?D)
                             ("KLUDGE" . ?K)

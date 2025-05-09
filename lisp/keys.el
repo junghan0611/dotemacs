@@ -1850,7 +1850,7 @@ window."
 
   "SPC" #'citar-denote-dwim
 
-  "M-i" #'my/insert-citations-by-date
+  "M-i" #'my/insert-citations-by-search
   )
 
 (defvar-keymap ews-annotate-map
@@ -1903,7 +1903,7 @@ window."
   "M-p" #'my/update-dblock-export-garden-all
 
   "M-s" #'my/insert-screenshot-links-by-date
-  "M-i" #'my/insert-citations-by-date
+  "M-i" #'my/insert-citations-by-search
 
   "M-d" #'my/delete-multiple-blank-lines
 

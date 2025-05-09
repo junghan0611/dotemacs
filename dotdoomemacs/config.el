@@ -2424,19 +2424,6 @@ ${content}"))
   (setq magit-blame-color-by-age-full-heading nil)
   (magit-blame-color-by-age-mode +1))
 
-;;;;; magit-gptcommit
-
-(use-package! magit-gptcommit
-  :after magit
-  :bind (:map git-commit-mode-map
-              ("C-c C-g" . magit-gptcommit-commit-accept))
-  ;; :custom
-  ;; (magit-gptcommit-llm-provider ash/llm-claude)
-  ;; :config
-  ;; ;; Eval (transient-remove-suffix 'magit-commit '(1 -1)) to remove gptcommit transient commands
-  ;; (magit-gptcommit-status-buffer-setup)
-  )
-
 ;;;; :lang org
 
 ;;;;; doom packages
@@ -3056,9 +3043,8 @@ ${content}"))
         denote-save-buffers t) ; default nil
 
   (add-hook 'org-mode-hook (lambda ()
-                             ;; (setq denote-rename-buffer-backlinks-indicator "¶")
+                             (setq denote-rename-buffer-backlinks-indicator "¶")
                              ;; (setq denote-rename-buffer-format "%t%b")
-                             (setq denote-rename-buffer-backlinks-indicator "")
                              (setq denote-rename-buffer-format "%b %t")
                              (denote-rename-buffer-mode +1)))
 
@@ -3331,23 +3317,26 @@ ${content}"))
 
 ;;;;;;;; 01 - gptel
 
-(use-package! gptel
-  :commands (gptel gptel-send)
-  :init
-  ;; (add-to-list 'yank-excluded-properties 'gptel)
-  (setq gptel-default-mode 'org-mode)
-  (setq gptel-temperature 0.5) ; gptel 1.0, Perplexity 0.2
+;; (use-package! gptel
+;;   :commands (gptel gptel-send)
+;;   :init
+;;   ;; (add-to-list 'yank-excluded-properties 'gptel)
+;;   (setq gptel-default-mode 'org-mode)
+;;   (setq gptel-temperature 0.5) ; gptel 1.0, Perplexity 0.2
 
-  ;; "^\\*gptel-ask\\*"
-  ;; ("^\\*ChatGPT\\*" :size 84 :side right :modeline t :select t :quit nil :ttl t)
-  (set-popup-rule! "^\\*ChatGPT\\*$" :side 'right :size 84 :vslot 100 :quit t) ; size 0.4
-  (set-popup-rule! "^\\*gptel\\*$" :side 'right :size 84 :vslot 100 :quit t) ; size 0.4
-  (set-popup-rule! "^\\*Deepseek\\*$" :side 'right :size 84 :vslot 100 :quit t) ; size 0.4
-  (set-popup-rule! "^\\*xAI\\*$" :side 'right :size 84 :vslot 100 :quit t) ; size 0.4
-  ;; :config
-  )
+;;   ;; "^\\*gptel-ask\\*"
+;;   ;; ("^\\*ChatGPT\\*" :size 84 :side right :modeline t :select t :quit nil :ttl t)
+;;   ;; (set-popup-rule! "^\\*ChatGPT\\*$" :side 'right :size 84 :vslot 100 :quit t) ; size 0.4
+;;   ;; (set-popup-rule! "^\\*gptel\\*$" :side 'right :size 84 :vslot 100 :quit t) ; size 0.4
+;;   ;; (set-popup-rule! "^\\*Deepseek\\*$" :side 'right :size 84 :vslot 100 :quit t) ; size 0.4
+;;   ;; (set-popup-rule! "^\\*xAI\\*$" :side 'right :size 84 :vslot 100 :quit t) ; size 0.4
+;;   ;; :config
+;;   )
 
 (after! gptel
+
+  (setq gptel-default-mode 'org-mode)
+  (setq gptel-temperature 0.5) ; gptel 1.0, Perplexity 0.2
 
 ;;;;;;;; 02 - default prompt
 
@@ -3390,10 +3379,10 @@ ${content}"))
         (insert (format "#+hugo_categories: Noname\n\n"))
 
         ;; add bib and history
-        (insert (format "#+print_bibliography:\n* Related Notes\n* History\n- %s\n" (format-time-string "[%Y-%m-%d %a %H:%M]")))
+        (insert (format "\n* Related Notes\n#+print_bibliography:\n* History\n- %s\n" (format-time-string "[%Y-%m-%d %a %H:%M]")))
 
         ;; heading-1 add backlink to today
-        (insert (format "* [[denote:%s::%s][%s]]\n"
+        (insert (format "* 로그 :LLMLOG:\n** [[denote:%s::%s][%s]]\n"
                         ;; (format-time-string "%Y%m%dT000000")
                         (format-time-string "%Y%m%dT000000"
                                             (org-journal--convert-time-to-file-type-time
@@ -3676,153 +3665,6 @@ ${content}"))
     ;; (map! :map visual-line-mode-map "C-k" #'gptel-quick)
     ) ; progn gptel-quick
   )
-
-;;;;; llmclient: chatgpt-shell
-
-;;;;;; use-package chatgpt-shell
-
-;; (use-package! chatgpt-shell
-;;   :defer t
-;;   :commands (chatgpt-shell--primary-buffer chatgpt-shell chatgpt-shell-prompt-compose)
-;;   :bind (("C-x m" . chatgpt-shell)
-;;          ("C-c C-0" . chatgpt-shell-prompt-compose))
-;;   :hook
-;;   (chatgpt-shell-mode
-;;    . (lambda () (setq-local completion-at-point-functions nil)))
-;;   :init (setq shell-maker-history-path (concat user-org-directory "var/"))
-;;   ;; (add-to-list 'display-buffer-alist
-;;   ;;              '("\\*chatgpt\\*"
-;;   ;;                display-buffer-in-side-window
-;;   ;;                (side . right)
-;;   ;;                (slot . 0)
-;;   ;;                (window-parameters . ((no-delete-other-windows . t)))
-;;   ;;                (dedicated . t)))
-;;   :custom (shell-maker-prompt-before-killing-buffer nil)
-;;   ;; (chatgpt-shell-openai-key
-;;   ;;  (auth-source-pick-first-password :host "api.openai.com"))
-;;   (chatgpt-shell-openai-key user-openai-api-key)
-;;   (chatgpt-shell-transmitted-context-length 5)
-;;   :config
-;;   (require 'ob-chatgpt-shell)
-;;   (ob-chatgpt-shell-setup)
-
-;;   (setq chatgpt-shell-model-versions '("gpt-4o-mini"
-;;                                        "gpt-3.5-turbo"
-;;                                        "gpt-4o-mini"
-;;                                        "chatgpt-4o-latest" "o1-preview" "o1-mini" "gpt-4o" "gpt-4-0125-preview"
-;;                                        "gpt-4-turbo-preview" "gpt-4-1106-preview" "gpt-4-0613" "gpt-4" "gpt-3.5-turbo-16k-0613" "gpt-3.5-turbo-16k" "gpt-3.5-turbo-0613" ))
-
-;;   (add-to-list
-;;    'chatgpt-shell-system-prompts
-;;    '("Writing" . "You are a large language model and a writing assistant."))
-
-;;   ;; (add-to-list
-;;   ;;  'chatgpt-shell-system-prompts
-;;   ;;  `("Cybersecurity" .
-;;   ;;    ,(concat "The user is an aspiring cybersecurity expert. "
-;;   ;;             "You need to go as deep into technical details as possible. "
-;;   ;;             "Elaborate your answers for the highest level of expertise. "
-;;   ;;             "Do not expand abbreviations unless explicitly asked. "
-;;   ;;             "Code examples should be in Emacs Org-mode source blocks. "
-;;   ;;             "Cite relevant RFCs and CVEs, if any. "
-;;   ;;             "Links and citations should be in Org-mode link format.")))
-
-;;   ;; (add-to-list
-;;   ;;  'chatgpt-shell-system-prompts
-;;   ;;  `("Espanól" .
-;;   ;;    ,(concat "The user is a person trying to learn Spanish. "
-;;   ;;             "Expect request texts mixed in both languages."
-;;   ;;             "Answer in Spanish, unless specifically asked to provide the translation."
-;;   ;;             "Focus on Latin American (primarily Mexican) dialect. "
-;;   ;;             "When applicable, help the user with memorization and building vocabulary. "
-;;   ;;             "Highligh the connection of words with shared etymology, e.g.: 'quieres' to 'inquire', and 'ayuda' to 'aid'. "
-;;   ;;             "When asked about specific words, provide example sentences.")))
-
-;;   (add-to-list
-;;    'chatgpt-shell-system-prompts
-;;    `("Leetcode" .
-;;      ,(concat
-;;        "Help user to solve Leetcode problems. "
-;;        "Structure responses in Org-Mode format and org-babel source blocks. "
-;;        "Write solutions in javascript. "
-;;        "Avoid using 'for loops' whenever possible, using .map/.reduce instead. "
-;;        "Comment on time and space complexity of each solution. "
-;;        "Advertise alternative algorithms and approaches for further research. ")))
-
-;;   ;; set default prompt to None
-;;   (setq chatgpt-shell-system-prompt
-;;         (- (length chatgpt-shell-system-prompts)
-;;            (length
-;;             (member
-;;              (assoc "None" chatgpt-shell-system-prompts)
-;;              chatgpt-shell-system-prompts))))
-
-;;   ;; :bind (:map chatgpt-shell-mode-map
-;;   ;;             (("RET" . newline)
-;;   ;;              ("M-RET" . shell-maker-submit)
-;;   ;;              ("M-." . dictionary-lookup-definition)))
-;;   )
-
-;;;;;; Custom ChatGPT Functions
-
-;; Custom ChatGPT Functions
-;; (after! chatgpt-shell
-;;   ;; required for `chatgpt-shell-system-prompts'
-;;   (require 'pcsv)
-
-;;   (defun my/chatgpt-shell-at-point-or-region (header)
-;;     "Send the header with the token at point or the selected region to ChatGPT."
-;;     (if (region-active-p)
-;;         (chatgpt-shell-send-region-with-header header)
-
-;;       (if-let ((token (thing-at-point 'symbol)))
-;;           (chatgpt-shell-send-to-buffer (concat header "\n\n" token))
-;;         (user-error "Nothing at point or selected."))))
-
-;;   ;; Explains
-;;   (defun my/chatgpt-shell-explain-org-heading ()
-;;     "Explain the org heading with GhatGPT."
-;;     (interactive)
-;;     (chatgpt-shell-send-to-buffer
-;;      (concat
-;;       "Explain the given topic briefly:\n\n" (my/org-get-heading-title)
-;;       ;; (my/org-breadcrumbs)
-;;       )))
-
-;;   (defun my/chatgpt-shell-explain-region ()
-;;     "Explain the topic using ChatGPT."
-;;     (interactive)
-;;     (my/chatgpt-shell-at-point-or-region
-;;      "Explain the given topic briefly and provides 3 fun facts
-;;     to help me remebering and learning it: "))
-
-;;   ;; Summarizes
-;;   (defun my/chatgpt-shell-summarize-region ()
-;;     "Explain the topic using ChatGPT."
-;;     (interactive)
-;;     (my/chatgpt-shell-at-point-or-region "Summerize the text briefly: "))
-
-;;   ;; Writes
-;;   (defun my/chatgpt-shell-write-org-heading ()
-;;     "Write the content for the current org heading using ChatGPT."
-;;     (interactive)
-;;     (chatgpt-shell-send-to-buffer
-;;      ;; (format "Write an article for the topic: \n\n%s"
-;;      (format "Write an article for the topic in briefly: \n\n%s"
-;;              (my/org-get-heading-title)
-;;              ;; (my/org-breadcrumbs)
-;;              )))
-
-;;   ;; Writes in Korean
-;;   (defun my/chatgpt-shell-write-org-heading-korean ()
-;;     "Write the content for the current org heading using ChatGPT in Korean."
-;;     (interactive)
-;;     (chatgpt-shell-send-to-buffer
-;;      (format "Write an article for the topic in Korean : \n\n%s"
-;;              (my/org-get-heading-title)
-;;              ;; (my/org-breadcrumbs)
-;;              ))))
-
 
 ;;;;; DONT llmclient: aider.el
 
@@ -5892,10 +5734,10 @@ See `consult-omni-multi' for more details.
 
 ;;;;;;; my/consult-omni-video
 
-(progn
+  (progn
     (defvar consult-omni-video-sources (list "gptel"
-                                           "Invidious"
-                                           ))
+                                             "Invidious"
+                                             ))
     (defun my/consult-omni-video (&optional initial prompt sources no-callback &rest args)
       "Interactive video search”
 
@@ -5931,20 +5773,20 @@ See `consult-omni-multi' for more details.
 ;;;;;;; DONT my/consult-omni-scholar
 
   ;; (progn
-;;     (setq consult-omni-scholar-sources (list "PubMed" "Scopus" "Notes Search" "gptel"))
+  ;;     (setq consult-omni-scholar-sources (list "PubMed" "Scopus" "Notes Search" "gptel"))
 
-;;     (defun consult-omni-scholar (&optional initial prompt sources no-callback &rest args)
-;;       "Interactive “multi-source acadmic literature” search
+  ;;     (defun consult-omni-scholar (&optional initial prompt sources no-callback &rest args)
+  ;;       "Interactive “multi-source acadmic literature” search
 
-;; This is similar to `consult-omni-multi', but runs the search on
-;; academic literature sources defined in `consult-omni-scholar-sources'.
-;; See `consult-omni-multi' for more details.
-;; "
-;;       (interactive "P")
-;;       (let ((prompt (or prompt (concat "[" (propertize "consult-omni-multi" 'face 'consult-omni-prompt-face) "]" " Search:  ")))
-;;             (sources (or sources consult-omni-scholar-sources)))
-;;         (consult-omni-multi initial prompt sources no-callback args)))
-;;     )
+  ;; This is similar to `consult-omni-multi', but runs the search on
+  ;; academic literature sources defined in `consult-omni-scholar-sources'.
+  ;; See `consult-omni-multi' for more details.
+  ;; "
+  ;;       (interactive "P")
+  ;;       (let ((prompt (or prompt (concat "[" (propertize "consult-omni-multi" 'face 'consult-omni-prompt-face) "]" " Search:  ")))
+  ;;             (sources (or sources consult-omni-scholar-sources)))
+  ;;         (consult-omni-multi initial prompt sources no-callback args)))
+  ;;     )
 
 ;;;;;;; my/consult-omni-autosuggest-at-point
 
@@ -5983,7 +5825,7 @@ See `consult-omni-multi' for more details.
 
 ;;;; :os tty
 
-;;;;; term-keys
+;;;;; DONT term-keys
 
 (use-package! term-keys
   :unless window-system
@@ -5998,6 +5840,13 @@ See `consult-omni-multi' for more details.
 ;;   (with-temp-buffer
 ;;     (insert (term-keys/kitty-conf))
 ;;     (write-region (point-min) (point-max) "~/kitty-for-term-keys.conf")))
+
+;;;;; DONT kkp
+
+;; (unless (display-graphic-p) ; gui
+;;   (require 'kkp)
+;;   (setq kkp-alt-modifier 'alt) ;; use this if you want to map the Alt keyboard modifier to Alt in Emacs (and not to Meta)
+;;   )
 
 
 ;;;; end-of user-configs

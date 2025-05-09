@@ -143,6 +143,7 @@
 
  (eval +overlay)     ; run code, run (also, repls)
  lookup ; only dumb-jump
+ llm                ; when I said you needed friends, I didn't mean...
  ;; (lsp +eglot)
  (lsp +peek)
 

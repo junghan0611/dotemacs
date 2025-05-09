@@ -327,8 +327,14 @@
 ;;            :repo "cashpw/org-fc"
 ;;            :branch "feat/classes"
 ;;            :files (:defaults "awk" "demo.org")))
+;;;; modules/tools llm
 
-;;;; AI
+(unpin! gptel)
+(package! gptel :recipe (:host github :repo "junghan0611/gptel" :branch "ko"))
+;; (package! gptel :recipe (:host github :repo "karthink/gptel" :branch "feature-tool-use"))
+;; (package! gptel-quick :recipe (:host github :repo "karthink/gptel-quick"))
+
+;;;; extra packages
 
 (package! khoj)
 
@@ -345,11 +351,6 @@
 ;; (package! chatgpt-shell)
 ;; (package! ob-chatgpt-shell)
 (package! pcsv)
-
-;; (package! gptel)
-(package! gptel :recipe (:host github :repo "junghan0611/gptel" :branch "ko"))
-;; (package! gptel :recipe (:host github :repo "karthink/gptel" :branch "feature-tool-use"))
-(package! gptel-quick :recipe (:host github :repo "karthink/gptel-quick"))
 
 ;; gptel plugins
 (package! elysium :recipe (:host github :repo "lanceberge/elysium" :branch "main" :files ("*.el")))  ; star 236 using smerge
@@ -457,7 +458,6 @@
 (package! consult-git-log-grep)
 (package! magit-todos)
 (package! magit-blame-color-by-age :recipe (:host github :repo "jdtsmith/magit-blame-color-by-age"))
-(package! magit-gptcommit)
 
 ;;;; Reading
 

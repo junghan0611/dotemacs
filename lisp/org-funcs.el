@@ -13,12 +13,12 @@
 
 ;;; Code:
 
-;;;; fixing files at once
+;;;; FIXME fixing files at once
 
 ;; 매우 중요한 개념이다.
 ;; 인덴트, 이름, 포멧, 형식 등 한번에 일괄 수정하는 방법
 
-;;;;; Indentation
+;;;;;; Indentation
 
 ;; https://stackoverflow.com/questions/2551632/how-to-format-all-files-under-a-dir-in-emacs
 
@@ -65,20 +65,8 @@
     (save-buffer)
     (kill-buffer nil)))
 
-;;;; my/org-store-link-id-optional for org-transclusion
-
-;; agzam-dot-spacemacs/layers/ag-org/funcs.el
-
-;;;###autoload
-(defun my/org-store-link-id-optional (&optional arg)
-  "Stores a link, reversing the value of `org-id-link-to-org-use-id'.
-If it's globally set to create the ID property, then it wouldn't,
-and if it is set to nil, then it would forcefully create the ID."
-  (interactive "P")
-  (let ((org-id-link-to-org-use-id (not org-id-link-to-org-use-id)))
-    (org-store-link arg :interactive)))
-
-;;;; org-rich-yank : format paste
+;;;; FIXME utilities
+;;;;; org-rich-yank : format paste
 
 ;; https://github.com/unhammer/org-rich-yank If you want to change how the
 ;; source block or link is formatted, you can do so by setting
@@ -100,9 +88,9 @@ and if it is set to nil, then it would forcefully create the ID."
             link))
   (customize-set-variable 'org-rich-yank-format-paste #'my/org-rich-yank-format-paste))
 
-;;;; doom : cae functions
+;;;;; doom : cae functions
 
-;; ;;;;###autoload
+;; ;;;;;###autoload
 ;; (defun cae-org-rich-yank ()
 ;;   (interactive)
 ;;   (require 'org-rich-yank)
@@ -151,7 +139,7 @@ and if it is set to nil, then it would forcefully create the ID."
 ;;            (format "\n#+end_src\n"))))
 ;;     (insert paste)))
 
-;;;;###autoload
+;;;;;###autoload
 (defun cae-org-insert-checkbox-or-bracket (arg)
   (interactive "p")
   (if (and (= arg 1)
@@ -177,13 +165,13 @@ and if it is set to nil, then it would forcefully create the ID."
     (org-self-insert-command arg)))
 
 
-;;;;###autoload
+;;;;;###autoload
 (defun cae-org-insert-file-link ()
   "Insert a file link.  At the prompt, enter the filename."
   (interactive)
   (insert (format "[[%s]]" (org-link-complete-file))))
 
-;;;;###autoload
+;;;;;###autoload
 (defun cae-org-syntax-convert-keyword-case-to-lower ()
   "Convert all #+KEYWORDS to #+keywords."
   (interactive)
@@ -197,8 +185,8 @@ and if it is set to nil, then it would forcefully create the ID."
           (setq count (1+ count))))
       (message "Replaced %d occurances" count))))
 
-;;;; eliies functions
-;;;;; my/genfile-timestamp
+;;;;; eliies functions
+;;;;;; my/genfile-timestamp
 
 ;; 중국어 문장 부호를 인식하도록 문장 끝을 설정합니다. 채우기에서 마침표 뒤에 두
 ;; 개의 공백을 삽입할 필요가 없습니다.
@@ -325,7 +313,7 @@ and if it is set to nil, then it would forcefully create the ID."
     (copy-region-as-kill (point-min) (point-max))
     (message "buffer copied")))
 
-;;;;; my/rename-file-and-buffer
+;;;;;; my/rename-file-and-buffer
 
 ;; copy from http://stackoverflow.com/questions/384284/how-do-i-rename-an-open-file-in-emacs
 ;; http://emacsredux.com/blog/2013/05/04/rename-file-and-buffer/
@@ -356,7 +344,7 @@ and if it is set to nil, then it would forcefully create the ID."
   (interactive)
   (grep-find (concat grep-find-command (buffer-substring-no-properties (region-beginning) (region-end)))))
 
-;;;;; my/open-external
+;;;;;; my/open-external
 
 (defun my/open-external (&optional file)
   "Open the current file or dired marked files in external app.
@@ -386,7 +374,7 @@ copy from xah lee: http://ergoemacs.org/emacs/emacs_dired_open_file_in_ext_apps.
        ((string-equal system-type "cygwin")
         (mapc (lambda (path) (let ((process-connection-type nil)) (start-process "" nil "xdg-open" path)) ) flist))))))
 
-;;;;; my/open-external-pdf
+;;;;;; my/open-external-pdf
 
 (defun my/open-external-pdf ()
   (interactive)
@@ -395,10 +383,10 @@ copy from xah lee: http://ergoemacs.org/emacs/emacs_dired_open_file_in_ext_apps.
     (file-name-sans-extension (buffer-file-name))
     ".pdf")))
 
-;;;; gr-functions
-;;;;; DONT Dily Notes with org-journal
+;;;;; gr-functions
+;;;;;; DONT Dily Notes with org-journal
 
-;;;;###autoload
+;;;;;###autoload
 ;; (defun gr/daily-notes (p)
 ;;   "Pop up dailynotes.org."
 ;;   (interactive "P")
@@ -452,7 +440,7 @@ copy from xah lee: http://ergoemacs.org/emacs/emacs_dired_open_file_in_ext_apps.
 ;;   (org-journal-new-entry nil nil)
 ;;   (goto-char (point-max)))
 
-;;;;; word count
+;;;;;; word count
 
 (defun gr/word-count-subtree ()
   "Count words in org subtree at point."
@@ -575,7 +563,7 @@ copy from xah lee: http://ergoemacs.org/emacs/emacs_dired_open_file_in_ext_apps.
       (kill-new filename)
       (message "Copied buffer file name '%s' to the clipboard." filename))))
 
-;;;;; capitalize, upcase, downcase dwim
+;;;;;; capitalize, upcase, downcase dwim
 
 (defun title-case-region ()
   "Render string in region in title case."
@@ -643,7 +631,7 @@ URL: https://christiantietze.de/posts/2021/03/change-case-of-word-at-point/"
 
 
 
-;;;;; convert docx to org
+;;;;;; convert docx to org
 
 (defun gr/flush-properties-drawers ()
   (interactive)
@@ -668,7 +656,7 @@ Navigate to files in dired, mark files, and execute command."
                        'gr/flush-properties-drawers)
   )
 
-;;;;; my/pandoc--convert-buffer-from-markdown-to-org-in-place
+;;;;;; my/pandoc--convert-buffer-from-markdown-to-org-in-place
 
 ;; from cashpw
 (defun my/pandoc--convert-buffer-from-markdown-to-org-in-place ()
@@ -697,7 +685,7 @@ Navigate to files in dired, mark files, and execute command."
        " | sed -E '/^[[:space:]]*:/d'")))
     (org-mode)))
 
-;;;;; "Better Return" edited
+;;;;;; "Better Return" edited
 
 ;; a better return; inserts list item with RET instead of M-RET
 
@@ -804,11 +792,11 @@ Navigate to files in dired, mark files, and execute command."
 ;;      (t
 ;;       (org-return)))))
 
-;;;; karthink-dotfiles-popper/lisp/utilities.el
+;;;;; karthink-dotfiles-popper/lisp/utilities.el
 
-;;;;; COUNT-WORDS-REGION: USING `while'
+;;;;;; COUNT-WORDS-REGION: USING `while'
 
-;; ;;;;###autoload
+;; ;;;;;###autoload
 (defun my/count-words-region (beginning end)
   "Print number of words in the region."
   (interactive "r")
@@ -835,7 +823,7 @@ Navigate to files in dired, mark files, and execute command."
 ;; count words in region
 ;; (global-set-key (kbd "C-=") 'my/count-words-region)
 
-;; ;;;;###autoload
+;; ;;;;;###autoload
 (defun my/count-words-buffer ()
   "Print number of words in the region."
   ;; 1. Set up appropriate conditions.
@@ -853,9 +841,9 @@ Navigate to files in dired, mark files, and execute command."
             ((= 1 count) (message "1 word"))
             (t  (message  (format "%d words" count)))))))
 
-;;;;; PRINT ASCII TABLE
+;;;;;; PRINT ASCII TABLE
 
-;; ;;;;###autoload
+;; ;;;;;###autoload
 (defun ascii-table ()
   "Display basic ASCII table (0 thru 127)"
   (interactive)
@@ -873,9 +861,9 @@ Navigate to files in dired, mark files, and execute command."
                       (setq i (- i 96)))))
   (special-mode))
 
-;;;;; INSERT FUNCTION DEFINITION AT POINT
+;;;;;; INSERT FUNCTION DEFINITION AT POINT
 
-;; ;;;;###autoload
+;; ;;;;;###autoload
 (defun insert-definition-at-point ()
   "Function to find the definition of the defun at point and insert it there."
   (interactive)
@@ -898,19 +886,19 @@ Navigate to files in dired, mark files, and execute command."
   (beginning-of-defun))
 ;; (global-set-key (kbd "C-x C-M-y") 'insert-definition-at-point)
 
-;;;; org funcs
+;;;;; org funcs
 
 
-;;;;; org-open-at-point-other-window
+;;;;;; org-open-at-point-other-window
 
 ;; ohyecloudy-dot-doom/doom.d/config.org
-;;;;###autoload
+;;;;;###autoload
 (defun my/org-open-at-point-other-window ()
   (interactive)
   (let ((org-link-frame-setup (cons (cons 'file 'find-file-other-window) org-link-frame-setup)))
     (org-open-at-point)))
 
-;;;;; repeated words
+;;;;;; repeated words
 
 (defun my/the-the ()
   "Search forward for for a duplicated word."
@@ -927,7 +915,7 @@ Navigate to files in dired, mark files, and execute command."
 ;;   ;; Bind 'the-the' to  C-c \
 ;;   (bind-key "C-c \\" 'the-the)
 
-;;;;; add-newlines-between-paragraphs
+;;;;;; add-newlines-between-paragraphs
 
 (defun my/add-newlines-between-paragraphs ()
   (interactive)
@@ -937,9 +925,10 @@ Navigate to files in dired, mark files, and execute command."
       (move-end-of-line nil)
       (newline)
       (next-line))))
-;;;;; org-capture and org-id
 
-;;;;;; my/org-insert-magic-link
+;;;;;; org-capture and org-id
+
+;;;;;;; my/org-insert-magic-link
 
 (defun my/org-insert-magic-link (url)
   "Auto create org links to Wikipedia URL."
@@ -952,7 +941,7 @@ Navigate to files in dired, mark files, and execute command."
      (t (error "I have no idea what to do with this")))
     (org-insert-link nil url title)))
 
-;;;;;; my/org-capture-goto-link
+;;;;;;; my/org-capture-goto-link
 
 ;; /home/junghan/.emacs.tshu/lisp/lang-org.el
 (defun my/org-capture-goto-link ()
@@ -974,7 +963,7 @@ Navigate to files in dired, mark files, and execute command."
         (insert "[[" link "]]\n")
         (point)))))
 
-;;;;;; my/get-id-to-clipboard
+;;;;;;; my/get-id-to-clipboard
 
 (defun my/get-id-to-clipboard() "Copy an ID link with the
   headline to killring, if no ID is there then create a new unique
@@ -997,7 +986,7 @@ Navigate to files in dired, mark files, and execute command."
 ;; (let ((map global-map))
 ;;     (define-key map (kbd "C-c j g") 'my/get-id-to-clipboard))
 
-;;;;; split and indirect orgtree
+;;;;;; split and indirect orgtree
 
 ;; copy from writers-dot-spacemaccs
 (defun my/split-and-indirect-orgtree ()
@@ -1013,14 +1002,14 @@ Navigate to files in dired, mark files, and execute command."
   (kill-this-buffer)
   (delete-window))
 
-;;;;; org-toggle-emphasis-markers
+;;;;;; org-toggle-emphasis-markers
 
 (defun my/org-toggle-emphasis-markers ()
   (interactive)
   (setq org-hide-emphasis-markers (not org-hide-emphasis-markers))
   (font-lock-fontify-buffer :interactively))
 
-;;;;; align-comments
+;;;;;; align-comments
 
 (defun my/align-comments (beginning end)
   "Align comments in region."
@@ -1028,7 +1017,7 @@ Navigate to files in dired, mark files, and execute command."
   (align-regexp beginning end (concat "\\(\\s-*\\)"
                                       (regexp-quote comment-start)) nil 2))
 
-;;;;; comment-or-uncomment-region
+;;;;;; comment-or-uncomment-region
 
 (defun my/comment-or-uncomment-region ()
   "Comment or uncomment region with just a character (e.g. '/'). If a region is
@@ -1038,14 +1027,14 @@ active call comment-or-uncomment-region, otherwise just insert the given char."
                           'comment-or-uncomment-region
                         'self-insert-command)))
 
-;;;;; indent-buffer
+;;;;;; indent-buffer
 
 (defun my/indent-buffer ()
   "Indent buffer."
   (interactive)
   (indent-region (point-min) (point-max)))
 
-;;;;; org-indent-src-block
+;;;;;; org-indent-src-block
 
 (defun my/org-indent-src-block ()
   (interactive)
@@ -1053,7 +1042,7 @@ active call comment-or-uncomment-region, otherwise just insert the given char."
   (my/indent-buffer)
   (org-edit-src-exit))
 
-;;;;; org-sort-by-priority
+;;;;;; org-sort-by-priority
 
 ;; (defun my/org-modern-sort-by-priority ()
 ;;   "Sort entries in level=2 by priority."
@@ -1064,7 +1053,7 @@ active call comment-or-uncomment-region, otherwise just insert the given char."
 ;;                    "LEVEL=1")
 ;;   (org-set-startup-visibility))
 
-;;;;; org-delete-link
+;;;;;; org-delete-link
 
 (defun org-delete-link ()
   "Remove the link part of an org-mode link at point and keep
@@ -1081,14 +1070,14 @@ active call comment-or-uncomment-region, otherwise just insert the given char."
             (delete-region link-begin link-end)
             (insert (concat content " "))))))))
 
-;;;;; org-insert-file-link
+;;;;;; org-insert-file-link
 
 (defun org-insert-file-link ()
   "Insert a file link.  At the prompt, enter the filename."
   (interactive)
   (insert (format "[[%s]]" (org-link-complete-file))))
 
-;;;;; org-random-heading
+;;;;;; org-random-heading
 
 (defun my/org-random-heading ()
   "Jump to a random org heading in the current org file."
@@ -1101,7 +1090,7 @@ active call comment-or-uncomment-region, otherwise just insert the given char."
       (goto-char (nth (random (length headings)) headings))
       (org-reveal))))
 
-;;;;; org-insert-link-dwim
+;;;;;; org-insert-link-dwim
 
 (defun org-insert-link-dwim ()
   "Like `org-insert-link' but with personal dwim preferences."
@@ -1128,7 +1117,7 @@ active call comment-or-uncomment-region, otherwise just insert the given char."
           (t
            (call-interactively 'org-insert-link)))))
 
-;;;;; org-show-level
+;;;;;; org-show-level
 
 (defun org-show-level-1 ()
   (interactive)
@@ -1146,7 +1135,7 @@ active call comment-or-uncomment-region, otherwise just insert the given char."
   (interactive)
   (org-content 4))
 
-;;;;; show-duplicate-lines
+;;;;;; show-duplicate-lines
 
 (defun show-duplicate-lines ()
   "Display all duplicate lines in the current buffer."
@@ -1164,7 +1153,7 @@ active call comment-or-uncomment-region, otherwise just insert the given char."
             (princ (concat line "\n"))))
       (message "No duplicate lines found."))))
 
-;;;;; get/insert heading-title / category
+;;;;;; get/insert heading-title / category
 
 ;; (defun cc-todo-item () ; from choi
 ;;   (interactive)
@@ -1205,7 +1194,7 @@ active call comment-or-uncomment-region, otherwise just insert the given char."
               )))
   )
 
-;;;;; org-narrow-to-item
+;;;;;; org-narrow-to-item
 
 ;; https://emacs-china.org/t/org-mode-narrow-to-sublist/24682/5
 (defun my/org-narrow-to-item ()
@@ -1217,7 +1206,7 @@ Throw an error when not in a list."
      (progn (org-beginning-of-item) (point))
      (progn (org-end-of-item) (1- (point))))))
 
-;;;;; my/view-text-file-as-info-manual
+;;;;;; my/view-text-file-as-info-manual
 
 ;; View ‘info’, ‘texi’, ‘org’ and ‘md’ files as ‘Info’ manual
 (defun my/view-text-file-as-info-manual ()
@@ -1243,7 +1232,7 @@ Throw an error when not in a list."
       (_ (user-error "Don't know how to convert `%s' to an `info' file"
                      (file-name-extension (buffer-file-name)))))))
 
-;;;;; my/org-outdent-or-promote
+;;;;;; my/org-outdent-or-promote
 
 (defun my/org-outdent-or-promote ()
   "Run either org-outdent-item-tree or org-promote-subtree,
@@ -1269,7 +1258,7 @@ depending on which one is appropriate based on the context."
    ;; Otherwise, do nothing and show a message
    (t (message "Not at an item or a headline"))))
 
-;;;;; my/unfill-paragraph-or-region
+;;;;;; my/unfill-paragraph-or-region
 
 ;; unfill paragraph: the opposite of fill-paragraph
 (defun my/unfill-paragraph-or-region (&optional region)
@@ -1305,7 +1294,7 @@ depending on which one is appropriate based on the context."
           (unfill-region-keep-formatting pos next-pos))
         (setq pos next-pos)))))
 
-;;;;; my/region-to-numbered-list
+;;;;;; my/region-to-numbered-list
 
 (defun my/region-to-numbered-list (start end)
   "Turn a region into a numbered list."
@@ -1320,7 +1309,7 @@ depending on which one is appropriate based on the context."
     (delete-region start end)
     (insert (mapconcat 'identity numbered-strings "\n"))))
 
-;;;;; my/extract-hyperlinks-from-file
+;;;;;; my/extract-hyperlinks-from-file
 
 (defun my/extract-hyperlinks-from-file (file)
   "Extracts all hyperlinks from the text file FILE."
@@ -1334,7 +1323,7 @@ depending on which one is appropriate based on the context."
     (message "Hyperlinks extracted: %s" hyperlinks)
     hyperlinks))
 
-;;;;; my/extract-hyperlinks-from-buffer
+;;;;;; my/extract-hyperlinks-from-buffer
 
 (defun my/extract-hyperlinks-from-buffer ()
   "Extracts all hyperlinks from the current buffer."
@@ -1347,7 +1336,7 @@ depending on which one is appropriate based on the context."
     (message "Hyperlinks extracted: %s" hyperlinks)
     hyperlinks))
 
-;;;;; Capitalize level 1 headings use correct rules of capitalizing titles
+;;;;;; Capitalize level 1 headings use correct rules of capitalizing titles
 
 (defun my/org-titlecase-level-1 ()
   "Convert all Level 1 org-mode headings to title case."
@@ -1357,14 +1346,14 @@ depending on which one is appropriate based on the context."
     (while (re-search-forward "^\\* " nil t)
       (titlecase-line))))
 
-;;;;; my/iloveyou
+;;;;;; my/iloveyou
 
 (defun my/iloveyou (args)
   (interactive "P")
   (message "%s" (propertize "I love you!" 'Face '(:foreground "red")))
   )
 
-;;;;; my/daily-log
+;;;;;; my/daily-log
 
 (defun my/daily-log ()
   "Insert a new daily log entry with the current date."
@@ -1385,31 +1374,31 @@ depending on which one is appropriate based on the context."
   (insert "  - Task 1\n")
   (insert "  - Task 2\n"))
 
-;;;;; my/consult-org-screenshot
+;;;;;; my/consult-org-screenshot
 
-;;;;###autoload
+;;;;;###autoload
 (defun my/consult-org-screenshot ()
   (interactive)
   (consult-fd org-screenshot-path))
 
-;;;;; org-procratinate
+;;;;;; org-procratinate
 
-;;;;###autoload
+;;;;;###autoload
 (defun org-procrastinate ()
   "Set the scheduled date on an Org agenda item to tomorrow."
   (interactive)
   (org-agenda-schedule nil "+1d"))
 
-;;;;; add-to-org-user-agenda-files
+;;;;;; add-to-org-user-agenda-files
 
 ;; (setq org-agenda-files (append org-user-agenda-files org-agenda-files))
-;;;;###autoload
+;;;;;###autoload
 (defun add-to-org-user-agenda-files (file)
   "다음 파일을 org-agenda-files에 추가합니다: FILE"
   (unless (member file org-user-agenda-files)
     (add-to-list 'org-user-agenda-files file)))
 
-;;;; pkm func
+;;;;; pkm func
 
 ;; /injae-dotfiles/module/+util.el
 ;; text random
@@ -1615,7 +1604,7 @@ depending on which one is appropriate based on the context."
     (shell-command-to-string "find ~/org/oldseq/pages -type f | shuf -n 1")
     0 -1)))
 
-;;;; consult rg search
+;;;;; consult rg search
 
 ;; Full text search the whole org directory
 (defun my/consult-ripgrep-org-directory ()
@@ -1637,11 +1626,11 @@ depending on which one is appropriate based on the context."
   (let ((consult-ripgrep-command "rg --ignore-case --type org --type md --line-buffered --color=always --max-columns=500 --no-heading --line-number . -e ARG OPTS"))
     (consult-ripgrep "~/nosync/clone-notes/ko/")))
 
-;;;; Logos focus editing toggle
+;;;;; Logos focus editing toggle
 
 (progn
 
-  ;;;;###autoload
+  ;;;;;###autoload
   (defun my/logos-focus-editing-on ()
     ;; hide current global centaur-tabs
     ;; (centaur-tabs-local-mode t)
@@ -1667,7 +1656,7 @@ depending on which one is appropriate based on the context."
     (diff-hl-mode -1)
     )
 
-  ;;;;###autoload
+  ;;;;;###autoload
   (defun my/logos-focus-editing-off ()
     (logos-focus-mode -1)
     ;; (centered-cursor-mode -1)
@@ -1693,7 +1682,7 @@ depending on which one is appropriate based on the context."
     ;; (centaur-tabs-local-mode -1)
     )
 
-  ;;;;###autoload
+  ;;;;;###autoload
   (defun my/logos-focus-editing-toggle ()
     (interactive)
     (if (eq logos-focus-mode t)
@@ -1701,7 +1690,7 @@ depending on which one is appropriate based on the context."
       (my/logos-focus-editing-on)))
   )
 
-;;;; eww-to-org
+;;;;; eww-to-org
 
 ;; Link: https://jao.io/blog/eww-to-org.html
 
@@ -1755,7 +1744,7 @@ If DEST, a buffer, is provided, insert the markup there."
     (pop-to-buffer buff)
     (goto-char (point-min))))
 
-;;;; shuffle-todo with org-ql - sacha
+;;;;; shuffle-todo with org-ql - sacha
 
 ;; https://sachachua.com/blog/2024/10/shuffling-my-org-mode-unscheduled-tasks
 (when (locate-library "org-ql")
@@ -1788,7 +1777,7 @@ If DEST, a buffer, is provided, insert the markup there."
       :sort 'random))
   )
 
-;;;; list item move to DESTINATION - sacha
+;;;;; list item move to DESTINATION - sacha
 
 (defun my/org-move-line-to-destination ()
   "Moves the current list item to DESTINATION in the current buffer.
@@ -1826,7 +1815,34 @@ and indent it one level."
 ;; Moving lines around:2 ends here
 
 
-;;;; my/insert-screenshot-links-by-date
+;;;; FIXME workflows
+
+;;;;; my/save-buffer-preserving-modtime
+
+;; https://emacs.stackexchange.com/a/13549
+;; ;;;###autoload
+(defun my/save-buffer-preserving-modtime ()
+  "Call `save-buffer', but keep the visited file's modtime the same."
+  (interactive)
+  (let ((original-time (visited-file-modtime)))
+    (save-buffer)
+    (set-file-times buffer-file-name original-time)
+    (set-visited-file-modtime original-time)))
+
+;;;;; my/org-store-link-id-optional for org-transclusion
+
+;; agzam-dot-spacemacs/layers/ag-org/funcs.el
+
+;;;###autoload
+(defun my/org-store-link-id-optional (&optional arg)
+  "Stores a link, reversing the value of `org-id-link-to-org-use-id'.
+If it's globally set to create the ID property, then it wouldn't,
+and if it is set to nil, then it would forcefully create the ID."
+  (interactive "P")
+  (let ((org-id-link-to-org-use-id (not org-id-link-to-org-use-id)))
+    (org-store-link arg :interactive)))
+
+;;;;; my/insert-screenshot-links-by-date
 
 ;; [[denote:20250416T131632][#LLM: 데일리 스크린샷 파일링크 생성]]
 
@@ -1865,7 +1881,7 @@ Replace spaces in filenames with underscores."
           (insert (format "#+begin_export html\n![[../images/%s|320]]\n#+end_export\n" new-filename))
           )))))
 
-;;;; my/delete-multiple-blank-lines
+;;;;; my/delete-multiple-blank-lines
 
 (defun my/delete-multiple-blank-lines ()
   "두 줄 이상의 연속된 빈 줄을 하나로 만든다."
@@ -1874,64 +1890,231 @@ Replace spaces in filenames with underscores."
   (while (re-search-forward "\n\\s-*\n\\s-*\n" nil t)
     (replace-match "\n\n" nil nil)))
 
-;;;; my/insert-citations-by-search
+;;;;; my/insert-citations-by-search
 
 ;; [[denote:20250422T110316]]
-(defun my/insert-citations-by-date (&optional date-field-name date)
-  "특정 날짜에 추가된 BibTeX 항목을 org-cite 형식으로 삽입합니다.
-DATE가 nil이면 오늘 날짜를 사용하며, YYYY-MM-DD 형식이어야 합니다.
-인용은 레벨 3 헤딩 아래 개별 줄에 삽입됩니다."
-  (interactive
-   (list
-    (when current-prefix-arg
-      (read-string "날짜 필드 이름 (기본값: dateadded): " nil nil "dateadded"))
-    (when current-prefix-arg
-      (read-string "날짜 (YYYY-MM-DD, 기본 오늘): "))))
-  (let* ((date-field (or date-field-name "dateadded"))
-         (date-str (or date (format-time-string "%Y-%m-%d")))
-         (bib-file (expand-file-name (car org-cite-global-bibliography)))
-         (keys '())
-         (entry-count 0)
-         (found-count 0))
-    (unless (and bib-file (file-exists-p bib-file))
-      (error "Bib 파일 없음: %s" bib-file))
-    (with-temp-buffer
-      (insert-file-contents bib-file)
-      (goto-char (point-min))
-      (let ((case-fold-search t))
-        (while (re-search-forward "^@\\w+{\\([^,]+\\)," nil t)
-          (setq entry-count (1+ entry-count))
-          (let ((key (match-string 1))
-                (entry-end (save-excursion
-                             (if (re-search-forward "^@" nil t)
-                                 (match-beginning 0)
-                               (point-max)))))
-            (when (re-search-forward (format "^\\s-*%s\\s-*=\\s-*{\\s-*\\([^}]+\\)\\s-*}"
-                                             (regexp-quote date-field))
-                                     entry-end t)
-              (let* ((date-value (replace-regexp-in-string "[\\\\\"]" "" (match-string 1)))
-                     (parsed-time (ignore-errors (date-to-time (string-trim date-value))))
-                     (entry-date (when parsed-time
-                                   (format-time-string "%Y-%m-%d" parsed-time))))
-                (when (string= entry-date date-str)
-                  (push key keys)
-                  (setq found-count (1+ found-count)))))))))
-    (insert (format "** %s\n" date-str))
-    (if keys
-        (dolist (k (reverse keys))
-          (insert (format "- [cite:@%s]\n" k)))
-      (insert "이 날짜에 추가된 인용이 없습니다.\n"))))
 
-(defun my/insert-citations-by-date-with-calendar (&optional date-field-name)
-  "캘린더에서 날짜를 선택하여 해당 일자의 인용을 삽입합니다."
+(defun my/insert-citations-by-search (search-text &optional case-sensitive target-files)
+  "BibTeX 항목에서 SEARCH-TEXT가 포함된 항목을 제목과 함께 org-cite 형식으로 삽입합니다.
+TARGET-FILES가 nil이면 `org-cite-global-bibliography`의 모든 파일을 검색합니다."
   (interactive
-   (list
-    (when current-prefix-arg
-      (read-string "날짜 필드 이름 (기본값: dateadded): " nil nil "dateadded"))))
-  (require 'calendar)
-  (let* ((date (calendar-read-date))
-         (date-str (format "%04d-%02d-%02d" (nth 2 date) (nth 0 date) (nth 1 date))))
-    (my/insert-citations-by-date date-field-name date-str)))
+   (list (read-string "검색할 텍스트: ")
+         (y-or-n-p "대소문자 구분? ")
+         (if current-prefix-arg
+             (list (completing-read "Bib 파일 선택: " org-cite-global-bibliography))
+           org-cite-global-bibliography)))
+  (let ((total 0))
+    (insert (format "** [검색어: %s]\n" search-text))
+    (dolist (bib-file target-files)
+      (with-temp-buffer
+        (insert-file-contents (expand-file-name bib-file))
+        (goto-char (point-min))
+        (let ((case-fold-search (not case-sensitive)))
+          (while (re-search-forward "^@\\w+{\\([^,]+\\)," nil t)
+            (let ((key (match-string 1))
+                  (entry-end (save-excursion (re-search-forward "^@\\|\\'" nil t)))
+                  (title "Untitled"))
+              ;; 제목 추출 (정규표현식 최적화)
+              (when (re-search-forward "^\\s-*title\\s-*=\\s-*[{\"]\\([^}\"]+\\)[}\"]" entry-end t)
+                (setq title (replace-regexp-in-string "[{}]" "" (match-string 1))))
+
+              ;; 검색어 매칭 확인 (버퍼 이동 없이 처리)
+              (when (save-excursion
+                      (re-search-forward (regexp-quote search-text) entry-end t))
+                (setq total (1+ total))
+                ;; 결과 즉시 삽입 (자료구조 없이 순차 처리)
+                (with-current-buffer (get-buffer-create "*temp-citation*")
+                  (insert (format "- %s (%s) [cite:@%s]\n"
+                                  title (file-name-base bib-file) key )))))))))
+    (insert-buffer-substring "*temp-citation*")
+    (kill-buffer "*temp-citation*")
+    (message "처리 완료: %d 항목" total)))
+
+;;;;; my/clear-nbsp-add-ascii-punctuations
+
+(progn
+  ;; ;;;###autoload
+  (defun +replace-in-buffer (old new)
+    "Replace OLD with NEW in the current buffer."
+    (save-excursion
+      (goto-char (point-min))
+      (let ((case-fold-search nil)
+            (matches 0))
+        (while (re-search-forward old nil t)
+          (replace-match new)
+          (cl-incf matches))
+        matches)))
+
+  ;; ;;;###autoload
+  (defun my/clear-nbsp-and-ascii-punctuations ()
+    "Replace french ponctuations (like unsectable space) by regular ones."
+    (interactive)
+    (let ((chars
+           '(("[\u00a0\u200b]" . "") ;; Non-breaking and zero-width spaces - nbsp
+             ;; Special spaces and quads
+             ("[\u2000-\u200A\u202F\u205F\u3000]" . " ")
+             ("[\{\$]" . "")
+             ("[\$\}]" . "")
+             ;; ("[‘’‚’]" . "'")
+             ;; ("[“”„”«»]" . "\"")
+             ("[‘’]" . "'")
+             ("[“”]" . "\"")
+             ))
+          (matches 0))
+      (dolist (pair chars)
+        (cl-incf matches (+replace-in-buffer (car pair) (cdr pair))))
+      (message "Replaced %d match%s." matches (if (> matches 1) "es" "")))
+    )
+  )
+
+;;;;; my/insert-nbsp-all-with-wordlist-and-tags
+
+;; [[denote:20250415T174028][#LLM: 20250415T174028]]
+;; [[denote:20250418T050908][#조직모드: 한국어 조사 공백문자 삽입 - 코드 통합]]
+;; [[denote:20250419T123138][정규식의 우선순위]]
+(defun my/insert-nbsp-all-with-wordlist-and-tags ()
+  "한글 조사, 라틴-한글, 기호-텍스트 사이에 NBSP 삽입 (3가지 패턴 통합)"
+  (interactive)
+  (let ((word-list '()))
+    (save-excursion
+      (goto-line 10)
+      ;; 1. 라틴 문자와 한글 사이 NBSP 삽입
+      ;; 2. 조직모드 기호(=,*,_,+) 뒤 한글 또는 라틴 문자에 NBSP 삽입
+      (while (re-search-forward "\\([A-Za-z*+=_]\\)\\([가-힣]\\)" nil t)
+        (unless (save-excursion
+                  (goto-char (match-beginning 1))
+                  (looking-back "\\s-" 1))
+          (goto-char (match-beginning 2))
+          (insert " ")
+          (goto-char (match-end 2))))
+
+      ;; 한글2자 + '4자'
+      (goto-line 10)
+      (while (re-search-forward
+              "\\([가-힣]\\{2,\\}\\)\\(으로부터\\)" ; 뒤 공백 무시
+              nil t)
+        (when (>= (length (match-string 1)) 2)
+          (push (match-string 1) word-list))
+        (replace-match "\\1 \\2 ")) ; 뒤 nbsp 추가
+
+      ;; 한글2자 + '3자'
+      (goto-line 10)
+      (while (re-search-forward
+              "\\([가-힣]\\{2,\\}\\)\\(로부터\\|시키는\\)" ; 뒤 공백 무시
+              nil t)
+        (when (>= (length (match-string 1)) 2)
+          (push (match-string 1) word-list))
+        (replace-match "\\1 \\2 ")) ; 뒤 nbsp 추가
+
+      ;; 3. 한글 조사 NBSP 삽입 '2자'
+      (goto-line 10)
+      (while (re-search-forward
+              "\\([가-힣]\\{2,\\}\\)\\(이는\\|주는\\|다는\\|하는\\|시키\\|로서\\|했을\\|와는\\|들의\\|들이\\|였을\\|와의\\|오는\\|에는\\|에서\\|으로\\|인가\\)\\(\x20\\)" ; [[:space:]]
+              nil t)
+        (when (>= (length (match-string 1)) 2)
+          (push (match-string 1) word-list))
+        (replace-match "\\1 \\2 \\3"))
+
+      ;; 4. 한글 조사 NBSP 삽입 - '1단어'
+      (goto-line 10)
+      (while (re-search-forward
+              "\\([가-힣]\\{2,\\}\\)\\(이\\|가\\|은\\|는\\|을\\|의\\|를\\|와\\|과\\|란\\)\\(\x20\\)" ; [[:space:]]
+              nil t)
+        (when (>= (length (match-string 1)) 2)
+          (push (match-string 1) word-list))
+        (replace-match "\\1 \\2 \\3"))
+      ) ; end save-excursion
+
+    ;; 중복 제거 전 word-list 출력
+    (message "중복 제거 전 word-list: %s" word-list)
+    ;; 중복 제거 및 WORDLIST 헤딩 아래에 목록 추가
+    (setq word-list (delete-dups word-list))
+    ;; 중복 제거 후 word-list 출력
+    (message "중복 제거 후 word-list: %s" word-list)
+    (goto-char (point-max))
+    (unless (re-search-backward "^* WORDLIST$" nil t)
+      (insert "\n* WORDLIST\n"))
+    (forward-line)
+    (dolist (word word-list)
+      (let ((tag-exists (condition-case nil
+                            (progn
+                              ;; (message "디버깅: find-tag-noselect 호출 - %s" word)
+                              (with-current-buffer (get-buffer-create "ten-TAGS")
+                                (let ((buffer-read-only nil))
+                                  (find-tag-noselect word nil))))
+                          (error
+                           (message "디버깅: find-tag-noselect 에러 - %s" word)
+                           nil)
+                          )))
+        (insert (format "- %s %s\n" word (if tag-exists "O" "X")))
+        ))))
+
+;; (add-hook 'before-save-hook
+;;           (lambda ()
+;;             (when (derived-mode-p 'org-mode)
+;;               (unless (org-at-table-p)
+;;                 (my/insert-nbsp-all)))))
+
+;;;;; my/add-to-glossay
+
+(defun my/add-to-glossary ()
+  (interactive)
+  (let ((glossary-file user-ten-glossary-files))
+    (save-excursion
+      (goto-char (point-min))
+      (when (re-search-forward "^* WORDLIST$" nil t)
+        (forward-line)
+        (while (re-search-forward "^- \\([가-힣]+\\) \\(.*\\)$" nil t)
+          (let* ((word (match-string 1))
+                 (meaning (match-string 2))
+                 (entry (format "<<%s>> :: %s\n" word meaning)))
+            (message "디버깅: 단어 - %s, 의미 - %s" word meaning)
+            (with-temp-file glossary-file
+              (insert-file-contents glossary-file)
+              (goto-char (point-max))
+              (insert entry)
+              (message "디버깅: %s 파일에 %s 항목 추가 완료" glossary-file entry))))))))
+
+;;;;; my/insert-white-space
+
+(defun my/insert-white-space ()
+  (interactive)
+  (insert " "))
+
+;;;;; my/insert-unicode-notetaking
+
+;; "⊢" prove, "⊨" entail , "∉" notin
+;;  『 』(겹낫표), ≪ ≫(겹화살괄호) / ｢ ｣(홑낫표) - https://wikidocs.net/79912
+;; 0x002012	‒	FIGURE DASH
+;; 0x002013	–	EN DASH
+;; 0x002014	—	EM DASH
+;; 0x002015	―	QUOTATION DASH
+;; 0x002015	―	HORIZONTAL BAR
+;; 0x000809	ࠉ SAMARITAN LETTER YUT
+;; 0x003179	ㅹ	HANGUL LETTER SSANG BIEUB SUN GYEONG EUM
+
+;; 2025-04-15 remove "⊨"
+(setq my/unicode-notetaking '( " " "§"
+                               "¶" "†" "‡" "№" "↔" "←" "→" "⊢" "∉"
+                               "ㅹ" "ㆅ" "ㅺ" "㉼" "㉽"
+                               ;; "Ж" ; Greek αβγδεζηθικλμνξοπρςτυφχψω
+                               "『겹낫표』"
+                               "≪겹화살괄호≫"
+                               "｢홑낫표｣"
+                               "― QUOTADASH"
+                               ))
+
+(defun my/insert-unicode-notetaking ()
+  "Insert Unicode for NoteTaking."
+  (interactive)
+  (insert (completing-read "Select unicode: " my/unicode-notetaking)))
+
+(evil-define-key '(insert normal) text-mode-map (kbd "M-M") #'my/insert-unicode-notetaking)
+(evil-define-key '(insert normal) text-mode-map (kbd "M-m") #'my/insert-white-space)
+
+(with-eval-after-load 'vertico
+  (define-key minibuffer-mode-map (kbd "M-M") #'my/insert-unicode-notetaking) ; needed
+  (define-key vertico-map (kbd "M-M") #'my/insert-unicode-notetaking))
 
 ;;;; provide
 
