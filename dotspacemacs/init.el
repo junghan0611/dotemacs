@@ -549,8 +549,8 @@
      (llm-client :variables
                  llm-client-enable-ellama nil
                  llm-client-enable-gptel t)
-     github-copilot
-     openai
+     ;; github-copilot
+     ;; openai
 
 ;;;;; end
      )
@@ -873,6 +873,7 @@
   (setq-default
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages'(
+                                   mu4e
                                    undo-fu-session
                                    helm-make
                                    flycheck-pos-tip
@@ -2794,9 +2795,9 @@
     :defer 1
     :hook (server-after-make-frame . spacious-padding-mode)
     :init
-    (setq spacious-padding-subtle-mode-line
-          '( :mode-line-active spacious-padding-subtle-mode-line-active
-             :mode-line-inactive spacious-padding-subtle-mode-line-inactive))
+    ;; (setq spacious-padding-subtle-mode-line
+    ;;       '( :mode-line-active spacious-padding-subtle-mode-line-active
+    ;;          :mode-line-inactive spacious-padding-subtle-mode-line-inactive))
     (setq spacious-padding-widths
           '(:header-line-width 4
                                :mode-line-width 4 ; 6
