@@ -1900,9 +1900,11 @@ TARGET-FILES가 nil이면 `org-cite-global-bibliography`의 모든 파일을 검
   (interactive
    (list (read-string "검색할 텍스트: ")
          (y-or-n-p "대소문자 구분? ")
-         (if current-prefix-arg
-             (list (completing-read "Bib 파일 선택: " org-cite-global-bibliography))
-           org-cite-global-bibliography)))
+         ;; (if current-prefix-arg
+         ;;     (list (completing-read "Bib 파일 선택: " org-cite-global-bibliography))
+         ;;   org-cite-global-bibliography)
+         (list (car org-cite-global-bibliography))
+         ))
   (let ((total 0))
     (insert (format "** [검색어: %s]\n" search-text))
     (dolist (bib-file target-files)

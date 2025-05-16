@@ -2017,7 +2017,7 @@ window."
   )
 
 (defvar-keymap ews-modus-themes-map
-  :doc "Doom/Modus/Ef-Themes keymap."
+  :doc "Doom/Modus/Ef/Doric-themes keymap."
   ;; "c" #'consult-theme
   "m" #'modus-themes-toggle
   "M" #'modus-themes-select
@@ -2025,6 +2025,8 @@ window."
   "E" #'ef-themes-select
   "," #'ef-themes-load-random-light
   "." #'ef-themes-load-random-dark
+  "r" #'doric-themes-toggle
+  "R" #'doric-themes-select
 
   ;; "t" #'my/doom-themes-toggle
   ;; "d" #'my/doom-themes-random-light

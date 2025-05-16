@@ -154,7 +154,7 @@
  (:unless IS-TERMUX (pdf)) ; pdf enhancements
  ;;terraform         ; infrastructure as code
  ;;tmux              ; an API for interacting with tmux
- ;; tree-sitter ;; syntax and parsing, sitting in a tree...
+ tree-sitter ;; syntax and parsing, sitting in a tree...
  upload            ; map local to remote projects via ssh/ftp
 
  :os
@@ -195,6 +195,7 @@
  ;;idris             ; a language you can depend on
 
  json  ; At least it ain't XML
+ janet             ; Fun fact: Janet is me!
  (javascript +lsp) ;; +tree-sitter all(hope(abandon(ye(who(enter(here))))))
  ;;(java +lsp)       ; the poster child for carpal tunnel syndrome
  ;;julia             ; a better, faster MATLAB

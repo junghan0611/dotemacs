@@ -1482,8 +1482,8 @@
   ;; Two solutions:
   ;; - Press ~C-m~ instead of the return key. evil-ret
   ;; - Change the send key from return to a key of your choice:
-  (transient-suffix-put 'gptel-menu (kbd "RET") :key "M-RET"))
-
+  ;; (transient-suffix-put 'gptel-menu (kbd "RET") :key "M-RET") ;; 2025-05-13 FIXME
+  )
 
 ;;;; vterm-mode-map
 

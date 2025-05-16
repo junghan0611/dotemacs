@@ -1098,8 +1098,7 @@ Also see `prot-window-delete-popup-frame'." command)
 ;;;; ox-hugo
 
 ;; 2024-04-26 move here, Important
-(with-eval-after-load 'org
-  (require 'ox-hugo)
+(with-eval-after-load 'ox-hugo
   ;; (setq org-hugo-base-dir (file-truename "~/git/blog/"))
   (setq org-hugo-base-dir user-hugo-notes-dir) ;; 2024-10-07 fix quartz
 
@@ -1171,15 +1170,15 @@ Also see `prot-window-delete-popup-frame'." command)
   ;; If this property is set to an empty string, this heading will not be auto-inserted.
   ;; default value is 'References'
   ;; https://ox-hugo.scripter.co/doc/org-cite-citations/
-  (plist-put org-hugo-citations-plist :bibliography-section-heading "References")
+  (plist-put org-hugo-citations-plist :bibliography-section-heading "BIBLIOGRAPHY")
 
   (defun +org-export-remove-white-space (text _backend _info)
     "Remove zero width spaces from TEXT."
     (unless (org-export-derived-backend-p 'org)
       (replace-regexp-in-string " " "" text)))
-  (add-to-list 'org-export-filter-final-output-functions #'+org-export-remove-white-space t))
+  (add-to-list 'org-export-filter-final-output-functions #'+org-export-remove-white-space t)
+  )
 
-;;;;
 ;;;; TODO Org-Hugo Links
 
 ;; lambda-setup/lem-setup-org-extensions.el

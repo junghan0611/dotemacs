@@ -316,8 +316,10 @@
 
 ;;;; org-export
 
-(setq org-export-headline-levels 3) ; default 3
+;; (setq org-export-headline-levels 3) ; default 3
 (setq org-export-with-toc nil) ; default t - turn off on hugo toc
+
+(setq org-hugo-export-with-toc nil) ; default nil
 
 (setq org-export-exclude-tags '("private" "noexport" "ignore" "crypt")) ;; "LLMLOG"
 

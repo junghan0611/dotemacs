@@ -2026,7 +2026,8 @@ only those in the selected frame."
   :defer 1
   :init (setq outli-speed-commands nil)
   :config
-  ;; (add-to-list 'outli-heading-config '(tex-mode "%%" ?% t))
+  (add-to-list 'outli-heading-config '(tex-mode "%%" ?% t))
+  (add-to-list 'outli-heading-config '(bibtex-mode "%%" ?% t))
   (add-to-list 'outli-heading-config '(js2-mode "//" ?\/ t))
   (add-to-list 'outli-heading-config '(js-ts-mode "//" ?\/ t))
   (add-to-list 'outli-heading-config '(typescript-mode "//" ?\/ t))
@@ -2044,6 +2045,7 @@ only those in the selected frame."
   (add-to-list 'outli-heading-config '(clojurescript-mode ";;" ?\; t))
 
   (add-hook 'prog-mode-hook 'outli-mode) ; not markdown-mode!
+  (add-hook 'bibtex-mode-hook 'outli-mode) ; not markdown-mode!
   ;; (add-hook 'org-mode-hook 'outli-mode)
 
   ;; Add h as narrow prefix for headings in consult-imenu
@@ -2868,7 +2870,6 @@ ${content}"))
   (require 'citar)
   (require 'bibtex)
   (setq citar-bibliography config-bibfiles)
-
   (setq org-cite-global-bibliography config-bibfiles)
   (setq bibtex-files config-bibfiles)
 
@@ -3313,9 +3314,15 @@ ${content}"))
 
 ;;;;; llmclient: gptel - llmclient
 
+;;;;;; evil-collection-gptel
+
+(setq evil-collection-gptel-want-ret-to-send nil) ; default t
+(setq evil-collection-gptel-want-shift-ret-to-send nil) ; default t
+(setq evil-collection-gptel-want-shift-ret-menu t)
+
 ;;;;;; use-package gptel
 
-;;;;;;;; 01 - gptel
+;;;;;;; 01 - gptel
 
 ;; (use-package! gptel
 ;;   :commands (gptel gptel-send)
@@ -3338,7 +3345,7 @@ ${content}"))
   (setq gptel-default-mode 'org-mode)
   (setq gptel-temperature 0.5) ; gptel 1.0, Perplexity 0.2
 
-;;;;;;;; 02 - default prompt
+;;;;;;; 02 - default prompt
 
   ;; (progn
   ;;   (setq gptel-model 'gpt-4o-mini) ; default 'gpt-4o-mini
@@ -3350,7 +3357,7 @@ ${content}"))
    "You are a large language model living in Emacs and a helpful assistant. Respond concisely using Korean language.")
   (setq gptel--system-message (alist-get 'default gptel-directives))
 
-;;;;;;;; 03 - gptel-save-as-org-with-denote-metadata
+;;;;;;; 03 - gptel-save-as-org-with-denote-metadata
 
 ;;;###autoload
   (defun gptel-save-as-org-with-denote-metadata ()
@@ -3394,7 +3401,7 @@ ${content}"))
         ;; (insert (format "** TODO [SUM]: \n"))
         (insert "\n"))))
 
-;;;;;;;; 04 - gptel-org-toggle-branching-context
+;;;;;;; 04 - gptel-org-toggle-branching-context
 
 
   (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "*** @user ")
@@ -3420,19 +3427,21 @@ ${content}"))
   ;; (with-eval-after-load 'gptel-org
   ;;   (setq-default gptel-org-branching-context t)) ; default nil
 
-;;;;;;;; 05 - gptel backend configurations
+;;;;;;; 05 - gptel backend configurations
 
   ;; xAI offers an OpenAI compatible API
-  (gptel-make-openai "xAI"
-    :host "api.x.ai"
-    :key #'gptel-api-key
-    :endpoint "/v1/chat/completions"
-    :stream t
-    :request-params '(:temperature 0.0)
-    :models '(grok-3 ; grok-3-fast
-              grok-3-mini ; grok-3-mini-fast
-              grok-2-image-1212
-              ))
+  (setq gptel-model 'grok-3
+        gptel-backend
+        (gptel-make-openai "xAI"
+          :host "api.x.ai"
+          :key #'gptel-api-key
+          :endpoint "/v1/chat/completions"
+          :stream t
+          :request-params '(:temperature 0.2)
+          :models '(grok-3 ; grok-3-fast
+                    grok-3-mini ; grok-3-mini-fast
+                    grok-2-image-1212
+                    )))
 
   ;; Google - Gemini
   (gptel-make-gemini "Gemini"
@@ -3449,14 +3458,15 @@ ${content}"))
   ;; sonar-reasoning	127k	Chat Completion
   ;; sonar-pro	200k	Chat Completion
   ;; sonar	127k	Chat Completion
-  (setq gptel-model 'sonar
-        gptel-backend (gptel-make-perplexity "Perplexity"
-                        :host "api.perplexity.ai"
-                        :key #'gptel-api-key
-                        :endpoint "/chat/completions"
-                        :stream t
-                        :request-params '(:temperature 0.2) ; sonar's default 0.2
-                        :models '(sonar sonar-pro sonar-reasoning)))
+  ;; (setq gptel-model 'sonar
+  ;;      gptel-backend
+  (gptel-make-perplexity "Perplexity"
+    :host "api.perplexity.ai"
+    :key #'gptel-api-key
+    :endpoint "/chat/completions"
+    :stream t
+    :request-params '(:temperature 0.2) ; sonar's default 0.2
+    :models '(sonar sonar-pro sonar-reasoning))
 
   ;; DeepSeek offers an OpenAI compatible API
   ;; The deepseek-chat model has been upgraded to DeepSeek-V3. deepseek-reasoner points to the new model DeepSeek-R1.
@@ -6171,13 +6181,6 @@ See `consult-omni-multi' for more details.
       (custom-set-faces
        `(consult-separator ((,c :inherit default :foreground ,yellow-intense)))
        `(consult-notes-time ((,c :inherit default :foreground ,cyan-intense)))
-
-       ;; `(ekg-notes-mode-title ((,c :inherit outline-1 :weight bold :height 1.0)))
-       ;; `(ekg-title ((,c :inherit outline-2 :weight semibold :height 1.0 :underline t)))
-       ;; `(ekg-tag ((,c :background ,bg-yellow-nuanced :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
-       ;; `(ekg-resource ((,c :inherit outline-7 :weight regular :height 1.0 :underline t)))
-       ;; `(ekg-metadata ((,c :inherit outline-1 :weight regular :height 1.0)))
-
        `(org-list-dt ((,c :foreground ,fg-main :weight bold))) ;; 2025-01-14
        ;; `(org-tag ((,c :background ,bg-yellow-nuanced :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
 
@@ -6200,15 +6203,6 @@ See `consult-omni-multi' for more details.
        `(imenu-list-entry-subalist-face-1 ((,c :inherit variable-pitch :foreground ,fg-heading-2 :underline t :height ,user-imenu-list-height)))
        `(imenu-list-entry-subalist-face-2 ((,c :inherit variable-pitch :foreground ,fg-heading-3 :underline t :height ,user-imenu-list-height)))
        `(imenu-list-entry-subalist-face-3 ((,c :inherit variable-pitch :foreground ,fg-heading-4 :underline t :height ,user-imenu-list-height)))
-
-       ;; 2024-07-03 spacious-padding
-       `(tab-bar ((,c :background ,bg-tab-bar)))
-       `(tab-bar-tab-group-current ((,c :inherit bold :background ,bg-tab-current :box (:line-width -2 :color ,bg-tab-current) :foreground ,fg-alt)))
-       `(tab-bar-tab-group-inactive ((,c :background ,bg-tab-bar :box (:line-width -2 :color ,bg-tab-bar) :foreground ,fg-alt)))
-       `(tab-bar-tab ((,c :inherit bold :box (:line-width -2 :color ,bg-tab-current) :background ,bg-tab-current)))
-       `(tab-bar-tab-inactive ((,c :box (:line-width -2 :color ,bg-tab-other) :background ,bg-tab-other)))
-       `(tab-bar-tab-ungrouped ((,c :inherit tab-bar-tab-inactive)))
-       `(fringe ((,c :background ,bg-dim)))
 
        `(vterm-color-black ((,c :background "gray25" :foreground "gray25")))
        `(vterm-color-yellow ((,c :background ,yellow-intense :foreground ,yellow-intense)))
@@ -6302,13 +6296,6 @@ See `consult-omni-multi' for more details.
        ;; `(org-tag ((,c :background ,bg-yellow-subtle :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
        `(diredp-file-name ((,c :foreground ,fg-main)))
 
-       `(tab-bar ((,c :background ,bg-tab-bar)))
-       `(tab-bar-tab-group-current ((,c :inherit bold :background ,bg-tab-current :box (:line-width -2 :color ,bg-tab-current) :foreground ,fg-alt)))
-       `(tab-bar-tab-group-inactive ((,c :background ,bg-tab-bar :box (:line-width -2 :color ,bg-tab-bar) :foreground ,fg-alt)))
-       `(tab-bar-tab ((,c :inherit bold :box (:line-width -2 :color ,bg-tab-current) :background ,bg-tab-current)))
-       `(tab-bar-tab-inactive ((,c :box (:line-width -2 :color ,bg-tab-other) :background ,bg-tab-other)))
-       `(tab-bar-tab-ungrouped ((,c :inherit tab-bar-tab-inactive)))
-
        ;; `(keycast-command ((,c :inherit ef-themes-ui-variable-pitch :background ,bg-main :foreground ,fg-main :weight semibold)))
        ;; `(keycast-command ((,c :inherit default :height 0.9)))
        `(fringe ((,c :background ,bg-dim)))
@@ -6343,6 +6330,15 @@ See `consult-omni-multi' for more details.
     )
   (add-hook 'ef-themes-post-load-hook #'my/ef-themes-custom-faces))
 
+;;;;; TODO doric-themes
+
+(use-package! doric-themes
+  :config
+  ;; These are the default values.
+  (setq doric-themes-to-toggle '(doric-light doric-dark))
+  (setq doric-themes-to-rotate doric-themes-collection)
+  (doric-themes-select 'doric-light))
+
 ;;;;; DONT custom themes loader for doom-themes
 
 ;; (require 'my-themes)
@@ -6354,9 +6350,9 @@ See `consult-omni-multi' for more details.
   :if window-system ; important
   :hook (server-after-make-frame . spacious-padding-mode)
   :init
-  (setq spacious-padding-subtle-mode-line
-        '( :mode-line-active spacious-padding-subtle-mode-line-active
-           :mode-line-inactive spacious-padding-subtle-mode-line-inactive))
+  ;; (setq spacious-padding-subtle-mode-line
+  ;;       '( :mode-line-active spacious-padding-subtle-mode-line-active
+  ;;          :mode-line-inactive spacious-padding-subtle-mode-line-inactive))
   (setq spacious-padding-widths
         '(:header-line-width 4
           :mode-line-width 4 ; 6
@@ -7768,5 +7764,11 @@ See `consult-omni-multi' for more details.
 ;  (setq org-ref-insert-cite-function
 ;        (lambda ()
 ;          (call-interactively #'citar-insert-citation))))
+
+;;;;; org-cv - ox-awesomecv
+
+(after! org
+  (add-to-list 'load-path "~/sync/emacs/git/default/org-cv/")
+  (require 'ox-awesomecv))
 
 ;;; left blank on purpose
