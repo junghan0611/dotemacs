@@ -38,7 +38,8 @@
     (let ((org-files (directory-files-recursively directory "\\.org\\'")))
       (dolist (org-file org-files)
         (with-current-buffer (find-file-noselect org-file)
-          (my/org-update-all-dblocks)
+            (org-update-all-dblocks)
+          ;; (org-dblock-update 0)
           ))))
   )
 

@@ -3022,15 +3022,14 @@ ${content}"))
 #+date:       %2$s
 #+identifier: %4$s
 #+export_file_name: %4$s.md
-#+description:
+#+description: %1$s
 #+hugo_categories: Noname
-
-#+print_bibliography:
 
 * History
 - %2$s
 
 * Related-Notes
+#+print_bibliography:
 
 \n")
 
@@ -3053,9 +3052,10 @@ ${content}"))
   (setq denote-dired-directories
         (list denote-directory
         (thread-last denote-directory (expand-file-name "bib"))
-        (thread-last denote-directory (expand-file-name "code"))
+        (thread-last denote-directory (expand-file-name "elisp"))
         (thread-last denote-directory (expand-file-name "docs"))
         (thread-last denote-directory (expand-file-name "meta"))
+        ;; (thread-last denote-directory (expand-file-name "topic"))
         (thread-last denote-directory (expand-file-name "notes"))
         (thread-last denote-directory (expand-file-name "private"))
         (thread-last denote-directory (expand-file-name "posts"))
@@ -3381,7 +3381,7 @@ ${content}"))
         (insert (format "#+date: %s\n" (format-time-string "[%Y-%m-%d %a %H:%M]")))
         (insert (format "#+identifier: %s\n" suffix))
         (insert (format "#+export_file_name: %s.md\n" suffix))
-        (insert (format "#+description:\n"))
+        (insert (format "#+description: %s\n" suffix))
         ;; (insert (format "#+hugo_tags: notes\n"))
         (insert (format "#+hugo_categories: Noname\n\n"))
 
@@ -3430,18 +3430,15 @@ ${content}"))
 ;;;;;;; 05 - gptel backend configurations
 
   ;; xAI offers an OpenAI compatible API
-  (setq gptel-model 'grok-3
-        gptel-backend
-        (gptel-make-openai "xAI"
-          :host "api.x.ai"
-          :key #'gptel-api-key
-          :endpoint "/v1/chat/completions"
-          :stream t
-          :request-params '(:temperature 0.2)
-          :models '(grok-3 ; grok-3-fast
-                    grok-3-mini ; grok-3-mini-fast
-                    grok-2-image-1212
-                    )))
+  (gptel-make-openai "xAI"
+    :host "api.x.ai"
+    :key #'gptel-api-key
+    :endpoint "/v1/chat/completions"
+    :stream t
+    :request-params '(:temperature 0.2)
+    :models '(grok-3 ; grok-3-fast
+              grok-3-mini ; grok-3-mini-fast
+              grok-2-image-1212))
 
   ;; Google - Gemini
   (gptel-make-gemini "Gemini"
@@ -3458,15 +3455,15 @@ ${content}"))
   ;; sonar-reasoning	127k	Chat Completion
   ;; sonar-pro	200k	Chat Completion
   ;; sonar	127k	Chat Completion
-  ;; (setq gptel-model 'sonar
-  ;;      gptel-backend
-  (gptel-make-perplexity "Perplexity"
-    :host "api.perplexity.ai"
-    :key #'gptel-api-key
-    :endpoint "/chat/completions"
-    :stream t
-    :request-params '(:temperature 0.2) ; sonar's default 0.2
-    :models '(sonar sonar-pro sonar-reasoning))
+  (setq gptel-model 'sonar
+        gptel-backend
+        (gptel-make-perplexity "Perplexity"
+          :host "api.perplexity.ai"
+          :key #'gptel-api-key
+          :endpoint "/chat/completions"
+          :stream t
+          :request-params '(:temperature 0.2) ; sonar's default 0.2
+          :models '(sonar sonar-pro sonar-reasoning)))
 
   ;; DeepSeek offers an OpenAI compatible API
   ;; The deepseek-chat model has been upgraded to DeepSeek-V3. deepseek-reasoner points to the new model DeepSeek-R1.
@@ -3676,30 +3673,18 @@ ${content}"))
     ) ; progn gptel-quick
   )
 
-;;;;; DONT llmclient: aider.el
+;;;;;; elysium for pair programming
 
-;; (use-package! aider
-;;   :config
-;;   (setq aider-args '("--model"  "deepseek/deepseek-chat"))
-;;   ;; "xai/grok-2-latest"
-;;   (setenv "ANTHROPIC_API_KEY" user-claude-api-key)
-;;   (setenv "OPENAI_API_KEY" user-openai-api-key)
-;;   (setenv "GEMINI_API_KEY" user-gemini-api-key)
-;;   (setenv "PERPLEXITYAI_API_KEY" user-perplexity-api-key)
-;;   (setenv "XAI_API_KEY" user-xai-api-key)
-;;   (setenv "DEEPSEEK_API_KEY" user-deepseek-api-key)
-;;   (add-hook 'aider-comint-mode-hook #'visual-line-mode)
-;;   )
-
-;; aider --list-models deepseek
-;; deepseek/deepseek-chat, deepseek/deepseek-coder, deepseek/deepseek-reasoner
-
-;; Or use chatgpt model since it is most well known
-;; (setq aider-args '("--model" "gpt-4o-mini"))
-;; Or use gemini v2 model since it is very good and free
-;; (setq aider-args '("--model" "gemini/gemini-exp-1206"))
-;; Optional: Set a key binding for the transient menu
-;; (global-set-key (kbd "C-c a") 'aider-transient-menu)
+(use-package! elysium
+  :commands (elysium-toggle-window)
+  :init
+  ;; Below are the default values
+  (setq elysium-window-size 0.33) ; The elysium buffer will be 1/3 your screen
+  (setq elysium-window-style 'vertical) ; Can be customized to horizontal
+  ;; Use `smerge-mode` to then merge in the changes
+  (require 'smerge-mode)
+  (add-hook 'prog-mode-hook 'smerge-mode)
+  )
 
 ;;;;; llmclient: emigo
 
@@ -3812,6 +3797,151 @@ Prefers existing sessions closer to current directory."
                (_ (buffer-live-p buf)))
       (doom-set-buffer-real buf t))))
 
+;;;;; llmclient: github copilot
+
+(use-package! copilot
+  :defer 5
+  :commands (copilot-login copilot-diagnose)
+  :init
+  ;; Sometimes the copilot agent doesn't start. Restarting fixes the issue.
+  (setq copilot-indent-offset-warning-disable t
+        copilot-max-char 10000) ; default 100000
+  :bind (:map copilot-completion-map
+              ("C-g" . 'copilot-clear-overlay)
+              ("M-P" . 'copilot-previous-completion)
+              ("M-N" . 'copilot-next-completion)
+              ("M-<tab>" . 'copilot-accept-completion) ; vscode
+              ;; ("TAB" . 'copilot-accept-completion) ; vscode
+              ("M-f" . 'copilot-accept-completion-by-word)
+              ("M-<return>" . 'copilot-accept-completion-by-line)
+              ("M-]" . 'copilot-next-completion) ; vscode
+              ("M-[" . 'copilot-next-completion) ; vscode
+              ;; ("C-'" . 'copilot-accept-completion)
+              ;; ("C-;" . 'copilot-accept-completion)
+              )
+  ;; :hook ((prog-mode . copilot-mode))
+  ;; (org-mode . copilot-mode)
+  ;; (markdown-mode . copilot-mode)
+  )
+
+;;;;; llmclient: github copilot-chat
+
+;; 2025-03-19 v2.0
+(use-package! copilot-chat
+  :defer 6
+  :after request
+  :bind (:map global-map
+              ("C-c C-y" . copilot-chat-yank)
+              ("C-c M-y" . copilot-chat-yank-pop)
+              ("C-c C-M-y" . (lambda () (interactive) (copilot-chat-yank-pop -1))))
+  :init
+  (setq copilot-chat-frontend 'markdown)
+
+  ;; (setq copilot-chat-backend 'request)
+  ;; (setq! copilot-chat-model "claude-3.5-sonnet"
+  ;;        copilot-chat-frontend 'org)
+  ;; (set-popup-rules!
+  ;;   '(("^\\*Copilot-chat-prompt\\*$" :vslot -2 :size 0.15 :select t :quit t)
+  ;;     ("^\\*Copilot-chat-list\\*$" :slot 10 :side bottom :size 0.1 :select nil :quit t)
+  ;;     ("^\\*Copilot-chat\\*$" :slot 2 :side right :size 0.45 :select nil :quit t)))
+  :config
+  ;; From https://github.com/chep/copilot-chat.el/issues/24
+  (defun my/copilot-chat-display (prefix)
+    "Opens the Copilot chat window, adding the current buffer to the context.
+Called with a PREFIX, resets the context buffer list before opening"
+    (interactive "P")
+
+    (require 'copilot-chat)
+    (let ((buf (current-buffer)))
+
+      ;; Explicit reset before doing anything, avoid it resetting later on
+      ;; target-fn and ignoring the added buffers
+      (unless (copilot-chat--ready-p)
+        (copilot-chat-reset))
+
+      (when prefix (copilot-chat--clear-buffers))
+
+      (copilot-chat--add-buffer buf)
+      (copilot-chat-display)))
+  )
+
+;;;;; DONT llmclient: aider.el
+
+;; (use-package! aider
+;;   :config
+;;   (setq aider-args '("--model"  "deepseek/deepseek-chat"))
+;;   ;; "xai/grok-2-latest"
+;;   (setenv "ANTHROPIC_API_KEY" user-claude-api-key)
+;;   (setenv "OPENAI_API_KEY" user-openai-api-key)
+;;   (setenv "GEMINI_API_KEY" user-gemini-api-key)
+;;   (setenv "PERPLEXITYAI_API_KEY" user-perplexity-api-key)
+;;   (setenv "XAI_API_KEY" user-xai-api-key)
+;;   (setenv "DEEPSEEK_API_KEY" user-deepseek-api-key)
+;;   (add-hook 'aider-comint-mode-hook #'visual-line-mode)
+;;   )
+
+;; aider --list-models deepseek
+;; deepseek/deepseek-chat, deepseek/deepseek-coder, deepseek/deepseek-reasoner
+
+;; Or use chatgpt model since it is most well known
+;; (setq aider-args '("--model" "gpt-4o-mini"))
+;; Or use gemini v2 model since it is very good and free
+;; (setq aider-args '("--model" "gemini/gemini-exp-1206"))
+;; Optional: Set a key binding for the transient menu
+;; (global-set-key (kbd "C-c a") 'aider-transient-menu)
+
+;;;;; DONT llmclient: codeium
+
+;; (use-package! codeium
+;;   :after cape
+;;   :commands (codeium-install)
+;;   :config
+;;   ;; codeium-completion-at-point is autoloaded, but you can
+;;   ;; optionally set a timer, which might speed up things as the
+;;   ;; codeium local language server takes ~0.2s to start up
+;;   ;; (add-hook 'emacs-startup-hook
+;;   ;;  (lambda () (run-with-timer 0.1 nil #'codeium-init)))
+
+;;   ;; if you don't want to use customize to save the api-key
+;;   ;; (setq codeium/metadata/api_key "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
+
+;;   ;; get codeium status in the modeline
+;;   (setq codeium-mode-line-enable
+;;         (lambda (api) (not (memq api '(CancelRequest Heartbeat AcceptCompletion)))))
+;;   (add-to-list 'mode-line-format '(:eval (car-safe codeium-mode-line)) t)
+
+;;   ;; alternatively for a more extensive mode-line
+;;   ;; (add-to-list 'mode-line-format '(-50 "" codeium-mode-line) t)
+
+;;   ;; use M-x codeium-diagnose to see apis/fields that would be sent to the local language server
+;;   (setq codeium-api-enabled
+;;         (lambda (api)
+;;           (memq api '(GetCompletions Heartbeat CancelRequest GetAuthToken RegisterUser auth-redirect AcceptCompletion))))
+
+;;   ;; you can also set a config for a single buffer like this:
+;;   ;; (add-hook 'python-mode-hook
+;;   ;;     (lambda ()
+;;   ;;         (setq-local codeium/editor_options/tab_size 4)))
+
+;;   ;; You can overwrite all the codeium configs!
+;;   ;; for example, we recommend limiting the string sent to codeium for better performance
+;;   (defun my-codeium/document/text ()
+;;     (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (min (+ (point) 1000) (point-max))))
+;;   ;; if you change the text, you should also change the cursor_offset
+;;   ;; warning: this is measured by UTF-8 encoded bytes
+;;   (defun my-codeium/document/cursor_offset ()
+;;     (codeium-utf8-byte-length
+;;      (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
+;;   (setq codeium/document/text 'my-codeium/document/text)
+;;   (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset)
+;;
+
+;;;;; DONT llmclient: wolframalpha
+
+;; ziova/wolfram.el
+;; (use-package! wolfram
+;;   :config (setq wolfram-alpha-app-id user-wolfram-alpha-app-id))
+
 ;;;;; DONT llmclient: kagi
 
 ;; cecil
@@ -3897,186 +4027,35 @@ Prefers existing sessions closer to current directory."
 ;; (setq dall-e-spinner-type 'flipping-line)
 ;; (setq dall-e-display-width 256)
 
-;;;;; llmclient: elysium with gptel for pairprogramming
+;;;; :lang coding
 
-(use-package! elysium
-  :after gptel
-  :commands (elysium-toggle-window)
-  :init
-  ;; Below are the default values
-  (setq elysium-window-size 0.33) ; The elysium buffer will be 1/3 your screen
-  (setq elysium-window-style 'vertical) ; Can be customized to horizontal
-  ;; Use `smerge-mode` to then merge in the changes
-  (require 'smerge-mode)
-  (add-hook 'prog-mode-hook 'smerge-mode)
-  )
+;;;;; treesit - tree-sitter
 
-;;;;; TODO llmclient: yap - gptel another
+(when (treesit-available-p)
+  (setq treesit-extra-load-path (list (concat doom-profile-data-dir "tree-sitter"))))
 
-;; vanilla/meain-dotfiles/emacs/.config/emacs/init.el
-;; (use-package! yap
-;;   :after (plz)
-;;   :config
-;;   (setq yap-service "openai")
-;;   (setq yap-model "gpt-4o-mini") ; start with something cheap
+;;;;; c/c++ clangd with eglot
 
-;;   (setq yap-api-key:openai user-openai-api-key)
-;;   (setq yap-api-key:anthropic user-claude-api-key)
-
-;;   ;; (setq yap-respond-in-buffer nil)
-;;   ;; (setq yap-show-diff-before-rewrite t)
-;;   ;; (setq yap-log-requests "/Users/meain/.cache/yap")
-
-;;   ;; Add window rules for *yap-response* buffer so that it shows up at
-;;   ;; top of the frame
-;;   (add-to-list 'display-buffer-alist
-;;                `(,(rx bos "*yap-response*" eos)
-;;                  (display-buffer-reuse-window
-;;                   display-buffer-in-side-window)
-;;                  (reusable-frames . visible)
-;;                  (side            . top)
-;;                  (window-height   . 0.3)))
-
-;;   (defun meain/yap-set-default-model ()
-;;     (interactive)
-;;     (setq yap-service "openai")
-;;     (setq yap-model "gpt-4o-mini"))
-
-;;   ;; (global-unset-key (kbd "M-m"))
-;;   ;; (global-set-key (kbd "M-m M-c") 'yap-buffer-toggle)
-;;   ;; (global-set-key (kbd "M-m M-m") 'yap-prompt)
-;;   ;; (global-set-key (kbd "M-m M-r") 'yap-rewrite)
-;;   ;; (global-set-key (kbd "M-m M-w") 'yap-write)
-;;   ;; (global-set-key (kbd "M-m M-e") (lambda () (interactive) (yap-prompt 'explain-code)))
+;; (after! cc-mode
+;;   ;; (set-eglot-client! 'cc-mode '("clangd" "-j=3" "--clang-tidy"))
 ;;   )
 
-;;;;; TODO llmclient: evedel - gtpel for programmer
+;; (setq flycheck-clang-language-standard "c++17")
+;; (after! lsp-clangd
+;;   (setq lsp-clients-clangd-executable "clangd")
+;;   (setq lsp-clients-clangd-args
+;;         '("-j=2"
+;;           "--background-index"
+;;           "--clang-tidy"
+;;           "--completion-style=detailed"
+;;           "--header-insertion=never"
+;;           "--header-insertion-decorators=0"))
+;;   (set-lsp-priority! 'clangd 2)
+;; )
 
-;; https://github.com/daedsidog/evedel
-;; (use-package! evedel
-;;   :after gptel)
-
-;;;;; DONT llmclient: wolframalpha
-
-;; ziova/wolfram.el
-;; (use-package! wolfram
-;;   :config (setq wolfram-alpha-app-id user-wolfram-alpha-app-id))
-
-;;;;; llmclient: github copilot
-
-(use-package! copilot
-  :defer 5
-  :commands (copilot-login copilot-diagnose)
-  :init
-  ;; Sometimes the copilot agent doesn't start. Restarting fixes the issue.
-  (setq copilot-indent-offset-warning-disable t
-        copilot-max-char 10000) ; default 100000
-  :bind (:map copilot-completion-map
-              ("C-g" . 'copilot-clear-overlay)
-              ("M-P" . 'copilot-previous-completion)
-              ("M-N" . 'copilot-next-completion)
-              ("M-<tab>" . 'copilot-accept-completion) ; vscode
-              ;; ("TAB" . 'copilot-accept-completion) ; vscode
-              ("M-f" . 'copilot-accept-completion-by-word)
-              ("M-<return>" . 'copilot-accept-completion-by-line)
-              ("M-]" . 'copilot-next-completion) ; vscode
-              ("M-[" . 'copilot-next-completion) ; vscode
-              ;; ("C-'" . 'copilot-accept-completion)
-              ;; ("C-;" . 'copilot-accept-completion)
-              )
-  ;; :hook ((prog-mode . copilot-mode))
-  ;; (org-mode . copilot-mode)
-  ;; (markdown-mode . copilot-mode)
-  )
-
-;;;;; llmclient: github copilot-chat
-
-;; 2025-03-19 v2.0
-(use-package! copilot-chat
-  :defer 6
-  :after request
-  :bind (:map global-map
-              ("C-c C-y" . copilot-chat-yank)
-              ("C-c M-y" . copilot-chat-yank-pop)
-              ("C-c C-M-y" . (lambda () (interactive) (copilot-chat-yank-pop -1))))
-  :init
-  (setq copilot-chat-frontend 'markdown)
-
-  ;; (setq copilot-chat-backend 'request)
-  ;; (setq! copilot-chat-model "claude-3.5-sonnet"
-  ;;        copilot-chat-frontend 'org)
-  ;; (set-popup-rules!
-  ;;   '(("^\\*Copilot-chat-prompt\\*$" :vslot -2 :size 0.15 :select t :quit t)
-  ;;     ("^\\*Copilot-chat-list\\*$" :slot 10 :side bottom :size 0.1 :select nil :quit t)
-  ;;     ("^\\*Copilot-chat\\*$" :slot 2 :side right :size 0.45 :select nil :quit t)))
-  :config
-  ;; From https://github.com/chep/copilot-chat.el/issues/24
-  (defun my/copilot-chat-display (prefix)
-    "Opens the Copilot chat window, adding the current buffer to the context.
-Called with a PREFIX, resets the context buffer list before opening"
-    (interactive "P")
-
-    (require 'copilot-chat)
-    (let ((buf (current-buffer)))
-
-      ;; Explicit reset before doing anything, avoid it resetting later on
-      ;; target-fn and ignoring the added buffers
-      (unless (copilot-chat--ready-p)
-        (copilot-chat-reset))
-
-      (when prefix (copilot-chat--clear-buffers))
-
-      (copilot-chat--add-buffer buf)
-      (copilot-chat-display)))
-  )
-
-;;;;; DONT llmclient: codeium
-
-;; (use-package! codeium
-;;   :after cape
-;;   :commands (codeium-install)
-;;   :config
-;;   ;; codeium-completion-at-point is autoloaded, but you can
-;;   ;; optionally set a timer, which might speed up things as the
-;;   ;; codeium local language server takes ~0.2s to start up
-;;   ;; (add-hook 'emacs-startup-hook
-;;   ;;  (lambda () (run-with-timer 0.1 nil #'codeium-init)))
-
-;;   ;; if you don't want to use customize to save the api-key
-;;   ;; (setq codeium/metadata/api_key "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
-
-;;   ;; get codeium status in the modeline
-;;   (setq codeium-mode-line-enable
-;;         (lambda (api) (not (memq api '(CancelRequest Heartbeat AcceptCompletion)))))
-;;   (add-to-list 'mode-line-format '(:eval (car-safe codeium-mode-line)) t)
-
-;;   ;; alternatively for a more extensive mode-line
-;;   ;; (add-to-list 'mode-line-format '(-50 "" codeium-mode-line) t)
-
-;;   ;; use M-x codeium-diagnose to see apis/fields that would be sent to the local language server
-;;   (setq codeium-api-enabled
-;;         (lambda (api)
-;;           (memq api '(GetCompletions Heartbeat CancelRequest GetAuthToken RegisterUser auth-redirect AcceptCompletion))))
-
-;;   ;; you can also set a config for a single buffer like this:
-;;   ;; (add-hook 'python-mode-hook
-;;   ;;     (lambda ()
-;;   ;;         (setq-local codeium/editor_options/tab_size 4)))
-
-;;   ;; You can overwrite all the codeium configs!
-;;   ;; for example, we recommend limiting the string sent to codeium for better performance
-;;   (defun my-codeium/document/text ()
-;;     (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (min (+ (point) 1000) (point-max))))
-;;   ;; if you change the text, you should also change the cursor_offset
-;;   ;; warning: this is measured by UTF-8 encoded bytes
-;;   (defun my-codeium/document/cursor_offset ()
-;;     (codeium-utf8-byte-length
-;;      (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
-;;   (setq codeium/document/text 'my-codeium/document/text)
-;;   (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset)
-;;
-
-;;;; :lang coding
+;; (after! ccls
+;;   (setq ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t)))
+;;   (set-lsp-priority! 'ccls 1))
 
 ;;;;; eglot configuration
 
@@ -4120,48 +4099,48 @@ Called with a PREFIX, resets the context buffer list before opening"
   ;; use indent-bar-mode
   )
 
-;;;;; lsp-mode - lsp-ui-mode - lsp-treemacs
+;;;;; DONT lsp-mode - lsp-ui-mode - lsp-treemacs
 
 ;; lsp 관련 설정 메뉴들. 느리게 만드는 범인중 십중팔구 LSP가 관련되어져 있다고 함.
 ;; 해당 튜닝도 구글링을 통해서 찾았다.
-(setq lsp-file-watch-threshold (* 1024 1024))
-(setq read-process-output-max (* 1024 1024))
+;; (setq lsp-file-watch-threshold (* 1024 1024))
+;; (setq read-process-output-max (* 1024 1024))
 
-(progn
-  (after! lsp-mode
-    (setq
-     ;; https://emacs-lsp.github.io/lsp-mode/page/settings/headerline/
-     lsp-headerline-breadcrumb-enable t ; doom nil
-     lsp-headerline-breadcrumb-icons-enable nil
-     ;; lsp-headerline-breadcrumb-segments '(symbols) ; namespace & symbols, no file path
+;; (progn
+;;   (after! lsp-mode
+;;     (setq
+;;      ;; https://emacs-lsp.github.io/lsp-mode/page/settings/headerline/
+;;      lsp-headerline-breadcrumb-enable t ; doom nil
+;;      lsp-headerline-breadcrumb-icons-enable nil
+;;      ;; lsp-headerline-breadcrumb-segments '(symbols) ; namespace & symbols, no file path
 
-     lsp-imenu-index-function #'lsp-imenu-create-categorized-index ;; 2025-03-26 doom 'lsp-imenu-create-uncategorized-index
+;;      lsp-imenu-index-function #'lsp-imenu-create-categorized-index ;; 2025-03-26 doom 'lsp-imenu-create-uncategorized-index
 
-     lsp-idle-delay 0.2  ; smooth LSP features response
-     ;; lsp-eldoc-enable-hover nil ; default t - disable all hover actions
-     ;; lsp-modeline-code-actions-segments '(count icon)
-     ;; lsp-navigation 'both ; default 'both ; 'simple or 'peek
-     ;; lsp-modeline-diagnostics-enable nil
-     ;; lsp-modeline-code-actions-enable nil
-     )
-    )
+;;      lsp-idle-delay 0.2  ; smooth LSP features response
+;;      ;; lsp-eldoc-enable-hover nil ; default t - disable all hover actions
+;;      ;; lsp-modeline-code-actions-segments '(count icon)
+;;      ;; lsp-navigation 'both ; default 'both ; 'simple or 'peek
+;;      ;; lsp-modeline-diagnostics-enable nil
+;;      ;; lsp-modeline-code-actions-enable nil
+;;      )
+;;     )
 
-  (after! lsp-ui
-    (setq
-     ;; lsp-ui-doc-use-webkit nil ; default nil
-     ;; lsp-ui-doc-winum-ignore t ; default t
-     lsp-ui-sideline-enable nil ; doom t - disable sideline for less distraction
-     lsp-ui-sideline-diagnostic-max-line-length 20 ; default 100
-     ;; lsp-ui-doc-enable nil ;; doom t - disable all doc popups
-     treemacs-space-between-root-nodes nil  ;; doom nil
-     ;; lsp-log-io t  ; default nil - Log client-server json communication
-     lsp-ui-peek-enable t ; doom t
-     ))
+;;   (after! lsp-ui
+;;     (setq
+;;      ;; lsp-ui-doc-use-webkit nil ; default nil
+;;      ;; lsp-ui-doc-winum-ignore t ; default t
+;;      lsp-ui-sideline-enable nil ; doom t - disable sideline for less distraction
+;;      lsp-ui-sideline-diagnostic-max-line-length 20 ; default 100
+;;      ;; lsp-ui-doc-enable nil ;; doom t - disable all doc popups
+;;      treemacs-space-between-root-nodes nil  ;; doom nil
+;;      ;; lsp-log-io t  ; default nil - Log client-server json communication
+;;      lsp-ui-peek-enable t ; doom t
+;;      ))
 
-  (when (modulep! :ui treemacs +lsp)
-    (setq lsp-treemacs-error-list-current-project-only t)
-    (lsp-treemacs-sync-mode +1))
-  )
+;;   (when (modulep! :ui treemacs +lsp)
+;;     (setq lsp-treemacs-error-list-current-project-only t)
+;;     (lsp-treemacs-sync-mode +1))
+;;   )
 
 ;;;;; devdocs-browser
 
@@ -4311,6 +4290,18 @@ Called with a PREFIX, resets the context buffer list before opening"
 
 (setq jupyter-eval-use-overlays t)
 
+;;;;;; python with eglot - basedpyright
+
+(with-eval-after-load 'eglot
+  (add-to-list
+   'eglot-server-programs
+   `(python-mode .
+     ,(eglot-alternatives
+       '(("basedpyright-langserver" "--stdio")))))
+  ;; (add-hook 'after-save-hook 'eglot-format)
+  )
+
+
 ;;;;;; uv : uv-mode and uv-menu
 
 ;; .venv
@@ -4328,17 +4319,6 @@ Called with a PREFIX, resets the context buffer list before opening"
 
 ;; (when (modulep! :tools lsp -eglot)
 ;;   (remove-hook 'python-mode-local-vars-hook 'lsp!))
-
-;;;;;; DONT python with eglot
-
-;; (with-eval-after-load 'eglot
-;;   (add-to-list
-;;    'eglot-server-programs
-;;    `(python-mode .
-;;      ,(eglot-alternatives
-;;        '(("basedpyright-langserver" "--stdio")))))
-;;   ;; (add-hook 'after-save-hook 'eglot-format)
-;;   )
 
 ;;;;;; TODO python-pytest
 
@@ -5258,7 +5238,7 @@ Suitable for `imenu-create-index-function'."
   (setq leetcode-prefer-language "python")
   (setq leetcode-prefer-sql "mysql")
   (setq leetcode-save-solutions t)
-  (setq leetcode-directory "~/sync/code/leetcode/")
+  (setq leetcode-directory "~/leetcode/")
   (setq leetcode-show-problem-by-slug t)
   ;; :config
   ;; (add-hook 'leetcode-solution-mode-hook
@@ -6090,7 +6070,7 @@ See `consult-omni-multi' for more details.
               '(modus-vivendi-tinted modus-operandi) ; load dark theme first
             '(modus-operandi modus-vivendi-tinted))))
   :config
-  (setq modus-themes-italic-constructs nil
+  (setq modus-themes-italic-constructs t
         modus-themes-bold-constructs t
         modus-themes-custom-auto-reload t
 
@@ -6152,7 +6132,7 @@ See `consult-omni-multi' for more details.
   ;;       )
 
   (when (display-graphic-p) ; gui
-    (setq modus-themes-variable-pitch-ui t)
+    ;; (setq modus-themes-variable-pitch-ui t)
     ;; The `modus-themes-headings' is an alist: read the manual's
     ;; node about it or its doc string. Basically, it supports
     ;; per-level configurations for the optional use of
@@ -6160,10 +6140,10 @@ See `consult-omni-multi' for more details.
     ;; the base font size (e.g. 1.5), and a `WEIGHT'.
     (setq modus-themes-headings
           '(
-            (0                . (bold 1.3)) ;; variable-pitch
-            (1                . (bold 1.2))
-            (2                . (bold 1.1))
-            (3                . (semibold 1.05))
+            (0                . (bold 1.0)) ;; variable-pitch
+            (1                . (bold 1.0))
+            (2                . (bold 1.0))
+            (3                . (semibold 1.0))
             (4                . (medium 1.0))
             (5                . (medium 1.0))
             (6                . (medium 1.0))
@@ -6251,7 +6231,7 @@ See `consult-omni-multi' for more details.
   (setq ef-themes-region '(intense no-extend neutral))
 
   (when (display-graphic-p) ; gui
-    (setq ef-themes-variable-pitch-ui t)
+    ;; (setq ef-themes-variable-pitch-ui t)
     (setq ef-themes-headings
           '(
             (0                . (bold 1.2)) ;; variable-pitch
@@ -7388,8 +7368,8 @@ See `consult-omni-multi' for more details.
 (when (display-graphic-p) ;; gui
   (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
 
-(when (display-graphic-p) ;; gui
-  (require 'ccmenu))
+;(when (display-graphic-p) ;; gui
+;  (require 'ccmenu))
 
 ;;;;; Terminal Mode - (unless (display-graphic-p)
 
@@ -7594,22 +7574,6 @@ See `consult-omni-multi' for more details.
   ;; (set-fontset-font "fontset-default" 'emoji (font-spec :family "Noto Emoji") nil 'prepend) ; default face
   )
 
-;;; DONT treesit-auto
-
-;; (use-package! treesit-auto
-;;   :defer 3
-;;   :commands (global-treesit-auto-mode
-;;              treesit-auto-install-all
-;;              treesit-auto-add-to-auto-mode-alist)
-;;   :custom
-;;   (setopt treesit-font-lock-level 5)
-;;   (treesit-auto-install 'prompt)
-;;   :config
-;;   (delete 'janet treesit-auto-langs)
-;;   (delete 'markdown treesit-auto-langs)
-;;   (delete 'latex treesit-auto-langs)
-;;   (treesit-auto-add-to-auto-mode-alist 'all)
-;;   (global-treesit-auto-mode))
 ;;; org-side-tree
 
 (progn
@@ -7738,7 +7702,6 @@ See `consult-omni-multi' for more details.
                            (car (auth-source-search
                                  :host "api-free.deepl.com"
                                  :user "apikey"))))
-  (global-set-key (kbd "M-g 0") 'txl-translate-region-or-paragraph)
   (with-eval-after-load 'evil-org
     (evil-define-key 'normal 'evil-org-mode-map (kbd "M-t") 'txl-translate-region-or-paragraph))
   )

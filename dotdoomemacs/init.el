@@ -96,8 +96,8 @@
  popup    ; tame sudden yet inevitable temporary windows
  (smooth-scroll +interpolate) ; So smooth you won't believe it's not butter
 
- ;; treemacs
- (treemacs +lsp) ;  a project drawer, like neotree but cooler
+ treemacs ;  a project drawer, like neotree but cooler
+ ;; (treemacs +lsp)
  vc-gutter ;; +pretty
  (window-select +numbers) ; visually switch windows
  workspaces        ; tab emulation, persistence & separate workspaces
@@ -126,8 +126,8 @@
  (:if (not (memq system-type '(cygwin windows-nt ms-dos))) vterm) ; the best terminal emulation in Emacs
 
  :checkers
- ;; (syntax +flymake) ; tasing you for every semicolon you forget
- syntax
+ (syntax +flymake) ; tasing you for every semicolon you forget
+ ;; syntax
 
  (:unless IS-TERMUX (spell +flyspell)) ; +hunspell - tasing you for misspelling mispelling
  ;; grammar           ; tasing grammar mistake every you make
@@ -139,13 +139,13 @@
  direnv
 
  ;; (docker +lsp)
- ;; editorconfig      ; let someone else argue about tabs vs spaces
+ ;; editorconfig     ; let someone else argue about tabs vs spaces
 
  (eval +overlay)     ; run code, run (also, repls)
- lookup ; only dumb-jump
- llm                ; when I said you needed friends, I didn't mean...
- ;; (lsp +eglot)
- (lsp +peek)
+ lookup              ; only dumb-jump
+ llm                 ; when I said you needed friends, I didn't mean...
+ (lsp +eglot)
+ ;; (lsp +peek)
 
  (magit +forge) ; a git porcelain for Emacs
 
@@ -163,8 +163,9 @@
 
  :lang
  ;;agda              ; types of types of types of types...
- beancount         ; mind the GAAP
- ;;(cc +lsp)         ; C > C++ == 1
+ ;; beancount         ; mind the GAAP
+ (cc +lsp +tree-sitter)         ; C > C++ == 1
+
  (clojure +lsp) ; +tree-sitter java with a lisp
  ;; common-lisp ; if you've seen one lisp, you've seen them all
  ;; (:unless IS-TERMUX (coq)) ; proofs-as-programs
@@ -194,8 +195,8 @@
  ;; ;; hy ; custom - readability of scheme w/ speed of python
  ;;idris             ; a language you can depend on
 
- json  ; At least it ain't XML
- janet             ; Fun fact: Janet is me!
+ (json +tree-sitter)  ; At least it ain't XML
+ janet  ; Fun fact: Janet is me!
  (javascript +lsp) ;; +tree-sitter all(hope(abandon(ye(who(enter(here))))))
  ;;(java +lsp)       ; the poster child for carpal tunnel syndrome
  ;;julia             ; a better, faster MATLAB
@@ -204,7 +205,7 @@
  ;;lean              ; for folks with too much to prove
  ledger            ; be audit you can be
  ;;lua               ; one-based indices? one-based indices
- markdown          ; writing docs for people to ignore
+ (markdown +tree-sitter) ; writing docs for people to ignore
  ;;nim               ; python + lisp at the speed of c
  ;;nix               ; I hereby declare "nix geht mehr!"
  ;;ocaml             ; an objective camel
@@ -228,8 +229,8 @@
  graphviz
  ;;purescript        ; javascript, but functional
  (python +conda +lsp +pyright +tree-sitter) ; +poetry +conda beautiful is better than ugly
- ;;qt                ; the 'cutest' gui framework ever
- racket ; a DSL for DSLs
+ qt                ; the 'cutest' gui framework ever
+ ;; racket ; a DSL for DSLs
  ;;raku              ; the artist formerly known as perl6
  ;;rest              ; Emacs as a REST client
  rst                 ; ReST in peace
@@ -255,7 +256,7 @@
  calendar
  emms
  (rss +org +youtube)        ; emacs as an RSS reader
- everywhere        ; *leave* Emacs!? You must be joking
+ ;; everywhere        ; *leave* Emacs!? You must be joking
  ;;irc               ; how neckbeards socialize
 
  ;; 2024-05-31 현재 사용자 설정은 다 커스텀 모듈로 옮기는게 좋겠다.

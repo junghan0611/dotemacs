@@ -152,7 +152,7 @@
 
 (package! ef-themes)
 (package! modus-themes)
-(package! doric-themes :recipe (:host github :repo "protesilaos/doric-themes"))
+(package! doric-themes)
 
 (package! show-font)
 ;; (package! hammy)
@@ -343,13 +343,14 @@
 (package! khoj)
 
 ;; (package! minuet) ;; code completion using LLM
-;; (package! aider :recipe (:host github :repo "tninja/aider.el" :files ("aider.el" "aider-core.el" "aider-file.el" "aider-code-change.el" "aider-discussion.el" "aider-prompt-mode.el" "aider-doom.el")))
+(package! aider)
 
 ;; (package! aidermacs)
 (package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs" :files ("*.el")))
 (package! emigo :recipe (:host github :repo "MatthewZMD/emigo"))
 
 (package! llm)
+(package! semext :recipe (:host github :repo "ahyatt/semext"))
 
 ;; (package! kagi)
 ;; (package! chatgpt-shell)
@@ -424,6 +425,8 @@
 (when (modulep! :lang python)
   (package! pydoc)
   (package! code-cells))
+
+(package! evil-textobj-tree-sitter)
 
 ;; Use the latest available packages for Clojure
 ;; - cider, clojure-mode
@@ -524,11 +527,14 @@
 
 ;; (package! zoxide)
 ;; (package! telega) ; telegram
+
 ;;;; Transient
 
 (package! ccmenu :recipe (:host github :repo "junghan0611/ccmenu"))
-;; (package! casual-suite)
-(package! casual-suite :recipe (:host github :repo "kickingvegas/casual-suite"))
+;; (package! ccmenu :recipe (:local-repo "local/ccmenu"))
+
+;; (package! casual-suite :recipe (:host github :repo "kickingvegas/casual-suite"))
+(package! casual)
 (package! recent-rgrep :recipe (:host github :repo "kickingvegas/recent-rgrep"))
 
 (package! p-search :recipe (:host github :repo "zkry/p-search"))

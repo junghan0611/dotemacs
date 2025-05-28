@@ -16,6 +16,7 @@
 ;;   ;;  (make-llm-gemini :key user-gemini-api-key :chat-model "gemini-1.5-flash"))
 ;;   )
 
+;;;; llm
 (use-package! llm
   :defer t
   :init
@@ -25,6 +26,8 @@
   (require 'seq)
   (require 'dash)
   (require 'subr-x))
+
+;;;;; summarize with gpt
 
 (defvar +gpt-system-message "You are a large language model living in Emacs and a helpful assistant. Respond concisely using Korean language.")
 
@@ -225,3 +228,13 @@ You should separate your response into multiple paragraph if they are too long."
 ;; (defun +llm-openai-shell-command ()
 ;;   (interactive)
 ;;   (call-interactively '+whisper-run))
+
+;;;; semext
+
+(use-package! semext
+  ;; :init
+  ;; Replace provider with whatever you want, see https://github.com/ahyatt/llm
+  ;; (setopt semext-provider (make-llm-ollama :chat-model "gemma3:1b"))
+  )
+
+;;; end-of file

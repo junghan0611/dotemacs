@@ -321,7 +321,7 @@
 
 (setq org-hugo-export-with-toc nil) ; default nil
 
-(setq org-export-exclude-tags '("private" "noexport" "ignore" "crypt")) ;; "LLMLOG"
+(setq org-export-exclude-tags '("private" "LOCAL" "noexport" "ignore" "crypt")) ;; "LLMLOG"
 
 (progn
   (setq org-publish-use-timestamps-flag t) ; default t
@@ -614,9 +614,9 @@
                             ;; ("@family" . ?F)
                             ;; (:endgroup) ;; Status
                             (:startgroup) ;; Action
-                            ("LATER" . ?l)
-                            ("NOW" . ?n)
-                            ("HOLD" . ?h)
+                            ("LATER" . ?L)
+                            ("NOW" . ?N)
+                            ("HOLD" . ?H)
                             (:endgroup)
                             ("IMPORTANT" . ?i) ; 별도 처리
                             ;; ("Up" . ?u) ;;
@@ -624,6 +624,7 @@
                             ("EXPORT" . ?e)
                             ;; ("crypt" . ?E)
                             ("noexport" . ?x)
+                            ("LOCAL" . ?l)
                             ("VIDEO" . ?v)
                             ("FULLTEXT" . ?f)
                             ("REPO" . ?r)

@@ -798,6 +798,10 @@
 (when (locate-library "immersive-translate")
   (global-set-key (kbd "M-g M-a") 'immersive-translate-auto-mode))
 
+(when (locate-library "txl")
+  (global-set-key (kbd "M-g 0") 'txl-translate-region-or-paragraph))
+
+
 ;; (when (locate-library "denote")
 ;;   (global-set-key (kbd "M-g d") #'my/goto-denote-dired)
 ;;   ;; (global-set-key (kbd "M-g n") #'my/goto-notes)
@@ -1145,19 +1149,15 @@
       ("q" "Quit" transient-quit-one)]])
   )
 
-;;;;; DONT move to ccmenu : transient : casual-suite
+;;;;; move to ccmenu : transient : casual-suite
 
-(keymap-global-set "M-a" #'casual-avy-tmenu)
+(when (locate-library "casual")
+  ;; (setq transient-align-variable-pitch t)
 
-(when (locate-library "casual-suite")
-  (setq transient-align-variable-pitch t)
-
-  (require 'casual-suite)
   (require 'calc-ext)
   (require 'casual-calc)
   (require 'casual-bookmarks) ;; optional
   (require 'casual-agenda)
-  (require 'casual-symbol-overlay) ;; optional
   (require 'casual-re-builder) ;; optional
   (require 'casual-editkit) ;; optional
 
@@ -1190,9 +1190,6 @@
   (keymap-set reb-mode-map "C-;" #'casual-re-builder-tmenu)
   (keymap-set reb-lisp-mode-map "C-;" #'casual-re-builder-tmenu)
 
-; 'M-a' backward-sentence -> '(' evil-backward-sentence-begin
-  ;; (keymap-global-set "M-a" #'casual-avy-tmenu)
-
   (keymap-set bookmark-bmenu-mode-map "<f2>" #'casual-bookmarks-tmenu)
   (keymap-set bookmark-bmenu-mode-map "C-;" #'casual-bookmarks-tmenu)
   ;; (evil-define-key 'normal bookmark-bmenu-mode-map (kbd "J") 'bookmark-jump)
@@ -1203,9 +1200,6 @@
   ;; org-agenda-clock-goto ; optional
   ;; bookmark-jump ; optional
 
-  (keymap-set symbol-overlay-map "C-;" #'casual-symbol-overlay-tmenu)
-  ;; (keymap-set prog-mode-map "C-;" #'casual-symbol-overlay-tmenu) ; C-'
-
   ;; cc-prog-mode.el:61:
   (keymap-set compilation-mode-map "C-;" #'casual-editkit-main-tmenu)
   ;; cc-grep-mode.el:33:
@@ -1215,6 +1209,8 @@
   ;; cc-global-keybindings.el:69:
   (keymap-global-set "C-;" #'casual-editkit-main-tmenu)
   (keymap-global-set "<f11>" #'casual-editkit-main-tmenu)
+
+;; (keymap-global-set "M-a" #'casual-avy-tmenu)
   )
 
 ;;;;; transient : expand-region

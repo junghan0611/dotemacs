@@ -247,7 +247,7 @@ org-mode
 [SYS]: You are a helpful assistant. Please write in Korean language.
 [ME]: " r> n> "#+end_ai")
 
-(export-html "#+BEGIN_EXPORT HTML" n> r> n> "#+END_EXPORT")
+(export-html "#+begin_export HTML" n> r> n> "#+end_export")
 
 (tagskeywords "#+hugo_front_matter_key_replace: tags>keywords")
 
@@ -326,6 +326,10 @@ alias:
 (desktopscreenshotfilelink "[[file:~/screenshot/" (format-time-string "%Y%m%dT"))
 (mobilescreenshot "[[file:~/screenshot/Screenshot_" (format-time-string "%Y%m%d_"))
 (mobilescreenshotkyobo "[[file:~/screenshot/kyoboebook_" (format-time-string "%Y%m%d-"))
+
+(export-html-quartz "#+begin_export html\n![[../images/.jpg|320]]\n#+end_export")
+
+(attachfilelink "[[file:../.attach/" )
 
 ;; for slide / presentation
 (revealimg "#+REVEAL_HTML: <div class=\"column\" style=\"float; width: 100%\">" n

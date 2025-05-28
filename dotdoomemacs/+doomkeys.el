@@ -1114,7 +1114,7 @@
   "M-y" #'consult-yank-pop ;; orig#'yank-pop
   ;; M-g bindings (goto-map
   "M-g E" #'consult-compile-error
-  ;; "M-g f" #'consult-flymake ;; Alternative: consult-flycheck
+  "M-g f" #'consult-flymake ;; Alternative: consult-flycheck
   "M-g g" #'consult-goto-line ;; orig#'goto-line
   ;; ("M-g M-g" #'consult-goto-line           ;; orig#'goto-line
   "M-g o" #'consult-outline ;; Alternative: consult-org-heading

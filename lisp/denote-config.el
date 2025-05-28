@@ -482,6 +482,21 @@
     (my/org-hugo-export-directory dir)
     )
 
+  (defun my/update-dblock-export-garden-meta ()
+    (interactive)
+    (my/update-dblock-garden (car garden-directory-lists))
+    (my/update-export-garden (car garden-directory-lists)))
+
+  (defun my/update-dblock-export-garden-bib ()
+    (interactive)
+    (my/update-dblock-garden (cadr garden-directory-lists))
+    (my/update-export-garden (cadr garden-directory-lists)))
+
+  (defun my/update-dblock-export-garden-notes ()
+    (interactive)
+    (my/update-dblock-garden (caddr garden-directory-lists))
+    (my/update-export-garden (caddr garden-directory-lists)))
+
   (defun my/update-dblock-garden-all ()
     (interactive)
     (mapcar 'my/update-dblock-garden garden-directory-lists))
