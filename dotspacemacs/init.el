@@ -396,6 +396,8 @@
 
 ;;;;; Layer: jh-coding
 
+     (c-c++ :variables c-c++-backend 'lsp-clangd)
+
      ;; (common-lisp
      ;;  :packages (auto-highlight-symbol common-lisp-snippets
      ;;                                   evil slime))
@@ -577,7 +579,6 @@
 
      webpaste
      transpose-frame
-     casual-suite
 
 ;;;;; Packages: jh-completion
 
@@ -4706,22 +4707,21 @@ For instance pass En as source for English."
     ;; (org-bookmarks-add-org-capture-template)
     )
 
-;;;;;; jh-org > packages > org-attach
+;;;;;; DONT jh-org > packages > org-attach
 
-  (use-package org-attach
-    :ensure nil
-    :after org
-    :commands (org-attach-follow org-attach-complete-link)
-    :init
-    (org-link-set-parameters "attachment"
-                             :follow #'org-attach-follow
-                             :complete #'org-attach-complete-link)
-    :config
-    (setq-default org-attach-id-dir (expand-file-name ".attach/" org-directory)) ; doom default
-    (setq org-attach-archive-delete 'nil ; doom nil
-          org-attach-method 'cp ; doom 'cp
-          org-attach-store-link-p 'attached) ; doom 'attached
-    )
+  ;; (use-package org-attach
+  ;;   :ensure nil
+  ;;   :after org
+  ;;   :commands (org-attach-follow org-attach-complete-link)
+  ;;   :init
+  ;;   (org-link-set-parameters "attachment"
+  ;;                            :follow #'org-attach-follow
+  ;;                            :complete #'org-attach-complete-link)
+  ;;   :config
+  ;;   (setq org-attach-archive-delete 'nil ; doom nil
+  ;;         org-attach-method 'cp ; doom 'cp
+  ;;         org-attach-store-link-p 'attached) ; doom 'attached
+  ;;   )
 
 ;;;;;; jh-org > packages > latex-preview
 

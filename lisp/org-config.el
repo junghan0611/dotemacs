@@ -815,6 +815,10 @@
 (setq org-eldoc-breadcrumb-separator " > ")
 
 
+;;;; org-attach
+
+    (setq-default org-attach-id-dir (concat org-directory ".attach/")) ; use relative path
+
 ;;; external dependency
 
 ;; (setq org-contacts-files (list (my/org-contacts-file)))

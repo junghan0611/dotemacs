@@ -82,7 +82,7 @@ Adds refile metadata to the heading."
                            :regexp regexp
                            :not-regexp nil
                            :excluded-dirs-regexp
-                             "\\(meta\\|journal\\|posts\\|docs\\|md\\|dict\\|private\\|ekg\\)"
+                             "\\(meta\\|tmp\\|journal\\|posts\\|docs\\|md\\|dict\\|private\\|ekg\\)"
                            :sort-by-component nil
                            :reverse-sort nil
                            :id-only nil
@@ -102,7 +102,7 @@ Adds refile metadata to the heading."
                              (mapconcat 'identity (mapcar (lambda (s) (replace-regexp-in-string "#" "" s)) selected) "\\|")
                              :not-regexp nil
                              :excluded-dirs-regexp
-                             "\\(bib\\|notes\\|docs\\|posts\\|md\\|journal\\|dict\\|private\\|ekg\\)"
+                             "\\(bib\\|notes\\|tmp\\|elisp\\|docs\\|posts\\|md\\|journal\\|dict\\|private\\|ekg\\)"
                              :sort-by-component nil
                              :reverse-sort t
                              :id-only nil

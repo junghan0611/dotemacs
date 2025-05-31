@@ -7708,7 +7708,19 @@ See `consult-omni-multi' for more details.
 
 ;;;;; org-zettel
 
-;; (use-package! org-zettel-ref-mode)
+;; (use-package! org-zettel-ref-mode
+;;   ;; :init
+;;   ;; (setq org-zettel-ref-overview-directory "~/Documents/notes/source-note/")
+;;   :config
+;;   (setq org-zettel-ref-mode-type 'denote)
+;;   ;; (setq org-zettel-ref-mode-type 'org-roam)
+;;   ;; (setq org-zettel-ref-mode-type 'normal)
+;;   (setq org-zettel-ref-python-file "~/sync/emacs/git/junghan0611/org-zettel-ref-mode/convert-to-org.py")
+;;   ;; (setq org-zettel-ref-temp-folder "~/Documents/temp_convert/")
+;;   ;; (setq org-zettel-ref-reference-folder "~/Documents/ref/")
+;;   ;; (setq org-zettel-ref-archive-folder "/Volumes/Collect/archives/")
+;;   (setq org-zettel-ref-debug t)
+;;   )
 
 ;;;;; org-supertag
 
