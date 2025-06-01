@@ -80,8 +80,7 @@
 (doom!
  :completion
  (corfu +orderless +icons) ;; +dabbrev - custom dabbrev
- (vertico +childframe) search engine of the future ; +icons
- ;; vertico
+ vertico ;; +childframe ; search engine of the future ; +icons
 
  :ui
  doom              ; what makes DOOM look the way it does
@@ -247,9 +246,9 @@
  yaml ; JSON, but readable
  ;;zig               ; C, but simpler
 
- :email
+ ;; :email
  ;; (mu4e +org +gmail)
- (notmuch +org)
+ ;; (notmuch +org)
  ;;(wanderlust +gmail)
 
  :app

@@ -724,37 +724,37 @@
 
 ;;;; :completion corfu vertico
 
-;;;;; vertico remove-hook
+;;;;; DONT vertico-posframe-mode remove-hook
 
-(when (modulep! :completion vertico +childframe)
-  (remove-hook 'vertico-mode-hook #'vertico-posframe-mode))
+;; (when (modulep! :completion vertico +childframe)
+;;   (remove-hook 'vertico-mode-hook #'vertico-posframe-mode))
 
 ;;;;; vertico-buffer on TOP
 
 ;; vertico-buffer on-top
-;; (unless (or IS-TERMUX IS-DEMO)
-;;   (progn
-;;     (require 'vertico-buffer)
-;;     (setq vertico-resize 'grow-only) ; doom nil
+(unless (or IS-TERMUX IS-DEMO)
+  (progn
+    (require 'vertico-buffer)
+    (setq vertico-resize 'grow-only) ; doom nil
 
-;;     ;; vertico on Top
-;;     (setq vertico-buffer-display-action
-;;           `(display-buffer-in-side-window
-;;             (window-height . ,(+ 3 vertico-count)) (side . top)))
-;;     (vertico-mode +1)
-;;     (vertico-buffer-mode +1)
-;;     )
+    ;; vertico on Top
+    (setq vertico-buffer-display-action
+          `(display-buffer-in-side-window
+            (window-height . ,(+ 3 vertico-count)) (side . top)))
+    (vertico-mode +1)
+    (vertico-buffer-mode +1)
+    )
 
-;;   (defun my/vertico-posframe-toggle ()
-;;     (interactive)
-;;     (if (bound-and-true-p vertico-buffer-mode)
-;;         (progn
-;;           ;; (vertico-buffer-mode -1)
-;;           (vertico-posframe-mode 1))
-;;       (progn
-;;         ;; (vertico-buffer-mode 1)
-;;         (vertico-posframe-mode -1))))
-;;   )
+  ;; (defun my/vertico-posframe-toggle ()
+  ;;   (interactive)
+  ;;   (if (bound-and-true-p vertico-buffer-mode)
+  ;;       (progn
+  ;;         ;; (vertico-buffer-mode -1)
+  ;;         (vertico-posframe-mode 1))
+  ;;     (progn
+  ;;       ;; (vertico-buffer-mode 1)
+  ;;       (vertico-posframe-mode -1))))
+  )
 
 ;;;;; vertico-multiform
 
@@ -6140,9 +6140,9 @@ See `consult-omni-multi' for more details.
     ;; the base font size (e.g. 1.5), and a `WEIGHT'.
     (setq modus-themes-headings
           '(
-            (0                . (bold 1.0)) ;; variable-pitch
-            (1                . (bold 1.0))
-            (2                . (bold 1.0))
+            (0                . (bold 1.1)) ;; variable-pitch
+            (1                . (bold 1.1))
+            (2                . (bold 1.05))
             (3                . (semibold 1.0))
             (4                . (medium 1.0))
             (5                . (medium 1.0))
@@ -6184,13 +6184,21 @@ See `consult-omni-multi' for more details.
        `(imenu-list-entry-subalist-face-2 ((,c :inherit variable-pitch :foreground ,fg-heading-3 :underline t :height ,user-imenu-list-height)))
        `(imenu-list-entry-subalist-face-3 ((,c :inherit variable-pitch :foreground ,fg-heading-4 :underline t :height ,user-imenu-list-height)))
 
+       ;; 2024-07-03 spacious-padding
+       ;; `(tab-bar ((,c :background ,bg-tab-bar)))
+       ;; `(tab-bar-tab-group-current ((,c :inherit bold :background ,bg-tab-current :box (:line-width -2 :color ,bg-tab-current) :foreground ,fg-alt)))
+       ;; `(tab-bar-tab-group-inactive ((,c :background ,bg-tab-bar :box (:line-width -2 :color ,bg-tab-bar) :foreground ,fg-alt)))
+       ;; `(tab-bar-tab ((,c :inherit bold :box (:line-width -2 :color ,bg-tab-current) :background ,bg-tab-current)))
+       ;; `(tab-bar-tab-inactive ((,c :box (:line-width -2 :color ,bg-tab-other) :background ,bg-tab-other)))
+       ;; `(tab-bar-tab-ungrouped ((,c :inherit tab-bar-tab-inactive)))
+       ;; `(fringe ((,c :background ,bg-dim)))
+
        `(vterm-color-black ((,c :background "gray25" :foreground "gray25")))
        `(vterm-color-yellow ((,c :background ,yellow-intense :foreground ,yellow-intense)))
        `(org-mode-line-clock ((,c :inherit bold :foreground ,modeline-info)))
        `(org-mode-line-clock-overrun ((,c :inherit bold :foreground ,modeline-err)))
        `(jinx-misspelled ((,c :underline (:style wave :color ,magenta-cooler))))
        ;; `(ten-id-face ((,c :inherit font-lock-keyword-face :underline (:style double-line :color ,cyan))))
-
        ;; `(keycast-command ((,c :inherit default :height 0.9)))
        )
       )
@@ -6234,7 +6242,7 @@ See `consult-omni-multi' for more details.
     ;; (setq ef-themes-variable-pitch-ui t)
     (setq ef-themes-headings
           '(
-            (0                . (bold 1.2)) ;; variable-pitch
+            (0                . (bold 1.1)) ;; variable-pitch
             (1                . (bold  1.1))
             (2                . (bold 1.05))
             (3                . (semibold 1.0))
@@ -6253,56 +6261,63 @@ See `consult-omni-multi' for more details.
     (interactive)
     ;; (message "ef-themes-post-load-hook : my-ef-themes-custom-faces")
     (ef-themes-with-colors
-      (custom-set-faces
-       `(consult-separator ((,c :inherit default :foreground ,yellow)))
-       `(consult-notes-time ((,c :inherit default :foreground ,cyan)))
+     (custom-set-faces
+      `(consult-separator ((,c :inherit default :foreground ,yellow)))
+      `(consult-notes-time ((,c :inherit default :foreground ,cyan)))
 
-       `(org-side-tree-heading-face ((,c :inherit variable-pitch :foreground ,fg-alt :height ,user-imenu-list-height)))
+      `(org-side-tree-heading-face ((,c :inherit variable-pitch :foreground ,fg-alt :height ,user-imenu-list-height)))
 
-       `(imenu-list-entry-face-0 ((,c :inherit variable-pitch :foreground ,rainbow-1 :height ,user-imenu-list-height)))
-       `(imenu-list-entry-face-1 ((,c :inherit variable-pitch :foreground ,rainbow-2 :height ,user-imenu-list-height)))
-       `(imenu-list-entry-face-2 ((,c :inherit variable-pitch :foreground ,rainbow-3 :height ,user-imenu-list-height)))
-       `(imenu-list-entry-face-3 ((,c :inherit variable-pitch :foreground ,rainbow-4 :height ,user-imenu-list-height)))
-       `(imenu-list-entry-subalist-face-0 ((,c :inherit variable-pitch :foreground ,rainbow-1 :underline t :height ,user-imenu-list-height)))
-       `(imenu-list-entry-subalist-face-1 ((,c :inherit variable-pitch :foreground ,rainbow-2 :underline t :height ,user-imenu-list-height)))
-       `(imenu-list-entry-subalist-face-2 ((,c :inherit variable-pitch :foreground ,rainbow-3 :underline t :height ,user-imenu-list-height)))
-       `(imenu-list-entry-subalist-face-3 ((,c :inherit variable-pitch :foreground ,rainbow-4 :underline t :height ,user-imenu-list-height)))
+      `(imenu-list-entry-face-0 ((,c :inherit variable-pitch :foreground ,rainbow-1 :height ,user-imenu-list-height)))
+      `(imenu-list-entry-face-1 ((,c :inherit variable-pitch :foreground ,rainbow-2 :height ,user-imenu-list-height)))
+      `(imenu-list-entry-face-2 ((,c :inherit variable-pitch :foreground ,rainbow-3 :height ,user-imenu-list-height)))
+      `(imenu-list-entry-face-3 ((,c :inherit variable-pitch :foreground ,rainbow-4 :height ,user-imenu-list-height)))
+      `(imenu-list-entry-subalist-face-0 ((,c :inherit variable-pitch :foreground ,rainbow-1 :underline t :height ,user-imenu-list-height)))
+      `(imenu-list-entry-subalist-face-1 ((,c :inherit variable-pitch :foreground ,rainbow-2 :underline t :height ,user-imenu-list-height)))
+      `(imenu-list-entry-subalist-face-2 ((,c :inherit variable-pitch :foreground ,rainbow-3 :underline t :height ,user-imenu-list-height)))
+      `(imenu-list-entry-subalist-face-3 ((,c :inherit variable-pitch :foreground ,rainbow-4 :underline t :height ,user-imenu-list-height)))
 
-       ;; `(org-link ((,c :inherit link :weight bold)))
-       ;; `(denote-faces-link ((,c :inherit link :weight bold :slant italic)))
-       ;; `(org-agenda-diary ((,c :inherit org-agenda-calendar-sexp :foreground ,fg-main :weight semibold)))
+      ;; `(org-link ((,c :inherit link :weight bold)))
+      ;; `(denote-faces-link ((,c :inherit link :weight bold :slant italic)))
+      ;; `(org-agenda-diary ((,c :inherit org-agenda-calendar-sexp :foreground ,fg-main :weight semibold)))
 
-       `(org-list-dt ((,c :foreground ,fg-main :weight bold))) ;; 2025-01-14
-       ;; `(org-tag ((,c :background ,bg-yellow-subtle :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
-       `(diredp-file-name ((,c :foreground ,fg-main)))
+      `(org-list-dt ((,c :foreground ,fg-main :weight bold))) ;; 2025-01-14
+      ;; `(org-tag ((,c :background ,bg-yellow-subtle :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
+      `(diredp-file-name ((,c :foreground ,fg-main)))
 
-       ;; `(keycast-command ((,c :inherit ef-themes-ui-variable-pitch :background ,bg-main :foreground ,fg-main :weight semibold)))
-       ;; `(keycast-command ((,c :inherit default :height 0.9)))
-       `(fringe ((,c :background ,bg-dim)))
-       `(org-mode-line-clock ((,c :inherit bold :foreground ,modeline-info)))
-       `(org-mode-line-clock-overrun ((,c :inherit bold :foreground ,modeline-err)))
-       `(jinx-misspelled ((,c :underline (:style wave :color ,magenta-cooler))))
-       ;; `(ten-id-face ((,c :inherit font-lock-keyword-face :underline (:style double-line :color ,cyan))))
-       )
-      (setq hl-todo-keyword-faces
-            `(("HOLD" . ,yellow)
-              ("TODO" . ,red)
-              ("NEXT" . ,blue)
-              ("THEM" . ,magenta)
-              ("PROG" . ,cyan-warmer)
-              ("OKAY" . ,green-warmer)
-              ("DONT" . ,yellow-warmer)
-              ("FAIL" . ,red-warmer)
-              ("BUG" . ,red-warmer)
-              ("DONE" . ,green)
-              ("NOTE" . ,blue-warmer)
-              ("KLUDGE" . ,cyan)
-              ("HACK" . ,cyan)
-              ("TEMP" . ,red)
-              ("FIXME" . ,red-warmer)
-              ("XXX+" . ,red-warmer)
-              ("REVIEW" . ,red)
-              ("DEPRECATED" . ,yellow))))
+      ;; `(tab-bar ((,c :background ,bg-tab-bar)))
+      ;; `(tab-bar-tab-group-current ((,c :inherit bold :background ,bg-tab-current :box (:line-width -2 :color ,bg-tab-current) :foreground ,fg-alt)))
+      ;; `(tab-bar-tab-group-inactive ((,c :background ,bg-tab-bar :box (:line-width -2 :color ,bg-tab-bar) :foreground ,fg-alt)))
+      ;; `(tab-bar-tab ((,c :inherit bold :box (:line-width -2 :color ,bg-tab-current) :background ,bg-tab-current)))
+      ;; `(tab-bar-tab-inactive ((,c :box (:line-width -2 :color ,bg-tab-other) :background ,bg-tab-other)))
+      ;; `(tab-bar-tab-ungrouped ((,c :inherit tab-bar-tab-inactive)))
+      ;; `(fringe ((,c :background ,bg-dim)))
+
+      ;; `(keycast-command ((,c :inherit ef-themes-ui-variable-pitch :background ,bg-main :foreground ,fg-main :weight semibold)))
+      ;; `(keycast-command ((,c :inherit default :height 0.9)))
+      `(org-mode-line-clock ((,c :inherit bold :foreground ,modeline-info)))
+      `(org-mode-line-clock-overrun ((,c :inherit bold :foreground ,modeline-err)))
+      `(jinx-misspelled ((,c :underline (:style wave :color ,magenta-cooler))))
+      ;; `(ten-id-face ((,c :inherit font-lock-keyword-face :underline (:style double-line :color ,cyan))))
+      )
+     (setq hl-todo-keyword-faces
+           `(("HOLD" . ,yellow)
+             ("TODO" . ,red)
+             ("NEXT" . ,blue)
+             ("THEM" . ,magenta)
+             ("PROG" . ,cyan-warmer)
+             ("OKAY" . ,green-warmer)
+             ("DONT" . ,yellow-warmer)
+             ("FAIL" . ,red-warmer)
+             ("BUG" . ,red-warmer)
+             ("DONE" . ,green)
+             ("NOTE" . ,blue-warmer)
+             ("KLUDGE" . ,cyan)
+             ("HACK" . ,cyan)
+             ("TEMP" . ,red)
+             ("FIXME" . ,red-warmer)
+             ("XXX+" . ,red-warmer)
+             ("REVIEW" . ,red)
+             ("DEPRECATED" . ,yellow))))
 
     (when (display-graphic-p) ; gui
       (when (locate-library "spacious-padding")
@@ -6317,7 +6332,8 @@ See `consult-omni-multi' for more details.
   ;; These are the default values.
   (setq doric-themes-to-toggle '(doric-light doric-dark))
   (setq doric-themes-to-rotate doric-themes-collection)
-  (doric-themes-select 'doric-light))
+  (doric-themes-select 'doric-light)
+  )
 
 ;;;;; DONT custom themes loader for doom-themes
 

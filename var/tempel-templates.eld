@@ -328,6 +328,7 @@ alias:
 (mobilescreenshotkyobo "[[file:~/screenshot/kyoboebook_" (format-time-string "%Y%m%d-"))
 
 (export-html-quartz "#+begin_export html\n![[../images/.jpg|320]]\n#+end_export")
+(export-extimages-youtube-quartz "#+begin_export html\n![]()\n#+end_export")
 
 (attachfilelink "[[file:../.attach/" )
 
