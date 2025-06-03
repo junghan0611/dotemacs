@@ -71,8 +71,26 @@ Adds refile metadata to the heading."
                            :this-heading-only nil
                            :include-date t))
   (org-update-dblock))
+;; denote-org-dblock-insert-links
 
 (defun my/denote-org-dblock-insert-links (regexp)
+  "Create Org dynamic block to insert Denote links matching REGEXP."
+  (interactive
+   (list (denote-files-matching-regexp-prompt)) org-mode)
+
+  (org-create-dblock (list :name "denote-links"
+                           :regexp regexp
+                           :not-regexp nil
+                           :excluded-dirs-regexp
+                           "\\(meta\\|tmp\\|elisp\\|journal\\|posts\\|docs\\|md\\|dict\\|private\\|ekg\\)"
+                           :sort-by-component nil
+                           :reverse-sort nil
+                           :id-only nil
+                           :include-date t))
+  (org-update-dblock)
+  )
+
+(defun my/denote-org-dblock-insert-bib-links (regexp)
   "Create Org dynamic block to insert Denote links matching REGEXP."
   (interactive
    (list
@@ -82,12 +100,31 @@ Adds refile metadata to the heading."
                            :regexp regexp
                            :not-regexp nil
                            :excluded-dirs-regexp
-                             "\\(meta\\|tmp\\|journal\\|posts\\|docs\\|md\\|dict\\|private\\|ekg\\)"
+                             "\\(meta\\|notes\\|tmp\\|journal\\|posts\\|docs\\|md\\|dict\\|private\\|ekg\\)"
                            :sort-by-component nil
                            :reverse-sort nil
                            :id-only nil
                            :include-date t))
-  (org-update-dblock))
+  (org-update-dblock)
+  )
+
+(defun my/denote-org-dblock-insert-notes-links (regexp)
+  "Create Org dynamic block to insert Denote links matching REGEXP."
+  (interactive
+   (list
+    (denote-files-matching-regexp-prompt))
+   org-mode)
+  (org-create-dblock (list :name "denote-links"
+                           :regexp regexp
+                           :not-regexp nil
+                           :excluded-dirs-regexp
+                             "\\(meta\\|bib\\|tmp\\|journal\\|posts\\|docs\\|md\\|dict\\|private\\|ekg\\)"
+                           :sort-by-component nil
+                           :reverse-sort nil
+                           :id-only nil
+                           :include-date t))
+  (org-update-dblock)
+  )
 
 ;; my/denote-insert-meta-links ()
 (defun my/denote-org-dblock-insert-meta-links  ()
@@ -106,7 +143,7 @@ Adds refile metadata to the heading."
                              :sort-by-component nil
                              :reverse-sort t
                              :id-only nil
-                             :include-date t))
+                             :include-date nil))
     (org-update-dblock)
     ))
 

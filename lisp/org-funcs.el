@@ -2086,7 +2086,10 @@ TARGET-FILES가 nil이면 `org-cite-global-bibliography`의 모든 파일을 검
 ;;;;; my/insert-unicode-notetaking
 
 ;; "⊢" prove, "⊨" entail , "∉" notin
-;;  『 』(겹낫표), ≪ ≫(겹화살괄호) / ｢ ｣(홑낫표) - https://wikidocs.net/79912
+;; - 겹화살괄호(《 》): 책의 제목이나 신문 이름 등을 나타낼 때 쓰임.[11]
+;; - 홑화살괄호(〈 〉): 소제목, 그림이나 노래와 같은 예술 작품의 제목, 상호, 법률, 규정 등을 나타낼 때 쓰임.[12]
+;;  『 』(겹낫표),
+;;  ｢ ｣(홑낫표) "≪겹화살괄호≫" - https://wikidocs.net/79912
 ;; 0x002012	‒	FIGURE DASH
 ;; 0x002013	–	EN DASH
 ;; 0x002014	—	EM DASH
@@ -2101,7 +2104,9 @@ TARGET-FILES가 nil이면 `org-cite-global-bibliography`의 모든 파일을 검
                                "ㅹ" "ㆅ" "ㅺ" "㉼" "㉽"
                                ;; "Ж" ; Greek αβγδεζηθικλμνξοπρςτυφχψω
                                "『겹낫표』"
-                               "≪겹화살괄호≫"
+                               "《겹화살괄호》"
+                               "〈홑화살괄호 〉"
+                               ;; "≪겹화살괄호≫"
                                "｢홑낫표｣"
                                "― QUOTADASH"
                                ))

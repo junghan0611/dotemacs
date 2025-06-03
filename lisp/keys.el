@@ -1967,6 +1967,8 @@ window."
 
   "i" #'my/denote-org-dblock-insert-links
   "I" #'my/denote-org-dblock-insert-backlinks
+  "M-," #'my/denote-org-dblock-insert-bib-links
+  "M-." #'my/denote-org-dblock-insert-notes-links
   "M-i" #'my/denote-org-dblock-insert-meta-links
 
   "l" #'denote-link

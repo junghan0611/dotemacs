@@ -94,6 +94,16 @@ org-mode
 ;; (cite "{{{cite(" (p (completing-read "Cite: " (jf/org-macro-value-list "cite"))) ")}}}")
 
 
+(verb_block
+  (p (completing-read "Method: " '("get" "post" "put") nil t) method t)
+  (p (read-string "URL: ") url t)
+  (p (completing-read "Content-Type: " '("text/html" "text/plain" "application/json" "application/xml") nil t) type t)
+  "#+begin_src verb :wrap src ob-verb-response" n
+  > method  " " url n
+  > "Content-Type: " type "; charset=utf-8" n
+  > q
+  "#+end_src")
+
 (date "[[date:" p "][" p "]]")
 
 ;; (tag-meta "{{{meta(" (p (completing-read "meta: " (my/org-tag-value-list "meta"))) ")}}}")

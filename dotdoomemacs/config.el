@@ -3806,6 +3806,8 @@ Prefers existing sessions closer to current directory."
   ;; Sometimes the copilot agent doesn't start. Restarting fixes the issue.
   (setq copilot-indent-offset-warning-disable t
         copilot-max-char 10000) ; default 100000
+  (setq copilot-version "1.282.0") ;; 2025-06-03 use stable version
+  (setq copilot-idle-delay nil)
   :bind (:map copilot-completion-map
               ("C-g" . 'copilot-clear-overlay)
               ("M-P" . 'copilot-previous-completion)
@@ -4265,6 +4267,13 @@ Called with a PREFIX, resets the context buffer list before opening"
 (use-package! bats-mode :defer t)
 
 ;;;;; :lang python
+
+;;;;;; conda
+
+;; set env ANACONDA_HOME and M-x conda-env-activate
+;; (after! python
+;;   (setq conda-anaconda-home (expand-file-name  "~/miniconda3/"))
+;;   )
 
 ;;;;;; ipython default
 
@@ -6191,7 +6200,7 @@ See `consult-omni-multi' for more details.
        ;; `(tab-bar-tab ((,c :inherit bold :box (:line-width -2 :color ,bg-tab-current) :background ,bg-tab-current)))
        ;; `(tab-bar-tab-inactive ((,c :box (:line-width -2 :color ,bg-tab-other) :background ,bg-tab-other)))
        ;; `(tab-bar-tab-ungrouped ((,c :inherit tab-bar-tab-inactive)))
-       ;; `(fringe ((,c :background ,bg-dim)))
+       `(fringe ((,c :background ,bg-dim)))
 
        `(vterm-color-black ((,c :background "gray25" :foreground "gray25")))
        `(vterm-color-yellow ((,c :background ,yellow-intense :foreground ,yellow-intense)))
@@ -6290,7 +6299,7 @@ See `consult-omni-multi' for more details.
       ;; `(tab-bar-tab ((,c :inherit bold :box (:line-width -2 :color ,bg-tab-current) :background ,bg-tab-current)))
       ;; `(tab-bar-tab-inactive ((,c :box (:line-width -2 :color ,bg-tab-other) :background ,bg-tab-other)))
       ;; `(tab-bar-tab-ungrouped ((,c :inherit tab-bar-tab-inactive)))
-      ;; `(fringe ((,c :background ,bg-dim)))
+      `(fringe ((,c :background ,bg-dim)))
 
       ;; `(keycast-command ((,c :inherit ef-themes-ui-variable-pitch :background ,bg-main :foreground ,fg-main :weight semibold)))
       ;; `(keycast-command ((,c :inherit default :height 0.9)))
