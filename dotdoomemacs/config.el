@@ -3807,7 +3807,7 @@ Prefers existing sessions closer to current directory."
   (setq copilot-indent-offset-warning-disable t
         copilot-max-char 10000) ; default 100000
   (setq copilot-version "1.282.0") ;; 2025-06-03 use stable version
-  (setq copilot-idle-delay nil)
+  (setq copilot-idle-delay 5) ; nil
   :bind (:map copilot-completion-map
               ("C-g" . 'copilot-clear-overlay)
               ("M-P" . 'copilot-previous-completion)

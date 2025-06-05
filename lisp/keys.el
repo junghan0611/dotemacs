@@ -1152,7 +1152,7 @@
 ;;;;; move to ccmenu : transient : casual-suite
 
 (when (locate-library "casual")
-  ;; (setq transient-align-variable-pitch t)
+  (setq transient-align-variable-pitch t)
 
   (require 'calc-ext)
   (require 'casual-calc)
