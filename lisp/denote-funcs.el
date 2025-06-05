@@ -84,7 +84,7 @@ Adds refile metadata to the heading."
                            :excluded-dirs-regexp
                            "\\(meta\\|tmp\\|elisp\\|journal\\|posts\\|docs\\|md\\|dict\\|private\\|ekg\\)"
                            :sort-by-component nil
-                           :reverse-sort nil
+                           :reverse-sort t
                            :id-only nil
                            :include-date t))
   (org-update-dblock)
@@ -102,7 +102,7 @@ Adds refile metadata to the heading."
                            :excluded-dirs-regexp
                              "\\(meta\\|notes\\|tmp\\|journal\\|posts\\|docs\\|md\\|dict\\|private\\|ekg\\)"
                            :sort-by-component nil
-                           :reverse-sort nil
+                           :reverse-sort t
                            :id-only nil
                            :include-date t))
   (org-update-dblock)
@@ -120,7 +120,7 @@ Adds refile metadata to the heading."
                            :excluded-dirs-regexp
                              "\\(meta\\|bib\\|tmp\\|journal\\|posts\\|docs\\|md\\|dict\\|private\\|ekg\\)"
                            :sort-by-component nil
-                           :reverse-sort nil
+                           :reverse-sort t
                            :id-only nil
                            :include-date t))
   (org-update-dblock)
