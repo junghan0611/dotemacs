@@ -6728,6 +6728,9 @@ See `consult-omni-multi' for more details.
   (interactive)
 
   ;; (message "my/open-workspaces")
+  (+workspace/new-named "pkm")
+  (find-file user-project-directory)
+
   (+workspace/new-named "git")
   (find-file user-project-directory)
 
@@ -6741,9 +6744,9 @@ See `consult-omni-multi' for more details.
   (+workspace/switch-to-0) ;; main
   ;; (find-file (concat denote-directory "notes")) ; for denote-dired excerpt
   ;; (evil-window-vsplit)
-  (my/denote-random-note-from-directory (concat denote-directory "notes"))
+  (my/denote-random-note-from-directory (concat denote-directory "meta"))
 
-  (setq org-agenda-file org-user-agenda-files) ; reset
+  (setq org-agenda-files org-user-agenda-files) ; reset
   ;; (my/add-today-journal-to-agenda) -- use org-journal-enable-agenda-integration
   (my/refresh-agenda-files)
   ;; (ash-goto-org-agenda) ; tab-bar
@@ -6775,7 +6778,7 @@ See `consult-omni-multi' for more details.
      tab-line-new-button-show nil
      tab-line-close-button-show nil)
 
-    ;; (global-tab-line-mode 1)
+    (global-tab-line-mode 1)
     )
   )
 
