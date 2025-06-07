@@ -100,7 +100,7 @@
 (defun my/expand-org-file-name (filename)
   (expand-file-name filename org-directory))
 
-(defconst user-inbox-file "20230202T020200--inbox-now__aprj.org")
+(defconst user-inbox-file "meta/20230202T020200--inbox-now__aprj_meta.org")
 (defun my/org-inbox-file () (my/expand-org-file-name user-inbox-file))
 
 (defun my/org-tasks-file () (my/expand-org-file-name user-inbox-file))

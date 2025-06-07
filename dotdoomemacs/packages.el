@@ -95,7 +95,7 @@
 
 ;; (package! corfu-popupinfo :disable t)
 
-(package! evil-snipe :disable t)
+;; (package! evil-snipe :disable t)
 ;; (package! evil-mc :disable t)
 
 ;; Disable tty module
@@ -322,8 +322,8 @@
 (package! astute :recipe (:host github :repo "rnkn/astute"))
 
 (package! ten :recipe (:host sourcehut :repo "nobiot/ten")) ;; https://git.sr.ht/~nobiot/ten
-(package! chu :recipe (:host sourcehut :repo "nobiot/chu")) ;; https://git.sr.ht/~nobiot/chu
-(package! obsidian)
+;; (package! chu :recipe (:host sourcehut :repo "nobiot/chu")) ;; https://git.sr.ht/~nobiot/chu
+;; (package! obsidian)
 
 ;; (package! org-fc
 ;;   :recipe (:host github
@@ -335,6 +335,8 @@
 
 (unpin! gptel)
 (package! gptel :recipe (:host github :repo "junghan0611/gptel" :branch "ko"))
+(package! mcp)
+
 ;; (package! gptel :recipe (:host github :repo "karthink/gptel" :branch "feature-tool-use"))
 ;; (package! gptel-quick :recipe (:host github :repo "karthink/gptel-quick"))
 

@@ -1225,8 +1225,15 @@
 
 (after! python
   (map! :after python
+        (:map python-ts-mode-map
+        ;; :in "<C-f9>" #'treemacs-find-file
+        ;; :in "<M-f9>" #'treemacs-select-window
+        :i "M-9" #'insert-parentheses
+        ;; :i "M-j" #'bk/improve-last-parens
+        :i "M-l" #'sp-forward-sexp
+        "M-RET" #'code-cells-eval)
         :localleader
-        :map python-mode-map
+        :map python-ts-mode-map
         "'" #'jupyter-repl-associate-buffer
         (:prefix ("j" . "jupyter")
                  "c" #'my/jupyter-connect-repl
@@ -1248,10 +1255,8 @@
                  "a" #'code-cells-eval-above
                  "c" #'code-cells-eval
                  "b" #'code-cells-backward-cell
-                 "f" #'code-cells-forward-cell)))
-
-
-
+                 "f" #'code-cells-forward-cell))
+  )
 
 ;; (after! python
 ;;   (map! :after python

@@ -3024,11 +3024,12 @@ ${content}"))
 #+export_file_name: %4$s.md
 #+description: %1$s
 #+hugo_categories: Noname
+#+OPTIONS: toc:1
 
-* History
+* 히스토리
 - %2$s
 
-* Related-Notes
+* 관련메타
 #+print_bibliography:
 
 \n")
@@ -3382,11 +3383,10 @@ ${content}"))
         (insert (format "#+identifier: %s\n" suffix))
         (insert (format "#+export_file_name: %s.md\n" suffix))
         (insert (format "#+description: %s\n" suffix))
-        ;; (insert (format "#+hugo_tags: notes\n"))
-        (insert (format "#+hugo_categories: Noname\n\n"))
+        (insert (format "#+hugo_categories: Noname\n#+OPTIONS: toc:1\n"))
 
-        ;; add bib and history
-        (insert (format "\n* Related Notes\n#+print_bibliography:\n* History\n- %s\n" (format-time-string "[%Y-%m-%d %a %H:%M]")))
+        (insert (format "\n* 히스토리\n- %s Created!" (format-time-string "[%Y-%m-%d %a %H:%M]")))
+        (insert (format "\n* 관련메타\n- \n#+print_bibliography:\n\n"))
 
         ;; heading-1 add backlink to today
         (insert (format "* 로그 :LLMLOG:\n** [[denote:%s::%s][%s]]\n"
@@ -4068,7 +4068,8 @@ Called with a PREFIX, resets the context buffer list before opening"
          "C-c d" 'eldoc
          "C-c f" 'flymake-show-buffer-diagnostics
          "C-c 0" 'eglot-inlay-hints-mode
-         "M-RET" 'eglot-code-actions)
+         ;; "C-RET" 'eglot-code-actions
+         )
 
         ;; FIXME need new keybindings
         ;; (:map 'flymake-mode-map
@@ -7773,5 +7774,53 @@ See `consult-omni-multi' for more details.
 (after! org
   (add-to-list 'load-path "~/sync/emacs/git/default/org-cv/")
   (require 'ox-awesomecv))
+
+;;;;; TODO evil-snipe from ohyecloudy
+
+;; 한글도 f/t로 찾을 수 있게 한다.
+;; 일괄로 편하게 적용할 수 있는 초성 자음만 찾는다.
+(after! evil-snipe
+  (setq evil-snipe-aliases '(
+                             (?r "[rㄱ가-낗]")
+                             (?R "[Rㄲ까-낗]")
+                             (?s "[sㄴ나-닣]")
+                             (?e "[eㄷ다-딯]")
+                             (?E "[Eㄸ따-띻]")
+                             (?f "[fㄹ라-맇]")
+                             (?a "[aㅁ마-밓]")
+                             (?q "[qㅂ바-빟]")
+                             (?Q "[Qㅃ빠-삫]")
+                             (?t "[tㅅ사-싷]")
+                             (?T "[Tㅆ싸-앃]")
+                             (?d "[dㅇ아-잏]")
+                             (?w "[wㅈ자-짛]")
+                             (?W "[Wㅉ짜-찧]")
+                             (?c "[cㅊ차-칳]")
+                             (?z "[zㅋ카-킿]")
+                             (?x "[xㅌ타-팋]")
+                             (?v "[vㅍ파-핗]")
+                             (?g "[gㅎ하-힣]")
+                             )))
+
+
+;;;;; gptel mcp
+
+(use-package! mcp
+  :after gptel
+  :custom (mcp-hub-servers
+           `(("filesystem" . (:command "npx" :args ("-y" "@modelcontextprotocol/server-filesystem" "/home/lizqwer/sync/")))
+             ("fetch" . (:command "uvx" :args ("mcp-server-fetch")))
+             ("qdrant" . (:url "http://localhost:8000/sse"))
+             ;; ("graphlit" . (
+             ;;                :command "npx"
+             ;;                :args ("-y" "graphlit-mcp-server")
+             ;;                :env (
+             ;;                      :GRAPHLIT_ORGANIZATION_ID "your-organization-id"
+             ;;                      :GRAPHLIT_ENVIRONMENT_ID "your-environment-id"
+             ;;                      :GRAPHLIT_JWT_SECRET "your-jwt-secret")))
+             ))
+  :config (require 'mcp-hub)
+  ;; :hook (after-init . mcp-hub-start-all-server)
+  )
 
 ;;; left blank on purpose
