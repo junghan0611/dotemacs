@@ -94,3 +94,5 @@ ccmenu
 modules
 user-keys.el
 
+dotspacemacs/.aspell_en_personal
+

@@ -37,7 +37,7 @@
     (interactive "DSelect directory: ")
     (let ((org-files (directory-files-recursively directory "\\.org\\'")))
       (dolist (org-file org-files)
-        ;; (message "%s" org-file)
+        (message "%s" org-file)
         (with-current-buffer (find-file-noselect org-file)
           (org-dblock-update 0)
           ))))
