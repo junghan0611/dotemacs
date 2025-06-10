@@ -996,12 +996,12 @@ Also see `prot-window-delete-popup-frame'." command)
           '((main
              .
              ;; [${urldate:10}]
-             "'${dateadded:10} ${author editor:19} ${title:49} ${date year issued:4} ${translator:7} @${=key= id:17}")  ; 2024-09-12 김정한
+             "'${dateadded:10} ${author editor:19} ${title:49} ${date year issued:4} ${translator:7} №${=key= id:17}")  ; 2024-09-12 김정한
             (suffix
              . "#${datemodified:10} ${=type=:10} ${shorttitle:19} ${namea:16} ${url:19} ${tags keywords:*}") ; 2024-11-17 add url
             (preview
              .
-             "** ${title} ${shorttitle}\n${author} ${translator} ${namea} ${year issued date:4}\n\n${abstract}\n") ; citar-copy-reference
+             "** ${title}\n${shorttitle}\n${author} ${translator} ${namea} ${year issued date:4}\n\n${abstract}\n") ; citar-copy-reference
             (note . "#+title: ${author translator:10}, ${title}")))
 
     ;; (note . "Notes on ${author:10 editor:%etal}, ${title}")

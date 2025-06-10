@@ -1037,6 +1037,88 @@ replacement."
 ;;         (rename-journal-to-denote-id file))))
 ;;   )
 
+;;;; my/denote-normalize-org-frontmatter
+
+;; https://gist.github.com/ashton314/f74060b00884ac9491b6944dac7bf8de
+
+(defun my/denote-normalize-org-frontmatter ()
+  "Normalize the front-matter in an org-mode file."
+  (interactive)
+  (when-let* ((file (buffer-file-name))
+              (denote-filename-is-note-p file)
+              (type (denote-filetype-heuristics file))
+              (title (denote-retrieve-title-value file type))
+              (id (denote-retrieve-filename-identifier file)))
+    (let ((kwds (denote-retrieve-keywords-value file type)))
+      (delete-matching-lines "^#\\+title:.*$" (point-min) (point-max))
+      (delete-matching-lines "^#\\+date:.*$" (point-min) (point-max))
+      (delete-matching-lines "^#\\+identifier:.*$" (point-min) (point-max))
+      (delete-matching-lines "^#\\+filetags:.*$" (point-min) (point-max))
+      (denote--add-front-matter file title kwds id type)
+      (delete-matching-lines "^$" (point) (- (point) 1)))))
+
+;;;; my/denote-transient
+
+(progn
+  ;; https://gist.github.com/ashton314/1de93821d255412cdadfbcf98cd30cad
+  (transient-define-prefix my/denote-transient ()
+    "Denote dispatch"
+    [["Note creation (d)"
+      ("dd" "new note" denote)
+      ("dj" "new or existing journal entry" denote-journal-new-or-existing-entry)
+      ("dn" "open or new" denote-open-or-create)
+      ("dt" "new specifying date and time" denote-date)
+      ("ds" "create in subdirectory " denote-subdirectory)]
+     ["Reviewing (r)"
+      ("rd" "notes this day" aw/notes-this-day)]
+     ["Folgezettel (f)"
+      ("fc" "create parent/child/sibling" denote-sequence)
+      ("ff" "find parent/child/sibling notes" denote-sequence-find)
+      ("fr" "reparent (adopt) current note into another sequence" denote-sequence-reparent)
+      ("fp" "find previous sibling" denote-sequence-find-previous-sibling :transient t)
+      ("fn" "find next sibling" denote-sequence-find-next-sibling :transient t)]]
+    [["Bookkeeping (b)"
+      ("br" "prompt and rename" denote-rename-file)
+      ("bf" "rename with frontmatter" denote-rename-file-using-front-matter)
+      ("bk" "modify keywords" denote-rename-file-keywords)]
+     ["Linking (l)"
+      ("li" "insert link" denote-link)
+      ("lh" "insert link to org heading" denote-org-link-to-heading)
+      ("lb" "show backlinks" denote-backlinks)
+      ("lg" "visit backlink" denote-find-backlink)
+      ("lo" "org backlink block" denote-org-dblock-insert-backlinks)]]
+    [["Searching (s)"
+      ("sd" "deft" deft)
+      ("sn" "consult-notes" consult-notes)
+      ("ss" "consult-notes search" consult-notes-search-in-all-notes)]])
+
+  ;; optional function to gather notes from previous years
+  (defun aw/notes-this-day ()
+    "Display files of the form '20..mmdd.*' in the current directory,
+where 'mm-dd' are the current month and day."
+    (interactive)
+    (let* ((month-day (format-time-string "%m%d"))
+           (this-day-matching (concat "20[[:digit:]][[:digit:]]" month-day ".*\\.\\(txt\\|org\\|md\\)"))
+           (note-files-this-day (directory-files-recursively "." this-day-matching nil
+                                                             (lambda (dirname) (not (string-search ".git/objects" dirname))))))
+
+      ;; make a buffer and fill it with the contents
+      (let ((buff (generate-new-buffer "*Notes on this day*")))
+        (set-buffer buff)                   ; Make this buffer current
+        (org-mode)
+        ;; (insert "* Notes on this day *\n")
+        (mapc (lambda (notes-file)
+                (progn
+                  (insert "\n------------------------------------------------------------\n")
+                  (insert (concat "[[file:" notes-file "][" notes-file "]]"))          ; File name, as a hyperlink
+                  (insert "\n")
+                  (insert-file-contents notes-file)
+                  (end-of-buffer)))
+              note-files-this-day)
+        (read-only-mode)
+        (display-buffer-in-direction buff '((direction . rightmost))))))
+  )
+
 ;;;; provide
 
 (provide 'denote-funcs)
