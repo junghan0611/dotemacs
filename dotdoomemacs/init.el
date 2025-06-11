@@ -153,7 +153,7 @@
  (:unless IS-TERMUX (pdf)) ; pdf enhancements
  ;;terraform         ; infrastructure as code
  ;;tmux              ; an API for interacting with tmux
- tree-sitter ;; syntax and parsing, sitting in a tree...
+ ;;tree-sitter ;; syntax and parsing, sitting in a tree...
  upload            ; map local to remote projects via ssh/ftp
 
  :os
@@ -163,7 +163,7 @@
  :lang
  ;;agda              ; types of types of types of types...
  ;; beancount         ; mind the GAAP
- (cc +lsp +tree-sitter)         ; C > C++ == 1
+ (cc +lsp) ;; +tree-sitter         ; C > C++ == 1
 
  (clojure +lsp) ; +tree-sitter java with a lisp
  ;; common-lisp ; if you've seen one lisp, you've seen them all
@@ -194,7 +194,7 @@
  ;; ;; hy ; custom - readability of scheme w/ speed of python
  ;;idris             ; a language you can depend on
 
- (json +tree-sitter)  ; At least it ain't XML
+ json ;; +tree-sitter  ; At least it ain't XML
  janet  ; Fun fact: Janet is me!
  (javascript +lsp) ;; +tree-sitter all(hope(abandon(ye(who(enter(here))))))
  ;;(java +lsp)       ; the poster child for carpal tunnel syndrome
@@ -228,7 +228,7 @@
  plantuml ; diagrams for confusing people more
  graphviz
  ;;purescript        ; javascript, but functional
- (python +conda +lsp +pyright +tree-sitter) ; +poetry +conda beautiful is better than ugly
+ (python +conda +lsp +pyright ) ;; +tree-sitter ; +poetry +conda beautiful is better than ugly
  qt                ; the 'cutest' gui framework ever
  ;; racket ; a DSL for DSLs
  ;;raku              ; the artist formerly known as perl6
