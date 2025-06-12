@@ -2023,7 +2023,8 @@ window."
   "E" #'ef-themes-select
   "," #'ef-themes-load-random-light
   "." #'ef-themes-load-random-dark
-  "r" #'doric-themes-toggle
+  ;; "r" #'doric-themes-toggle
+  "r" #'doric-themes-load-random
   "R" #'doric-themes-select
 
   ;; "t" #'my/doom-themes-toggle

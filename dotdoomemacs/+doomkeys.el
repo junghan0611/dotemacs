@@ -827,6 +827,7 @@
 (with-eval-after-load 'markdown-mode
   (map! :map markdown-mode-map
         :localleader
+        "RET" #'toc-org-markdown-follow-thing-at-point
         "y" #'yank-as-org))
 ;; (:prefix ("t" . "Table")
 ;;  :desc "Header" "h" #'markdown-table-hline-at-point-p
