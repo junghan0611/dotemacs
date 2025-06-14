@@ -246,7 +246,7 @@
 ;;;; pretty-entities / bullet lists / image-width
 
 (setq org-image-actual-width t)
-(setq org-image-max-width (min (/ (display-pixel-width) 3) 640))
+(setq org-image-max-width (min (/ (display-pixel-width) 3) 480)) ; 640
 
 ;; Org styling, hide markup etc. 테스트
 ;; 왜 minemacs 는 org-pretty 설정을 둘다 t 로 했을까?  org-pretty-entities 가

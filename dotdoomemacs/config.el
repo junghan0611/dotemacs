@@ -5159,32 +5159,31 @@ Suitable for `imenu-create-index-function'."
 
 (use-package! mastodon)
 
-;;   ;;:init
-;;   ;; (require 'mastodon-toot)
-;;   ;; (setq mastodon-tl--horiz-bar "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-;;   ;; (setq mastodon-tl--highlight-current-toot t
-;;   ;;       mastodon-tl--tag-timeline-tags t
-;;   ;;       mastodon-tl--show-avatars t)
-;;   ;;:config
-;;   ;; The default emojis take two characters for me
-;;   ;; (setq mastodon-tl--symbols
-;;   ;;       '((reply "" . "R")
-;;   ;;         (boost "" . "B")
-;;   ;;         (favourite "" . "F")
-;;   ;;         (bookmark "" . "K")
-;;   ;;         (media "" . "[media]")
-;;   ;;         (verified "" . "V")
-;;   ;;         (locked "" . "[locked]")
-;;   ;;         (private "" . "[followers]")
-;;   ;;         (direct "" . "[direct]")
-;;   ;;         (edited "" . "[edited]")))
-;;   ;; (mastodon-discover) ; context-mode
-;;   ;; (add-hook 'mastodon-toot-mode-hook
-;;   ;;           (lambda ()
-;;   ;;             (auto-fill-mode -1) ; default
-;;   ;;             (display-line-numbers-mode -1)
-;;   ;;             (jinx-mode 1)))
-;;   )
+(after! mastodon
+  (require 'mastodon-toot)
+  (setq mastodon-tl--horiz-bar "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+  (setq mastodon-tl--highlight-current-toot t
+        mastodon-tl--tag-timeline-tags t
+        mastodon-tl--show-avatars t)
+  ;; The default emojis take two characters for me
+  (setq mastodon-tl--symbols
+        '((reply "" . "R")
+          (boost "" . "B")
+          (favourite "" . "F")
+          (bookmark "" . "K")
+          (media "" . "[media]")
+          (verified "" . "V")
+          (locked "" . "[locked]")
+          (private "" . "[followers]")
+          (direct "" . "[direct]")
+          (edited "" . "[edited]")))
+  (mastodon-discover) ; context-mode
+  (add-hook 'mastodon-toot-mode-hook
+            (lambda ()
+              (auto-fill-mode -1) ; default
+              (display-line-numbers-mode -1)
+              (jinx-mode 1)))
+  )
 
 ;;;;;; my/dired-attach-to-mastodon
 

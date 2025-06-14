@@ -1200,7 +1200,7 @@
       "p" #'dired-preview-mode
       :desc "sort-modified-date" "o" #'dired-sort-toggle-or-edit
 
-      "m" #'my/dired-attach-to-mastodon
+      ;; "m" #'my/dired-attach-to-mastodon
 
       :desc "*denote-insert* marked-notes" "i" #'my/denote-link-dired-marked-notes
       "g" #'prot-dired-grep-marked-files
