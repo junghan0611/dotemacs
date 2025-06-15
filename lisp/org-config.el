@@ -1138,8 +1138,10 @@ A prefix arg forces clock in of the default task."
   (define-key org-mode-map (kbd "C-c H") 'org-insert-heading)
   (define-key org-mode-map (kbd "C-c S") 'org-insert-subheading)
 
+  (define-key org-mode-map (kbd "C-c h") #'my/link-to-headline)
   (define-key org-mode-map (kbd "C-c r") #'my/org-random-heading)
   (define-key org-mode-map (kbd "C-c L") #'my/org-store-link-id-optional)
+
 
   (evil-define-key '(normal visual) org-mode-map (kbd "C-n") 'org-next-visible-heading)
   (evil-define-key '(normal visual) org-mode-map (kbd "C-p") 'org-previous-visible-heading)

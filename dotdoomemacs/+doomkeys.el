@@ -1809,6 +1809,7 @@
         ":" #'my/insert-nbsp-all-with-wordlist-and-tags
         "M-;" #'my/add-to-glossary
         "M-'" #'my/add-newlines-between-paragraphs
+        "M-l" #'my/link-to-headline
 
         :desc "org-set-effot" "E" #'org-set-effort
         :desc "time-stamp" "1" #'time-stamp
@@ -1822,6 +1823,7 @@
         ;; l links
         :desc "cae-org-insert-file-link" "l f" #'cae-org-insert-file-link
         :desc "my/org-store-link-id-optional" "l I" #'my/org-store-link-id-optional
+        "l h" #'my/link-to-headline
 
         :desc "org-paste-subtree" "s p" #'org-paste-subtree
         :desc "org-rich-yank" "l y" #'org-rich-yank
