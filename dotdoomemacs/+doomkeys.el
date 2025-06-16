@@ -131,6 +131,7 @@
        :desc "consult-buffer" "." #'consult-buffer
        :desc "Kill all Dired buffers" "D" #'my/dired-kill-all-buffers
        :desc "Jump to Bookmark" "RET" #'consult-bookmark
+       "1" #'bookmark-bmenu-list
        :desc "Kill buffer and window" "K" #'kill-buffer-and-window
        ;; :desc "Kill buffer and return previous" "K" #'kill-buffer-and-return-previous
        :desc "Kill all buffers" "M-k" #'doom/kill-all-buffers
