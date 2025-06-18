@@ -337,6 +337,9 @@
 (package! gptel :recipe (:host github :repo "junghan0611/gptel" :branch "ko"))
 (package! mcp)
 
+;; (package! gptel-prompt :recipe (:host github :repo "jwiegley/gptel-prompts"))
+;; (package! gptel-rag :recipe (:host github :repo "jwiegley/gptel-rag"))
+
 ;; (package! gptel :recipe (:host github :repo "karthink/gptel" :branch "feature-tool-use"))
 ;; (package! gptel-quick :recipe (:host github :repo "karthink/gptel-quick"))
 
