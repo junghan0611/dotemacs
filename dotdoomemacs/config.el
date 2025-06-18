@@ -7393,8 +7393,8 @@ See `consult-omni-multi' for more details.
 
 ;;;;; ccmenu: context-menu with casual
 
-(when (display-graphic-p) ;; gui
-  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
+;; (when (display-graphic-p) ;; 2025-06-18 disable
+;;   (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
 
 ;(when (display-graphic-p) ;; gui
 ;  (require 'ccmenu))

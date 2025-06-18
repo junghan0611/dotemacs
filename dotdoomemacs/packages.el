@@ -174,7 +174,7 @@
 (package! celestial-mode-line)
 (package! lin)
 (package! nerd-icons-dired)
-(package! nerd-icons-completion) ; 2025-03-26 disable conflict with what?!
+;; (package! nerd-icons-completion) ; 2025-03-26 disable conflict with what?!
 
 (package! dired-preview)
 

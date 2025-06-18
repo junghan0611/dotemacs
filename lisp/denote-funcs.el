@@ -31,6 +31,16 @@
 ;; 2025-04-14
 (require 'org-archive)
 
+(defun my/refile-to-current-file (arg &optional file)
+  "Refile current heading to elsewhere in the current buffer.
+If prefix ARG, copy instead of move."
+  (interactive "P")
+  (let ((org-refile-targets `((,file :maxlevel . 1))) ; maxlevel 1
+        (org-refile-use-outline-path 'file)
+        (org-refile-keep arg)
+        current-prefix-arg)
+    (call-interactively #'org-refile)))
+
 (defun my/refile-heading-to-denote-file (arg)
   "Refile current heading to a particular denote file.
 If prefix ARG, move instead of copy.
@@ -41,7 +51,7 @@ Adds refile metadata to the heading."
   ;; (org-archive-set-tag) ; hidden
   (let ((selected-file (denote-file-prompt)))
     (when selected-file
-      (+org/refile-to-current-file
+      (my/refile-to-current-file ;; +org/refile-to-current-file
        (not arg) ; Invert ARG for org-refile: nil means move, non-nil means copy
        selected-file)
       (org-set-property "REFILED" (format-time-string "%Y-%m-%d %H:%M:%S"))
