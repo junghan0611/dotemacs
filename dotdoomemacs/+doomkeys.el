@@ -1645,6 +1645,7 @@
         "," #'org-switchb
         "." #'org-goto
         "@" #'org-cite-insert
+        "C" #'my/toggle-comment-for-en-paragraph
         (:when (modulep! :completion vertico)
           "." #'consult-org-heading
           "/" #'consult-org-agenda)

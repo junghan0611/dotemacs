@@ -2201,6 +2201,29 @@ TARGET-FILES가 nil이면 `org-cite-global-bibliography`의 모든 파일을 검
   (define-key vertico-map (kbd "M-N") #'my/insert-unicode-notetaking-circle)
   )
 
+
+;;;;; my/toggle-comment-for-en-paragraph
+
+(require 'guess-language)
+
+;; [[denote:20250619T153536]]
+(defun my/toggle-comment-for-en-paragraph ()
+  "버퍼 내의 각 줄을 검사하여 영문(en)으로 판별될 경우 해당 줄의 주석을 토글합니다.
+헤딩, 코드 블록, 프로퍼티는 제외됩니다."
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (while (not (eobp))
+      (let ((line-begin (line-beginning-position))
+            (line-end (line-end-position)))
+        (unless (or (org-at-heading-p)
+                    (org-in-src-block-p)
+                    (org-at-property-p))
+          (let ((lang (guess-language-region line-begin line-end)))
+            (when (eq lang 'en)
+              (comment-or-uncomment-region line-begin line-end)))))
+      (forward-line 1))))
+
 ;;;; provide
 
 (provide 'org-funcs)

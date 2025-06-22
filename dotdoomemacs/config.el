@@ -3013,7 +3013,8 @@ ${content}"))
   (setq denote-file-type 'org)
   (setq denote-sort-components '(signature title keywords identifier))
   (setq denote-sort-keywords nil) ; denote-sort-keywords-comparison-function - default string-collate-lessp
-  (setq denote-infer-keywords t)
+  (setq denote-infer-keywords t) ; important
+  ;; TODO denote-excluded-keywords-regexp
   (setq denote-excluded-directories-regexp "archives")
   ;; Automatically rename Denote buffers using the `denote-rename-buffer-format'.
   ;; (setq denote-rename-buffer-format "Denote: %t (%k)")
