@@ -248,7 +248,7 @@
   (setq which-key-idle-delay 0.4 ; important
         which-key-idle-secondary-delay 0.01)
   (setq which-key-use-C-h-commands t) ; paging key maps
-  (setq which-key-max-description-length 29) ; doom 27, spacemacs 36
+  (setq which-key-max-description-length 36) ; doom 27, spacemacs 36
   )
 
 ;;;;; evil
@@ -1840,38 +1840,6 @@ only those in the selected frame."
 ;; en_US:aspell,hunspell,nuspell
 ;; en:aspell,hunspell,nuspell
 
-;;;;; org-glossary
-
-(use-package! org-glossary
-  :after org
-  :init
-  (setq org-glossary-idle-update-period 1.0) ; 0.5
-  (setq org-glossary-autodetect-in-headings t) ; 2024-06-13 new
-  ;; :hook (org-mode . org-glossary-mode)
-  :config
-  (setq org-glossary-collection-root (concat org-directory "dict/"))
-  ;; (setq org-glossary-global-terms "global")
-
-  (define-key org-mode-map (kbd "C-}") 'org-glossary-insert-term-reference)
-  (define-key org-mode-map (kbd "C-{") 'org-glossary-create-definition)
-  (define-key org-mode-map (kbd "C-\"") 'org-glossary-create-definition)
-  ;; (setq org-glossary-automatic nil) ;; disable auto-export
-  )
-
-;; sample from tecosaur/org-glossary
-;; (defun +org-glossary--latex-cdef (backend info term-entry form &optional ref-index plural-p capitalized-p extra-parameters)
-;;   (org-glossary--export-template
-;;    (if (plist-get term-entry :uses)
-;;        "*%d*\\emsp{}%v\\ensp{}@@latex:\\labelcpageref{@@%b@@latex:}@@\n"
-;;      "*%d*\\emsp{}%v\n")
-;;    backend info term-entry ref-index
-;;    plural-p capitalized-p extra-parameters))
-;; (org-glossary-set-export-spec
-;;  'latex t
-;;  :backref "gls-%K-use-%r"
-;;  :backref-seperator ","
-;;  :definition-structure #'+org-glossary--latex-cdef)
-
 ;;;;; d2 / mermaid / plantuml
 
 (after! org
@@ -2405,10 +2373,10 @@ ${content}"))
     (consult-gh-embark-mode +1))
 
   ;; Install `consult-gh-forge' for forge actions
-  (with-eval-after-load 'forge
-    (require 'consult-gh-forge)
-    (consult-gh-forge-mode +1)
-    (setq consult-gh-forge-timeout-seconds 20))
+  ;; (with-eval-after-load 'forge
+  ;;    (require 'consult-gh-forge)
+  ;;    (consult-gh-forge-mode +1)
+  ;;    (setq consult-gh-forge-timeout-seconds 20))
   )
 
 ;;;;; magit-blame-color-by-age
@@ -2831,12 +2799,14 @@ ${content}"))
 ;;;;;; org-marked-text-overview
 
 (use-package! org-marked-text-overview
+  :defer 5
   :after org
   :bind ("M-g l" . org-marked-text-overview-mode))
 
 ;;;;;; org-headline-card
 
 (use-package! org-headline-card
+  :defer 10
   :after org
   :commands (org-headline-card-at-point)
   :config
@@ -2863,6 +2833,39 @@ ${content}"))
                                  (rectangleFontColor . "#2C2C2C")
                                  (rectangleBackgroundColor . "#FDFAFF"))))
   )
+
+;;;;;; org-glossary
+
+(use-package! org-glossary
+  :after org
+  :defer 10
+  :init
+  (setq org-glossary-idle-update-period 1.0) ; 0.5
+  (setq org-glossary-autodetect-in-headings t) ; 2024-06-13 new
+  ;; :hook (org-mode . org-glossary-mode)
+  :config
+  (setq org-glossary-collection-root (concat org-directory "dict/"))
+  ;; (setq org-glossary-global-terms "global")
+
+  (define-key org-mode-map (kbd "C-}") 'org-glossary-insert-term-reference)
+  (define-key org-mode-map (kbd "C-{") 'org-glossary-create-definition)
+  (define-key org-mode-map (kbd "C-\"") 'org-glossary-create-definition)
+  ;; (setq org-glossary-automatic nil) ;; disable auto-export
+  )
+
+;; sample from tecosaur/org-glossary
+;; (defun +org-glossary--latex-cdef (backend info term-entry form &optional ref-index plural-p capitalized-p extra-parameters)
+;;   (org-glossary--export-template
+;;    (if (plist-get term-entry :uses)
+;;        "*%d*\\emsp{}%v\\ensp{}@@latex:\\labelcpageref{@@%b@@latex:}@@\n"
+;;      "*%d*\\emsp{}%v\n")
+;;    backend info term-entry ref-index
+;;    plural-p capitalized-p extra-parameters))
+;; (org-glossary-set-export-spec
+;;  'latex t
+;;  :backref "gls-%K-use-%r"
+;;  :backref-seperator ","
+;;  :definition-structure #'+org-glossary--latex-cdef)
 
 ;;;; :tools biblio : citar
 
@@ -3011,7 +3014,7 @@ ${content}"))
   (setq denote-sort-components '(signature title keywords identifier))
   (setq denote-sort-keywords nil) ; denote-sort-keywords-comparison-function - default string-collate-lessp
   (setq denote-infer-keywords t)
-  (setq denote-excluded-directories-regexp "screenshot")
+  (setq denote-excluded-directories-regexp "archives")
   ;; Automatically rename Denote buffers using the `denote-rename-buffer-format'.
   ;; (setq denote-rename-buffer-format "Denote: %t (%k)")
 
@@ -3060,7 +3063,7 @@ ${content}"))
         (thread-last denote-directory (expand-file-name "notes"))
         (thread-last denote-directory (expand-file-name "private"))
         (thread-last denote-directory (expand-file-name "posts"))
-        (thread-last denote-directory (expand-file-name "tmp"))
+        (thread-last denote-directory (expand-file-name "llmlog"))
         ;; (thread-last denote-directory (expand-file-name "ekg"))
         ))
   :config
@@ -3211,6 +3214,7 @@ ${content}"))
   ;; 읽어볼 것 https://github.com/pprevos/denote-explore
   (use-package! denote-explore
     :defer 5
+    :config
     ;; :custom
     ;; Location of graph files
     ;; (denote-explore-network-directory "~/documents/notes/graphs/")
@@ -3220,6 +3224,7 @@ ${content}"))
     ;; (denote-explore-network-graphviz-filetype "svg")
     ;; Exlude keywords or regex
     ;; (denote-explore-network-keywords-ignore '("bib"))
+    (setq denote-explore-random-regex-ignore '("archive"))
     )
 
 ;;;;;; citar-denote
@@ -3265,7 +3270,11 @@ ${content}"))
             (text
              :reference-format "reference:  %s\n"
              :reference-regex "^reference\\s-*:")))
-    (citar-denote-mode))
+    (citar-denote-mode)
+
+    (require 'citar-org-mode)
+    (setq citar-org-mode-directory (concat org-directory "bib/"))
+    )
 
 ;;;;;; denote-search
 
@@ -3366,7 +3375,7 @@ ${content}"))
     (interactive)
     (unless (buffer-file-name (current-buffer))
       (let* ((suffix (format-time-string "%Y%m%dT%H%M%S"))
-             (chat-dir (concat org-directory "/tmp"))
+             (chat-dir (concat org-directory "/llmlog"))
              (ext (replace-regexp-in-string "-mode$" "" (symbol-name gptel-default-mode)))
              (filename (concat suffix "__llmlog" "." ext))
              (full-path (expand-file-name filename chat-dir)))
@@ -5000,14 +5009,14 @@ Suitable for `imenu-create-index-function'."
   (setq dired-preview-display-action-alist-function #'my-dired-preview-to-the-right)
   )
 
-;;;;; nerd-icons-dired
+;;;;; DONT nerd-icons-dired
 
-(use-package! nerd-icons-dired
-  :if window-system
-  :hook (dired-mode . nerd-icons-dired-mode))
+;; (use-package! nerd-icons-dired
+;;   :if window-system
+;;   :hook (dired-mode . nerd-icons-dired-mode))
 
-(use-package! oneko-macs
-  :if window-system)
+;; (use-package! oneko-macs
+;;   :if window-system)
 
 ;;;;; lin - hl-line
 

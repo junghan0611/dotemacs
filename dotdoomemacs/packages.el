@@ -173,7 +173,7 @@
 (package! breadcrumb) ; with eglot
 (package! celestial-mode-line)
 (package! lin)
-(package! nerd-icons-dired)
+;; (package! nerd-icons-dired)
 ;; (package! nerd-icons-completion) ; 2025-03-26 disable conflict with what?!
 
 (package! dired-preview)
@@ -314,6 +314,7 @@
 (package! consult-denote)
 
 (package! citar-denote)
+(package! citar-org-mode :recipe (:host github :repo "pprevos/citar-org-mode"))
 (package! tmr) ; timer
 
 ;; (package! ekg)
@@ -363,7 +364,8 @@
 (package! pcsv)
 
 ;; gptel plugins
-(package! elysium :recipe (:host github :repo "lanceberge/elysium" :branch "main" :files ("*.el")))  ; star 236 using smerge
+;; (package! elysium :recipe (:host github :repo "lanceberge/elysium" :branch "main" :files ("*.el")))  ; star 236 using smerge
+(package! elysium)
 ;; (package! evedel :recipe (:host github :repo "daedsidog/evedel")) ; star 87
 ;; (package! yap :recipe (:host github :repo "meain/yap")) ; star 13
 
@@ -372,14 +374,9 @@
 
 (package! whisper :recipe (:host github :repo "natrys/whisper.el"))
 
-(package! gpt-babel
-  :recipe (:host github
-           :repo "ElleNajt/gpt-babel"
-           :branch "main"
-           :files ("*.el")))
+(package! gpt-babel :recipe (:host github :repo "ElleNajt/gpt-babel" :branch "main" :files ("*.el")))
 
 ;; (package! codeium :recipe (:host github :repo "Exafunction/codeium.el"))
-
 ;; (package! ellama)
 ;; (package! openai :recipe (:host github :repo "emacs-openai/openai" :files ("*.el")))
 ;; (package! dall-e :recipe (:host github :repo "emacs-openai/dall-e"))
@@ -599,7 +596,7 @@
 
 (package! fireplace)
 (package! snow)
-(package! oneko-macs :recipe (:host github :repo "ElleNajt/oneko-macs")) ; sudo apt-get install oneko
+;; (package! oneko-macs :recipe (:host github :repo "ElleNajt/oneko-macs")) ; sudo apt-get install oneko
 ;; (package! selectric-mode)
 
 (package! wiki-summary :recipe (:host github :repo "rnkn/wiki-summary.el"))

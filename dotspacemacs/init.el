@@ -594,7 +594,7 @@
 
      ;; minions
      nerd-icons
-     nerd-icons-dired
+     ;; nerd-icons-dired
      nerd-icons-corfu
      ;; treemacs-nerd-icons
      hl-todo
@@ -2689,11 +2689,11 @@
     ;; Remember to add an entry for `t', the library uses that as default.
     )
 
-  (use-package nerd-icons-dired
-    :if window-system
-    :after nerd-icons
-    :hook (dired-mode . nerd-icons-dired-mode)
-    )
+  ;; (use-package nerd-icons-dired
+  ;;   :if window-system
+  ;;   :after nerd-icons
+  ;;   :hook (dired-mode . nerd-icons-dired-mode)
+  ;;   )
 
   (with-eval-after-load 'imenu-list
     (setq imenu-list-focus-after-activation t)
@@ -4974,7 +4974,7 @@ For instance pass En as source for English."
     (setq denote-sort-keywords nil)
     (setq denote-infer-keywords t)
 
-    (setq denote-excluded-directories-regexp "screenshot")
+    (setq denote-excluded-directories-regexp "archives")
     ;; (setq denote-rename-buffer-format "Denote: %t (%k)")
     ;; (setq denote-rename-buffer-format "[D]%t") ; prot
     ;; (setq denote-rename-buffer-format "%s %t") ; default

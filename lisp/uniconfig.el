@@ -336,22 +336,22 @@
       (call-interactively #'delete-region)
     (my/delete-backward-word arg)))
 
-;;;; my/write-window-setup
+;;;; DONT my/write-window-setup
 
 ;; Writing Window Setup on Dired
 ;; 괜찮다. 화면 버퍼 구성이 여러모로 집중하기 좋다.
-(defun my/write-window-setup ()
-  (interactive)
-  (split-window-right)
-  (windmove-right)
-  (split-window-below)
-  (windmove-left)
-  (find-file "*draft.org" t)
-  (windmove-right)
-  (find-file "*notes.txt" t) ; txt
-  (windmove-left))
-(with-eval-after-load 'dired
-  (define-key dired-mode-map [f3] #'my/write-window-setup))
+;; (defun my/write-window-setup ()
+;;   (interactive)
+;;   (split-window-right)
+;;   (windmove-right)
+;;   (split-window-below)
+;;   (windmove-left)
+;;   (find-file "*draft.org" t)
+;;   (windmove-right)
+;;   (find-file "*notes.txt" t) ; txt
+;;   (windmove-left))
+;; (with-eval-after-load 'dired
+;;   (define-key dired-mode-map [f3] #'my/write-window-setup))
 
 
 ;;;; my/convert-hangul-jamo-to-syllable
@@ -1197,26 +1197,15 @@ Also see `prot-window-delete-popup-frame'." command)
 ;;                              :follow 'org-hugo-follow))
 ;;   )
 
-;;;; TODO clojure/cider utils
+;;;; my/add snippets on project
 
-;; benjamin-asdf-dotall/mememacs/.emacs-mememacs.d/lisp/init-cider.el
-(when (locate-library "cider")
-  (with-eval-after-load 'cider
-    (defun my/clojure-add-libs-snippet ()
-      (interactive)
+(progn
+  (defun my/add-setup-env-sh-snippet ()
+    (interactive)
+    (with-current-buffer
+        (find-file (expand-file-name "setup-env.sh" (project-root (project-current))))
       (insert
-       "(comment
- (require '[clojure.tools.deps.alpha.repl :refer [add-libs]]))
-  (add-libs
-   '{org.sg.get-currency-conversions/get-currency-conversions
-     {:local/root \"../get-currency-conversions/\"}})"))
-
-    (defun my/clojure-setup-env-sh-snippet ()
-      (interactive)
-      (with-current-buffer
-          (find-file (expand-file-name "setup-env.sh" (project-root (project-current))))
-        (insert
-         "
+       "
 mkdir -p .linenote
 mkdir -p .vscode
 
@@ -1224,25 +1213,26 @@ cd .vscode
 ln -s ../.linenote linenote
 cd -
 "
-         )))
+       )))
 
-    (defun my/clojure-projectile-snippet ()
-      (interactive)
-      (with-current-buffer
-          (find-file (expand-file-name ".projectile" (project-root (project-current))))
-        (insert
-         "- /*~
+
+  (defun my/add-projectile-snippet ()
+    (interactive)
+    (with-current-buffer
+        (find-file (expand-file-name ".projectile" (project-root (project-current))))
+      (insert
+       "- /*~
 - /*.elc
 - /modes/*.elc
 - /git/"
-         )))
+       )))
 
-    (defun my/clojure-dir-locals-snippet ()
-      (interactive)
-      (with-current-buffer
-          (find-file (expand-file-name ".dir-locals.el" (project-root (project-current))))
-        (insert
-         "((nil .
+  (defun my/add-dir-locals-snippet ()
+    (interactive)
+    (with-current-buffer
+        (find-file (expand-file-name ".dir-locals.el" (project-root (project-current))))
+      (insert
+       "((nil .
       ( ;; (cider-clojure-cli-aliases . \"dev\")
        (+evil-want-o/O-to-continue-comments . nil)
        (+default-want-RET-continue-comments . nil)
@@ -1252,64 +1242,61 @@ cd -
                   (eval . (copilot-mode 1))
                   ))
  )"
-         )))
-    ))
+       )))
+  )
 
-;; https://github.com/sstraust/sammys-cider-utils
-;; make-unit-test.el
+;;;; DONT clojure/cider utils
 
+;; benjamin-asdf-dotall/mememacs/.emacs-mememacs.d/lisp/init-cider.el
 ;; (when (locate-library "cider")
 ;;   (with-eval-after-load 'cider
-;;     (defvar create-cider-test-macro
-;;       "(defmacro convert-to-test [intended-output & args]
-;;     (let [test-form (last args)]
-;;       `(~'deftest ~'my-cider-gen-test
-;;          (~'testing \"test1\"
-;;            (do ~@(drop-last 1 args)
-;;              (~'is (~'= ~intended-output ~test-form)))))))")
+;;     (defun my/clojure-add-libs-snippet ()
+;;       (interactive)
+;;       (insert
+;;        "(comment
+;;  (require '[clojure.tools.deps.alpha.repl :refer [add-libs]]))
+;;   (add-libs
+;;    '{org.sg.get-currency-conversions/get-currency-conversions
+;;      {:local/root \"../get-currency-conversions/\"}})"))
 
-;;     (defun write-command-to-test (command-output command-contents)
-;;       (projectile-toggle-between-implementation-and-test)
-;;       (setq current-test-buffer1 (current-buffer))
-;;       (goto-char (point-max))
-;;       (cider-interactive-eval
-;;        (concat "(do " create-cider-test-macro "\n"
-;; 	       "(require 'clojure.pprint)\n"
-;; 	       "(with-out-str (clojure.pprint/pprint (macroexpand-1 '(convert-to-test "
-;; 	       command-output " "
-;; 	       command-contents ")))))")
-;;        (lambda (value)
-;;          (with-current-buffer current-test-buffer1
-;; 	   (when (nrepl-dict-get value "value")
-;; 	     (progn
-;; 	       (insert "\n\n")
-;; 	       (setq output12 (nrepl-dict-get value "value"))
-;; 	       (insert (read (nrepl-dict-get value "value")))))))
-;;        nil
-;;        (cider--nrepl-pr-request-map)))
+;;     ))
 
 
-;;     (defun cider-write-region-to-test (start end)
-;;       "Creates a unit test out of the given selected region."
-;;       (interactive "r")
-;;       (goto-char end)
-;;       (let ((curr-selected (buffer-substring start end))
-;; 	    (last-sexp (cider-last-sexp))
-;; 	    (current-buffer2 (current-buffer)))
-;;         (cider-interactive-eval
-;;          last-sexp
-;;          (lambda (value)
-;;            (with-current-buffer current-buffer2
-;;              (when (nrepl-dict-get value "value")
-;; 	       (write-command-to-test
-;; 		(nrepl-dict-get value "value")
-;; 		curr-selected))))
-;;          nil
-;;          (cider--nrepl-pr-request-map))))
+;;;; Dired with ultra lightweight icons
 
-;;     ;; (setq debug-on-error t)
-;;     )
-;;   )
+;; 2025-06-21 disable nerd-icons-dired first
+;; https://emacs.dyerdwelling.family/emacs/20250612223745-emacs--emacs-dired-with-ultra-lightweight-visual-icons/
+(progn
+  (defvar dired-icons-map
+    '(("el" . "λ") ("rb" . "◆") ("js" . "○") ("ts" . "●") ("json" . "◎") ("md" . "■")
+      ("txt" . "□") ("html" . "▲") ("css" . "▼") ("png" . "◉") ("jpg" . "◉")
+      ("pdf" . "▣") ("zip" . "▢") ("py" . "∆") ("c" . "◇") ("sql" . "▦")
+      ("mp3" . "♪") ("mp4" . "▶") ("exe" . "▪")))
+
+  (defun dired-add-icons ()
+    (when (derived-mode-p 'dired-mode)
+      (let ((inhibit-read-only t))
+        (save-excursion
+          (goto-char (point-min))
+          (while (and (not (eobp)) (< (line-number-at-pos) 200))
+            (condition-case nil
+                (let ((line (buffer-substring-no-properties (line-beginning-position) (line-end-position))))
+                  (when (and (> (length line) 10)
+                             (string-match "\\([rwxd-]\\{10\\}\\)" line)
+                             (dired-move-to-filename t)
+                             (not (looking-at "[▶◦λ◆○●◎■□▲▼◉▣▢◇∆▦♪▪] ")))
+                    (let* ((is-dir (eq (aref line (match-beginning 1)) ?d))
+                           (filename (and (string-match "\\([^ ]+\\)$" line) (match-string 1 line)))
+                           (icon (cond (is-dir "▶")
+                                       ((and filename (string-match "\\.\\([^.]+\\)$" filename))
+                                        (or (cdr (assoc (downcase (match-string 1 filename)) dired-icons-map)) "◦"))
+                                       (t "◦"))))
+                      (insert icon " "))))
+              (error nil))
+            (forward-line))))))
+
+  (add-hook 'dired-after-readin-hook 'dired-add-icons)
+  )
 
 ;;; provide
 

@@ -79,14 +79,14 @@
 ;; 문서에서는 유용하지만 내보낸 콘텐츠에서는 유용하지 않을 수 있으므로 이러한
 ;; 링크를 주석 줄로 만들 수 있습니다.
 
-(when (locate-library "org-rich-yank")
-  (defun my/org-rich-yank-format-paste (language contents link)
-    "Based on `org-rich-yank--format-paste-default'."
-    (format "#+BEGIN_SRC %s\n%s\n#+END_SRC\n#+comment: %s"
-            language
-            (org-rich-yank--trim-nl contents)
-            link))
-  (customize-set-variable 'org-rich-yank-format-paste #'my/org-rich-yank-format-paste))
+;; (when (locate-library "org-rich-yank")
+;;   (defun my/org-rich-yank-format-paste (language contents link)
+;;     "Based on `org-rich-yank--format-paste-default'."
+;;     (format "#+begin_src %s\n%s\n#+end_src\n#+comment: %s"
+;;             language
+;;             (org-rich-yank--trim-nl contents)
+;;             link))
+;;   (customize-set-variable 'org-rich-yank-format-paste #'my/org-rich-yank-format-paste))
 
 ;;;;; doom : cae functions
 
@@ -2085,7 +2085,6 @@ TARGET-FILES가 nil이면 `org-cite-global-bibliography`의 모든 파일을 검
 
 ;;;;; my/insert-unicode-notetaking
 
-;; "⊢" prove, "⊨" entail , "∉" notin
 ;; - 겹화살괄호(《 》): 책의 제목이나 신문 이름 등을 나타낼 때 쓰임.[11]
 ;; - 홑화살괄호(〈 〉): 소제목, 그림이나 노래와 같은 예술 작품의 제목, 상호, 법률, 규정 등을 나타낼 때 쓰임.[12]
 ;;  『 』(겹낫표),
@@ -2097,11 +2096,47 @@ TARGET-FILES가 nil이면 `org-cite-global-bibliography`의 모든 파일을 검
 ;; 0x002015	―	HORIZONTAL BAR
 ;; 0x000809	ࠉ SAMARITAN LETTER YUT
 ;; 0x003179	ㅹ	HANGUL LETTER SSANG BIEUB SUN GYEONG EUM
+;; - 0x0000A7	§	SECTION SIGN
+;; - 0x0000A9	©	COPYRIGHT SIGN
+;; - 0x0000AC	¬	NOT SIGN
+;; - 0x0000A1	¡	INVERTED EXCLAMATION MARK
+;; - 0x0000A2	¢	CENT SIGN
+;; - 0x0000A3	£	POUND SIGN
+;; - 0x0000A4	¤	CURRENCY SIGN
+;; - 0x0000A5	¥	YEN SIGN
+;; - 0x0000A6	¦	BROKEN VERTICAL BAR
+;; - 0x0000B5	µ	MICRO SIGN
+;; - 0x0000B6	¶	PARAGRAPH SIGN
 
 ;; 2025-04-15 remove "⊨"
-(setq my/unicode-notetaking '( " " "§"
-                               "¶" "†" "‡" "№" "↔" "←" "→" "⊢" "∉"
-                               "ㅹ" "ㆅ" "ㅺ" "㉼" "㉽"
+;; "⊢" prove, "⊨" entail , "∉" notin
+(setq my/unicode-notetaking '( " "
+                               "§"
+                               "§ section"
+                               "¶ paragraph"
+                               "†"
+                               "‡"
+                               "№ num"
+                               "↔"
+                               "←"
+                               "→"
+                               "⊢ derive도출"
+                               "⊨ entail함축"
+                               "∉ notin"
+                               "© company"
+                               "¬ not"
+                               "¤"
+                               "µ micro"
+                               "¡ excla"
+                               "¿ ques"
+                               "◊ f"
+                               "◊"
+                               "⁂"
+                               "¥"
+                               "¢"
+                               "£"
+                               ;; ☚ ☛ ⁂ ⸮ ※ † ‡ ¿ ¡ ❦ ◊ № ‽
+                               ;; "ㅹ" "ㆅ" "ㅺ"
                                ;; "Ж" ; Greek αβγδεζηθικλμνξοπρςτυφχψω
                                "『겹낫표』"
                                "《겹화살괄호》"
@@ -2111,17 +2146,60 @@ TARGET-FILES가 nil이면 `org-cite-global-bibliography`의 모든 파일을 검
                                "― QUOTADASH"
                                ))
 
+(setq my/unicode-notetaking-circle '(
+                          "ⓐ a"
+                          "ⓑ b"
+                          "ⓒ c"
+                          "ⓓ d"
+                          "ⓔ e"
+                          "ⓕ f"
+                          "ⓖ g"
+                          "ⓗ h"
+                          "ⓘ i"
+                          "ⓙ j"
+                          "ⓚ k"
+                          "ⓛ l"
+                          "ⓜ m"
+                          "ⓝ n"
+                          "ⓞ o"
+                          "ⓟ p"
+                          "ⓠ q"
+                          "ⓡ r"
+                          "ⓢ s"
+                          "ⓣ t"
+                          "ⓤ y"
+                          "ⓥ v"
+                          "ⓦ w"
+                          "ⓧ x"
+                          "ⓨ y"
+                          "ⓩ z"
+                          "⓪ 0"
+                          ;; "㉼"
+                          ;; "㉽"
+                          ))
+
 (defun my/insert-unicode-notetaking ()
   "Insert Unicode for NoteTaking."
   (interactive)
   (insert (completing-read "Select unicode: " my/unicode-notetaking)))
 
+(defun my/insert-unicode-notetaking-circle ()
+  "Insert Unicode for NoteTaking2"
+  (interactive)
+  (insert (completing-read "Select unicode: " my/unicode-notetaking-circle)))
+
 (evil-define-key '(insert normal) text-mode-map (kbd "M-M") #'my/insert-unicode-notetaking)
+(evil-define-key '(insert normal) text-mode-map (kbd "M-N") #'my/insert-unicode-notetaking-circle)
 (evil-define-key '(insert normal) text-mode-map (kbd "M-m") #'my/insert-white-space)
 
 (with-eval-after-load 'vertico
   (define-key minibuffer-mode-map (kbd "M-M") #'my/insert-unicode-notetaking) ; needed
-  (define-key vertico-map (kbd "M-M") #'my/insert-unicode-notetaking))
+  (define-key grep-mode-map (kbd "M-M") #'my/insert-unicode-notetaking) ; needed
+  (define-key vertico-map (kbd "M-M") #'my/insert-unicode-notetaking)
+  (define-key minibuffer-mode-map (kbd "M-N") #'my/insert-unicode-notetaking-circle) ; needed
+
+  (define-key vertico-map (kbd "M-N") #'my/insert-unicode-notetaking-circle)
+  )
 
 ;;;; provide
 

@@ -1867,22 +1867,36 @@ window."
 
 (defvar-keymap ews-denote-explore-map
   :doc "Denote-Explore keybindings"
-  "i" #'denote-explore-isolated-notes
-  "s" #'denote-explore-sync-metadata
-  "d" #'denote-explore-identify-duplicate-notes
-  "c" #'denote-explore-count-notes
-  "C" #'denote-explore-count-keywords
-  "S" #'denote-explore-single-keywords
-  "K" #'denote-explore-rename-keyword
-  "r" #'denote-explore-random-note
-  "l" #'denote-explore-random-link
-  "k" #'denote-explore-random-keyword
-  "x" #'denote-explore-random-regex
-  "b" #'denote-explore-barchart-keywords
-  "B" #'denote-explore-backlinks-barchart
-  "e" #'denote-explore-barchart-filetypes
-  "n" #'denote-explore-network
-  "z" #'denote-explore-zero-keywords
+  ;; Statistics
+  "c n" #'denote-explore-count-notes
+  "c k" #'denote-explore-count-keywords
+
+  ;; barchart
+  "b f" #'denote-explore-barchart-filetypes
+  "b k" #'denote-explore-barchart-keywords
+  "b t" #'denote-explore-barchart-timeline
+  "b d" #'denote-explore-barchart-degree
+  "b b" #'denote-explore-barchart-backlinks
+
+  ;; Random walks
+  "r n" #'denote-explore-random-note
+  "r r" #'denote-explore-random-regex
+  "r l" #'denote-explore-random-link
+  "r k" #'denote-explore-random-keyword
+
+  ;; Denote Janitor
+  "j d" #'denote-explore-duplicate-notes
+  "j D" #'denote-explore-duplicate-notes-dired
+  "j l" #'denote-explore-missing-links
+  "j z" #'denote-explore-zero-keywords
+  "j s" #'denote-explore-single-keywords
+  "j r" #'denote-explore-rename-keywords
+  "j y" #'denote-explore-sync-metadata
+  "j i" #'denote-explore-isolated-files
+
+  ;; Visualise denote
+  "n n" #'denote-explore-network
+  "n r" #'denote-explore-network-regenerate
   )
 
 (defvar-keymap ews-org-publish-map

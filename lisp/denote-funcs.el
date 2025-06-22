@@ -92,7 +92,7 @@ Adds refile metadata to the heading."
                            :regexp regexp
                            :not-regexp nil
                            :excluded-dirs-regexp
-                           "\\(meta\\|tmp\\|elisp\\|journal\\|posts\\|docs\\|md\\|dict\\|private\\|ekg\\)"
+                           "\\(meta\\|llmlog\\|elisp\\|journal\\|posts\\|docs\\|md\\|dict\\|private\\|ekg\\)"
                            :sort-by-component nil
                            :reverse-sort t
                            :id-only nil
@@ -110,7 +110,7 @@ Adds refile metadata to the heading."
                            :regexp regexp
                            :not-regexp nil
                            :excluded-dirs-regexp
-                             "\\(meta\\|notes\\|tmp\\|journal\\|posts\\|docs\\|md\\|dict\\|private\\|ekg\\)"
+                             "\\(meta\\|notes\\|llmlog\\|journal\\|posts\\|docs\\|md\\|dict\\|private\\|ekg\\)"
                            :sort-by-component nil
                            :reverse-sort t
                            :id-only nil
@@ -128,7 +128,7 @@ Adds refile metadata to the heading."
                            :regexp regexp
                            :not-regexp nil
                            :excluded-dirs-regexp
-                             "\\(meta\\|bib\\|tmp\\|journal\\|posts\\|docs\\|md\\|dict\\|private\\|ekg\\)"
+                             "\\(meta\\|bib\\|llmlog\\|journal\\|posts\\|docs\\|md\\|dict\\|private\\|ekg\\)"
                            :sort-by-component nil
                            :reverse-sort t
                            :id-only nil
@@ -149,7 +149,7 @@ Adds refile metadata to the heading."
                              (mapconcat 'identity (mapcar (lambda (s) (replace-regexp-in-string "#" "" s)) selected) "\\|")
                              :not-regexp nil
                              :excluded-dirs-regexp
-                             "\\(bib\\|notes\\|tmp\\|elisp\\|docs\\|posts\\|md\\|journal\\|dict\\|private\\|ekg\\)"
+                             "\\(bib\\|notes\\|llmlog\\|elisp\\|docs\\|posts\\|md\\|journal\\|dict\\|private\\|ekg\\)"
                              :sort-by-component nil
                              :reverse-sort t
                              :id-only nil

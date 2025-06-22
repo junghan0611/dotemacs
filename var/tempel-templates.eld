@@ -147,7 +147,7 @@ org-mode
 -----
 # Local Variables:
 # fill-column: 80
-# eval: (org-glossary-mode 1)
+# eval: (org-num-mode 1)
 # End:" n>)
 
 (project n "#+PROJECT_NAME: " (p "Project Name: " project-name)
