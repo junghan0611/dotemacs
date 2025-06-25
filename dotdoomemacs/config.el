@@ -4584,9 +4584,13 @@ Called with a PREFIX, resets the context buffer list before opening"
         (fontaine-set-preset 'regular17)
       (fontaine-set-preset 'regular14))
 
-    ;; 1) go default spacemacs themes
     (my/load-font-cjk))
-  (add-hook 'after-setting-font-hook #'my/fontaine-load-preset 90)
+
+  (progn
+    (add-hook 'after-setting-font-hook #'my/fontaine-load-preset 90)
+    (add-hook 'doom-first-input-hook #'my/fontaine-load-preset) ;; 2025-06-25
+    (add-hook 'doom-load-theme-hook #'my/fontaine-load-preset) ;; 2025-06-25
+    )
 
   ;; load @ theme change
   ;; (set-fontset-font "fontset-default" 'hangul (font-spec :family "BHGoo") nil 'append) ; 구본형체 테스트
