@@ -41,8 +41,8 @@
                     :url "https://openrouter.ai/api/v1/"
                     :key user-openrouter-api-key
                     :chat-model
-                    "google/gemini-flash-1.5"
-                    ;; "openrouter/auto"
+                    "google/gemini-flash-2.5"
+                    "openrouter/auto"
                     ))
          (first-message (make-llm-chat-prompt-interaction
                          :role 'user

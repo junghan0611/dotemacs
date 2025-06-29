@@ -982,8 +982,7 @@ Also see `prot-window-delete-popup-frame'." command)
 
 (when (locate-library "side-notes")
   (require 'side-notes)
-  (setq side-notes-display-alist '((side . right)
-                                   (window-width . 84)))
+  (setq side-notes-display-alist '((side . right) (window-width . 40))) ; 84
   (add-hook 'side-notes-hook #'visual-line-mode)
   )
 

@@ -127,7 +127,28 @@ org-mode
         "]["
         (format-time-string "|%Y-%m-%d %a %H:%M|") "]]") ; for weekly journal
 
+(dtoday-prompt "** [[denote:"
+        (format-time-string "%Y%m%dT000000"
+                            (org-journal--convert-time-to-file-type-time
+                             (time-subtract (current-time)
+                                            (* 3600 org-extend-today-until))))
+        (format-time-string "::#h:%Y-%m-%d")
+        "]["
+        (format-time-string "|%Y-%m-%d %a %H:%M|") "]]\n"
+        "*** @user ")
+
+(dtoday-full-prompt "* 로그 :LLMLOG:\n** [[denote:"
+        (format-time-string "%Y%m%dT000000"
+                            (org-journal--convert-time-to-file-type-time
+                             (time-subtract (current-time)
+                                            (* 3600 org-extend-today-until))))
+        (format-time-string "::#h:%Y-%m-%d")
+        "]["
+        (format-time-string "|%Y-%m-%d %a %H:%M|") "]]\n"
+        "*** @user ")
+
 (edit "Edit" (format-time-string " [%Y-%m-%d %a %H:%M]: "))
+
 
 (Today "[[date:" (format-time-string "%Y-%m-%d") "][Today]]")
 (did (format-time-string "%Y%m%d")) ; remove T

@@ -103,35 +103,22 @@ backend."
 ;; - [창조적 행위와 도구 : 존재의 방식]({{< relref "/blog/20240324T074729-creative-way.md/#h:5bde73df-7451-4b96-bc99-b878e0fe0cfe" >}})
 ;; - [창조적 행위와 도구 : 존재의 방식](/blog/20240324T074729-creative-way/#h:5bde73df-7451-4b96-bc99-b878e0fe0cfe)
 
-;; (defun my/get-export-file-name-from-org (filepath)
-;;   "Retrieve the value of #+output_file_name from the Org file at FILEPATH in an efficient way."
+;; (defun my/get-export-file-name-from-file (filepath)
+;;   "Retrieve the value of #+export_file_name from the Org file at FILEPATH in an efficient way."
 ;;   (if (file-exists-p filepath)
-;;       (progn
-;;         (message "File found: %s" filepath)
-;;         (org-element-map (org-element-parse-buffer 'element) 'keyword
-;;           (lambda (el)
-;;             (when (string= (org-element-property :key el) "EXPORT_FILE_NAME")
-;;               (org-element-property :value el)))
-;;           nil t))
-;;     (message "File not found: %s" filepath)
-;;     nil))
-
-(defun my/get-export-file-name-from-file (filepath)
-  "Retrieve the value of #+export_file_name from the Org file at FILEPATH in an efficient way."
-  (if (file-exists-p filepath)
-      (with-temp-buffer
-        (insert-file-contents filepath nil 0 2000) ; 파일의 처음 2000바이트만 삽입
-        ;; (message "File found: %s" filepath)
-        (goto-char 0)
-        (if (re-search-forward "^#\\+export_file_name: \\(.*\\)$" nil t)
-            (match-string 1)
-          (progn
-            (message "^#\\+export_file_name not found: %s" filepath)
-            ;; nil
-            "notfound39219199.md"
-            )))
-    (progn
-      (message "File not found: %s" filepath) nil)))
+;;       (with-temp-buffer
+;;         (insert-file-contents filepath nil 0 3000) ; 파일의 처음 3000바이트만 삽입
+;;         ;; (message "File found: %s" filepath)
+;;         (goto-char 0)
+;;         (if (re-search-forward "^#\\+export_file_name: \\(.*\\)$" nil t)
+;;             (match-string 1)
+;;           (progn
+;;             (message "^#\\+export_file_name not found: %s" filepath)
+;;             ;; nil
+;;             "notfound39219199.md"
+;;             )))
+;;     (progn
+;;       (message "File not found: %s" filepath) nil)))
 
 (defun my/is-docs-file (path)
   "Check if the file at PATH belongs to the blog directory."
@@ -176,6 +163,7 @@ backend."
     matched-dir))
 
 ;; 1. `my/denote-markdown-export` 함수를 수정하여 `blog` 폴더가 아닌 경우 `exportfilename`이 없을 시 슬러기한 파일명으로 내보내도록 변경.
+;; [2025-06-29 Sun 16:56] id로 내보내기로 바꿈
 
 (defun my/denote-markdown-export (link desc)
   "Format the way Denote links are exported to markdown.
@@ -191,7 +179,8 @@ If USE-RELREF is non-nil, format it as a Hugo relref link."
          (section (my/get-hugo-section-directory-from-path path))
          (id (nth 1 path-id))
          (query (nth 2 path-id))
-         (exportfilename (my/get-export-file-name-from-file path))
+         ;; (exportfilename (my/get-export-file-name-from-file path))
+         (exportfilename (format "%s.md" id))
          (content-dir (concat (file-name-as-directory org-hugo-base-dir)
                               (format "content/%s/" section)))
          (exportfilepath (when (and exportfilename org-hugo-base-dir)

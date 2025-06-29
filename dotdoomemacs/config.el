@@ -3054,19 +3054,19 @@ ${content}"))
                              (denote-rename-buffer-mode +1)))
 
   (setq denote-directory (expand-file-name user-org-directory))
-  (setq denote-dired-directories
-        (list denote-directory
-        (thread-last denote-directory (expand-file-name "bib"))
-        (thread-last denote-directory (expand-file-name "elisp"))
-        (thread-last denote-directory (expand-file-name "docs"))
-        (thread-last denote-directory (expand-file-name "meta"))
-        ;; (thread-last denote-directory (expand-file-name "topic"))
-        (thread-last denote-directory (expand-file-name "notes"))
-        (thread-last denote-directory (expand-file-name "private"))
-        (thread-last denote-directory (expand-file-name "posts"))
-        (thread-last denote-directory (expand-file-name "llmlog"))
-        ;; (thread-last denote-directory (expand-file-name "ekg"))
-        ))
+  ;; (setq denote-dired-directories
+  ;;       (list denote-directory
+  ;;       (thread-last denote-directory (expand-file-name "bib"))
+  ;;       (thread-last denote-directory (expand-file-name "elisp"))
+  ;;       (thread-last denote-directory (expand-file-name "docs"))
+  ;;       (thread-last denote-directory (expand-file-name "meta"))
+  ;;       ;; (thread-last denote-directory (expand-file-name "topic"))
+  ;;       (thread-last denote-directory (expand-file-name "notes"))
+  ;;       (thread-last denote-directory (expand-file-name "private"))
+  ;;       (thread-last denote-directory (expand-file-name "posts"))
+  ;;       (thread-last denote-directory (expand-file-name "llmlog"))
+  ;;       ;; (thread-last denote-directory (expand-file-name "ekg"))
+  ;;       ))
   :config
   (set-register ?n (cons 'file (concat org-directory "notes")))
 
@@ -3216,6 +3216,7 @@ ${content}"))
   (use-package! denote-explore
     :defer 5
     :config
+    (setq denote-explore-random-regex-ignore "archive")
     ;; :custom
     ;; Location of graph files
     ;; (denote-explore-network-directory "~/documents/notes/graphs/")
@@ -3225,7 +3226,6 @@ ${content}"))
     ;; (denote-explore-network-graphviz-filetype "svg")
     ;; Exlude keywords or regex
     ;; (denote-explore-network-keywords-ignore '("bib"))
-    (setq denote-explore-random-regex-ignore '("archive"))
     )
 
 ;;;;;; citar-denote
@@ -3465,15 +3465,13 @@ ${content}"))
   ;; sonar-reasoning	127k	Chat Completion
   ;; sonar-pro	200k	Chat Completion
   ;; sonar	127k	Chat Completion
-  (setq gptel-model 'sonar
-        gptel-backend
-        (gptel-make-perplexity "Perplexity"
-          :host "api.perplexity.ai"
-          :key #'gptel-api-key
-          :endpoint "/chat/completions"
-          :stream t
-          :request-params '(:temperature 0.2) ; sonar's default 0.2
-          :models '(sonar sonar-pro sonar-reasoning)))
+  (gptel-make-perplexity "Perplexity"
+    :host "api.perplexity.ai"
+    :key #'gptel-api-key
+    :endpoint "/chat/completions"
+    :stream t
+    :request-params '(:temperature 0.2) ; sonar's default 0.2
+    :models '(sonar sonar-pro sonar-reasoning))
 
   ;; DeepSeek offers an OpenAI compatible API
   ;; The deepseek-chat model has been upgraded to DeepSeek-V3. deepseek-reasoner points to the new model DeepSeek-R1.
@@ -3484,13 +3482,12 @@ ${content}"))
   ;; Translation	1.3
   ;; Creative Writing / Poetry	1.5
   ;; https://api-docs.deepseek.com/quick_start/parameter_settings
-  (gptel-make-openai "DeepSeek"
-    :host "api.deepseek.com"
-    :key #'gptel-api-key
-    :endpoint "/chat/completions"
-    :stream t
-    :request-params '(:temperature 0.0) ; 1.0 default
-    :models '(deepseek-chat deepseek-reasoner))
+  (setq gptel-model   'deepseek-chat
+        gptel-backend (gptel-make-deepseek "DeepSeek"
+                          :stream t
+                          :key #'gptel-api-key
+                          ;; :request-params '(:temperature 0.0) ; 1.0 default
+                          ))
 
   ;; Upstage: solar
   ;; https://developers.upstage.ai/docs/apis/chat
@@ -3505,19 +3502,22 @@ ${content}"))
 
   ;; OpenRouter offers an OpenAI compatible API
   ;; https://openrouter.ai/
-  ;; (gptel-make-openai "OpenRouter"
-  ;;   :host "openrouter.ai"
-  ;;   :endpoint "/api/v1/chat/completions"
-  ;;   :stream t
-  ;;   :key #'gptel-api-key
-  ;;   :request-params '(:temperature 0.5)
-  ;;   :models '(
-  ;;             google/gemini-flash-1.5
-  ;;             anthropic/claude-3.5-sonnet
-  ;;             openai/gpt-4o-mini
-  ;;             deepseek/deepseek-chat
-  ;;             ;; qwen/qwen-2.5-7b-instruct
-  ;;             ))
+  (gptel-make-openai "OpenRouter"
+    :host "openrouter.ai"
+    :endpoint "/api/v1/chat/completions"
+    :stream t
+    :key #'gptel-api-key
+    :request-params '(:temperature 0.0)
+    :models '(
+              google/gemini-2.5-flash
+              google/gemini-2.5-pro
+              anthropic/claude-sonnet-4
+              deepseek/deepseek-chat-v3-0324
+              anthropic/claude-3.7-sonnet
+              openai/gpt-4.1
+              openai/gpt-4o-mini
+              ;; qwen/qwen-2.5-7b-instruct
+              ))
 
   ;; Kagi’s FastGPT model and the Universal Summarizer are both supported. A couple of notes:
   ;; (gptel-make-kagi "Kagi"
@@ -6112,50 +6112,44 @@ See `consult-omni-multi' for more details.
         ;; '((matches   . (semibold))
         ;;   (selection . (semibold text-also)))
         )
-  ;; (setq modus-themes-common-palette-overrides
-  ;;       `(
-  ;;         ;; (fg-mode-line-active fg-main) ; Black
+  (setq modus-themes-common-palette-overrides
+        `(
+          ;; Comments are yellow, strings are green
+          (comment yellow-cooler)
+          (string green-warmer)
 
-  ;;         ;;   ;; Comments are yellow, strings are green
-  ;;         ;;   (comment yellow-cooler)
-  ;;         ;;   (string green-warmer)
+          ;; "Make matching parenthesis more or less intense"
+          (bg-paren-match bg-magenta-intense)
+          (underline-paren-match unspecified)
 
-  ;;         ;;   ;; "Make the mode line borderless"
-  ;;         ;;   (border-mode-line-active unspecified)
-  ;;         ;;   (border-mode-line-inactive unspecified)
+          ;; Intense magenta background combined with the main foreground
+          ;; (bg-region bg-magenta-subtle)
+          ;; (fg-region fg-main)
 
-  ;;         ;;   ;; "Make matching parenthesis more or less intense"
-  ;;         ;; (bg-paren-match bg-magenta-intense)
-  ;;         ;; (underline-paren-match unspecified)
+          ;;   ;; Links
+          ;;   ;; (underline-link border)
+          ;;   ;; (underline-link-visited border)
+          ;;   ;; (underline-link-symbolic border)
 
-  ;;         ;; Intense magenta background combined with the main foreground
-  ;;         ;; (bg-region bg-magenta-subtle)
-  ;;         ;; (fg-region fg-main)
+          ;; (fg-heading-0 blue-cooler)
+          ;; (fg-heading-1 magenta-cooler)
+          ;; (fg-heading-2 magenta-warmer)
+          ;; (fg-heading-3 blue)
 
-  ;;         ;;   ;; Links
-  ;;         ;;   ;; (underline-link border)
-  ;;         ;;   ;; (underline-link-visited border)
-  ;;         ;;   ;; (underline-link-symbolic border)
+          (bg-heading-0 bg-inactive)
+          (bg-heading-1 bg-blue-nuanced)
 
-  ;;         ;; (fg-heading-0 blue-cooler)
-  ;;         ;; (fg-heading-1 magenta-cooler)
-  ;;         ;; (fg-heading-2 magenta-warmer)
-  ;;         ;; (fg-heading-3 blue)
+          ; (overline-heading-0 unspecified)
+          (overline-heading-1 magenta-cooler)
+          (overline-heading-2 magenta-warmer)
 
-  ;;         ;; (bg-heading-0 bg-inactive)
-  ;;         (bg-heading-1  bg-blue-nuanced)
-
-  ;;         ;; (overline-heading-0 unspecified)
-  ;;         ;; (overline-heading-1 magenta-cooler)
-  ;;         ;; (overline-heading-2 magenta-warmer)
-
-  ;;         ;; ,@modus-themes-preset-overrides-faint
-  ;;         ;; ,@modus-themes-preset-overrides-intense
-  ;;         )
-  ;;       )
+          ;; ,@modus-themes-preset-overrides-faint
+          ;; ,@modus-themes-preset-overrides-intense
+          )
+        )
 
   (when (display-graphic-p) ; gui
-    ;; (setq modus-themes-variable-pitch-ui t)
+    (setq modus-themes-variable-pitch-ui t)
     ;; The `modus-themes-headings' is an alist: read the manual's
     ;; node about it or its doc string. Basically, it supports
     ;; per-level configurations for the optional use of
@@ -6369,9 +6363,9 @@ See `consult-omni-multi' for more details.
   :if window-system ; important
   :hook (server-after-make-frame . spacious-padding-mode)
   :init
-  ;; (setq spacious-padding-subtle-mode-line
-  ;;       '( :mode-line-active spacious-padding-subtle-mode-line-active
-  ;;          :mode-line-inactive spacious-padding-subtle-mode-line-inactive))
+  (setq spacious-padding-subtle-mode-line
+        '( :mode-line-active spacious-padding-subtle-mode-line-active
+           :mode-line-inactive spacious-padding-subtle-mode-line-inactive))
   (setq spacious-padding-widths
         '(:header-line-width 4
           :mode-line-width 4 ; 6
@@ -6530,8 +6524,8 @@ See `consult-omni-multi' for more details.
   :if window-system
   :defer 4
   :commands (atomic-chrome-start-server)
-  ;; :config
-  ;; (atomic-chrome-start-server)
+  :config
+  (atomic-chrome-start-server)
   )
 
 ;;;;; google-translte
@@ -7593,14 +7587,14 @@ See `consult-omni-multi' for more details.
       daily-note-file))
 
   ;; M-g j
-  (defun my/side-notes-toggle-daily-note ()
-    (interactive)
-    (let ((daily-note-file (+denote-daily-note-file-name)))
-      (unless (f-exists? daily-note-file)
-        (+denote-daily-note)
-        (bury-buffer))
-      (setq! side-notes-file daily-note-file)
-      (call-interactively #'side-notes-toggle-notes)))
+  ;; (defun my/side-notes-toggle-daily-note ()
+  ;;   (interactive)
+  ;;   (let ((daily-note-file (+denote-daily-note-file-name)))
+  ;;     (unless (f-exists? daily-note-file)
+  ;;       (+denote-daily-note)
+  ;;       (bury-buffer))
+  ;;     (setq! side-notes-file daily-note-file)
+  ;;     (call-interactively #'side-notes-toggle-notes)))
   )
 ;;; IS-DEMO
 
@@ -7638,75 +7632,76 @@ See `consult-omni-multi' for more details.
   (setq read-minibuffer-restore-windows nil) ; doom t
   ;; (setq enable-recursive-minibuffers t) ; conflict vertico-multiform
   )
-;;;; Emacs Application Framework (EAF)
+
+;;;; DONT Emacs Application Framework (EAF)
 
 ;; check  'C-h v' eaf-var-list
 
-(progn
-  (setq eaf-python-command "/usr/bin/python")
-  (require 'eaf)
-  (require 'eaf-browser)
-  (require 'eaf-pdf-viewer)
-  (require 'eaf-mind-elixir)
+;; (progn
+;;   (setq eaf-python-command "/usr/bin/python")
+;;   (require 'eaf)
+;;   (require 'eaf-browser)
+;;   (require 'eaf-pdf-viewer)
+;;   (require 'eaf-mind-elixir)
 
-  (add-hook 'eaf-mode-hook #'doom-mark-buffer-as-real-h)
+;;   (add-hook 'eaf-mode-hook #'doom-mark-buffer-as-real-h)
 
-  (progn
-    ;; https://github.com/emacs-eaf/emacs-application-framework/wiki/Evil
-    (require 'eaf-evil)
-    (define-key key-translation-map (kbd "SPC")
-                (lambda (prompt)
-                  (if (derived-mode-p 'eaf-mode)
-                      (pcase eaf--buffer-app-name
-                        ("browser" (if  eaf-buffer-input-focus
-                                       (kbd "SPC")
-                                     (kbd eaf-evil-leader-key)))
-                        ("pdf-viewer" (kbd eaf-evil-leader-key))
-                        ("mind-elixir" (kbd eaf-evil-leader-key))
-                        ;; ("image-viewer" (kbd eaf-evil-leader-key))
-                        (_  (kbd "SPC")))
-                    (kbd "SPC"))))
-    )
+;;   (progn
+;;     ;; https://github.com/emacs-eaf/emacs-application-framework/wiki/Evil
+;;     (require 'eaf-evil)
+;;     (define-key key-translation-map (kbd "SPC")
+;;                 (lambda (prompt)
+;;                   (if (derived-mode-p 'eaf-mode)
+;;                       (pcase eaf--buffer-app-name
+;;                         ("browser" (if  eaf-buffer-input-focus
+;;                                        (kbd "SPC")
+;;                                      (kbd eaf-evil-leader-key)))
+;;                         ("pdf-viewer" (kbd eaf-evil-leader-key))
+;;                         ("mind-elixir" (kbd eaf-evil-leader-key))
+;;                         ;; ("image-viewer" (kbd eaf-evil-leader-key))
+;;                         (_  (kbd "SPC")))
+;;                     (kbd "SPC"))))
+;;     )
 
-  ;; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
-  (progn
-    (setq eaf-browser-translate-language "ko")
+;;   ;; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
+;;   (progn
+;;     (setq eaf-browser-translate-language "ko")
 
-    ;; make default browser
-    ;; (setq browse-url-browser-function 'eaf-open-browser)
-    ;; (defalias 'browse-web #'eaf-open-browser)
-    (eaf-bind-key nil "M-q" eaf-browser-keybinding) ;; unbind, see more in the Wiki
+;;     ;; make default browser
+;;     ;; (setq browse-url-browser-function 'eaf-open-browser)
+;;     ;; (defalias 'browse-web #'eaf-open-browser)
+;;     (eaf-bind-key nil "M-q" eaf-browser-keybinding) ;; unbind, see more in the Wiki
 
-    ;; /home/junghan/sync/man/dotsamples/vanilla/gavinok-dotfiles/lisp/eaf-config.el
-    (defun slurp (f)
-      (with-temp-buffer
-        (insert-file-contents f)
-        (buffer-substring-no-properties
-         (point-min)
-         (point-max))))
+;;     ;; /home/junghan/sync/man/dotsamples/vanilla/gavinok-dotfiles/lisp/eaf-config.el
+;;     (defun slurp (f)
+;;       (with-temp-buffer
+;;         (insert-file-contents f)
+;;         (buffer-substring-no-properties
+;;          (point-min)
+;;          (point-max))))
 
-    ;; https://www.abc.com abc
-    (defun my/bm ()
-      (interactive)
-      (require 'eaf-browser)
-      (let ((selected (completing-read
-                       "Select URL: " (split-string
-                                       (slurp "~/url-bookmarks.el") "\n" t))))
-        (let ((url (car (split-string
-                         selected
-                         " " t))))
-          (if (string-match-p "\\http.*\\'" url)
-              ;; Open selected url
-              (eaf-open-browser url)
-            ;; Search entered text
-            (eaf-search-it selected)))))
-    (setq eaf-browser-continue-where-left-off t)
-    (setq eaf-browser-dnefault-search-engine "duckduckgo")
-    (setq eaf-browser-enable-adblocker "true")
-    ;; (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-    ;; (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-    )
-  ) ; end-of eaf
+;;     ;; https://www.abc.com abc
+;;     (defun my/bm ()
+;;       (interactive)
+;;       (require 'eaf-browser)
+;;       (let ((selected (completing-read
+;;                        "Select URL: " (split-string
+;;                                        (slurp "~/url-bookmarks.el") "\n" t))))
+;;         (let ((url (car (split-string
+;;                          selected
+;;                          " " t))))
+;;           (if (string-match-p "\\http.*\\'" url)
+;;               ;; Open selected url
+;;               (eaf-open-browser url)
+;;             ;; Search entered text
+;;             (eaf-search-it selected)))))
+;;     (setq eaf-browser-continue-where-left-off t)
+;;     (setq eaf-browser-dnefault-search-engine "duckduckgo")
+;;     (setq eaf-browser-enable-adblocker "true")
+;;     ;; (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+;;     ;; (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+;;     )
+;;   ) ;; end-of eaf
 
 ;;;; :custom 'Local' Packages
 

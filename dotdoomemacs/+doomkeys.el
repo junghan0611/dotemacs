@@ -637,7 +637,7 @@
 
 (map! :leader
       (:prefix ("n" . "notes")
-       :n "TAB" #'my/side-notes-toggle-daily-note
+       ;; :n "TAB" #'my/side-notes-toggle-daily-note
        ;; "a" nil
        "d" nil
        "n" nil
@@ -1645,6 +1645,7 @@
         "," #'org-switchb
         "." #'org-goto
         "@" #'org-cite-insert
+        "y" #'yank-as-markdown
         "C" #'my/toggle-comment-for-en-paragraph
         (:when (modulep! :completion vertico)
           "." #'consult-org-heading

@@ -324,7 +324,7 @@
 ;; add devdocs-browser
 (when (locate-library "side-notes")
   (global-set-key (kbd "M-g M-s") 'side-notes-toggle-notes)
-  (global-set-key (kbd "M-g j") 'my/side-notes-toggle-daily-note)
+  ;; (global-set-key (kbd "M-g j") 'my/side-notes-toggle-daily-note)
   )
 
 ;;;;; org-side-tree
@@ -1170,7 +1170,7 @@
 
   (keymap-set dired-mode-map "<f2>" #'casual-dired-tmenu)
   (keymap-set dired-mode-map "C-;" #'casual-dired-tmenu)
-  (keymap-set dired-mode-map "C-M-;" #'casual-editkit-main-tmenu)
+  ;; (keymap-set dired-mode-map "C-M-;" #'casual-editkit-main-tmenu)
 
   (keymap-set ibuffer-mode-map "<f2>" #'casual-ibuffer-tmenu)
   (keymap-set ibuffer-mode-map "C-;" #'casual-ibuffer-tmenu)
@@ -1196,19 +1196,26 @@
   (keymap-set bookmark-bmenu-mode-map "J" #'bookmark-jump)
   (easy-menu-add-item global-map '(menu-bar) casual-bookmarks-main-menu "Tools")
 
+  (keymap-set org-agenda-mode-map "<f2>" #'casual-agenda-tmenu)
   (keymap-set org-agenda-mode-map "C-;" #'casual-agenda-tmenu)
   ;; org-agenda-clock-goto ; optional
   ;; bookmark-jump ; optional
 
   ;; cc-prog-mode.el:61:
+  (keymap-set compilation-mode-map "<f2>" #'casual-editkit-main-tmenu)
   (keymap-set compilation-mode-map "C-;" #'casual-editkit-main-tmenu)
   ;; cc-grep-mode.el:33:
   (require 'grep)
+  (keymap-set grep-mode-map "<f2>" #'casual-editkit-main-tmenu)
   (keymap-set grep-mode-map "C-;" #'casual-editkit-main-tmenu)
+
+  (require 'casual-man) ; optional if using autoloaded menu
+  (keymap-set Man-mode-map "<f2>" #'casual-man-tmenu)
+  (keymap-set Man-mode-map "C-;" #'casual-man-tmenu)
 
   ;; cc-global-keybindings.el:69:
   (keymap-global-set "C-;" #'casual-editkit-main-tmenu)
-  (keymap-global-set "<f11>" #'casual-editkit-main-tmenu)
+  ;; (keymap-global-set "<f11>" #'casual-editkit-main-tmenu)
 
 ;; (keymap-global-set "M-a" #'casual-avy-tmenu)
   )
