@@ -1027,42 +1027,42 @@ These annotations are skipped for remote paths."
 
 ;;;; :checkers
 
-;;;;; Flycheck
+;;;;; DONT Flycheck
 
-(after! flycheck
-  (setq flycheck-global-modes '(not emacs-lisp-mode org-mode markdown-mode gfm-mode))
-  (setq flycheck-checker-error-threshold 1000) ; need more than default of 400
-  )
+;; (after! flycheck
+;;   (setq flycheck-global-modes '(not emacs-lisp-mode org-mode markdown-mode gfm-mode))
+;;   (setq flycheck-checker-error-threshold 1000) ; need more than default of 400
+;;   )
 
-(remove-hook 'doom-first-buffer-hook #'global-flycheck-mode)
+;; (remove-hook 'doom-first-buffer-hook #'global-flycheck-mode)
 
-(progn
-  (setq flycheck-help-echo-function nil ; default 'flycheck-help-echo-all-error-messages
-        flycheck-display-errors-function nil ; default 'flycheck-display-error-messages
-        )
+;; (progn
+;;   (setq flycheck-help-echo-function nil ; default 'flycheck-help-echo-all-error-messages
+;;         flycheck-display-errors-function nil ; default 'flycheck-display-error-messages
+;;         )
 
-  (after! flycheck
-    (ignore-errors
-      (define-key flycheck-mode-map flycheck-keymap-prefix nil))
-    (setq flycheck-keymap-prefix nil)
+;;   (after! flycheck
+;;     (ignore-errors
+;;       (define-key flycheck-mode-map flycheck-keymap-prefix nil))
+;;     (setq flycheck-keymap-prefix nil)
 
-    (add-hook! flycheck-mode
-      (defun disable-flycheck-popup-buffer ()
-        (setq flycheck-display-errors-function #'ignore)))
-    (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-package)
-    )
+;;     (add-hook! flycheck-mode
+;;       (defun disable-flycheck-popup-buffer ()
+;;         (setq flycheck-display-errors-function #'ignore)))
+;;     (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-package)
+;;     )
 
-  (after! elisp-mode
-    (add-hook! 'doom-scratch-buffer-created-hook
-      (defun flycheck-off ()
-        (flycheck-mode -1))))
-  )
+;;   (after! elisp-mode
+;;     (add-hook! 'doom-scratch-buffer-created-hook
+;;       (defun flycheck-off ()
+;;         (flycheck-mode -1))))
+;;   )
 
-;;;;; DONT Flymake
+;;;;; Flymake
 
 ;;;;;; remove flymake-mode default
 
-;; (remove-hook! (prog-mode text-mode) #'flymake-mode)
+(remove-hook! (prog-mode text-mode) #'flymake-mode)
 
 ;;;;;; DONT flymake-vale
 
@@ -1233,11 +1233,11 @@ These annotations are skipped for remote paths."
   (sp-local-pair 'markdown-mode "\"" "\"" :actions '(rem))
   (sp-local-pair 'markdown-mode "/" "/" :actions '(rem))
 
-  ;; pair management
   (sp-with-modes
       '(minibuffer-mode)
     (sp-local-pair "'" nil :actions nil)
     (sp-local-pair "(" nil :wrap "C-("))
+  (sp-local-pair 'minibuffer-mode "[" "]" :actions '(rem)) ; 2025-07-13 remove pair
 
   (sp-with-modes 'markdown-mode (sp-local-pair "**" "***"))
 
@@ -1353,7 +1353,7 @@ work computers.")
 ;; NOTE 2023-01-19: Check the `templates'
 (use-package! tempel
   :bind
-  (("M-+" . tempel-complete) ;; Alternative tempel-expand
+  (;; ("M-+" . tempel-complete) ;; Alternative tempel-expand
    ("M-*" . tempel-insert))
   :bind (:map tempel-map (([backtab] . tempel-previous)
                           ("TAB" . tempel-next)))
@@ -1858,10 +1858,6 @@ only those in the selected frame."
 ;; - npm install -g @mermaid-js/mermaid-cli
 ;; - mmdc -i input.mmd -o output.svg
 
-(after! ob-mermaid
-  (setq ob-mermaid-cli-path "/usr/local/bin/mmdc")
-  )
-
 ;; (use-package! mermaid-mode
 ;;   :config
 ;;   (map! :localleader
@@ -1892,20 +1888,6 @@ only those in the selected frame."
 ;;         "o"  #'d2-open-browser
 ;;         "v"  #'d2-view-current-svg
 ;;         "h"  #'d2-open-doc))
-
-;;;;; ob-mermaid / ob-d2 / ox-reveal
-
-;; (use-package! ob-mermaid
-;;   :after org
-;;   :defer t
-;;   :config
-;;   (add-to-list 'org-babel-load-languages '(mermaid . t)))
-
-;; (use-package! ob-d2
-;;   :after org
-;;   :defer 3
-;;   :config
-;;   (add-to-list 'org-babel-load-languages '(d2 . t)))
 
 ;;;;; orgabilize
 
@@ -2841,7 +2823,7 @@ ${content}"))
   :defer 10
   :init
   (setq org-glossary-idle-update-period 1.0) ; 0.5
-  (setq org-glossary-autodetect-in-headings t) ; 2024-06-13 new
+  ;; (setq org-glossary-autodetect-in-headings t) ; 2024-06-13 new
   ;; :hook (org-mode . org-glossary-mode)
   :config
   (setq org-glossary-collection-root (concat org-directory "dict/"))
@@ -3004,7 +2986,7 @@ ${content}"))
   :demand t
   :commands
   (denote denote-create-note denote-insert-link denote-show-backlinks-buffer denote-link-ol-store)
-  ;; :hook (dired-mode . denote-dired-mode)
+  :hook (dired-mode . denote-dired-mode)
   :init
   (require 'denote-silo)
   (require 'denote-sequence)
@@ -3018,6 +3000,9 @@ ${content}"))
   (setq denote-excluded-directories-regexp "archives")
   ;; Automatically rename Denote buffers using the `denote-rename-buffer-format'.
   ;; (setq denote-rename-buffer-format "Denote: %t (%k)")
+
+  ;; The default sequence scheme is `numeric'.
+  (setq denote-sequence-scheme 'alphanumeric)
 
   (setq denote-org-front-matter
         "#+title:      %1$s
@@ -3050,7 +3035,7 @@ ${content}"))
   (add-hook 'org-mode-hook (lambda ()
                              (setq denote-rename-buffer-backlinks-indicator "¶")
                              ;; (setq denote-rename-buffer-format "%t%b")
-                             (setq denote-rename-buffer-format "%b %t")
+                             (setq denote-rename-buffer-format "%b %s %t")
                              (denote-rename-buffer-mode +1)))
 
   (setq denote-directory (expand-file-name user-org-directory))
@@ -3072,7 +3057,6 @@ ${content}"))
 
   ;; (add-hook 'text-mode-hook #'denote-fontify-links-mode-maybe) ; from 3.0
   ;; (add-hook 'markdown-mode-hook #'denote-fontify-links-mode-maybe) ; from 3.0
-  (add-hook 'dired-mode-hook #'denote-dired-mode-in-directories)
 
   ;; (progn ;; vedangs tips
   ;;   (unless IS-TERMUX
@@ -3356,6 +3340,8 @@ ${content}"))
   (setq gptel-default-mode 'org-mode)
   (setq gptel-temperature 0.5) ; gptel 1.0, Perplexity 0.2
 
+  ;; (setq gptel-include-reasoning nil)
+
 ;;;;;;; 02 - default prompt
 
   ;; (progn
@@ -3399,13 +3385,13 @@ ${content}"))
         (insert (format "\n* 관련메타\n- \n#+print_bibliography:\n\n"))
 
         ;; heading-1 add backlink to today
-        (insert (format "* 로그 :LLMLOG:\n** [[denote:%s::%s][%s]]\n"
+        (insert (format "* 로그 :LLMLOG:\n** [[denote:%s::#%s][%s]]\n"
                         ;; (format-time-string "%Y%m%dT000000")
                         (format-time-string "%Y%m%dT000000"
                                             (org-journal--convert-time-to-file-type-time
                                              (time-subtract (current-time)
                                                             (* 3600 org-extend-today-until))))
-                        (format-time-string "#h:%Y-%m-%d")
+                        (downcase (format-time-string "%Y-%m-%d-%a"))
                         (format-time-string "|%Y-%m-%d %a %H:%M|")))
         ;; heading-2 [SUM]:
         ;; (insert (format "** TODO [SUM]: \n"))
@@ -3439,16 +3425,26 @@ ${content}"))
 
 ;;;;;;; 05 - gptel backend configurations
 
+  ;; ~/sync/man/dotsamples/doom/agzam-dot-doom/modules/custom/ai/config.el
+  (require 'gptel-integrations)
+
+  (setq gptel-magit-model 'deepseek-chat)
+
+  (setq gptel-model 'claude-4.0-sonnet
+        gptel-backend (gptel-make-gh-copilot "Copilot"))
+
+  (load! "+gptel") ; agzam-dot-doom
+
   ;; xAI offers an OpenAI compatible API
-  (gptel-make-openai "xAI"
-    :host "api.x.ai"
-    :key #'gptel-api-key
-    :endpoint "/v1/chat/completions"
-    :stream t
-    :request-params '(:temperature 0.2)
-    :models '(grok-3 ; grok-3-fast
-              grok-3-mini ; grok-3-mini-fast
-              grok-2-image-1212))
+  ;; (gptel-make-openai "xAI"
+  ;;   :host "api.x.ai"
+  ;;   :key #'gptel-api-key
+  ;;   :endpoint "/v1/chat/completions"
+  ;;   :stream t
+  ;;   :request-params '(:temperature 0.2)
+  ;;   :models '(grok-3 ; grok-3-fast
+  ;;             grok-3-mini ; grok-3-mini-fast
+  ;;             grok-2-image-1212))
 
   ;; Google - Gemini
   (gptel-make-gemini "Gemini"
@@ -3456,9 +3452,9 @@ ${content}"))
     :stream t)
 
   ;; Anthropic - Claude
-  (gptel-make-anthropic "Claude"
-    :key #'gptel-api-key
-    :stream t)
+  ;; (gptel-make-anthropic "Claude"
+  ;;   :key #'gptel-api-key
+  ;;   :stream t)
 
   ;; https://perplexity.mintlify.app/guides/pricing
   ;; Model	Context Length	Model Type
@@ -3482,12 +3478,11 @@ ${content}"))
   ;; Translation	1.3
   ;; Creative Writing / Poetry	1.5
   ;; https://api-docs.deepseek.com/quick_start/parameter_settings
-  (setq gptel-model   'deepseek-chat
-        gptel-backend (gptel-make-deepseek "DeepSeek"
-                          :stream t
-                          :key #'gptel-api-key
-                          ;; :request-params '(:temperature 0.0) ; 1.0 default
-                          ))
+  (gptel-make-deepseek "DeepSeek"
+    :stream t
+    :key #'gptel-api-key
+    ;; :request-params '(:temperature 0.0) ; 1.0 default
+    )
 
   ;; Upstage: solar
   ;; https://developers.upstage.ai/docs/apis/chat
@@ -3507,17 +3502,17 @@ ${content}"))
     :endpoint "/api/v1/chat/completions"
     :stream t
     :key #'gptel-api-key
-    :request-params '(:temperature 0.0)
-    :models '(
-              google/gemini-2.5-flash
-              google/gemini-2.5-pro
-              anthropic/claude-sonnet-4
-              deepseek/deepseek-chat-v3-0324
-              anthropic/claude-3.7-sonnet
-              openai/gpt-4.1
-              openai/gpt-4o-mini
-              ;; qwen/qwen-2.5-7b-instruct
-              ))
+    ;; :request-params '(:temperature 0.0)
+    :models gptel--openrouter-models)
+
+  ;; TODO 2025-07-04 테스트 필요
+  ;; (gptel-make-openai "Github Copilot"
+  ;;   :protocol "http"
+  ;;   :host "localhost:4141"
+  ;;   :endpoint "/chat/completions"
+  ;;   :stream t
+  ;;   :key "no-key-required"
+  ;;   :models gptel--gh-copilot-models)
 
   ;; Kagi’s FastGPT model and the Universal Summarizer are both supported. A couple of notes:
   ;; (gptel-make-kagi "Kagi"
@@ -3542,6 +3537,24 @@ ${content}"))
   ;;   :stream t
   ;;   :key #'gptel-api-key
   ;;   :models '(gpt-4o-mini)) ;; low tier
+
+;; gptel-transient
+
+;; 2025-07-13 [[denote:20250713T154805][#LLM: 20250713T154805]]
+  (require 'gptel-transient)
+  (transient-suffix-put 'gptel-tools 'gptel--suffix-mcp-connect :key "a")
+  (transient-suffix-put 'gptel-tools 'gptel--suffix-mcp-disconnect :key "d")
+
+;; (after! gptel
+;;   (transient-append-suffix 'gptel-menu "k"
+;;     '("q" "quit" transient-quit-one))
+;;   ;; Doom binds ~RET~ in Org mode to =+org/dwim-at-point=, which appears to conflict with gptel's transient menu bindings for some reason.
+;;   ;; Two solutions:
+;;   ;; - Press ~C-m~ instead of the return key. evil-ret
+;;   ;; - Change the send key from return to a key of your choice:
+;;   ;; (transient-suffix-put 'gptel-menu (kbd "RET") :key "M-RET") ;; 2025-05-13 FIXME
+;;   )
+
   ) ; end-of gptel
 
 ;;;;;; cashpwd - gptel-send with prompt
@@ -3584,8 +3597,6 @@ ${content}"))
 ;;;;;; agzam
 
 (after! gptel
-  ;; ~/sync/man/dotsamples/doom/agzam-dot-doom/modules/custom/ai/config.el
-  (load! "+gptel") ; agzam-dot-doom
 
   (add-hook! 'gptel-mode-hook
     (defun gptel-mode-set-local-keys ()
@@ -3698,16 +3709,16 @@ ${content}"))
 
 ;;;;; llmclient: emigo
 
-(use-package! emigo
-  :config
-  (emigo-enable) ;; Starts the background process automatically
-  ;; :custom
-  ;; Encourage using OpenRouter with Deepseek
-  ;; openrouter/quasar-alpha
-  ;; (emigo-model "openrouter/deepseek/deepseek-chat-v3-0324")
-  ;; (emigo-base-url "https://openrouter.ai/api/v1")
-  ;; (emigo-api-key (getenv "OPENROUTER_API_KEY"))
-  )
+;; (use-package! emigo
+;;   :config
+;;   (emigo-enable) ;; Starts the background process automatically
+;;   ;; :custom
+;;   ;; Encourage using OpenRouter with Deepseek
+;;   ;; openrouter/quasar-alpha
+;;   ;; (emigo-model "openrouter/deepseek/deepseek-chat-v3-0324")
+;;   ;; (emigo-base-url "https://openrouter.ai/api/v1")
+;;   ;; (emigo-api-key (getenv "OPENROUTER_API_KEY"))
+;;   )
 
 ;;;;; llmclient: aidermacs
 
@@ -3877,20 +3888,21 @@ Called with a PREFIX, resets the context buffer list before opening"
       (copilot-chat-display)))
   )
 
-;;;;; DONT llmclient: aider.el
+;;;;; llmclient: aider.el
 
-;; (use-package! aider
-;;   :config
-;;   (setq aider-args '("--model"  "deepseek/deepseek-chat"))
-;;   ;; "xai/grok-2-latest"
-;;   (setenv "ANTHROPIC_API_KEY" user-claude-api-key)
-;;   (setenv "OPENAI_API_KEY" user-openai-api-key)
-;;   (setenv "GEMINI_API_KEY" user-gemini-api-key)
-;;   (setenv "PERPLEXITYAI_API_KEY" user-perplexity-api-key)
-;;   (setenv "XAI_API_KEY" user-xai-api-key)
-;;   (setenv "DEEPSEEK_API_KEY" user-deepseek-api-key)
-;;   (add-hook 'aider-comint-mode-hook #'visual-line-mode)
-;;   )
+(use-package! aider
+  :commands (aider-transient-menu)
+  :config
+  (require 'aider-doom)
+  (global-set-key (kbd "C-c a") 'aider-transient-menu) ;; for wider screen
+  ;; (setq aider-args '("--model"  "deepseek/deepseek-chat"))
+  (setq aider-args '("--model" "openrouter/deepseek/deepseek-r1" )) ;; add --no-auto-commits if you don't want it
+  ;; - openrouter/deepseek/deepseek-coder
+
+  (setenv "DEEPSEEK_API_KEY" user-deepseek-api-key)
+  (setenv "OPENROUTERAPI_KEY" user-openrouter-api-key)
+  (add-hook 'aider-comint-mode-hook #'visual-line-mode)
+  )
 
 ;; aider --list-models deepseek
 ;; deepseek/deepseek-chat, deepseek/deepseek-coder, deepseek/deepseek-reasoner
@@ -3955,7 +3967,6 @@ Called with a PREFIX, resets the context buffer list before opening"
 ;;   :config (setq wolfram-alpha-app-id user-wolfram-alpha-app-id))
 
 ;;;;; DONT llmclient: kagi
-
 ;; cecil
 ;; agnes
 ;; daphne
@@ -3969,20 +3980,6 @@ Called with a PREFIX, resets the context buffer list before opening"
 ;;   (kagi-summarizer-engine "cecil") ;; Formal, technical, analytical summary.
 ;;   (kagi-summarizer-default-language "KO")
 ;;   (kagi-summarizer-cache t))
-
-;;;;; DONT org-ai
-
-;; (use-package! org-ai
-;;   :defer 5
-;;   :commands (org-ai-mode org-ai-global-mode)
-;;   :init
-;;   (add-hook 'org-mode-hook #'org-ai-mode) ; enable org-ai in org-mode
-;;   (org-ai-global-mode) ; installs global keybindings on C-c M-a
-;;   :config
-;;   (setq org-ai-openai-api-token user-openai-api-key)
-;;   (setq org-ai-default-chat-model "gpt-4o-mini") ;; "gpt-4o-mini"
-;;   (org-ai-install-yasnippets))
-; if you are using yasnippet and want `ai` snippets
 
 ;;;;; DONT elisa
 
@@ -4001,17 +3998,17 @@ Called with a PREFIX, resets the context buffer list before opening"
 ;;;;; DONT ellama - offline local llm
 
 ;; https://github.com/s-kostyaev/ellama
-;; (use-package! ellama
-;;   :defer 3
-;;   :init
-;;   ;; setup key bindings
-;;   ;; (setopt ellama-keymap-prefix "C-c e")
-;;   ;; (setopt ellama-language "Korean")
-;;   ;; (setopt ellama-provider emacs-llm-default-provider)
+(use-package! ellama
+  :defer 3
+  :init
+  ;; setup key bindings
+  ;; (setopt ellama-keymap-prefix "C-c e")
+  ;; (setopt ellama-language "Korean")
+  ;; (setopt ellama-provider emacs-llm-default-provider)
 
-;;   ;; I've looked for this option for 1.5 hours
-;;   (setq ellama-long-lines-length 100000)
-;;   )
+  ;; I've looked for this option for 1.5 hours
+  (setq ellama-long-lines-length 100000)
+  )
 
 ;;;;; DONT whisper
 
@@ -4298,10 +4295,6 @@ Called with a PREFIX, resets the context buffer list before opening"
 ;;;;;; indent-guides-init-maybe-h
 
 (add-hook 'python-mode-hook #'+indent-guides-init-maybe-h)
-
-;;;;;; rainbow-delimiters-mode
-
-(add-hook 'python-mode-hook #'rainbow-delimiters-mode)
 
 ;;;;;; custom emacs-jupyter/jupyter ob-jupyter
 
@@ -5599,242 +5592,218 @@ Suitable for `imenu-create-index-function'."
 ;;               (cape-company-to-capf 'notmuch-company)
 ;;               nil t)))
 
-;;;;; :app consult-omni
+;;;;; DONT :app consult-omni
 
-(use-package! consult-omni
-  :after (consult gptel)
-  :custom
-  ;; General settings that apply to all sources
-  (consult-omni-show-preview t) ;;; show previews
-  (consult-omni-preview-key "M-m") ;;; set the preview key to C-o
-  (consult-omni-highlight-matches-in-minibuffer t) ;;; highlight matches in minibuffer
-  (consult-omni-highlight-matches-in-file t) ;;; highlight matches in files
-  (consult-omni-default-count 5) ;;; set default count
-  (consult-omni-default-page 0) ;;; set the default page (default is 0 for the first page)
+;; (use-package! consult-omni
+;;   :after (consult gptel)
+;;   :custom
+;;   ;; General settings that apply to all sources
+;;   (consult-omni-show-preview t) ;;; show previews
+;;   (consult-omni-preview-key "M-m") ;;; set the preview key to C-o
+;;   (consult-omni-highlight-matches-in-minibuffer t) ;;; highlight matches in minibuffer
+;;   (consult-omni-highlight-matches-in-file t) ;;; highlight matches in files
+;;   (consult-omni-default-count 5) ;;; set default count
+;;   (consult-omni-default-page 0) ;;; set the default page (default is 0 for the first page)
 
-  ;; optionally change the consult-omni debounce, throttle and delay.
-  ;; Adjust these (e.g. increase to avoid hiting a source (e.g. an API) too frequently)
-  (consult-omni-dynamic-input-debounce 0.8)
-  (consult-omni-dynamic-input-throttle 1.6)
-  (consult-omni-dynamic-refresh-delay 0.8)
+;;   ;; optionally change the consult-omni debounce, throttle and delay.
+;;   ;; Adjust these (e.g. increase to avoid hiting a source (e.g. an API) too frequently)
+;;   (consult-omni-dynamic-input-debounce 0.8)
+;;   (consult-omni-dynamic-input-throttle 1.6)
+;;   (consult-omni-dynamic-refresh-delay 0.8)
 
-  ;; Optionally set backend for http request (either 'url, 'request, or 'plz)
-  (consult-omni-http-retrieve-backend 'url)
-  :config
-  ;; Load Sources Core code
-  (require 'consult-omni-sources)
+;;   ;; Optionally set backend for http request (either 'url, 'request, or 'plz)
+;;   (consult-omni-http-retrieve-backend 'url)
+;;   :config
+;;   ;; Load Sources Core code
+;;   (require 'consult-omni-sources)
 
-  ;; Load Embark Actions
-  (require 'consult-omni-embark)
+;;   ;; Load Embark Actions
+;;   (require 'consult-omni-embark)
 
-  ;; Either load all source modules or a selected list
-  ;; Select a list of modules you want to aload, otherwise all sources all laoded
-  (setq consult-omni-sources-modules-to-load
-        '(consult-omni-man
-          consult-omni-wikipedia
-          consult-omni-notes
-          ;; consult-omni-numi ; calculator
-          consult-omni-locate
-          consult-omni-line-multi
-          consult-omni-youtube
-          consult-omni-invidious
-          consult-omni-gptel
-          consult-omni-google-autosuggest
-          consult-omni-google
-          consult-omni-git-grep
-          consult-omni-grep
-          consult-omni-ripgrep
-          consult-omni-gh
-          consult-omni-find
-          consult-omni-fd
-          consult-omni-elfeed
-          consult-omni-duckduckgo
-          ;; consult-omni-doi
-          consult-omni-dict
-          consult-omni-notes
-          ;; consult-omni-chatgpt
-          consult-omni-calc
-          consult-omni-buffer
-          consult-omni-browser-history
-          consult-omni-brave
-          consult-omni-brave-autosuggest
-          ;; consult-omni-bing
-          consult-omni-apps))
-  (consult-omni-sources-load-modules)
+;;   ;; Either load all source modules or a selected list
+;;   ;; Select a list of modules you want to aload, otherwise all sources all laoded
+;;   (setq consult-omni-sources-modules-to-load
+;;         '(consult-omni-man
+;;           consult-omni-wikipedia
+;;           consult-omni-notes
+;;           ;; consult-omni-numi ; calculator
+;;           consult-omni-locate
+;;           consult-omni-line-multi
+;;           consult-omni-youtube
+;;           consult-omni-invidious
+;;           ;; consult-omni-gptel
+;;           ;; consult-omni-google-autosuggest
+;;           ;; consult-omni-google
+;;           consult-omni-git-grep
+;;           consult-omni-grep
+;;           consult-omni-ripgrep
+;;           consult-omni-gh
+;;           consult-omni-find
+;;           consult-omni-fd
+;;           consult-omni-elfeed
+;;           consult-omni-duckduckgo
+;;           ;; consult-omni-doi
+;;           consult-omni-dict
+;;           consult-omni-notes
+;;           ;; consult-omni-chatgpt
+;;           consult-omni-calc
+;;           ;; consult-omni-buffer
+;;           ;; consult-omni-browser-history
+;;           ;; consult-omni-brave
+;;           ;; consult-omni-brave-autosuggest
+;;           ;; consult-omni-bing
+;;           consult-omni-apps))
+;;   (consult-omni-sources-load-modules)
 
-  ;; set multiple sources for consult-omni-multi command. Change these lists as needed for different interactive commands. Keep in mind that each source has to be a key in `consult-omni-sources-alist'.
-  (setq consult-omni-multi-sources '("calc"
-                                     ;; "File"
-                                     ;; "Buffer"
-                                     ;; "Bookmark"
-                                     ;; "Apps"
-                                     ;; "gptel"
-                                     "Brave"
-                                     "Dictionary"
-                                     ;; "Google"
-                                     "Wikipedia"
-                                     "elfeed"
-                                     ;; "mu4e"
-                                     ;; "buffers text search"
-                                     ;; "Notes Search"
-                                     ;; "Org Agenda"
-                                     "GitHub"
-                                     ;; "YouTube"
-                                     ;; "Invidious"
-                                     ))
+;;   ;; set multiple sources for consult-omni-multi command. Change these lists as needed for different interactive commands. Keep in mind that each source has to be a key in `consult-omni-sources-alist'.
+;;   (setq consult-omni-multi-sources '("calc"
+;;                                      ;; "File"
+;;                                      ;; "Buffer"
+;;                                      ;; "Bookmark"
+;;                                      ;; "Apps"
+;;                                      ;; "gptel"
+;;                                      "Brave"
+;;                                      "Dictionary"
+;;                                      ;; "Google"
+;;                                      "Wikipedia"
+;;                                      "elfeed"
+;;                                      ;; "mu4e"
+;;                                      ;; "buffers text search"
+;;                                      ;; "Notes Search"
+;;                                      ;; "Org Agenda"
+;;                                      "GitHub"
+;;                                      ;; "YouTube"
+;;                                      ;; "Invidious"
+;;                                      ))
 
-;;;;;; consult-omni - Per source customization
+;; ;;;;;; consult-omni - Per source customization
 
-  (require 'auth-source)
-  (require 'gptel)
+;;   (require 'auth-source)
+;;   (require 'gptel)
 
-  ;; Set API KEYs. It is recommended to use a function that returns the string for better security.
-  ;; (setq consult-omni-google-customsearch-key "YOUR-GOOGLE-API-KEY-OR-FUNCTION")
-  ;; (setq consult-omni-google-customsearch-cx "YOUR-GOOGLE-CX-NUMBER-OR-FUNCTION")
-  (setq consult-omni-brave-api-key (auth-info-password (car (auth-source-search :host "api.search.brave.com" :user "apikey"))))
-  ;; (setq consult-omni-stackexchange-api-key "YOUR-STACKEXCHANGE-API-KEY-OR-FUNCTION")
-  ;; (setq consult-omni-pubmed-api-key "YOUR-PUBMED-API-KEY-OR-FUNCTION")
+;;   ;; Set API KEYs. It is recommended to use a function that returns the string for better security.
+;;   ;; (setq consult-omni-google-customsearch-key "YOUR-GOOGLE-API-KEY-OR-FUNCTION")
+;;   ;; (setq consult-omni-google-customsearch-cx "YOUR-GOOGLE-CX-NUMBER-OR-FUNCTION")
+;;   ;; (setq consult-omni-brave-api-key (auth-info-password (car (auth-source-search :host "api.search.brave.com" :user "apikey"))))
+;;   ;; (setq consult-omni-stackexchange-api-key "YOUR-STACKEXCHANGE-API-KEY-OR-FUNCTION")
+;;   ;; (setq consult-omni-pubmed-api-key "YOUR-PUBMED-API-KEY-OR-FUNCTION")
+;;   ;; (setq consult-omni-openai-api-key (auth-info-password (car (auth-source-search :host "api.openai.com" :user "apikey"))))
 
-  (setq consult-omni-openai-api-key (auth-info-password (car (auth-source-search :host "api.openai.com" :user "apikey"))))
+;;   ;; add more keys as needed here.
+;;   ;; gptel settings
+;;   (setq consult-omni-gptel-cand-title #'consult-omni--gptel-make-title-short-answer)
 
-  ;; add more keys as needed here.
+;;   ;; default terminal
+;;   (setq consult-omni-embark-default-term #'vterm)
 
-  ;; gptel settings
-  (setq consult-omni-gptel-cand-title #'consult-omni--gptel-make-title-short-answer)
+;;   ;; default video player
+;;   (setq consult-omni-embark-video-default-player  #'mpv-play-url)
 
-  ;; default terminal
-  (setq consult-omni-embark-default-term #'vterm)
+;;   ;; pretty prompt for launcher
+;;   (setq consult-omni-open-with-prompt "  ")
 
-  ;; default video player
-  (setq consult-omni-embark-video-default-player  #'mpv-play-url)
+;;   ;; Pick your favorite autosuggest command.
+;;   (setq consult-omni-default-autosuggest-command #'consult-omni-dynamic-brave-autosuggest) ;;or any other autosuggest source you define
 
-  ;; pretty prompt for launcher
-  (setq consult-omni-open-with-prompt "  ")
+;;   ;; Set your shorthand favorite interactive command
+;;   (setq consult-omni-default-interactive-command #'consult-omni-multi)
 
-  ;; Pick your favorite autosuggest command.
-  (setq consult-omni-default-autosuggest-command #'consult-omni-dynamic-brave-autosuggest) ;;or any other autosuggest source you define
+;;   ;; Optionally Set back-end for notes search to ripgrep-all (requires ripgrep-all)
+;;   ;; (setq consult-omni-notes-backend-command "rga")
 
-  ;; Set your shorthand favorite interactive command
-  (setq consult-omni-default-interactive-command #'consult-omni-multi)
+;; ;;;;;; Optionally add more interactive commands
 
-  ;; Optionally Set back-end for notes search to ripgrep-all (requires ripgrep-all)
-  ;; (setq consult-omni-notes-backend-command "rga")
+;; ;;;;;;; my/consult-omni-web
 
-;;;;;; Optionally add more interactive commands
+;;   (progn
+;;     (defvar consult-omni-web-sources (list "gptel"
+;;                                            "Brave"
+;;                                            "elfeed"
+;;                                            ;; "mu4e"
+;;                                            "Wikipedia"
+;;                                            ;; "GitHub"
+;;                                            ))
+;;     (defun my/consult-omni-web (&optional initial prompt sources no-callback &rest args)
+;;       "Interactive web search”
 
-;;;;;;; my/consult-omni-web
+;; This is similar to `consult-omni-multi', but runs the search on
+;; web sources defined in `consult-omni-web-sources'.
+;; See `consult-omni-multi' for more details.
+;; "
+;;       (interactive "P")
+;;       (let ((prompt (or prompt (concat "[" (propertize "my/consult-omni-web" 'face 'consult-omni-prompt-face) "]" " Search:  ")))
+;;             (sources (or sources consult-omni-web-sources)))
+;;         (consult-omni-multi initial prompt sources no-callback args)))
+;;     )
 
-  (progn
-    (defvar consult-omni-web-sources (list "gptel"
-                                           "Brave"
-                                           "elfeed"
-                                           ;; "mu4e"
-                                           "Wikipedia"
-                                           ;; "GitHub"
-                                           ))
-    (defun my/consult-omni-web (&optional initial prompt sources no-callback &rest args)
-      "Interactive web search”
+;; ;;;;;;; my/consult-omni-video
 
-This is similar to `consult-omni-multi', but runs the search on
-web sources defined in `consult-omni-web-sources'.
-See `consult-omni-multi' for more details.
-"
-      (interactive "P")
-      (let ((prompt (or prompt (concat "[" (propertize "my/consult-omni-web" 'face 'consult-omni-prompt-face) "]" " Search:  ")))
-            (sources (or sources consult-omni-web-sources)))
-        (consult-omni-multi initial prompt sources no-callback args)))
-    )
+;;   (progn
+;;     (defvar consult-omni-video-sources (list "gptel"
+;;                                              "Invidious"
+;;                                              ))
+;;     (defun my/consult-omni-video (&optional initial prompt sources no-callback &rest args)
+;;       "Interactive video search”
 
-;;;;;;; my/consult-omni-video
+;; This is similar to `consult-omni-multi', but runs the search on
+;; web sources defined in `consult-omni-video-sources'.
+;; See `consult-omni-multi' for more details.
+;; "
+;;       (interactive "P")
+;;       (let ((prompt (or prompt (concat "[" (propertize "my/consult-omni-video" 'face 'consult-omni-prompt-face) "]" " Search:  ")))
+;;             (sources (or sources consult-omni-video-sources)))
+;;         (consult-omni-multi initial prompt sources no-callback args)))
+;;     )
 
-  (progn
-    (defvar consult-omni-video-sources (list "gptel"
-                                             "Invidious"
-                                             ))
-    (defun my/consult-omni-video (&optional initial prompt sources no-callback &rest args)
-      "Interactive video search”
+;; ;;;;;;; my/consult-omni-local
 
-This is similar to `consult-omni-multi', but runs the search on
-web sources defined in `consult-omni-video-sources'.
-See `consult-omni-multi' for more details.
-"
-      (interactive "P")
-      (let ((prompt (or prompt (concat "[" (propertize "my/consult-omni-video" 'face 'consult-omni-prompt-face) "]" " Search:  ")))
-            (sources (or sources consult-omni-video-sources)))
-        (consult-omni-multi initial prompt sources no-callback args)))
-    )
+;;   (defvar consult-omni-local-sources (list "ripgrep"
+;;                                            "Notes Search"
+;;                                            ;; "Apps"
+;;                                            "Org Agenda"
+;;                                            ))
+;;   (defun my/consult-omni-local (&optional initial prompt sources no-callback &rest args)
+;;     "Interactive local search”
 
-;;;;;;; my/consult-omni-local
+;; This is similar to `consult-omni-multi', but runs the search on
+;; local sources defined in `consult-omni-local-sources'.
+;; See `consult-omni-multi' for more details.
+;; "
+;;     (interactive "P")
+;;     (let ((prompt (or prompt (concat "[" (propertize "my/consult-omni-local" 'face 'consult-omni-prompt-face) "]" " Search:  ")))
+;;           (sources (or sources consult-omni-local-sources)))
+;;       (consult-omni-multi initial prompt sources no-callback args)))
 
-  (defvar consult-omni-local-sources (list "ripgrep"
-                                           "Notes Search"
-                                           ;; "Apps"
-                                           "Org Agenda"
-                                           ))
-  (defun my/consult-omni-local (&optional initial prompt sources no-callback &rest args)
-    "Interactive local search”
+;; ;;;;;;; DONT my/consult-omni-scholar
 
-This is similar to `consult-omni-multi', but runs the search on
-local sources defined in `consult-omni-local-sources'.
-See `consult-omni-multi' for more details.
-"
-    (interactive "P")
-    (let ((prompt (or prompt (concat "[" (propertize "my/consult-omni-local" 'face 'consult-omni-prompt-face) "]" " Search:  ")))
-          (sources (or sources consult-omni-local-sources)))
-      (consult-omni-multi initial prompt sources no-callback args)))
+;;   ;; (progn
+;;   ;;     (setq consult-omni-scholar-sources (list "PubMed" "Scopus" "Notes Search" "gptel"))
 
-;;;;;;; DONT my/consult-omni-scholar
+;;   ;;     (defun consult-omni-scholar (&optional initial prompt sources no-callback &rest args)
+;;   ;;       "Interactive “multi-source acadmic literature” search
 
-  ;; (progn
-  ;;     (setq consult-omni-scholar-sources (list "PubMed" "Scopus" "Notes Search" "gptel"))
+;;   ;; This is similar to `consult-omni-multi', but runs the search on
+;;   ;; academic literature sources defined in `consult-omni-scholar-sources'.
+;;   ;; See `consult-omni-multi' for more details.
+;;   ;; "
+;;   ;;       (interactive "P")
+;;   ;;       (let ((prompt (or prompt (concat "[" (propertize "consult-omni-multi" 'face 'consult-omni-prompt-face) "]" " Search:  ")))
+;;   ;;             (sources (or sources consult-omni-scholar-sources)))
+;;   ;;         (consult-omni-multi initial prompt sources no-callback args)))
+;;   ;;     )
 
-  ;;     (defun consult-omni-scholar (&optional initial prompt sources no-callback &rest args)
-  ;;       "Interactive “multi-source acadmic literature” search
+;; ;;;;;;; my/consult-omni-autosuggest-at-point
 
-  ;; This is similar to `consult-omni-multi', but runs the search on
-  ;; academic literature sources defined in `consult-omni-scholar-sources'.
-  ;; See `consult-omni-multi' for more details.
-  ;; "
-  ;;       (interactive "P")
-  ;;       (let ((prompt (or prompt (concat "[" (propertize "consult-omni-multi" 'face 'consult-omni-prompt-face) "]" " Search:  ")))
-  ;;             (sources (or sources consult-omni-scholar-sources)))
-  ;;         (consult-omni-multi initial prompt sources no-callback args)))
-  ;;     )
-
-;;;;;;; my/consult-omni-autosuggest-at-point
-
-  ;; AutoSuggest at point
-  (defun my/consult-omni-autosuggest-at-point ()
-    (interactive)
-    (let ((input (or (thing-at-point 'url) (thing-at-point 'filename) (thing-at-point 'symbol) (thing-at-point 'sexp) (thing-at-point 'word))))
-      (when (and (minibuffer-window-active-p (selected-window))
-                 (equal (substring input 0 1) (consult--async-split-initial nil)))
-        (setq input (substring input 1)))
-      (consult-omni-brave-autosuggest input)))
-  ) ; end-of consult-omni
-
-;; (after! consult-gh
-;;   ;; https://www.armindarvish.com/post/web_omni_search_in_emacs_with_consult-web/
-;;   (defun consult-omni-embark-open-consult-gh (cand)
-;;     "Search github for repo in candidate by using `consult-gh-search-repos'."
-;;     (when-let ((url (and (stringp cand) (get-text-property 0 :url cand))))
-;;       (if (string-match ".*github.*" url nil nil)
-;;           (let* ((urlobj (url-generic-parse-url url))
-;;                  (path (url-filename urlobj))
-;;                  (repo (string-join (take 2 (cdr (string-split path "/"))) "/"))
-;;                  (issue (if (string-match ".*\/issues\/\\([[:digit:]]*\\)" path)
-;;                             (substring-no-properties (match-string 1 path))))
-;;                  (pr (if (string-match ".*\/pull\/\\(?1:[[:digit:]]*\\)" path)
-;;                          (substring-no-properties (match-string 1 path))))
-;;                  )
-;;             (cond
-;;              (pr (consult-gh-search-prs pr repo))
-;;              (issue (consult-gh-search-issues issue repo))
-;;              (repo (consult-gh-search-repos repo))
-;;              (t (consult-gh-search-repos)))
-;;             (message "not a github link"))
-;;         )))
+;;   ;; AutoSuggest at point
+;;   (defun my/consult-omni-autosuggest-at-point ()
+;;     (interactive)
+;;     (let ((input (or (thing-at-point 'url) (thing-at-point 'filename) (thing-at-point 'symbol) (thing-at-point 'sexp) (thing-at-point 'word))))
+;;       (when (and (minibuffer-window-active-p (selected-window))
+;;                  (equal (substring input 0 1) (consult--async-split-initial nil)))
+;;         (setq input (substring input 1)))
+;;       (consult-omni-brave-autosuggest input)))
 ;;   )
+; end-of consult-omni
 
 ;;;; :os tty
 
@@ -5879,11 +5848,20 @@ See `consult-omni-multi' for more details.
   ;; (load-file (concat user-dotemacs-dir "lisp/org-funcs.el"))
   ;; (load-file (concat user-dotemacs-dir "lisp/org-config.el"))
   ;; (+org-init-keybinds-h) -> 2024-06-01 여기 키바인딩 관련 부분 뒤에서 다시 잡아줌
-
   ;; (setq org-attach-use-inheritance nil) ; selective
 
   ;; overide here! important
   (setq org-insert-heading-respect-content nil) ; doom t
+
+  (progn
+    ;; [[denote:20250309T142131][#LLM: Tab width in Org files must be 8, not 4]]
+    (add-hook 'org-mode-hook (lambda () (setq-local tab-width 8)))
+
+    (defun my/org-tab-width-warning-filter (orig-fun type message &rest args)
+      (unless (and (eq type 'emacs)
+                   (string-match-p "Tab width in Org files must be 8" message))
+        (apply orig-fun type message args)))
+    (advice-add 'display-warning :around #'my/org-tab-width-warning-filter))
 
   ;; (progn
   ;;   ;; 2024-06-04 file - id - http/https
@@ -5898,78 +5876,81 @@ See `consult-omni-multi' for more details.
   ;; (remove-hook 'org-mode-hook 'org-eldoc-load)
   )
 
-;;;;; DONT org-modern
+;;;;; org-modern
 
-;; (after! org
-;; (when (locate-library "org-modern")
-;;   (require 'org-modern)
-;;   (progn
-;;     ;; configurtaion
-;;     (setq
-;;      ;; Edit settings
-;;      ;; org-auto-align-tags nil ; default t
-;;      org-tags-column 0 ; doom 0
-;;      org-catch-invisible-edits 'show-and-error ; smart
-;;      org-special-ctrl-a/e t
-;;      ;; org-insert-heading-respect-content t ; prefer nil
+(after! org
+  (when (locate-library "org-modern")
+    (require 'org-modern)
+    (progn
+      ;; configurtaion
+      (setq
+       ;; Edit settings
+       ;; org-auto-align-tags nil ; default t
+       org-tags-column 0 ; doom 0
+       org-catch-invisible-edits 'show-and-error ; smart
+       org-special-ctrl-a/e t
+       ;; org-insert-heading-respect-content t ; prefer nil
 
-;;      ;; Org styling, hide markup etc.
-;;      ;; org-ellipsis "…"
-;;      org-hide-emphasis-markers nil ; nil
-;;      org-pretty-entities t ; nil
-;;      org-agenda-tags-column 0)
+       ;; Org styling, hide markup etc.
+       ;; org-ellipsis "…"
+       org-hide-emphasis-markers nil ; nil
+       org-pretty-entities t ; nil
+       org-agenda-tags-column 0)
 
-;;     (setq org-modern-tag nil)
-;;     (setq org-modern-table nil) ; org-modern-indent
-;;     ;;  org-modern-todo t
-;;     ;;  org-modern-timestamp t
-;;     ;;  org-modern-priority t
-;;     ;;  org-modern-checkbox t
-;;     ;;  org-modern-block-name t
-;;     ;;  org-modern-footnote nil
-;;     ;;  org-modern-internal-target nil
-;;     ;;  org-modern-radio-target nil
-;;     ;;  org-modern-progress nil)
+      (setq org-modern-tag nil)
+      (setq org-modern-table nil) ; org-modern-indent
+      ;;  org-modern-todo t
+      ;;  org-modern-timestamp t
+      ;;  org-modern-priority t
+      ;;  org-modern-checkbox t
+      ;;  org-modern-block-name t
+      ;;  org-modern-footnote nil
+      ;;  org-modern-internal-target nil
+      ;;  org-modern-radio-target nil
+      ;;  org-modern-progress nil)
 
-;;     (setq org-modern-star nil) ; org-modern-indent
-;;     (setq org-modern-hide-stars nil) ; adds extra indentation
-;;     (setq org-modern-list
-;;           '((?+ . "•") ; ◦
-;;             (?- . "–") ; ‣, – endash
-;;             (?* . "⭑")))
+      (setq org-modern-star nil) ; org-modern-indent
+      (setq org-modern-hide-stars nil) ; adds extra indentation
+      (setq org-modern-list
+            '((?+ . "•") ; ◦
+              (?- . "–") ; – endash
+              (?* . "➤"))) ; ➤ ‣
 
-;;     (setq org-modern-block-fringe 0) ; default 2
-;;     (setq org-modern-block-name nil)
-;;     ;; (setq org-modern-block-name
-;;     ;;       '((t . t)
-;;     ;;         ("src" "»" "«")
-;;     ;;         ("example" "»–" "–«")
-;;     ;;         ("quote" "❝" "❞")
-;;     ;;         ("export" "⏩" "⏪")))
+      (setq org-modern-block-fringe 0) ; default 2
+      (setq org-modern-block-name nil)
+      ;; (setq org-modern-block-name
+      ;;       '((t . t)
+      ;;         ("src" "»" "«")
+      ;;         ("example" "»–" "–«")
+      ;;         ("quote" "❝" "❞")
+      ;;         ("export" "⏩" "⏪")))
 
-;;     (setq org-modern-progress nil)
+      (setq org-modern-progress nil)
 
-;;     ;; https://github.com/tecosaur/emacs-config/blob/master/config.org?plain=1#L7886
-;;     (setq org-modern-keyword nil)
-;;     (setq org-modern-priority t)
-;;     (setq org-modern-priority-faces
-;;           '((?A :inverse-video t :inherit +org-todo-todo)
-;;             (?B :inverse-video t :inherit +org-todo-next)
-;;             (?C :inverse-video t :inherit +org-todo-dont)
-;;             (?D :inverse-video t :inherit +org-todo-done)
-;;             ))
+      ;; https://github.com/tecosaur/emacs-config/blob/master/config.org?plain=1#L7886
+      (setq org-modern-keyword nil)
+      (setq org-modern-priority t)
+      (setq org-modern-priority-faces
+            '((?A :inverse-video t :inherit +org-todo-todo)
+              (?B :inverse-video t :inherit +org-todo-next)
+              (?C :inverse-video t :inherit +org-todo-dont)
+              (?D :inverse-video t :inherit +org-todo-done)
+              ))
 
-;;     (setq org-modern-todo-faces
-;;           '(("TODO" :inverse-video t :inherit +org-todo-todo)
-;;             ("DONE" :inverse-video t :inherit +org-todo-done)
-;;             ("NEXT"  :inverse-video t :inherit +org-todo-next)
-;;             ("DONT" :inverse-video t :inherit +org-todo-dont)
-;;             ))
-;;     )
-;;   (require 'org-modern-indent)
-;;   (add-hook 'org-mode-hook #'org-modern-indent-mode 90)
-;;   )
-;; )
+      (setq org-modern-todo-faces
+            '(("TODO" :inverse-video t :inherit +org-todo-todo)
+              ("DONE" :inverse-video t :inherit +org-todo-done)
+              ("NEXT"  :inverse-video t :inherit +org-todo-next)
+              ("DONT" :inverse-video t :inherit +org-todo-dont)
+              ))
+      )
+
+    ;; (remove-hook! org-mode-hook #'org-modern-mode)
+    ;; (remove-hook! org-agenda-finalize . org-modern-agenda)
+    ;; (require 'org-modern-indent)
+    ;; (add-hook 'org-mode-hook #'org-modern-indent-mode 90)
+    )
+  )
 
 ;;;;; TODO org-src-mode-map
 
@@ -6053,6 +6034,17 @@ See `consult-omni-multi' for more details.
   (setq org-journal-file-type 'weekly) ; default 'daily
 
   (setq org-journal-tag-alist '(("meet" . ?m) ("dev" . ?d) ("idea" . ?i) ("emacs" . ?e) ("discuss" . ?c) ("1on1" . ?o))) ; default nil
+
+  (add-hook 'org-journal-mode-hook (lambda () (setq-local tab-width 8)))
+
+  (defun my/org-journal-add-custom-id ()
+    ;;  :CUSTOM_ID: 2025-03-21 Mon
+    (unless (org-journal--daily-p)
+      (org-set-property "CUSTOM_ID"
+                        (downcase (format-time-string "%Y-%m-%d-%a")))))
+
+  (add-hook 'org-journal-after-header-create-hook #'my/org-journal-add-custom-id)
+
   )
 
 ;;;;; TODO om-dash org-based dashboards
@@ -6256,7 +6248,7 @@ See `consult-omni-multi' for more details.
   (setq ef-themes-region '(intense no-extend neutral))
 
   (when (display-graphic-p) ; gui
-    ;; (setq ef-themes-variable-pitch-ui t)
+    (setq ef-themes-variable-pitch-ui t)
     (setq ef-themes-headings
           '(
             (0                . (bold 1.1)) ;; variable-pitch
@@ -6786,7 +6778,7 @@ See `consult-omni-multi' for more details.
      tab-line-new-button-show nil
      tab-line-close-button-show nil)
 
-    (global-tab-line-mode 1)
+    ;; (global-tab-line-mode 1)
     )
   )
 
@@ -7063,7 +7055,6 @@ See `consult-omni-multi' for more details.
 
 ;;   (use-package! scheme
 ;;     :interpreter ("scsh" . scheme-mode)
-;;     :hook (scheme-mode . rainbow-delimiters-mode)
 ;;     :config
 ;;     (set-formatter! 'lisp-indent #'apheleia-indent-lisp-buffer :modes '(scheme-mode))
 ;;     (advice-add #'scheme-indent-function :override #'+scheme-indent-function-a))
@@ -7104,7 +7095,7 @@ See `consult-omni-multi' for more details.
 ;;     )
 ;;   )
 
-;;;;; clojure
+;;;;; DONT clojure
 
 (when (modulep! :lang clojure)
 
@@ -7815,20 +7806,24 @@ See `consult-omni-multi' for more details.
 
 (use-package! mcp
   :after gptel
-  :custom (mcp-hub-servers
-           `(("filesystem" . (:command "npx" :args ("-y" "@modelcontextprotocol/server-filesystem" "/home/lizqwer/sync/")))
-             ("fetch" . (:command "uvx" :args ("mcp-server-fetch")))
-             ("qdrant" . (:url "http://localhost:8000/sse"))
-             ;; ("graphlit" . (
-             ;;                :command "npx"
-             ;;                :args ("-y" "graphlit-mcp-server")
-             ;;                :env (
-             ;;                      :GRAPHLIT_ORGANIZATION_ID "your-organization-id"
-             ;;                      :GRAPHLIT_ENVIRONMENT_ID "your-environment-id"
-             ;;                      :GRAPHLIT_JWT_SECRET "your-jwt-secret")))
-             ))
-  :config (require 'mcp-hub)
-  ;; :hook (after-init . mcp-hub-start-all-server)
+  :config
+  (require 'mcp-hub)
+  (setq mcp-hub-servers
+        `(("filesystem" . (:command "npx" :args ("-y" "@modelcontextprotocol/server-filesystem"
+                                                 "/home/goqual/office/cube_res-v5.0.0-goqual-Nightly/"
+                                                 "/home/goqual/sync/org/office/"
+                                                 )))
+          ("fetch" . (:command "uvx" :args ("mcp-server-fetch")))
+          ("qdrant" . (:url "http://localhost:8000/sse"))
+          ;; ("graphlit" . (
+          ;;                :command "npx"
+          ;;                :args ("-y" "graphlit-mcp-server")
+          ;;                :env (
+          ;;                      :GRAPHLIT_ORGANIZATION_ID "your-organization-id"
+          ;;                      :GRAPHLIT_ENVIRONMENT_ID "your-environment-id"
+          ;;                      :GRAPHLIT_JWT_SECRET "your-jwt-secret")))
+          ))
+  :hook (after-init . mcp-hub-start-all-server)
   )
 
 ;;; left blank on purpose

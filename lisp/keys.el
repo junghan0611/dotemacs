@@ -468,7 +468,8 @@
     (define-key vterm-mode-map (kbd "<f10>") nil)
     (define-key vterm-mode-map (kbd "<f11>") nil)
     (define-key vterm-mode-map (kbd "<f12>") nil)
-    ))
+    )
+  )
 
 
 ;;;;; DONT  Wordreference
@@ -728,49 +729,52 @@
     (interactive)
     (find-file (my/org-emacs-config-file)))
 
-  (global-set-key (kbd "C-c j A") 'edit-abbrevs)
+  (progn
+    (global-set-key (kbd "C-c j a") 'my/consult-org-all)
+    (global-set-key (kbd "C-c j A") 'edit-abbrevs)
 
-  (global-set-key (kbd "C-c j b") 'my/consult-org-blog)
-  (global-set-key (kbd "C-c j c") 'my/consult-org-contacts)
+    (global-set-key (kbd "C-c j b") 'my/consult-org-blog)
+    (global-set-key (kbd "C-c j c") 'my/consult-org-contacts)
 
-  (global-set-key (kbd "C-c j e") 'my/open-org-emacs-config-file)
-  (global-set-key (kbd "C-c j E") 'my/open-external)
+    (global-set-key (kbd "C-c j e") 'my/open-org-emacs-config-file)
+    (global-set-key (kbd "C-c j E") 'my/open-external)
 
-  (global-set-key (kbd "C-c j m") 'my/open-tempel-templates)
-  (global-set-key (kbd "C-c j i") 'my/consult-org-inbox)
-  (global-set-key (kbd "C-c j I") 'my/open-now-inbox-file)
+    (global-set-key (kbd "C-c j m") 'my/open-tempel-templates)
+    (global-set-key (kbd "C-c j i") 'my/consult-org-inbox)
+    (global-set-key (kbd "C-c j I") 'my/open-now-inbox-file)
 
-  (global-set-key (kbd "C-c j SPC") 'my/open-index-file)
+    (global-set-key (kbd "C-c j SPC") 'my/open-index-file)
 
-  (global-set-key (kbd "C-c j r") 'my/consult-org-reading)
+    (global-set-key (kbd "C-c j r") 'my/consult-org-reading)
 
-  (global-set-key (kbd "C-c j t") 'my/consult-org-tasks)
+    (global-set-key (kbd "C-c j t") 'my/consult-org-tasks)
 
-  (global-set-key (kbd "C-c j k") 'my/consult-org-kdc)
-  (global-set-key (kbd "C-c j j") 'my/consult-org-all)
+    (global-set-key (kbd "C-c j k") 'my/consult-org-kdc)
+    (global-set-key (kbd "C-c j j") 'my/consult-org-cheat)
 
-  (global-set-key (kbd "C-c j l") 'my/consult-org-links)
+    (global-set-key (kbd "C-c j l") 'my/consult-org-links)
 
-  (global-set-key (kbd "C-c j q") 'my/consult-org-quote)
+    (global-set-key (kbd "C-c j q") 'my/consult-org-quote)
 
-  (global-set-key (kbd "C-c j s") 'my/consult-ripgrep-org-directory)
+    (global-set-key (kbd "C-c j s") 'my/consult-ripgrep-org-directory)
 
-  ;; my/open-
-  (global-set-key (kbd "C-c j o a") 'my/open-remark-file) ;; annotation
-  (global-set-key (kbd "C-c j o d") 'my/open-hunspell-personal)
-  (global-set-key (kbd "C-c j o c") 'my/open-contacts-file)
-  (global-set-key (kbd "C-c j o D") 'my/open-dict-ko-mydata)
-  (global-set-key (kbd "C-c j o R") 'my/open-remember-file)
-  (global-set-key (kbd "C-c j o g") 'my/open-glossary-file)
-  (global-set-key (kbd "C-c j o m") 'my/open-mobile-file)
-  (global-set-key (kbd "C-c j o h") 'my/open-hugo-notes-path)
-  (global-set-key (kbd "C-c j o e") 'my/open-elfeed-list)
-  (global-set-key (kbd "C-c j o q") 'my/open-fortunes-path)
-  (global-set-key (kbd "C-c j o i") 'my/open-now-inbox-file)
-  (global-set-key (kbd "C-c j o l") 'my/open-links-file)
-  (global-set-key (kbd "C-c j o t") 'my/open-tags-file)
-  ;; (global-set-key (kbd "C-c j o t") 'my/open-tasks-file)
-  (global-set-key (kbd "C-c j o q") 'my/open-quote-file)
+    ;; my/open-
+    (global-set-key (kbd "C-c j o a") 'my/open-remark-file) ;; annotation
+    (global-set-key (kbd "C-c j o d") 'my/open-hunspell-personal)
+    (global-set-key (kbd "C-c j o c") 'my/open-contacts-file)
+    (global-set-key (kbd "C-c j o D") 'my/open-dict-ko-mydata)
+    (global-set-key (kbd "C-c j o R") 'my/open-remember-file)
+    (global-set-key (kbd "C-c j o g") 'my/open-glossary-file)
+    (global-set-key (kbd "C-c j o m") 'my/open-mobile-file)
+    (global-set-key (kbd "C-c j o h") 'my/open-hugo-notes-path)
+    (global-set-key (kbd "C-c j o e") 'my/open-elfeed-list)
+    (global-set-key (kbd "C-c j o q") 'my/open-fortunes-path)
+    (global-set-key (kbd "C-c j o i") 'my/open-now-inbox-file)
+    (global-set-key (kbd "C-c j o l") 'my/open-links-file)
+    (global-set-key (kbd "C-c j o t") 'my/open-tags-file)
+    ;; (global-set-key (kbd "C-c j o t") 'my/open-tasks-file)
+    (global-set-key (kbd "C-c j o q") 'my/open-quote-file)
+    )
   )
 
 ;; (global-set-key (kbd "C-c j h") 'my/browse-hugo-maybe)
@@ -1801,12 +1805,16 @@ window."
 
 (defvar-keymap denote-sequence-map
   :doc "Emacs denote-sequence keymap."
-  "s" 'denote-sequence
+  "n" 'denote-sequence
   "f" 'denote-sequence-find
   "l" 'denote-sequence-link
   "d" 'denote-sequence-dired
   "r" 'denote-sequence-reparent
-  "c" 'denote-sequence-convert
+  "c" 'denote-sequence-new-child-of-current
+  "C" 'denote-sequence-convert
+  "s" 'denote-sequence-new-sibling-of-current
+  "z" 'denote-rename-file-signature
+  "p" #'(lambda () (interactive) (denote-sequence-find 'parent))
   )
 
 (defvar-keymap denote-search-map
@@ -1913,7 +1921,7 @@ window."
   "o" #'my/org-open-exported-markdown-in-hugo-content
   "E" #'my/org-hugo-export-directory
   "u" #'my/org-update-all-dblocks
-  "U" #'my/org-update-all-dblocks-on-directory
+  "U" #'my/update-dblock-garden-all
   ;; "c" #'my/denote-convert-note-to-blog-draft
   ;; "p" #'my/denote-convert-blog-ready-to-hugo
 

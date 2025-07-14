@@ -123,7 +123,8 @@ org-mode
                             (org-journal--convert-time-to-file-type-time
                              (time-subtract (current-time)
                                             (* 3600 org-extend-today-until))))
-        (format-time-string "::#h:%Y-%m-%d")
+        "::#"
+        (downcase (format-time-string "%Y-%m-%d-%a"))
         "]["
         (format-time-string "|%Y-%m-%d %a %H:%M|") "]]") ; for weekly journal
 
@@ -132,7 +133,8 @@ org-mode
                             (org-journal--convert-time-to-file-type-time
                              (time-subtract (current-time)
                                             (* 3600 org-extend-today-until))))
-        (format-time-string "::#h:%Y-%m-%d")
+        "::#"
+        (downcase (format-time-string "%Y-%m-%d-%a"))
         "]["
         (format-time-string "|%Y-%m-%d %a %H:%M|") "]]\n"
         "*** @user ")
@@ -142,13 +144,15 @@ org-mode
                             (org-journal--convert-time-to-file-type-time
                              (time-subtract (current-time)
                                             (* 3600 org-extend-today-until))))
-        (format-time-string "::#h:%Y-%m-%d")
+        "::#"
+        (downcase (format-time-string "%Y-%m-%d-%a"))
         "]["
         (format-time-string "|%Y-%m-%d %a %H:%M|") "]]\n"
         "*** @user ")
 
 (edit "Edit" (format-time-string " [%Y-%m-%d %a %H:%M]: "))
 
+(conn-notes "\n* 연결노트\n + -> ")
 
 (Today "[[date:" (format-time-string "%Y-%m-%d") "][Today]]")
 (did (format-time-string "%Y%m%d")) ; remove T
@@ -392,11 +396,12 @@ alias:
 (comment "#+BEGIN_COMMENT" n> r> n> "#+END_COMMENT")
 (mermaid "#+begin_mermaid" n> r> n> "#+end_mermaid")
 (ob-mermaid "#+begin_src mermaid exports: code" n> r> n> "#+end_src")
+(ob-mermaid-png "#+begin_src mermaid :file ./test.png " n> r> n> "#+end_src")
 (ob-d2 "#+begin_src d2 exports: code" n> r> n> "#+end_src")
 
 (verse "#+BEGIN_VERSE" n> r> n> "#+END_VERSE")
 (bash "#+name:" n> "#+BEGIN_SRC bash :tangle no " n> r> n> "#+END_SRC") ;; :eval no :exports none
-(sh "#+BEGIN_SRC shell :tangle no :eval no :exports none" n> r> n> "#+END_SRC")
+(sh "#+begin_src shell :tangle no :eval no :exports none" n> r> n> "#+end_src")
 
 (hugo-relref "@@hugo:[Title]({{< relref \"docs\" >}})@@")
 

@@ -50,17 +50,10 @@
 
 ;;; doom-unpin-packages
 
-;;; consult - consult-omni consult-gh
+;;; DONT consult-omni consult-gh
 
-;; (package! consult-omni :recipe (:host github :repo "armindarvish/consult-omni" :files (:defaults "sources/*.el")))
-
-(package! consult :pin "03fa8f6b7482eab1dee85d32ab604f0b7312cf82") ; 2.0 stable
-
-;; from agzam
-(package! consult-omni :recipe
-  (:host github :repo "armindarvish/consult-omni" :branch "develop" :files (:defaults "sources/*.el")) :pin "017ba1b4e13c5515b88f588d22f0bfea83fb9b3e")
-
-(package! consult-gh :recipe (:host github :repo "armindarvish/consult-gh" :files ("*")))
+(package! consult-omni :recipe (:host github :repo "armindarvish/consult-omni" :files (:defaults "sources/*.el")))
+(package! consult-gh :recipe (:host github :repo "armindarvish/consult-gh" :files ("*")) :pin  "eeb1a4371ca35526d6e282f639ce39a9aa371acd")
 
 ;;; DONT NEVER use built-in on emacs 30
 
@@ -237,19 +230,19 @@
 
 (package! ox-leanpub) ;; https://github.com/junghan0611/ox-leanpub
 
-(package! ob-mermaid)
+;; (package! ob-mermaid)
 ;; (package! mermaid-mode)
 
 (package! org-ql)
 (package! org-kanban)
 
-(package! org-sliced-images :recipe (:host github :repo "ElleNajt/org-sliced-images"))
+;; (package! org-sliced-images :recipe (:host github :repo "ElleNajt/org-sliced-images"))
 ;; (package! image-slicing :recipe (:host github :repo "ginqi7/image-slicing"))
 
 (package! parse-csv :recipe (:host github :repo "junghan0611/el-csv")) ; for om-dash
 (package! om-dash :recipe (:host github :repo "gavv/om-dash" :files ("*.el" "*.org"))) ; org-based dashboards
 
-(package! org-modern-indent :recipe (:host github :repo "jdtsmith/org-modern-indent"))
+;; (package! org-modern-indent :recipe (:host github :repo "jdtsmith/org-modern-indent"))
 
 ;; (package! org-bookmark-heading)
 ;; (package! d2-mode)
@@ -353,7 +346,7 @@
 
 ;; (package! aidermacs)
 (package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs" :files ("*.el")))
-(package! emigo :recipe (:host github :repo "MatthewZMD/emigo"))
+;; (package! emigo :recipe (:host github :repo "MatthewZMD/emigo"))
 
 (package! llm)
 (package! semext :recipe (:host github :repo "ahyatt/semext"))
@@ -377,7 +370,8 @@
 (package! gpt-babel :recipe (:host github :repo "ElleNajt/gpt-babel" :branch "main" :files ("*.el")))
 
 ;; (package! codeium :recipe (:host github :repo "Exafunction/codeium.el"))
-;; (package! ellama)
+(package! ellama)
+
 ;; (package! openai :recipe (:host github :repo "emacs-openai/openai" :files ("*.el")))
 ;; (package! dall-e :recipe (:host github :repo "emacs-openai/dall-e"))
 ;; (package! elisa :recipe (:host github :repo "s-kostyaev/elisa" :files ("*.el" "*.org")))
@@ -408,13 +402,13 @@
 (package! auto-highlight-symbol)
 (package! symbol-overlay)
 
-(when (modulep! :lang clojure)
-  (package! clojure-mode-extra-font-locking) ;; better looks
-  (package! kaocha-runner) ; Koacha test runner in Emacs
-  (package! vega-view)
-  (package! clj-deps-new)
-  (package! clojure-essential-ref-nov)
-  (package! clay))
+;; (when (modulep! :lang clojure)
+;;   (package! clojure-mode-extra-font-locking) ;; better looks
+;;   (package! kaocha-runner) ; Koacha test runner in Emacs
+;;   (package! vega-view)
+;;   (package! clj-deps-new)
+;;   (package! clojure-essential-ref-nov)
+;;   (package! clay))
 
 (package! exercism)
 (package! leetcode)
@@ -475,6 +469,7 @@
 ;; (package! adoc-mode)
 
 (package! yeetube :recipe (:host github :repo "Boruch-Baum/emacs-yeetube.el"))
+(package! youtube-sub-extractor)
 
 (package! elfeed-tube-mpv)
 ;; (package! elfeed-webkit) ; not working on ubuntu
@@ -519,7 +514,6 @@
 (package! gif-screencast)
 (package! lorem-ipsum)
 (package! go-translate)
-(package! youtube-sub-extractor)
 ;; (package! jira)
 
 ;; (package! ready-player)
@@ -557,9 +551,9 @@
   ;; (package! pylookup :recipe (:host github :repo "junghan0611/pylookup"))
   (package! pylookup :recipe (:local-repo "local/pylookup")))
 
-  ;; (package! paw :recipe (:local-repo "local/paw" :branch "ko" :files ("*"))))
+;; (package! paw :recipe (:local-repo "local/paw" :branch "ko" :files ("*"))))
 
-  ;; (package! paw :recipe (:host github :repo "junghan0611/paw" :branch "ko" :files ("*")))
+;; (package! paw :recipe (:host github :repo "junghan0611/paw" :branch "ko" :files ("*")))
 
 
 ;; (package! trekker
@@ -570,8 +564,8 @@
 
 (package! literate-calc-mode)
 (package! calctex :recipe (:host github
-                           :repo "johnbcoughlin/calctex"
-                           :files ("*.el" "calctex/*.el" "calctex-contrib/*.el" "org-calctex/*.el" "vendor")))
+                                 :repo "johnbcoughlin/calctex"
+                                 :files ("*.el" "calctex/*.el" "calctex-contrib/*.el" "org-calctex/*.el" "vendor")))
 
 ;;;; TODO waiting
 

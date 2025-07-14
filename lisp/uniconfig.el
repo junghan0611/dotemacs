@@ -930,15 +930,6 @@ Also see `prot-window-delete-popup-frame'." command)
     ;; (add-hook 'org-mode-hook #'org-rainbow-tags-mode)
     ))
 
-;;;; org-sliced-images
-
-;; for smooth scroll of images in or mode
-(when (locate-library "org-sliced-images")
-  (with-eval-after-load 'org
-    (require 'org-sliced-images)
-    ;; (org-sliced-images-mode)
-    ))
-
 ;;;; oneko-macs eyecandy
 
 (when (locate-library "oneko-macs")
@@ -946,28 +937,19 @@ Also see `prot-window-delete-popup-frame'." command)
 
 ;;;; ob-mermaid
 
-(when (locate-library "ob-mermaid")
-  (with-eval-after-load 'org
-    (require 'ob-mermaid)
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     (append org-babel-load-languages '((mermaid . t))))
-    ))
+;; (when (locate-library "ob-mermaid")
+;;   (with-eval-after-load 'org
+;;     (require 'ob-mermaid)
+;;     (org-babel-do-load-languages
+;;      'org-babel-load-languages
+;;      (append org-babel-load-languages '((mermaid . t))))
+;;     ))
 
-;;;; tab-width for org-mode and org-journal-mode
-
-(when (locate-library "org-journal")
-  (add-hook 'org-mode-hook (lambda () (setq-local tab-width 8)))
-  (add-hook 'org-journal-mode-hook (lambda () (setq-local tab-width 8)))
-
-  (defun my/org-journal-add-custom-id ()
-    ;;  :CUSTOM_ID: 2025-03-21 Mon
-    (unless (org-journal--daily-p)
-      (org-set-property "CUSTOM_ID"
-                        (downcase (format-time-string "%Y-%m-%d-%a")))))
-
-  (add-hook 'org-journal-after-header-create-hook #'my/org-journal-add-custom-id)
-  )
+;; (use-package! ob-d2
+;;   :after org
+;;   :defer 3
+;;   :config
+;;   (add-to-list 'org-babel-load-languages '(d2 . t)))
 
 ;;;; goto-last-change
 
@@ -1100,6 +1082,7 @@ Also see `prot-window-delete-popup-frame'." command)
 (with-eval-after-load 'ox-hugo
   ;; (setq org-hugo-base-dir (file-truename "~/git/blog/"))
   (setq org-hugo-base-dir user-hugo-notes-dir) ;; 2024-10-07 fix quartz
+  (setq org-hugo-export-with-toc nil) ; default nil
 
   (progn
     ;; Append and update time-stamps for
@@ -1125,13 +1108,13 @@ Also see `prot-window-delete-popup-frame'." command)
 
   (setq org-hugo-section "notes") ; 2024-04-26 change
   (setq org-hugo-paired-shortcodes
-        "mermaid callout cards details tabs") ; hint sidenote
+        "mermaid callout cards details tabs sidenote") ; hint
 
   ;; https://ox-hugo.scripter.co/doc/formatting/
   ;; if org-hugo-use-code-for-kbd is non-nil
   ;; Requires CSS to render the <kbd> tag as something special.
   ;; eg: ~kbd~
-  ;; (setq org-hugo-use-code-for-kbd t)
+  (setq org-hugo-use-code-for-kbd t)
 
   ;; https://ox-hugo.scripter.co/doc/linking-numbered-elements/
 
@@ -1160,11 +1143,11 @@ Also see `prot-window-delete-popup-frame'." command)
   ;; the sidenote block. That is configured by customizing the
   ;; org-hugo-special-block-type-properties variable:
   (progn
-    (add-to-list 'org-hugo-special-block-type-properties '("mermaid" :raw t))
+    ;; (add-to-list 'org-hugo-special-block-type-properties '("mermaid" :raw t))
     (add-to-list 'org-hugo-special-block-type-properties '("callout" :raw t))
     (add-to-list 'org-hugo-special-block-type-properties '("cards" :raw t))
-    (add-to-list 'org-hugo-special-block-type-properties '("details" :raw t)))
-  ;; (add-to-list 'org-hugo-special-block-type-properties '("sidenote" . (:trim-pre t :trim-post t)))
+    (add-to-list 'org-hugo-special-block-type-properties '("details" :raw t))
+    (add-to-list 'org-hugo-special-block-type-properties '("sidenote" . (:trim-pre t :trim-post t))))
 
   ;; If this property is set to an empty string, this heading will not be auto-inserted.
   ;; default value is 'References'
@@ -1297,8 +1280,33 @@ cd -
   (add-hook 'dired-after-readin-hook 'dired-add-icons)
   )
 
+
+;;;; my/diff-mark-toggle-vc-modified
+
+;; [[denote:20250707T093026][#디레드]]
+;; [2025-07-07 Mon 11:35]
+(defun my/diff-mark-toggle-vc-modified ()
+  "Dired 버퍼에서 git 등 VC로 변경된 파일에 마크를 토글합니다."
+  (interactive)
+  (require 'vc)
+  (save-excursion
+    (goto-char (point-min))
+    (while (not (eobp))
+      (let ((file (dired-get-filename nil t)))
+        (when file
+          (let ((backend (vc-backend file)))
+            (when backend
+              (let ((state (vc-state file backend)))
+                (when (memq state '(edited unregistered added removed conflict))
+                  (dired-mark 1))))))
+      (forward-line 1)))))
+
 ;;; provide
 
 (provide 'uniconfig)
 
 ;;; end-of configuration
+
+;; Local Variables:
+;; elisp-flymake-byte-compile: t
+;; End:

@@ -184,6 +184,155 @@
 ;;       (write-file
 ;;        (expand-file-name (concat suffix "__llmlog" "." ext) chat-dir)))))
 
+;;;; gptel model descriptions
+
+;;;;; gptel openrouter models
+
+;; ~/sync/man/dotsamples/dotall/yqrashawn-dot-doom-clj/.doom.d/models.el
+
+(defconst gptel--openrouter-models
+  '(
+    ;; https://openrouter.ai/provider/deepseek
+    (deepsek/deepseek-r1-0528 ;; 2025-07-04
+     :capabilities (tool reasoning)
+     :context-window 128
+     :input-cost 0.50
+     :output-cost 2.15)
+
+    (deepseek/deepseek-chat-v3-0324
+     :capabilities (tool)
+     :context-window 163
+     :input-cost 0.28
+     :output-cost 1.1)
+
+    ;; https://openrouter.ai/google/gemini-2.5-pro
+    (google/gemini-2.5-pro
+     :capabilities (media tool-use cache reasoning)
+     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+     :context-window 1048
+     :input-cost 1.25
+     :output-cost 10)
+
+    ;; https://openrouter.ai/google/gemini-2.5-flash
+    (google/gemini-2.5-flash
+     :capabilities (media tool-use cache)
+     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+     :context-window 1048
+     :input-cost 0.30
+     :output-cost 2.5)
+
+    ;; openai/codex-mini  - https://openrouter.ai/openai/codex-mini
+    (openai/gpt-4.1
+     :description "Flagship model for complex tasks"
+     :capabilities (media tool-use json url)
+     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
+     :context-window 1024
+     :input-cost 2.0
+     :output-cost 8.0
+     :cutoff-date "2024-05")
+
+    ;; https://openrouter.ai/anthropic/claude-sonnet-4
+    (anthropic/claude-sonnet-4
+     :description "Hybrid model capable of standard thinking and extended thinking modes"
+     :capabilities (media tool-use cache)
+     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+     :context-window 200
+     :input-cost 3
+     :output-cost 15
+     :cutoff-date "2025-05")
+
+    (anthropic/claude-opus-4
+     :description "Hybrid model capable of standard thinking and extended thinking modes"
+     :capabilities (media tool-use cache)
+     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+     :context-window 200
+     :input-cost 15
+     :output-cost 75
+     :cutoff-date "2025-05")
+
+    (anthropic/claude-3.7-sonnet:thinking
+     :description "Hybrid model capable of standard thinking and extended thinking modes"
+     :capabilities (media tool-use cache)
+     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+     :context-window 200
+     :input-cost 3
+     :output-cost 15
+     :cutoff-date "2025-02")))
+
+;;;; openrouter
+
+;; google/gemini-2.5-flash
+;; google/gemini-2.5-pro
+;; anthropic/claude-sonnet-4
+;; anthropic/claude-3.7-sonnet
+;; deepseek/deepseek-chat
+;; openai/gpt-4.1
+;; openai/gpt-4o-mini
+;; qwen/qwen-2.5-7b-instruct
+
+;;~/sync/man/dotsamples/doom/rajp152k-dot-all/doom/.config/doom/config.el
+  ;; (openai/gpt-4.1
+;;                     openai/gpt-4.1-nano
+;;                     openai/gpt-4.1-mini
+;;                     openai/o4-mini-high
+;;                     openai/o4-mini
+
+;;                     meta-llama/llama-4-maverick:free
+;;                     meta-llama/llama-4-maverick
+;;                     meta-llama/llama-4-scout:free
+;;                     meta-llama/llama-4-scout
+
+;;                     deepseek/deepseek-chat
+;;                     deepseek/deepseek-chat-v3-0324
+;;                     deepseek/deepseek-r1
+;;                     deepseek/deepseek-r1-distill-llama-70b
+
+;;                     mistralai/mixtral-8x7b-instruct
+;;                     mistralai/codestral-2501
+;;                     mistralai/codestral-mamba
+;;                     mistralai/ministral-8b
+;;                     mistralai/mistral-small-3.1-24b-instruct
+;;                     mistralai/mistral-saba
+
+;;                     anthropic/claude-3.7-sonnet:thinking
+;;                     anthropic/claude-3.7-sonnet
+;;                     anthropic/claude-3.5-haiku
+
+;;                     google/gemini-2.5-flash-preview:thinking
+;;                     google/gemini-2.5-flash-preview
+;;                     google/gemini-2.5-pro-preview-03-25
+
+;;                     qwen/qwen3-30b-a3b
+;;                     qwen/qwen3-8b:free
+;;                     qwen/qwen3-14b
+;;                     qwen/qwen3-32b
+;;                     qwen/qwen3-235b-a22b
+
+;;                     x-ai/grok-3-mini-beta
+;;                     x-ai/grok-3-beta)
+
+;; ~/sync/man/dotsamples/vanilla/mgalgs-dotfiles-gptel/init.el
+;; (anthropic/claude-3.7-sonnet
+;;               anthropic/claude-3.7-sonnet:thinking
+;;               anthropic/claude-opus-4
+;;               anthropic/claude-sonnet-4
+;;               deepseek/deepseek-chat-v3-0324
+;;               deepseek/deepseek-chat-v3-0324:free
+;;               deepseek/deepseek-r1-0528
+;;               deepseek/deepseek-r1-0528:free
+;;               google/gemini-2.0-flash-001
+;;               google/gemini-2.5-flash-preview-05-20
+;;               google/gemini-2.5-pro-preview-05-06
+;;               openai/gpt-4.1
+;;               openai/gpt-4.1-mini
+;;               openai/gpt-4o
+;;               openai/gpt-4o-2024-11-20
+;;               openai/gpt-4o-mini
+;;               openai/o1
+;;               openai/o1-mini
+;;               qwen/qwen3-235b-a22b
+;;               x-ai/grok-3-mini-beta)
+
 ;;;; model descriptions
 
 ;; updated 2025-01-27

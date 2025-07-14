@@ -233,7 +233,7 @@
 ;;;; imenu ellipsis bookmark
 
 (setq org-capture-bookmark nil)
-(setq org-imenu-depth 4) ; doom 6, default 2
+(setq org-imenu-depth 3) ; doom 6, default 2
 
 ;; Search on https://www.compart.com/en/unicode/U+25BF
 ;; Unicode Character “◉” (U+25C9)
@@ -319,9 +319,7 @@
 (setq org-export-headline-levels 5) ; default 3
 (setq org-export-with-toc nil) ; default t - turn off on hugo toc
 
-(setq org-hugo-export-with-toc nil) ; default nil
-
-(setq org-export-exclude-tags '("private" "OFFICE" "LOCAL" "noexport" "ignore" "crypt")) ;; "LLMLOG"
+(setq org-export-exclude-tags '("private" "OFFICE" "FILE" "LOG" "CREDENTIAL" "LOCAL" "noexport" "ignore" "crypt")) ;; "LLMLOG"
 
 (progn
   (setq org-publish-use-timestamps-flag t) ; default t
@@ -389,8 +387,8 @@
 
 ;;;; custom indentation
 
-;; (setq org-adapt-indentation t)
-;; (setq org-startup-indented nil) ; doom t, spacemacs nil
+(setq org-adapt-indentation t)
+(setq org-startup-indented nil) ; doom t, spacemacs nil
 (setq org-src-preserve-indentation t) ; doom t, spacemacs nil
 (setq org-edit-src-content-indentation 0) ; default 2
 
@@ -408,11 +406,12 @@
                 jit-lock-stealth-time 1)))
 (add-hook 'org-mode-hook #'locally-defer-font-lock)
 
-;;;; TODO org-blank-before-new-entry : heading and plain-list
+;;;; org-list-demote-modify-bullet
 
-;; /ohyecloudy-dot-doom/doom.d/config.org
 ;; 순서 없는 목록(unordered list)에서 bullet으로 들여쓰기를 할 때마다 +, -를 번갈아 사용한다
-;; (setq org-list-demote-modify-bullet '(("+" . "-") ("-" . "+")))
+(setq org-list-demote-modify-bullet '(("+" . "-") ("-" . "+")))
+
+;;;; TODO org-blank-before-new-entry : heading and plain-list
 
 ;; (setq org-blank-before-new-entry
 ;;       '((heading . t) (plain-list-item . nil)))
@@ -614,31 +613,33 @@
                             ;; ("@family" . ?F)
                             ;; (:endgroup) ;; Status
                             (:startgroup) ;; Action
-                            ("LATER" . ?L)
-                            ("NOW" . ?N)
+                            ("LATER" . ?l)
+                            ("NOW" . ?n)
                             ("HOLD" . ?H)
                             (:endgroup)
+                            ("BOOKMARK" . ?b)
                             ("IMPORTANT" . ?i) ; 별도 처리
-                            ;; ("Up" . ?u) ;;
-                            ("SUBNOTE" . ?s) ;; subtree -> subnote
+                            ("SUBNOTE" . ?S) ;; subtree -> subnote
+                            ("SCREENSHOT" . ?s)
+                            ("TABLE" . ?t)
                             ("EXPORT" . ?e)
                             ;; ("crypt" . ?E)
-                            ("noexport" . ?x)
-                            ("LOCAL" . ?l)
                             ("VIDEO" . ?v)
                             ("FULLTEXT" . ?f)
-                            ("REPO" . ?r)
-                            ("nonum" . ?u)
-                            ("ATTACH" . ?a)
-                            ;; ("LATEST" . ?t) ;; latest version
+                            ("URL" . ?u)
                             ("LLMLOG" . ?m)
-                            ("WEBLOG" . ?w)
-                            ("WIKIPEDIA" . ?k)
-                            ("WORKLOG" . ?g)
+                            ("LOG" . ?L) ; WORKLOG WEBLOG LOCAL
+                            ("CREDENTIAL" . ?C) ; TOKEN APIKEY
                             ("OFFICE" . ?o)
-                            ("DEPRECATED" . ?D)
-                            ("KLUDGE" . ?K)
+                            ("FILE" . ?F)
+                            ("DIAGRAM" . ?D)
+                            ("REPO" . ?r)
                             ("REFILED" . ?R)
+                            ("ATTACH" . ?a)
+                            ("ARCHIVE" . ?A)
+                            ("PAYMENT" . ?P) ;; 결제
+                            ("nonum" . ?U) ; 소문자
+                            ("noexport" . ?x) ; 소문자
                             ("2020" . ?0) ;; 2000~2009
                             ("2021" . ?1) ;; 2010~2019
                             ("2022" . ?2) ;; 2022
@@ -711,7 +712,7 @@
   (org-agenda-goto-today)
 
   (if window-system
-      (search-forward "← now ─")
+      (search-forward "◀── now ─")
     (search-forward "now -"))
   )
 
@@ -891,6 +892,12 @@
   (consult-org-heading
    "+LEVEL<=3"
    (list (my/org-kdc-file))))
+
+(defun my/consult-org-cheat ()
+  (interactive)
+  (consult-org-heading
+   "+LEVEL<=3"
+   (list (my/org-cheat-file))))
 
 (defun my/consult-org-blog ()
   (interactive)

@@ -93,7 +93,7 @@
  neotree ; a project drawer, like NERDTree for vim
  ophints           ; highlight the region an operation acts on
  popup    ; tame sudden yet inevitable temporary windows
- (smooth-scroll +interpolate) ; So smooth you won't believe it's not butter
+ (smooth-scroll -interpolate) ; So smooth you won't believe it's not butter
 
  treemacs ;  a project drawer, like neotree but cooler
  ;; (treemacs +lsp)
@@ -162,16 +162,16 @@
 
  :lang
  ;;agda              ; types of types of types of types...
- ;; beancount         ; mind the GAAP
+ beancount         ; mind the GAAP
  (cc +lsp) ;; +tree-sitter         ; C > C++ == 1
 
- (clojure +lsp) ; +tree-sitter java with a lisp
+ ;; (clojure +lsp) ; +tree-sitter java with a lisp
  ;; common-lisp ; if you've seen one lisp, you've seen them all
  ;; (:unless IS-TERMUX (coq)) ; proofs-as-programs
  ;;crystal           ; ruby at the speed of c
  ;;csharp            ; unity, .NET, and mono shenanigans
  data              ; config/data formats
- ;;(dart +flutter)   ; paint ui and not much else
+ (dart +flutter)   ; paint ui and not much else
  ;;dhall
  ;; (:unless IS-TERMUX (elixir +lsp)) ; +tree-sitter ; erlang done right
  ;;elm               ; care for a cup of TEA?
@@ -219,16 +219,16 @@
   +present                    ; using org-mode for presentations
   +contacts
   +journal
-  ;; +pretty
-  ;; +passwords
+  +pretty
+  +passwords
   ;; +pomodoro                 ; be fruitful with the tomato technique
   )                     ; wander around notes
 
  ;;php               ; perl's insecure younger brother
- plantuml ; diagrams for confusing people more
+ plantuml            ; diagrams for confusing people more
  graphviz
  ;;purescript        ; javascript, but functional
- (python +conda +lsp +pyright +poetry) ;; +tree-sitter ; +poetry +conda beautiful is better than ugly
+ (python +lsp +pyright +poetry +pyenv) ;; +conda +tree-sitter ; beautiful is better than ugly
  ;; qt                ; the 'cutest' gui framework ever
  ;; racket ; a DSL for DSLs
  ;;raku              ; the artist formerly known as perl6
@@ -250,7 +250,7 @@
  ;; :email
  ;; (mu4e +org +gmail)
  ;; (notmuch +org)
- ;;(wanderlust +gmail)
+ ;; (wanderlust +gmail)
 
  :app
  calendar
@@ -258,18 +258,6 @@
  (rss +org +youtube)        ; emacs as an RSS reader
  ;; everywhere        ; *leave* Emacs!? You must be joking
  ;;irc               ; how neckbeards socialize
-
- ;; 2024-05-31 현재 사용자 설정은 다 커스텀 모듈로 옮기는게 좋겠다.
- ;; 2025-01-15 아니. 커스텀 다 빼.
- ;; :custom
- ;; completion
- ;; ui
- ;; emacs
- ;; editor
- ;; writing
- ;; tab-bar
- ;; (:unless IS-TERMUX extra)
- ;; eaf
 
  :config
  ;;literate

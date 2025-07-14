@@ -1878,7 +1878,7 @@ Replace spaces in filenames with underscores."
           ;; (insert "#+attr_org: :width 320px :align center\n")
           (insert (format "*** %s\n" display-name))
           (insert (format ";# [[file:%s%s]]\n" dir new-filename))
-          (insert (format "#+begin_export html\n![[../images/%s|320]]\n#+end_export\n" new-filename))
+          ;; (insert (format "#+begin_export html\n![[../images/%s|320]]\n#+end_export\n" new-filename))
           )))))
 
 ;;;;; my/delete-multiple-blank-lines
@@ -2147,36 +2147,36 @@ TARGET-FILES가 nil이면 `org-cite-global-bibliography`의 모든 파일을 검
                                ))
 
 (setq my/unicode-notetaking-circle '(
-                          "ⓐ a"
-                          "ⓑ b"
-                          "ⓒ c"
-                          "ⓓ d"
-                          "ⓔ e"
-                          "ⓕ f"
-                          "ⓖ g"
-                          "ⓗ h"
-                          "ⓘ i"
-                          "ⓙ j"
-                          "ⓚ k"
-                          "ⓛ l"
-                          "ⓜ m"
-                          "ⓝ n"
-                          "ⓞ o"
-                          "ⓟ p"
-                          "ⓠ q"
-                          "ⓡ r"
-                          "ⓢ s"
-                          "ⓣ t"
-                          "ⓤ y"
-                          "ⓥ v"
-                          "ⓦ w"
-                          "ⓧ x"
-                          "ⓨ y"
-                          "ⓩ z"
-                          "⓪ 0"
-                          ;; "㉼"
-                          ;; "㉽"
-                          ))
+                                     "ⓐ a"
+                                     "ⓑ b"
+                                     "ⓒ c"
+                                     "ⓓ d"
+                                     "ⓔ e"
+                                     "ⓕ f"
+                                     "ⓖ g"
+                                     "ⓗ h"
+                                     "ⓘ i"
+                                     "ⓙ j"
+                                     "ⓚ k"
+                                     "ⓛ l"
+                                     "ⓜ m"
+                                     "ⓝ n"
+                                     "ⓞ o"
+                                     "ⓟ p"
+                                     "ⓠ q"
+                                     "ⓡ r"
+                                     "ⓢ s"
+                                     "ⓣ t"
+                                     "ⓤ y"
+                                     "ⓥ v"
+                                     "ⓦ w"
+                                     "ⓧ x"
+                                     "ⓨ y"
+                                     "ⓩ z"
+                                     "⓪ 0"
+                                     ;; "㉼"
+                                     ;; "㉽"
+                                     ))
 
 (defun my/insert-unicode-notetaking ()
   "Insert Unicode for NoteTaking."
@@ -2194,6 +2194,7 @@ TARGET-FILES가 nil이면 `org-cite-global-bibliography`의 모든 파일을 검
 
 (with-eval-after-load 'vertico
   (define-key minibuffer-mode-map (kbd "M-M") #'my/insert-unicode-notetaking) ; needed
+  (require 'grep)
   (define-key grep-mode-map (kbd "M-M") #'my/insert-unicode-notetaking) ; needed
   (define-key vertico-map (kbd "M-M") #'my/insert-unicode-notetaking)
   (define-key minibuffer-mode-map (kbd "M-N") #'my/insert-unicode-notetaking-circle) ; needed
@@ -2223,6 +2224,24 @@ TARGET-FILES가 nil이면 `org-cite-global-bibliography`의 모든 파일을 검
             (when (eq lang 'en)
               (comment-or-uncomment-region line-begin line-end)))))
       (forward-line 1))))
+
+
+;;;;; my/find-headings-by-tag-rgrep
+
+(defun my/find-headings-by-tag-rgrep ()
+  "org-tag-alist에서 태그를 선택하고, 텍스트 기반 검색(rgrep)을 사용하여
+org-directory 아래의 모든 org 파일에서 해당 태그를 포함하는 라인을 찾습니다.
+검색 패턴은 ':TAG:' 형식입니다."
+  (interactive)
+  (let* ((tags (mapcar #'car org-tag-alist))
+         (selected-tag (completing-read "검색할 태그 선택: " tags nil t)))
+    (when selected-tag
+      (if (and org-directory (file-directory-p org-directory))
+          (let ((search-pattern (concat ":" selected-tag ":")))
+            ;; rgrep을 호출하여 텍스트 검색을 수행합니다.
+            ;; rgrep REGEXP FILE-PATTERN DIR
+            (rgrep search-pattern "*.org" org-directory))
+        (message "org-directory 변수가 설정되지 않았거나 유효한 디렉토리가 아닙니다.")))))
 
 ;;;; provide
 

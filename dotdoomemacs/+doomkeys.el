@@ -1216,7 +1216,8 @@
       :desc "*casual-dired* menu" ";" #'casual-dired-tmenu
       "-" #'nerd-icons-dired-mode
       "P" #'my/dired-hugo-export-wim-to-md
-      :desc "denote-map" "n" ews-denote-map)
+      :desc "denote-map" "n" ews-denote-map
+      "m" #'my/diff-mark-toggle-vc-modified)
 ;; (:prefix ("y" . "copy")
 ;;          )
 
@@ -1479,24 +1480,11 @@
 ;; "C-S-SPC" #'embark-preview+
 
 
-;;;; gptel - fix transient menu
-
-(after! gptel
-  (transient-append-suffix 'gptel-menu "k"
-    '("q" "quit" transient-quit-one))
-
-  ;; Doom binds ~RET~ in Org mode to =+org/dwim-at-point=, which appears to conflict with gptel's transient menu bindings for some reason.
-  ;; Two solutions:
-  ;; - Press ~C-m~ instead of the return key. evil-ret
-  ;; - Change the send key from return to a key of your choice:
-  ;; (transient-suffix-put 'gptel-menu (kbd "RET") :key "M-RET") ;; 2025-05-13 FIXME
-  )
-
 ;;;; vterm-mode-map
 
 (after! vterm
-  ;; Compile Vterm without asking.
-  (setq vterm-always-compile-module t)
+  (setq vterm-always-compile-module t) ;; Compile Vterm without asking.
+  (undefine-key! vterm-mode-map "M-1" "M-2" "M-3" "M-4" "M-5" "M-6" "M-7" "M-8" "M-9" "M-0") ;; 2025-07-13 Simpler
   (map! :map vterm-mode-map "M-y" #'vterm-yank-pop))
 
 ;;;; outli-mode-map / markdown-mode-map
@@ -1647,6 +1635,8 @@
         "@" #'org-cite-insert
         "y" #'yank-as-markdown
         "C" #'my/toggle-comment-for-en-paragraph
+        ;; #'my/find-headings-by-tag-rgrep
+
         (:when (modulep! :completion vertico)
           "." #'consult-org-heading
           "/" #'consult-org-agenda)
@@ -1962,6 +1952,7 @@
 
    (:map
     embark-file-map
+    "O" #'consult-outline
     "x" #'embark-open-externally+
     "1" #'embark-open-externally+
     "5" #'embark-dired-merge-action

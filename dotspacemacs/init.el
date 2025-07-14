@@ -336,7 +336,7 @@
                                    hungry-delete password-generator drag-stuff undo-tree smartparens)
                         :variables dotspacemacs-undo-system 'undo-fu)
 
-     (spacemacs-editing-visual :packages (hide-comnt rainbow-delimiters volatile-highlights term-cursor writeroom-mode))
+     (spacemacs-editing-visual :packages (hide-comnt volatile-highlights term-cursor writeroom-mode))
 
      copy-as-format
 
@@ -704,7 +704,7 @@
      bats-mode ; shell-scripts
      ;; awk-ts-mode
 
-     clojure-ts-mode
+     ;; clojure-ts-mode
      treesit-auto
 
      ;; > python
@@ -734,7 +734,6 @@
      org-rainbow-tags
      org-bookmarks
      ;; org-ql
-     org-sliced-images
 
      (orgabilize :location (recipe :fetcher github :repo "akirak/orgabilize.el"))
      org-noter
@@ -752,12 +751,7 @@
      math-preview ; for org and markdown with mathjax
      math-symbol-lists
 
-     ;; (org-node :location (recipe :fetcher github :repo "meedstrom/org-node"))
-
 ;;;;; Packages: jh-org-ext
-
-     ;; consult-org-roam
-     ;; citar-org-roam
 
      (org-glossary :location (recipe :fetcher github :repo "tecosaur/org-glossary"
                                      :files ("*.el" "*.org" "*.texi")))
@@ -810,8 +804,6 @@
      ;; engine-mode
 
 ;;;;; Packages: jh-llm
-
-     aidermacs
 
      ;; (llm :location (recipe :fetcher github :repo "ahyatt/llm" :branch "main" :files ("*.el" "*.org")))
      ;; ellama
