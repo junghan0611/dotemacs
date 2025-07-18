@@ -483,11 +483,16 @@ alias:
 (coq "# #+name:
 #+begin_src coq" n> r> n> "#+end_src")
 
+(bash-0755 "#+begin_src bash :tangle run.sh :tangle-mode (identity #o755)" n> r> n> "#+end_src")
+
+(text "#+begin_src text" n> r> n> "#+end_src")
+(yaml "#+begin_src yaml" n> r> n> "#+end_src")
+(json "#+begin_src json" n> r> n> "#+end_src")
+(jsontangle "#+begin_src json :tangle a.json" n> r> n> "#+end_src")
+
 (org "#+BEGIN_SRC org" n> r> n> "#+END_SRC")
 (elisp "#+BEGIN_SRC elisp" n> r> n> "#+END_SRC")
 (elixir "#+BEGIN_SRC elixir" n> r> n> "#+END_SRC")
-
-(gpt "#+BEGIN_SRC chatgpt-shell" n> r> n> "#+END_SRC")
 
 (emacslisp "#+BEGIN_SRC emacs-lisp :tangle yes" n> r> n> "#+END_SRC")
 ;; (emacslisp "#+BEGIN_SRC emacs-lisp :tangle no :eval no" n> r> n> "#+END_SRC")

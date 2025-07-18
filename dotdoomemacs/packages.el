@@ -88,7 +88,7 @@
 
 ;; (package! corfu-popupinfo :disable t)
 
-;; (package! evil-snipe :disable t)
+(package! evil-snipe :disable t)
 ;; (package! evil-mc :disable t)
 
 ;; Disable tty module
@@ -331,21 +331,22 @@
 (package! gptel :recipe (:host github :repo "junghan0611/gptel" :branch "ko"))
 (package! mcp)
 
-;; (package! gptel-prompt :recipe (:host github :repo "jwiegley/gptel-prompts"))
+(package! gptel-prompt :recipe (:host github :repo "jwiegley/gptel-prompts"))
 ;; (package! gptel-rag :recipe (:host github :repo "jwiegley/gptel-rag"))
 
-;; (package! gptel :recipe (:host github :repo "karthink/gptel" :branch "feature-tool-use"))
-;; (package! gptel-quick :recipe (:host github :repo "karthink/gptel-quick"))
+;; (package! gpt-babel :recipe (:host github :repo "ElleNajt/gpt-babel" :branch "main" :files ("*.el")))
+(package! gpt-babel :recipe (:local-repo "~/git/default/gpt-babel/"))
+(package! org-auto-tangle :recipe (:local-repo "~/git/default/org-auto-tangle/"))
 
 ;;;; extra packages
 
-(package! khoj)
-
+;; (package! khoj)
 ;; (package! minuet) ;; code completion using LLM
-(package! aider)
+;; (package! aider)
 
-;; (package! aidermacs)
-(package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs" :files ("*.el")))
+;; (package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs" :files ("*.el")))
+(package! aidermacs :recipe (:local-repo "~/git/default/aidermacs/"))
+
 ;; (package! emigo :recipe (:host github :repo "MatthewZMD/emigo"))
 
 (package! llm)
@@ -353,28 +354,17 @@
 
 ;; (package! kagi)
 ;; (package! chatgpt-shell)
-;; (package! ob-chatgpt-shell)
 (package! pcsv)
 
 ;; gptel plugins
-;; (package! elysium :recipe (:host github :repo "lanceberge/elysium" :branch "main" :files ("*.el")))  ; star 236 using smerge
-(package! elysium)
-;; (package! evedel :recipe (:host github :repo "daedsidog/evedel")) ; star 87
-;; (package! yap :recipe (:host github :repo "meain/yap")) ; star 13
+;; (package! elysium)
+(package! elysium :recipe (:local-repo "~/git/junghan0611/elysium/"))
 
 (package! copilot :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))) ; github copilot
 (package! copilot-chat :recipe (:host github :repo "chep/copilot-chat.el" :files ("*.el"))) ; github copilot
 
 (package! whisper :recipe (:host github :repo "natrys/whisper.el"))
-
-(package! gpt-babel :recipe (:host github :repo "ElleNajt/gpt-babel" :branch "main" :files ("*.el")))
-
-;; (package! codeium :recipe (:host github :repo "Exafunction/codeium.el"))
 (package! ellama)
-
-;; (package! openai :recipe (:host github :repo "emacs-openai/openai" :files ("*.el")))
-;; (package! dall-e :recipe (:host github :repo "emacs-openai/dall-e"))
-;; (package! elisa :recipe (:host github :repo "s-kostyaev/elisa" :files ("*.el" "*.org")))
 
 ;; ~/sync/man/dotsamples/doom/lemon-dot-doom/modules/cae/ai/config.el
 ;; (package! greader)
@@ -455,7 +445,6 @@
 ;;;; Git
 
 (package! git-link :recipe (:host github :repo "sshaw/git-link"))
-
 (package! git-cliff)
 (package! gist)
 (package! consult-git-log-grep)
@@ -526,8 +515,8 @@
 
 ;;;; Transient
 
-(package! ccmenu :recipe (:host github :repo "junghan0611/ccmenu"))
-;; (package! ccmenu :recipe (:local-repo "local/ccmenu"))
+;; (package! ccmenu :recipe (:host github :repo "junghan0611/ccmenu"))
+(package! ccmenu :recipe (:local-repo "~/emacs/git/junghan0611/ccmenu"))
 
 ;; (package! casual-suite :recipe (:host github :repo "kickingvegas/casual-suite"))
 (package! casual)

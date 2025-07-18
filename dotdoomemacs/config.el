@@ -729,32 +729,32 @@
 ;; (when (modulep! :completion vertico +childframe)
 ;;   (remove-hook 'vertico-mode-hook #'vertico-posframe-mode))
 
-;;;;; vertico-buffer on TOP
+;;;;; DONT vertico-buffer on TOP
 
 ;; vertico-buffer on-top
-(unless (or IS-TERMUX IS-DEMO)
-  (progn
-    (require 'vertico-buffer)
-    (setq vertico-resize 'grow-only) ; doom nil
+;; (unless (or IS-TERMUX IS-DEMO)
+;;   (progn
+;;     (require 'vertico-buffer)
+;;     (setq vertico-resize 'grow-only) ; doom nil
 
-    ;; vertico on Top
-    (setq vertico-buffer-display-action
-          `(display-buffer-in-side-window
-            (window-height . ,(+ 3 vertico-count)) (side . top)))
-    (vertico-mode +1)
-    (vertico-buffer-mode +1)
-    )
+;;     ;; vertico on Top
+;;     (setq vertico-buffer-display-action
+;;           `(display-buffer-in-side-window
+;;             (window-height . ,(+ 3 vertico-count)) (side . top)))
+;;     (vertico-mode +1)
+;;     (vertico-buffer-mode +1)
+;;     )
 
-  ;; (defun my/vertico-posframe-toggle ()
-  ;;   (interactive)
-  ;;   (if (bound-and-true-p vertico-buffer-mode)
-  ;;       (progn
-  ;;         ;; (vertico-buffer-mode -1)
-  ;;         (vertico-posframe-mode 1))
-  ;;     (progn
-  ;;       ;; (vertico-buffer-mode 1)
-  ;;       (vertico-posframe-mode -1))))
-  )
+;;   ;; (defun my/vertico-posframe-toggle ()
+;;   ;;   (interactive)
+;;   ;;   (if (bound-and-true-p vertico-buffer-mode)
+;;   ;;       (progn
+;;   ;;         ;; (vertico-buffer-mode -1)
+;;   ;;         (vertico-posframe-mode 1))
+;;   ;;     (progn
+;;   ;;       ;; (vertico-buffer-mode 1)
+;;   ;;       (vertico-posframe-mode -1))))
+;;   )
 
 ;;;;; vertico-multiform
 
@@ -2011,6 +2011,8 @@ only those in the selected frame."
 (after! projectile
   ;; Disable projectile cache - saves requirement to invalidate cache when moving files
   (setq projectile-enable-caching nil)
+  (setq projectile-sort-order 'recentf)
+   ;; projectile-verbose nil
 
   ;; create missing test files
   (setq projectile-create-missing-test-files t)
@@ -2129,8 +2131,9 @@ only those in the selected frame."
 ;; Location of Git repositories
 ;; define paths and level of sub-directories to search
 (setq magit-repository-directories
-      '(("~/doomemacs-git/" . 0)
-        ("~/.doom.d/" . 0) ("~/git/" . 1) ("~/mydotfiles/" . 0)
+      '( ;; ("~/doomemacs/" . 0)
+        ("~/dotemacs/" . 0) ("~/office/" . 2) ("~/git/" . 2)
+        ;; ("~/mydotfiles/" . 0)
         ;; ("~/sync/code/" . 2)
         ))
 
@@ -2179,6 +2182,12 @@ only those in the selected frame."
           (side . bottom)
           (dedicated . t)
           (inhibit-same-window . t)))
+
+  ;; MattheZMD-dotfiles-aidermacs-eaf/README.md
+  (defun my/magit-log-follow-current-file ()
+    "A wrapper around `magit-log-buffer-file' with `--follow' argument."
+    (interactive)
+    (magit-log-buffer-file t))
   )
 
 ;;;;; git-commit : categories
@@ -2269,11 +2278,12 @@ ${content}"))
 
 ;; Show project TODO lines in Magit Status
 (use-package! magit-todos
-  :after magit)
-;; :hook (magit-mode . magit-todos-mode)
+  :after magit
+  :hook (magit-mode . magit-todos-mode))
 
 ;;;;; git-cliff
 
+;; [[denote:20230612T070000]]
 (use-package! git-cliff
   :defer t
   :after (magit transient)
@@ -2330,15 +2340,11 @@ ${content}"))
   (consult-gh-code-action #'consult-gh--code-view-action) ;;open files that contain code snippet in an emacs buffer
   (consult-gh-file-action #'consult-gh--files-view-action) ;;open files in an emacs buffer
   :config
+
   (require 'consult-gh-transient)
 
-  (after! projectile
-    (add-hook! 'consult-gh-repo-post-clone-hook
-      (defun cae-projectile-discover-projects-in-search-path-h (&rest _)
-        (projectile-discover-projects-in-search-path))))
-
   ;; set the default folder for cloning repositories, By default Consult-GH will confirm this before cloning
-  (setq consult-gh-default-clone-directory "~/git/default/")
+  (setq consult-gh-default-clone-directory "~/git/clone/")
   (setq consult-gh-default-save-directory "~/Downloads")
 
   (dolist (repo '("junghan0611" "junghanacs" "agzam" "minad" "alphapapa"
@@ -2820,7 +2826,6 @@ ${content}"))
 
 (use-package! org-glossary
   :after org
-  :defer 10
   :init
   (setq org-glossary-idle-update-period 1.0) ; 0.5
   ;; (setq org-glossary-autodetect-in-headings t) ; 2024-06-13 new
@@ -3338,7 +3343,12 @@ ${content}"))
 (after! gptel
 
   (setq gptel-default-mode 'org-mode)
-  (setq gptel-temperature 0.5) ; gptel 1.0, Perplexity 0.2
+
+  ;; ~/sync/man/dotsamples/vanilla/gregoryg-dotfiles-gpt/README.org
+  (setq gptel-include-reasoning 'ignore
+        gptel-expert-commands t
+        )
+  (setq gptel-temperature 0.0) ; gptel 1.0, Perplexity 0.2
 
   ;; (setq gptel-include-reasoning nil)
 
@@ -3399,9 +3409,8 @@ ${content}"))
 
 ;;;;;;; 04 - gptel-org-toggle-branching-context
 
-
-  (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "*** @user ")
-  (setf (alist-get 'org-mode gptel-response-prefix-alist) "@assistant\n")
+  ;; (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "*** @user ")
+  ;; (setf (alist-get 'org-mode gptel-response-prefix-alist) "@assistant\n")
 
   (require 'gptel-org)
 
@@ -3416,9 +3425,9 @@ ${content}"))
       (setq-local gptel-org-branching-context t)
       (message "Context: subheading")))
 
-  ;; (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "@user\n"
-  ;;       (alist-get 'org-mode gptel-response-prefix-alist) "@assistant\n"
-  ;;       (alist-get 'markdown-mode gptel-prompt-prefix-alist) "#### ")
+  (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "@user\n"
+        (alist-get 'org-mode gptel-response-prefix-alist) "@assistant\n"
+        (alist-get 'markdown-mode gptel-prompt-prefix-alist) "#### ")
 
   ;; (with-eval-after-load 'gptel-org
   ;;   (setq-default gptel-org-branching-context t)) ; default nil
@@ -3428,10 +3437,9 @@ ${content}"))
   ;; ~/sync/man/dotsamples/doom/agzam-dot-doom/modules/custom/ai/config.el
   (require 'gptel-integrations)
 
-  (setq gptel-magit-model 'deepseek-chat)
-
-  (setq gptel-model 'claude-4.0-sonnet
-        gptel-backend (gptel-make-gh-copilot "Copilot"))
+  (setq gptel-model 'claude-sonnet-4)
+  (setq gptel-copilot-backend (gptel-make-gh-copilot "Copilot"))
+  (setq gptel-backend gptel-copilot-backend)
 
   (load! "+gptel") ; agzam-dot-doom
 
@@ -3497,13 +3505,14 @@ ${content}"))
 
   ;; OpenRouter offers an OpenAI compatible API
   ;; https://openrouter.ai/
-  (gptel-make-openai "OpenRouter"
-    :host "openrouter.ai"
-    :endpoint "/api/v1/chat/completions"
-    :stream t
-    :key #'gptel-api-key
-    ;; :request-params '(:temperature 0.0)
-    :models gptel--openrouter-models)
+  (setq gptel-openrouter-backend
+        (gptel-make-openai "OpenRouter"
+          :host "openrouter.ai"
+          :endpoint "/api/v1/chat/completions"
+          :stream t
+          :key #'gptel-api-key
+          ;; :request-params '(:temperature 0.0)
+          :models gptel--openrouter-models))
 
   ;; TODO 2025-07-04 테스트 필요
   ;; (gptel-make-openai "Github Copilot"
@@ -3538,22 +3547,27 @@ ${content}"))
   ;;   :key #'gptel-api-key
   ;;   :models '(gpt-4o-mini)) ;; low tier
 
-;; gptel-transient
+  ;; gptel-transient
 
-;; 2025-07-13 [[denote:20250713T154805][#LLM: 20250713T154805]]
+  ;; 2025-07-13 [[denote:20250713T154805][#LLM: 20250713T154805]]
   (require 'gptel-transient)
   (transient-suffix-put 'gptel-tools 'gptel--suffix-mcp-connect :key "a")
   (transient-suffix-put 'gptel-tools 'gptel--suffix-mcp-disconnect :key "d")
 
-;; (after! gptel
-;;   (transient-append-suffix 'gptel-menu "k"
-;;     '("q" "quit" transient-quit-one))
-;;   ;; Doom binds ~RET~ in Org mode to =+org/dwim-at-point=, which appears to conflict with gptel's transient menu bindings for some reason.
-;;   ;; Two solutions:
-;;   ;; - Press ~C-m~ instead of the return key. evil-ret
-;;   ;; - Change the send key from return to a key of your choice:
-;;   ;; (transient-suffix-put 'gptel-menu (kbd "RET") :key "M-RET") ;; 2025-05-13 FIXME
-;;   )
+  ;; (after! gptel
+  ;;   (transient-append-suffix 'gptel-menu "k"
+  ;;     '("q" "quit" transient-quit-one))
+  ;;   ;; Doom binds ~RET~ in Org mode to =+org/dwim-at-point=, which appears to conflict with gptel's transient menu bindings for some reason.
+  ;;   ;; Two solutions:
+  ;;   ;; - Press ~C-m~ instead of the return key. evil-ret
+  ;;   ;; - Change the send key from return to a key of your choice:
+  ;;   ;; (transient-suffix-put 'gptel-menu (kbd "RET") :key "M-RET") ;; 2025-05-13 FIXME
+  ;;   )
+
+;;;;;;; 06 - gptel-magit
+
+  (setq gptel-magit-backend gptel-openrouter-backend)
+  (setq gptel-magit-model "google/gemini-2.5-flash");
 
   ) ; end-of gptel
 
@@ -3592,7 +3606,17 @@ ${content}"))
     "Invoke `gptel-send' with specific PROMPT."
     (let ((gptel--system-message prompt))
       (gptel-send)))
+
   )
+
+;;;;;; TODO gptel-make-preset
+
+;; (after! gptel
+;;   (gptel-make-preset 'python-coder
+;;     :description "Full prompt for a python coder partner."
+;;     :system (gjg/build-system-prompt
+;;              '("roles" "use-org-mode" "project-context" "documentation" "task-management" "tool-usage" "code-structure" "coding-behavior-rules" "human-coding-partner" "python-style-conventions" "python-tests")))
+;;   )
 
 ;;;;;; agzam
 
@@ -3603,8 +3627,8 @@ ${content}"))
       (map! :map gptel-mode-map
             :iv "M-<return>" #'gptel-send
             :iv "M-RET" #'gptel-send
-            :iv "C-RET" #'cashpw/gptel-send
-            :iv "C-<return>" #'cashpw/gptel-send
+            ;; :iv "C-RET" #'cashpw/gptel-send
+            ;; :iv "C-<return>" #'cashpw/gptel-send
             (:localleader
              :desc "gptel/default" "5" #'gptel-menu ;; TODO fixme
              "M-s" #'gptel-save-as-org-with-denote-metadata
@@ -3694,10 +3718,26 @@ ${content}"))
     ) ; progn gptel-quick
   )
 
+;;;;;;  gpt-babel
+
+(use-package! gpt-babel
+  :after gptel org
+  :init
+  (setq gpt-babel/error-action 'nil)  ; Options: nil, 'send, or 'fix
+  :defer 2)
+
 ;;;;;; elysium for pair programming
 
 (use-package! elysium
+  :after gptel
+  :defer 2
   :commands (elysium-toggle-window)
+  :bind (("C-c e q" . elysium-query)
+         ("C-c e t" . elysium-toggle-window)
+         ("C-c e c" . elysium-clear-buffer)
+         ("C-c e a" . elysium-add-context)
+         ("C-c e k" . elysium-keep-all-suggested-changes)
+         ("C-c e d" . elysium-discard-all-suggested-changes))
   :init
   ;; Below are the default values
   (setq elysium-window-size 0.33) ; The elysium buffer will be 1/3 your screen
@@ -3705,6 +3745,18 @@ ${content}"))
   ;; Use `smerge-mode` to then merge in the changes
   (require 'smerge-mode)
   (add-hook 'prog-mode-hook 'smerge-mode)
+
+  :config
+  ;; OpenRouter를 통한 Anthropic 설정
+  (setq gptel-elysium-backend
+        (gptel-make-openai "Elysium-OpenRouter"
+          :host "openrouter.ai"
+          :endpoint "/api/v1/chat/completions"
+          :stream t
+          :key #'gptel-api-key
+          :models gptel--openrouter-models))
+  (setq gptel-elysium-model "anthropic/claude-sonnet-4")
+  (setq gptel-elysium-temperature 0.1) ; 코딩용 설정
   )
 
 ;;;;; llmclient: emigo
@@ -3723,14 +3775,9 @@ ${content}"))
 ;;;;; llmclient: aidermacs
 
 (use-package! aidermacs
-  :defer 3
+  :defer 1
   :init
   (autoload 'aidermacs-transient-menu "aidermacs" nil t)
-  ;;:config
-  ;; (setenv "XAI_API_KEY" (auth-info-password
-  ;;                        (car (auth-source-search
-  ;;                              :host "api.x.ai"
-  ;;                              :user "apikey"))))
 
 ;;;###autoload
   (defun aidermacs-buffer-name ()
@@ -3777,22 +3824,17 @@ Prefers existing sessions closer to current directory."
       (format "*aidermacs:%s*"
               (file-truename display-root))))
 
-  ;; (setq aidermacs-default-model "anthropic/claude-3-7-sonnet-20250219")
-  ;;(setq aidermacs-default-model "gemini/gemini-2.5-pro-exp-03-25")
-  ;;(setq aidermacs-editor-model "gemini/gemini-2.5-pro-exp-03-25")
   (setq aidermacs-auto-commits nil)
-  (setq aidermacs-use-architect-mode t)
+  (setq aidermacs-default-chat-mode 'ask)
   (setq aidermacs-auto-accept-architect t)
-  (setq aidermacs-backend 'vterm) ; 'comint
-
-  ;; Optional: Set specific model for architect reasoning
-  ;; (setq aidermacs-architect-model "deepseek/deepseek-reasoner")
-  ;; Optional: Set specific model for code generation
-  ;; (setq aidermacs-editor-model "deepseek/deepseek-chat")
-
-  (setq aidermacs-default-model "xai/grok-3-beta")
-  (setq aidermacs-editor-model "xai/grok-3-beta")
-  (setq aidermacs-architect-model "xai/grok-3-mini-beta")
+  ;; (setq aidermacs-show-diff-after-change nil)
+  ;; (setq aidermacs-backend 'vterm) ; 'comint
+  (setq aidermacs-default-model "openrouter/anthropic/claude-sonnet-4")
+  (setq aidermacs-weak-model "openrouter/anthropic/claude-3-5-haiku")
+  ;;"openrouter/deepseek/deekseek-r1"
+  ;; "openrouter/deepseek/deepseek-chat-v3-0324")
+  ;; (setq aidermacs-default-model "deepseek/deepseek-reasoner")
+  ;; (setq aidermacs-weak-model "deepseek/deepseek-coder")
 
   ;; Comint backend:
   ;; (setq aidermacs-comint-multiline-newline-key "S-<return>")
@@ -3800,23 +3842,35 @@ Prefers existing sessions closer to current directory."
   ;; (setq aidermacs-vterm-multiline-newline-key "S-<return>")
 
   (setq aidermacs-extra-args
-        '("--cache-prompts"
-          "--cache-keepalive-pings" "6"
+        '(
+          ;; "--cache-prompts"
+          ;; "--cache-keepalive-pings" "6"
           "--watch-files"
           ;;"--auto-test"
           ;;"--timeout" "120"
           ;;"--test"
-          "--auto-commits"
-          "--auto-accept-architect"
+          ;; "--auto-commits"
+          ;; "--auto-accept-architect"
           ;;"--install-tree-sitter-language-pack"
-          "--chat-language" "Korean" ; "English"
+          "--chat-language" "ko" ; "English"
           ;;"--editor-edit-format" "editor-whole"
           ))
+
   (defadvice! my/aidermacs-run-make-real-buffer-a ()
     :after #'aidermacs-run
     (when-let ((buf (get-buffer (aidermacs-buffer-name)))
                (_ (buffer-live-p buf)))
-      (doom-set-buffer-real buf t))))
+      (doom-set-buffer-real buf t)))
+
+  ;; (set-popup-rule!
+  ;;   (lambda (bname _action)
+  ;;     (and (null gptel-display-buffer-action)
+  ;;          (buffer-local-value 'gptel-mode (get-buffer bname))))
+  ;;   :select t
+  ;;   :size 0.3
+  ;;   :quit nil
+  ;;   :ttl nil)
+  )
 
 ;;;;; llmclient: github copilot
 
@@ -3828,7 +3882,7 @@ Prefers existing sessions closer to current directory."
   (setq copilot-indent-offset-warning-disable t
         copilot-max-char 10000) ; default 100000
   (setq copilot-version "1.282.0") ;; 2025-06-03 use stable version
-  (setq copilot-idle-delay 5) ; nil
+  (setq copilot-idle-delay 2) ; nil
   :bind (:map copilot-completion-map
               ("C-g" . 'copilot-clear-overlay)
               ("M-P" . 'copilot-previous-completion)
@@ -3841,7 +3895,7 @@ Prefers existing sessions closer to current directory."
               ("M-[" . 'copilot-next-completion) ; vscode
               ;; ("C-'" . 'copilot-accept-completion)
               ;; ("C-;" . 'copilot-accept-completion)
-              )
+                   )
   ;; :hook ((prog-mode . copilot-mode))
   ;; (org-mode . copilot-mode)
   ;; (markdown-mode . copilot-mode)
@@ -3888,21 +3942,21 @@ Called with a PREFIX, resets the context buffer list before opening"
       (copilot-chat-display)))
   )
 
-;;;;; llmclient: aider.el
+;;;;; DONT llmclient: aider.el
 
-(use-package! aider
-  :commands (aider-transient-menu)
-  :config
-  (require 'aider-doom)
-  (global-set-key (kbd "C-c a") 'aider-transient-menu) ;; for wider screen
-  ;; (setq aider-args '("--model"  "deepseek/deepseek-chat"))
-  (setq aider-args '("--model" "openrouter/deepseek/deepseek-r1" )) ;; add --no-auto-commits if you don't want it
-  ;; - openrouter/deepseek/deepseek-coder
+;; (use-package! aider
+;;   :commands (aider-transient-menu)
+;;   :config
+;;   (require 'aider-doom)
+;;   (global-set-key (kbd "C-c a") 'aider-transient-menu) ;; for wider screen
+;;   ;; (setq aider-args '("--model"  "deepseek/deepseek-chat"))
+;;   (setq aider-args '("--model" "openrouter/deepseek/deepseek-r1" )) ;; add --no-auto-commits if you don't want it
+;;   ;; - openrouter/deepseek/deepseek-coder
 
-  (setenv "DEEPSEEK_API_KEY" user-deepseek-api-key)
-  (setenv "OPENROUTERAPI_KEY" user-openrouter-api-key)
-  (add-hook 'aider-comint-mode-hook #'visual-line-mode)
-  )
+;;   (setenv "DEEPSEEK_API_KEY" user-deepseek-api-key)
+;;   (setenv "OPENROUTERAPI_KEY" user-openrouter-api-key)
+;;   (add-hook 'aider-comint-mode-hook #'visual-line-mode)
+;;   )
 
 ;; aider --list-models deepseek
 ;; deepseek/deepseek-chat, deepseek/deepseek-coder, deepseek/deepseek-reasoner
@@ -5898,9 +5952,9 @@ Suitable for `imenu-create-index-function'."
        org-agenda-tags-column 0)
 
       (setq org-modern-tag nil)
+      (setq org-modern-timestamp nil)
       (setq org-modern-table nil) ; org-modern-indent
       ;;  org-modern-todo t
-      ;;  org-modern-timestamp t
       ;;  org-modern-priority t
       ;;  org-modern-checkbox t
       ;;  org-modern-block-name t
@@ -5916,7 +5970,7 @@ Suitable for `imenu-create-index-function'."
               (?- . "–") ; – endash
               (?* . "➤"))) ; ➤ ‣
 
-      (setq org-modern-block-fringe 0) ; default 2
+      ;; (setq org-modern-block-fringe 0) ; default 2
       (setq org-modern-block-name nil)
       ;; (setq org-modern-block-name
       ;;       '((t . t)
@@ -6728,7 +6782,7 @@ Suitable for `imenu-create-index-function'."
   (interactive)
 
   ;; (message "my/open-workspaces")
-  (+workspace/new-named "pkm")
+  (+workspace/new-named "work")
   (find-file user-project-directory)
 
   (+workspace/new-named "git")
@@ -7390,14 +7444,6 @@ Suitable for `imenu-create-index-function'."
 (use-package! fireplace :defer t)
 (use-package! snow :defer t)
 
-;;;;; ccmenu: context-menu with casual
-
-;; (when (display-graphic-p) ;; 2025-06-18 disable
-;;   (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
-
-;(when (display-graphic-p) ;; gui
-;  (require 'ccmenu))
-
 ;;;;; Terminal Mode - (unless (display-graphic-p)
 
 ;; README /doomemacs-junghan0611/lisp/doom-ui.el
@@ -7524,6 +7570,7 @@ Suitable for `imenu-create-index-function'."
   ;;          todoist-backing-buffer (concat org-directory ".cache/todoist.org")))
 
   (use-package! orgbox
+    :after org
     :commands (orgbox orgbox-schedule)
     :init
     (setq! orgbox-start-time-of-day "9:30"
@@ -7774,32 +7821,32 @@ Suitable for `imenu-create-index-function'."
   (add-to-list 'load-path "~/sync/emacs/git/default/org-cv/")
   (require 'ox-awesomecv))
 
-;;;;; TODO evil-snipe from ohyecloudy
+;;;;; DONT evil-snipe from ohyecloudy
 
 ;; 한글도 f/t로 찾을 수 있게 한다.
 ;; 일괄로 편하게 적용할 수 있는 초성 자음만 찾는다.
-(after! evil-snipe
-  (setq evil-snipe-aliases '(
-                             (?r "[rㄱ가-낗]")
-                             (?R "[Rㄲ까-낗]")
-                             (?s "[sㄴ나-닣]")
-                             (?e "[eㄷ다-딯]")
-                             (?E "[Eㄸ따-띻]")
-                             (?f "[fㄹ라-맇]")
-                             (?a "[aㅁ마-밓]")
-                             (?q "[qㅂ바-빟]")
-                             (?Q "[Qㅃ빠-삫]")
-                             (?t "[tㅅ사-싷]")
-                             (?T "[Tㅆ싸-앃]")
-                             (?d "[dㅇ아-잏]")
-                             (?w "[wㅈ자-짛]")
-                             (?W "[Wㅉ짜-찧]")
-                             (?c "[cㅊ차-칳]")
-                             (?z "[zㅋ카-킿]")
-                             (?x "[xㅌ타-팋]")
-                             (?v "[vㅍ파-핗]")
-                             (?g "[gㅎ하-힣]")
-                             )))
+;; (after! evil-snipe
+;;   (setq evil-snipe-aliases '(
+;;                              (?r "[rㄱ가-낗]")
+;;                              (?R "[Rㄲ까-낗]")
+;;                              (?s "[sㄴ나-닣]")
+;;                              (?e "[eㄷ다-딯]")
+;;                              (?E "[Eㄸ따-띻]")
+;;                              (?f "[fㄹ라-맇]")
+;;                              (?a "[aㅁ마-밓]")
+;;                              (?q "[qㅂ바-빟]")
+;;                              (?Q "[Qㅃ빠-삫]")
+;;                              (?t "[tㅅ사-싷]")
+;;                              (?T "[Tㅆ싸-앃]")
+;;                              (?d "[dㅇ아-잏]")
+;;                              (?w "[wㅈ자-짛]")
+;;                              (?W "[Wㅉ짜-찧]")
+;;                              (?c "[cㅊ차-칳]")
+;;                              (?z "[zㅋ카-킿]")
+;;                              (?x "[xㅌ타-팋]")
+;;                              (?v "[vㅍ파-핗]")
+;;                              (?g "[gㅎ하-힣]")
+;;                              )))
 
 
 ;;;;; gptel mcp
@@ -7810,8 +7857,9 @@ Suitable for `imenu-create-index-function'."
   (require 'mcp-hub)
   (setq mcp-hub-servers
         `(("filesystem" . (:command "npx" :args ("-y" "@modelcontextprotocol/server-filesystem"
-                                                 "/home/goqual/office/cube_res-v5.0.0-goqual-Nightly/"
-                                                 "/home/goqual/sync/org/office/"
+                                                 ;; "/home/goqual/office/cube_res-v5.0.0-goqual-Nightly/"
+                                                 "~/sync/"
+                                                 "~/git/"
                                                  )))
           ("fetch" . (:command "uvx" :args ("mcp-server-fetch")))
           ("qdrant" . (:url "http://localhost:8000/sse"))
@@ -7825,5 +7873,18 @@ Suitable for `imenu-create-index-function'."
           ))
   :hook (after-init . mcp-hub-start-all-server)
   )
+
+;;; ccmenu: context-menu with casual
+
+;; (when (display-graphic-p) ;; 2025-06-18 disable
+;;   (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
+
+(when (display-graphic-p) ;; gui
+  (require 'ccmenu))
+
+;;; Load office
+
+(load! "+office")
+
 
 ;;; left blank on purpose

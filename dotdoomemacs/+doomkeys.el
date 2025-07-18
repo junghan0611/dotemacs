@@ -97,7 +97,6 @@
       :desc "er/expand-region" "v" #'er/expand-region
       :desc "expand-transient" "V" #'expand-transient)
 
-
 ;;;; Replace Doom `/' highlight with buffer-search - consult-line
 
 (map! :after evil
@@ -548,25 +547,42 @@
                           "=" #'smerge-diff-upper-lower))))
 
 
+;; (require 'gpt-babel)
 (map! :leader
       "e" nil
-      (:prefix ("e" . "elysium/gptel")
+      (:prefix ("e" . "gptel")
        ;; '(insert normal) 'gptel-mode-map "C-<return>" #'elysium-query
-       "q" #'elysium-query
-       "o" #'elysium-keep-all-suggested-changes
-       "m" #'elysium-discard-all-suggested-changes
-       "a" #'elysium-add-context
-       "c" #'elysium-clear-buffer
-       "t" #'elysium-toggle-window
-       "e" #'elysium-toggle-window
 
-       :desc "gptel: gptel-mode" "1" #'gptel-mode
+       (:prefix ("g" . "gpt-babel")
+                "s" #'gpt-babel/send-block
+                "p" #'gpt-babel/patch-block
+                "f" #'gpt-babel/fix-block
+                "i" #'gpt-babel/fix-with-instructions
+                "w" #'gpt-babel/wish-complete
+
+                (:prefix ("c" . "context-fix")
+                         "a" #'gpt-babel/fix-block-file-above
+                         "h" #'gpt-babel/fix-block-with-help
+                         ))
+
+       (:prefix ("e" . "elysium")
+                "q" #'elysium-query
+                "o" #'elysium-keep-all-suggested-changes
+                "m" #'elysium-discard-all-suggested-changes
+                "a" #'elysium-add-context
+                "c" #'elysium-clear-buffer
+                "t" #'elysium-toggle-window
+                "e" #'elysium-toggle-window
+                )
+
+       "q" #'elysium-query-no-code
        :desc "gptel: gptel-mode" "SPC" #'gptel-mode
        :desc "gptel: gptel-mode" "RET" #'gptel-mode
-       "2" #'gptel-org-toggle-branching-context
-       :desc "gptel: send default" :n "3" (cmd! (cashpw/gptel-send (alist-get 'default gptel-directives)))
-       :desc "gptel: send chain-of-thought" :n "4" (cmd! (cashpw/gptel-send (alist-get 'chain-of-thought gptel-directives)))
-       :desc "gptel: send follow-up" :n "5" (cmd! (cashpw/gptel-send (alist-get 'follow-up gptel-directives))))
+       "t" #'gptel-org-toggle-branching-context
+       ;; :desc "gptel: send default" :n "3" (cmd! (cashpw/gptel-send (alist-get 'default gptel-directives)))
+       ;; :desc "gptel: send chain-of-thought" :n "4" (cmd! (cashpw/gptel-send (alist-get 'chain-of-thought gptel-directives)))
+       ;; :desc "gptel: send follow-up" :n "5" (cmd! (cashpw/gptel-send (alist-get 'follow-up gptel-directives))))
+       )
       )
 
 ;;;; '9' gptel
@@ -1217,10 +1233,11 @@
       "-" #'nerd-icons-dired-mode
       "P" #'my/dired-hugo-export-wim-to-md
       :desc "denote-map" "n" ews-denote-map
-      "m" #'my/diff-mark-toggle-vc-modified)
+      "M" #'my/diff-mark-toggle-vc-modified
+      "m" #'my/diff-hl-dired-mark-modified
+      )
 ;; (:prefix ("y" . "copy")
 ;;          )
-
 
 ;;;; python-mode-map
 
@@ -1554,16 +1571,16 @@
           :g "C-7" #'leetcode-submit)))
 
 
-;;;; aider
-
-;; (after! aider
-;;   (aider-doom-enable))
-
-;;;; Experiments
+;;;; Magit
 
 ;; Use `,,` to close a commit message and `,k' to cancel
 ;; Doom maps `ZZ` to commit, `ZQ' to quit
 (map! :after magit
+      :map magit-status-mode-map
+      "M-RET" #'magit-diff-visit-file-other-window
+      ;; :localleader
+      ;; "o" #'magit-diff-visit-file-other-window
+      ;; "f" #'my/magit-log-follow-current-file
       :map text-mode-map
       :localleader
       "," #'with-editor-finish
@@ -1799,7 +1816,8 @@
         "o" #'my/denote-howmish-find-file
 
         ";" #'my/clear-nbsp-and-ascii-punctuations
-        ":" #'my/insert-nbsp-all-with-wordlist-and-tags
+        ":" #'my/insert-nbsp-simple-all
+        ;; ":" #'my/insert-nbsp-all-with-wordlist-and-tags
         "M-;" #'my/add-to-glossary
         "M-'" #'my/add-newlines-between-paragraphs
         "M-l" #'my/link-to-headline
@@ -1807,6 +1825,7 @@
         :desc "org-set-effot" "E" #'org-set-effort
         :desc "time-stamp" "1" #'time-stamp
         :desc "insert-inactive-timestamp" "2" #'bh/insert-inactive-timestamp
+        "m" #'org-babel-tangle
         :desc "focus-mode" "3" #'focus-mode
         :desc "org-appear-mode" "4" #'org-appear-mode
 

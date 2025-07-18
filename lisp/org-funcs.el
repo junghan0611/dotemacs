@@ -1971,6 +1971,33 @@ TARGET-FILES가 nil이면 `org-cite-global-bibliography`의 모든 파일을 검
 
 ;;;;; my/insert-nbsp-all-with-wordlist-and-tags
 
+(defun my/insert-nbsp-simple-all ()
+  "한글 조사, 라틴-한글, 기호-텍스트 사이에 NBSP 삽입 (3가지 패턴 통합)"
+  (interactive)
+  (let ((word-list '()))
+    (save-excursion
+      (goto-line 10)
+      ;; 1. 라틴 문자와 한글 사이 NBSP 삽입
+      ;; 2. 조직모드 기호(=,*,_,+) 뒤 한글 또는 라틴 문자에 NBSP 삽입
+      (while (re-search-forward "\\([A-Za-z*+=_]\\)\\([가-힣]\\)" nil t)
+        (unless (save-excursion
+                  (goto-char (match-beginning 1))
+                  (looking-back "\\s-" 1))
+          (goto-char (match-beginning 2))
+          (insert " ")
+          (goto-char (match-end 2))))
+
+      ;; 4. 한글 조사 NBSP 삽입 - '1단어'
+      (goto-line 10)
+      (while (re-search-forward
+              "\\([가-힣]\\{2,\\}\\)\\(이\\|가\\|은\\|는\\|을\\|의\\|를\\|와\\|과\\|란\\)\\(\x20\\)" ; [[:space:]]
+              nil t)
+        (when (>= (length (match-string 1)) 2)
+          (push (match-string 1) word-list))
+        (replace-match "\\1 \\2 \\3"))
+      ) ; end save-excursion
+    ))
+
 ;; [[denote:20250415T174028][#LLM: 20250415T174028]]
 ;; [[denote:20250418T050908][#조직모드: 한국어 조사 공백문자 삽입 - 코드 통합]]
 ;; [[denote:20250419T123138][정규식의 우선순위]]

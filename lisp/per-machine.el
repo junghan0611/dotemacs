@@ -262,4 +262,25 @@
         ("Github/junghanacs" . "https://github.com/junghanacs")
         ))
 
+;;; my-company-name
+
+(progn
+  (defvar my-company-name nil
+    "회사명을 저장하는 변수. dotfile 외부에서 설정해야 합니다.")
+
+  (defvar my-company-name-rot13 nil
+    "ROT13으로 암호화된 회사명을 저장하는 변수.")
+
+  (defun my-set-company-name (name)
+    "회사명을 설정하고 ROT13 버전도 미리 계산해서 저장합니다."
+    (setq my-company-name name)
+    (setq my-company-name-rot13 (when name (rot13 name))))
+  )
+
+;;; my-sensitivie-string-file
+
+  (defvar my-sensitive-strings-file "~/org/sensitive-strings.txt"
+    "민감한 문자열들을 저장하는 파일 경로")
+
+
 ;;; per-machine.el ends here

@@ -55,6 +55,8 @@
             ("emacs-lisp" "el")
             ("elisp" "el")
             ("python" "py")
+            ("json" "json")
+            ("yaml" "yml")
             ("jupyter-python" "py")
             ;; ("ruby" "rb")
             ;; ...
@@ -165,6 +167,7 @@
 
 ;;;; TODO Finding Code
 
+
 ;;;; Keybindings
 
 (when (locate-library "pretty-hydra")
@@ -173,19 +176,22 @@
     (:color amaranth :quit-key "<escape>")
     (
      "Code Blocks"
-     (("g" avy-jump-org-block "Goto ")
+     (("g" avy-jump-org-block "avy Jump")
       ("j" org-next-block "Previous" :color pink)
       ("k" org-previous-block "Next" :color pink))
      "Evaluate"
-     (("o" avy-org-babel-execute-src-block "Block ")
+     (("o" avy-org-babel-execute-src-block "avy Block")
       ("h" org-babel-execute-subtree "Section")
       ("b" org-babel-execute-buffer "Buffer"))
      "Tangle"
      (("t" org-babel-tangle "to Default")
       ("f" org-babel-tangle-file "choose File")
       ("T" org-babel-detangle "from File"))
+     ;; "AI"
+     ;; (("s" gpt-babel/send-block)
+     ;;  ("p" gpt-babel/patch-block))
      "Misc"
-     (("e" avy-org-babel-edit-src-block "Edit Block ")
+     (("e" avy-org-babel-edit-src-block "avy Edit Block")
       ("s" org-babel-pop-to-session-maybe "Session REPL")
       ("v" ha-org-babel-tangle-visit-file "Visit Tangled")
       ("q" nil "Quit" :color red :exit t)
@@ -193,7 +199,7 @@
      )
     )
   (keymap-set org-mode-map "C-c 0" #'hydra-org-babel/body)
-  (keymap-set org-mode-map "<f11>" #'hydra-org-babel/body)
+  (keymap-set org-mode-map "<f5>" #'hydra-org-babel/body)
   )
 
 ;;; provide

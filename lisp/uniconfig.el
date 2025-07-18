@@ -1281,25 +1281,220 @@ cd -
   )
 
 
-;;;; my/diff-mark-toggle-vc-modified
+;;;; my/diff-hl-dired-mark-modified
 
-;; [[denote:20250707T093026][#디레드]]
-;; [2025-07-07 Mon 11:35]
-(defun my/diff-mark-toggle-vc-modified ()
-  "Dired 버퍼에서 git 등 VC로 변경된 파일에 마크를 토글합니다."
+(with-eval-after-load 'diff-hl
+  ;; [[denote:20250707T093026][#디레드]]
+
+  (defun my/diff-mark-toggle-vc-modified ()
+    "Dired 버퍼에서 git 등 VC로 변경된 파일에 마크를 토글합니다."
+    (interactive)
+    (require 'vc)
+    (save-excursion
+      (goto-char (point-min))
+      (while (not (eobp))
+        (let ((file (dired-get-filename nil t)))
+          (when file
+            (let ((backend (vc-backend file)))
+              (when backend
+                (let ((state (vc-state file backend)))
+                  (when (memq state '(edited added removed conflict))
+                    (dired-mark 1))))))
+          (forward-line 1)))))
+
+;; (defun my/diff-hl-dired-mark-untracked ()
+  ;; "Mark all untracked files in current dired buffer."
+(defun my/diff-hl-dired-mark-modified ()
+  "Mark all modified (edited/added/removed/untracked) files in current dired buffer."
   (interactive)
-  (require 'vc)
-  (save-excursion
-    (goto-char (point-min))
-    (while (not (eobp))
-      (let ((file (dired-get-filename nil t)))
-        (when file
-          (let ((backend (vc-backend file)))
-            (when backend
-              (let ((state (vc-state file backend)))
-                (when (memq state '(edited unregistered added removed conflict))
-                  (dired-mark 1))))))
-      (forward-line 1)))))
+  (let ((backend (ignore-errors (vc-responsible-backend default-directory)))
+        (def-dir default-directory)
+        (current-buffer (current-buffer)))
+    (when (and backend (not (memq backend diff-hl-dired-ignored-backends)))
+      (let ((process-buffer (generate-new-buffer " *mark-untracked-tmp*")))
+        (with-current-buffer process-buffer
+          (setq default-directory (expand-file-name def-dir))
+          (erase-buffer)
+          (diff-hl-dired-status-files
+           backend def-dir
+           (when diff-hl-dired-extra-indicators
+             (cl-loop for file in (directory-files def-dir)
+                      unless (member file '("." ".." ".hg" ".git"))
+                      collect file))
+           (lambda (entries &optional more-to-come)
+             (when (buffer-live-p current-buffer)
+               (with-current-buffer current-buffer
+                 (let ((inhibit-read-only t))
+                   (dolist (entry entries)
+                     (cl-destructuring-bind (file state &rest r) entry
+                       (setq file (replace-regexp-in-string "\\` " "" file))
+                       (when (memq state '(unregistered edited added removed)) ;; all-in-one
+                         (save-excursion
+                           (goto-char (point-min))
+                           (when (dired-goto-file-1
+                                  file (expand-file-name file def-dir) nil)
+                             (dired-mark 1)))))))))
+             (unless more-to-come
+               (when (buffer-live-p process-buffer)
+                 (kill-buffer process-buffer))))))))))
+  )
+
+
+;;;; my-org-hugo-rot13-company-name
+
+(when my-company-name
+
+  (defun my-org-hugo-rot13-company-name (text backend info)
+    "Hugo로 내보낼 때 회사명을 ROT13으로 암호화합니다."
+    (when (and my-company-name my-company-name-rot13
+               (org-export-derived-backend-p backend 'hugo))
+      ;; 미리 계산된 ROT13 값을 사용합니다.
+      ;; 세 번째 인수인 t는 case-fold-search를 활성화하여
+      ;; 대소문자 구분 없이 모두 찾아 바꿉니다.
+      (replace-regexp-in-string my-company-name
+                                my-company-name-rot13
+                                text t t)))
+
+  (add-to-list 'org-export-filter-plain-text-functions
+               'my-org-hugo-rot13-company-name)
+  (add-to-list 'org-export-filter-src-block-functions
+               'my-org-hugo-rot13-company-name)
+  (add-to-list 'org-export-filter-link-functions
+               'my-org-hugo-rot13-company-name)
+  (add-to-list 'org-export-filter-keyword-functions
+               'my-org-hugo-rot13-company-name)
+  )
+
+;;;; my-post-export-replace-in-content-dir
+
+(progn
+  (defvar my-sensitive-strings-map nil
+    "민감한 문자열과 대체 문자열의 매핑을 저장하는 해시테이블")
+
+  (defun my-generate-consistent-replacement (original-string)
+    "원본 문자열을 일관된 대체 문자열로 변환합니다.
+   같은 입력에 대해 항상 같은 출력을 생성합니다."
+    (let* ((hash (secure-hash 'sha256 original-string))
+           ;; 해시의 앞 16자리를 사용하여 원본과 같은 길이의 문자열 생성
+           (hex-chars (substring hash 0 (min 32 (* 2 (length original-string)))))
+           (replacement ""))
+      ;; 원본의 문자 패턴을 유지하면서 대체
+      (dotimes (i (length original-string))
+        (let ((orig-char (aref original-string i))
+              (hex-index (* 2 (% i 16))))
+          (cond
+           ;; 숫자는 숫자로
+           ((and (>= orig-char ?0) (<= orig-char ?9))
+            (setq replacement
+                  (concat replacement
+                          (char-to-string
+                           (+ ?0 (% (string-to-number
+                                     (substring hex-chars hex-index (1+ hex-index)) 16) 10))))))
+           ;; 소문자는 소문자로
+           ((and (>= orig-char ?a) (<= orig-char ?z))
+            (setq replacement
+                  (concat replacement
+                          (char-to-string
+                           (+ ?a (% (string-to-number
+                                     (substring hex-chars hex-index (1+ hex-index)) 16) 26))))))
+           ;; 대문자는 대문자로
+           ((and (>= orig-char ?A) (<= orig-char ?Z))
+            (setq replacement
+                  (concat replacement
+                          (char-to-string
+                           (+ ?A (% (string-to-number
+                                     (substring hex-chars hex-index (1+ hex-index)) 16) 26))))))
+           ;; 기타 문자는 그대로
+           (t
+            (setq replacement (concat replacement (char-to-string orig-char)))))))
+      replacement))
+
+  (defun my-load-sensitive-strings ()
+    "민감한 문자열 파일을 로드합니다."
+    (setq my-sensitive-strings-map (make-hash-table :test 'equal))
+    (when (file-exists-p my-sensitive-strings-file)
+      (with-temp-buffer
+        (insert-file-contents my-sensitive-strings-file)
+        (goto-char (point-min))
+        (let ((data (read (current-buffer))))
+          (dolist (item data)
+            (puthash (car item) (cdr item) my-sensitive-strings-map))))))
+
+  (defun my-save-sensitive-strings ()
+    "민감한 문자열 매핑을 파일에 저장합니다."
+    (let ((dir (file-name-directory my-sensitive-strings-file)))
+      (unless (file-exists-p dir)
+        (make-directory dir t)))
+    (with-temp-file my-sensitive-strings-file
+      (let ((data '()))
+        (maphash (lambda (k v) (push (cons k v) data)) my-sensitive-strings-map)
+        (insert (format "%S" data)))))
+
+  (defun my-add-sensitive-string (original)
+    "새로운 민감한 문자열을 추가합니다."
+    (interactive "s민감한 문자열 입력: ")
+    (unless my-sensitive-strings-map
+      (my-load-sensitive-strings))
+    (unless (gethash original my-sensitive-strings-map)
+      (let ((replacement (my-generate-consistent-replacement original)))
+        (puthash original replacement my-sensitive-strings-map)
+        (my-save-sensitive-strings)
+        (message "추가됨: '%s' -> '%s'" original replacement))))
+
+  (defun my-org-hugo-filter-sensitive-strings (text backend info)
+    "Hugo 내보내기 시 민감한 문자열들을 대체합니다."
+    (when (org-export-derived-backend-p backend 'hugo)
+      (unless my-sensitive-strings-map
+        (my-load-sensitive-strings))
+      (when my-sensitive-strings-map
+        (maphash (lambda (original replacement)
+                   (setq text (replace-regexp-in-string
+                               (regexp-quote original) replacement text t t)))
+                 my-sensitive-strings-map))
+      text))
+
+  (defun my-post-export-replace-in-content-dir (content-dir)
+    "content 디렉토리의 모든 마크다운 파일에서 민감한 문자열을 일괄 치환합니다."
+    (interactive "Dcontent 디렉토리 경로: ")
+    (unless my-sensitive-strings-map
+      (my-load-sensitive-strings))
+    (when my-sensitive-strings-map
+      (let ((md-files (directory-files-recursively content-dir "\\.md$")))
+        (dolist (file md-files)
+          (with-temp-buffer
+            (insert-file-contents file)
+            (let ((modified nil))
+              (maphash (lambda (original replacement)
+                         (goto-char (point-min))
+                         (while (search-forward original nil t)
+                           (replace-match replacement t t)
+                           (setq modified t)))
+                       my-sensitive-strings-map)
+              (when modified
+                (write-region (point-min) (point-max) file)
+                (message "Updated: %s" file))))))))
+
+  (defun my/export-replace-in-notes-content-dir ()
+    (interactive)
+    (my-post-export-replace-in-content-dir (concat org-hugo-base-dir "content"))
+    )
+
+  )
+
+;; (defun my-setup-sensitive-string-filters ()
+;;   "민감한 문자열 필터들을 설정합니다."
+;;   (my-load-sensitive-strings)
+;;   (add-to-list 'org-export-filter-plain-text-functions
+;;                'my-org-hugo-filter-sensitive-strings)
+;;   (add-to-list 'org-export-filter-src-block-functions
+;;                'my-org-hugo-filter-sensitive-strings)
+;;   (add-to-list 'org-export-filter-example-block-functions
+;;                'my-org-hugo-filter-sensitive-strings)
+;;   (add-to-list 'org-export-filter-fixed-width-functions
+;;                'my-org-hugo-filter-sensitive-strings))
+
+;; ;; 자동 설정
+;; (my-setup-sensitive-string-filters)
 
 ;;; provide
 

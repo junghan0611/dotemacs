@@ -1774,7 +1774,7 @@ window."
 ;;;;; aidermacs
 
 (when (locate-library "aidermacs")
-  (global-set-key (kbd "C-c a") 'aidermacs-transient-menu))
+  (global-set-key (kbd "M-z") 'aidermacs-transient-menu))
 
 ;;;; EWS Map : 'M-c n', 'C-c n' and 'SPC RET'
 
@@ -1938,6 +1938,7 @@ window."
   ;; "r" 'org-reveal-export-to-html
   "r" #'org-re-reveal-export-to-html-and-browse
   "e" #'org-hugo-export-wim-to-md
+  "X" #'my/export-replace-in-notes-content-dir
   )
 
 (defvar-keymap ews-denote-extra-map
@@ -1957,6 +1958,9 @@ window."
   ;; "z" #'denote-signature ; "zettelkasten" mnemonic
 
   "M-i" #'denote-org-dblock-insert-files
+
+  "S" #'my-add-sensitive-string
+
   ;; "M-r" #'my/rename-all-screenshot-images-to-denote-id
   ;; "S" #'my/denote-sort-with-days
   ;; "n" #'my/goto-denote-dired

@@ -193,17 +193,18 @@
 (defconst gptel--openrouter-models
   '(
     ;; https://openrouter.ai/provider/deepseek
-    (deepsek/deepseek-r1-0528 ;; 2025-07-04
+    ;; Created Jan 20, 2025 163,840 context $0.40/M input tokens $2/M output tokens
+    (deepsek/deepseek-r1 ;; 2025-07-04
      :capabilities (tool reasoning)
-     :context-window 128
-     :input-cost 0.50
-     :output-cost 2.15)
+     :context-window 164
+     :input-cost 0.40
+     :output-cost 2.0)
 
     (deepseek/deepseek-chat-v3-0324
      :capabilities (tool)
-     :context-window 163
-     :input-cost 0.28
-     :output-cost 1.1)
+     :context-window 131
+     :input-cost 0.25
+     :output-cost 0.85)
 
     ;; https://openrouter.ai/google/gemini-2.5-pro
     (google/gemini-2.5-pro
@@ -231,6 +232,14 @@
      :output-cost 8.0
      :cutoff-date "2024-05")
 
+    (anthropic/claude-3.5-haiku
+     :description "enhanced capabilities in speed, coding accuracy, and tool use"
+     :capabilities (tool-use cache)
+     :context-window 200
+     :input-cost 0.8
+     :output-cost 4
+     :cutoff-date "2024-11")
+
     ;; https://openrouter.ai/anthropic/claude-sonnet-4
     (anthropic/claude-sonnet-4
      :description "Hybrid model capable of standard thinking and extended thinking modes"
@@ -241,23 +250,24 @@
      :output-cost 15
      :cutoff-date "2025-05")
 
-    (anthropic/claude-opus-4
-     :description "Hybrid model capable of standard thinking and extended thinking modes"
-     :capabilities (media tool-use cache)
-     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
-     :context-window 200
-     :input-cost 15
-     :output-cost 75
-     :cutoff-date "2025-05")
+    ;; (anthropic/claude-opus-4
+    ;;  :description "Hybrid model capable of standard thinking and extended thinking modes"
+    ;;  :capabilities (media tool-use cache)
+    ;;  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+    ;;  :context-window 200
+    ;;  :input-cost 15
+    ;;  :output-cost 75
+    ;;  :cutoff-date "2025-05")
 
-    (anthropic/claude-3.7-sonnet:thinking
-     :description "Hybrid model capable of standard thinking and extended thinking modes"
-     :capabilities (media tool-use cache)
-     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
-     :context-window 200
-     :input-cost 3
-     :output-cost 15
-     :cutoff-date "2025-02")))
+    ;; (anthropic/claude-3.7-sonnet:thinking
+    ;;  :description "Hybrid model capable of standard thinking and extended thinking modes"
+    ;;  :capabilities (media tool-use cache)
+    ;;  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+    ;;  :context-window 200
+    ;;  :input-cost 3
+    ;;  :output-cost 15
+    ;;  :cutoff-date "2025-02")
+    ))
 
 ;;;; openrouter
 
