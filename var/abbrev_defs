@@ -4107,8 +4107,9 @@
     ("ㅜㅑㅣ" "nil" nil :count 3)
     ("ㅜㅠㅠ" "nbb" nil :count 3)
     ("ㅜ샏ㄴ" "notes" nil :count 0)
+    ("ㅞㅜ" "N8N" nil :count 0)
     ("ㅠㅑㅠ" "bib" nil :count 1)
-    ("ㅣㅣㅡ" "LLM" nil :count 1)
+    ("ㅣㅣㅡ" "LLM" nil :count 3)
     ("ㅣ냐ㅔ" "Lisp" nil :count 5)
     ("ㅣ핸ㄷㅂ" "Logseq" nil :count 2)
     ("냐체" "SICP" nil :count 2)
@@ -4124,7 +4125,11 @@
     ("약ㄷㅇ" "Dired" nil :count 4)
     ("우샏" "Denote" nil :count 11)
     ("챗헷" "chatgpt" nil :count 4)
+    ("츠ㅔ" "MCP" nil :count 2)
     ("치ㅐㅓ겯" "Clojure" nil :count 2)
+    ("치ㅑ" "CLI" nil :count 0)
+    ("헷디" "GPTEL" nil :count 0)
+    ("혀ㅑ" "GUI" nil :count 1)
    ))
 
 (define-abbrev-table 'org-journal-mode-abbrev-table

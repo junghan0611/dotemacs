@@ -1774,7 +1774,12 @@ window."
 ;;;;; aidermacs
 
 (when (locate-library "aidermacs")
-  (global-set-key (kbd "M-z") 'aidermacs-transient-menu))
+  (global-set-key (kbd "M-a") 'aidermacs-transient-menu))
+
+;;;;; claude-code
+
+(when (locate-library "claude-code")
+  (global-set-key (kbd "M-z") 'claude-code-transient)) ;; claude-code-command-map
 
 ;;;; EWS Map : 'M-c n', 'C-c n' and 'SPC RET'
 
@@ -1806,7 +1811,7 @@ window."
 (defvar-keymap denote-sequence-map
   :doc "Emacs denote-sequence keymap."
   "n" 'denote-sequence
-  "f" 'denote-sequence-find
+  "F" 'denote-sequence-find
   "l" 'denote-sequence-link
   "d" 'denote-sequence-dired
   "r" 'denote-sequence-reparent
@@ -1814,14 +1819,17 @@ window."
   "C" 'denote-sequence-convert
   "s" 'denote-sequence-new-sibling-of-current
   "z" 'denote-rename-file-signature
-  "p" #'(lambda () (interactive) (denote-sequence-find 'parent))
   )
 
 (defvar-keymap denote-search-map
-  :doc "Emacs denote-search keymap."
-  "s" #'denote-search
+  :doc "Emacs denote-search, denote-sequence keymap."
+  "SPC" #'denote-search
+  "f" #'denote-search
   "d" #'denote-search-marked-dired-files
   "r" #'denote-search-files-referenced-in-region
+  "p" #'(lambda () (interactive) (denote-sequence-find 'parent))
+  "s" #'(lambda () (interactive) (denote-sequence-find 'siblings))
+  "c" #'(lambda () (interactive) (denote-sequence-find 'children))
   ;; "r" #'denote-search-refine
   ;; "f" #'denote-search-focused-search
   ;; denote-search-exclude-files

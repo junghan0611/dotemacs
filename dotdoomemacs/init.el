@@ -149,7 +149,7 @@
  (magit -forge) ; a git porcelain for Emacs
 
  make              ; run make tasks from Emacs
- ;;pass              ; password manager for nerds
+ pass              ; password manager for nerds
  (:unless IS-TERMUX (pdf)) ; pdf enhancements
  ;;terraform         ; infrastructure as code
  ;;tmux              ; an API for interacting with tmux
@@ -207,7 +207,7 @@
  ;; (markdown +tree-sitter) ; writing docs for people to ignore
  markdown
  ;;nim               ; python + lisp at the speed of c
- ;;nix               ; I hereby declare "nix geht mehr!"
+ (nix +lsp)               ; I hereby declare "nix geht mehr!"
  ;;ocaml             ; an objective camel
  (org                         ; organize your plain life in plain text
   ;; +dragndrop                  ; drag & drop files/images into org buffers

@@ -157,11 +157,10 @@
 (global-set-key (kbd "C-c A") 'ash-goto-org-agenda)
 
 ;; Sets default-directory to org-directory so that =M-x magit= from the agenda view does not ask me for a dir.
-(global-set-key (kbd "C-c a") 'org-agenda)
+;; (global-set-key (kbd "C-c a") 'org-agenda)
 ;; (global-set-key (kbd "C-c A")
 ;;                 (lambda () (interactive) (let ((default-directory org-directory)) (org-agenda))))
 
-(global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c \\") 'org-tags-sparse-tree)
 
 (global-unset-key (kbd "<f6>"))
@@ -319,7 +318,7 @@
 (setq org-export-headline-levels 5) ; default 3
 (setq org-export-with-toc nil) ; default t - turn off on hugo toc
 
-(setq org-export-exclude-tags '("private" "OFFICE" "FILE" "LOG" "CREDENTIAL" "LOCAL" "noexport" "ignore" "crypt")) ;; "LLMLOG"
+(setq org-export-exclude-tags '("private" "OFFICE" "FILE" "LOG" "LLMLOG" "CREDENTIAL" "REFILED" "LOCAL" "noexport" "ignore" "crypt"))
 
 (progn
   (setq org-publish-use-timestamps-flag t) ; default t
@@ -1232,7 +1231,6 @@ A prefix arg forces clock in of the default task."
 ;;       "/your/path/to/an/org/file/for/storing/project/todos.org")
 ;; (push (org-projectile-project-todo-entry) org-capture-templates)
 ;; (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
-;; (global-set-key (kbd "C-c c") 'org-capture)
 ;; (global-set-key (kbd "C-c n p") 'org-projectile-project-todo-completing-read)
 
 ;;;; DONT denote capture

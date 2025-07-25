@@ -194,17 +194,17 @@
   '(
     ;; https://openrouter.ai/provider/deepseek
     ;; Created Jan 20, 2025 163,840 context $0.40/M input tokens $2/M output tokens
-    (deepsek/deepseek-r1 ;; 2025-07-04
+    (deepseek/deepseek-r1-0528
      :capabilities (tool reasoning)
      :context-window 164
-     :input-cost 0.40
-     :output-cost 2.0)
+     :input-cost 0.55
+     :output-cost 2.19)
 
     (deepseek/deepseek-chat-v3-0324
      :capabilities (tool)
      :context-window 131
-     :input-cost 0.25
-     :output-cost 0.85)
+     :input-cost 0.27
+     :output-cost 1.1)
 
     ;; https://openrouter.ai/google/gemini-2.5-pro
     (google/gemini-2.5-pro

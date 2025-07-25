@@ -819,7 +819,11 @@
   (map! :map evil-org-mode-map
         :n "x" 'delete-forward-char
         :n "X" 'delete-backward-char
-
+        :n "6" 'evil-first-non-blank
+        :n "4" 'evil-end-of-line
+        :n "8" 'evil-ex-search-word-forward
+        :n "3" 'evil-ex-search-word-backward
+        :n "M-8" #'tempel-insert
         :ni "M-t" #'txl-translate-region-or-paragraph
 
         ;; :niv "M-j" #'org-meta-down ; M-<up>
@@ -1600,8 +1604,6 @@
         ;; overriding org's [tab] keybind in GUI Emacs. This is needed to undo
         ;; that, and should probably be PRed to org.
         ;; [tab]        #'org-cycle
-
-        "M-8" #'tempel-insert
         "M-9" #'denote-link
         "<f12>" #'org-transclusion-mode
         "C-M-y" #'org-rich-yank

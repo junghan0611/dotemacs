@@ -255,10 +255,10 @@
 
 ;;;; :tools
 
-;;;;; :tools biblio
+;;;;; :tools infrastructure
 
-;(package! org-ref :recipe (:files (:defaults "citeproc" (:exclude "*ivy*" "*helm*"))))
-;
+;; (package! kubernetes)
+
 ;;;; :tools writing
 
 (package! hypothesis :recipe (:host github :repo "EFLS/hypothesis"))
@@ -328,17 +328,28 @@
 ;;;; modules/tools llm
 
 (unpin! gptel)
-(package! gptel :recipe (:host github :repo "junghan0611/gptel" :branch "ko"))
-(package! mcp)
+(package! gptel :recipe (:host github :repo "karthink/gptel") :pin "7218aedd6f8294af5be876c0c18a733863156b7b")
 
+(package! mcp)
+(package! yaml) ; for gptel-prompt
+(package! templatel) ; for gptel-prompt
 (package! gptel-prompt :recipe (:host github :repo "jwiegley/gptel-prompts"))
-;; (package! gptel-rag :recipe (:host github :repo "jwiegley/gptel-rag"))
+(package! ob-prompt :recipe (:host github :repo "jwiegley/ob-gptel"))
+(package! gptel-rag :recipe (:host github :repo "jwiegley/gptel-rag"))
+(package! macher :recipe (:host github :repo "kmontag/macher"))
 
 ;; (package! gpt-babel :recipe (:host github :repo "ElleNajt/gpt-babel" :branch "main" :files ("*.el")))
 (package! gpt-babel :recipe (:local-repo "~/git/default/gpt-babel/"))
-(package! org-auto-tangle :recipe (:local-repo "~/git/default/org-auto-tangle/"))
+;; (package! org-auto-tangle :recipe (:local-repo "~/git/default/org-auto-tangle/"))
 
-;;;; extra packages
+(package! eshell-atuin)
+
+;; (package! claude-code :recipe (:host github :repo "stevemolitor/claude-code.el" ))
+(package! claude-code :recipe (:local-repo "~/git/default/claude-code.el/"))
+
+;; (package! eat)
+
+;;;;; extra packages
 
 ;; (package! khoj)
 ;; (package! minuet) ;; code completion using LLM
@@ -360,8 +371,8 @@
 ;; (package! elysium)
 (package! elysium :recipe (:local-repo "~/git/junghan0611/elysium/"))
 
-(package! copilot :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))) ; github copilot
-(package! copilot-chat :recipe (:host github :repo "chep/copilot-chat.el" :files ("*.el"))) ; github copilot
+;; (package! copilot :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))) ; github copilot
+;; (package! copilot-chat :recipe (:host github :repo "chep/copilot-chat.el" :files ("*.el"))) ; github copilot
 
 (package! whisper :recipe (:host github :repo "natrys/whisper.el"))
 (package! ellama)
@@ -437,6 +448,8 @@
 ;; (package! uv-mode :recipe (:host github :repo "z80dev/uv-mode"))
 ;; (package! uv-menu :recipe (:host github :repo "pizzatorque/uv-menu"))
 
+;; (package! mise :recipe (:host github :repo "eki3z/mise.el"))
+
 ;;;;; DONT treesit
 
 ;; (package! treesit-auto)
@@ -486,6 +499,7 @@
 
 ;; (package! org-supertag :recipe (:host github :repo "yibie/org-supertag")) ; require epc
 (package! org-supertag :recipe (:local-repo "~/emacs/git/junghan0611/org-supertag/"))
+(package! org-zotero-client :recipe (:local-repo "~/git/default/zotero-cli/elisp/"))
 
 ;;;; Workspace
 
@@ -548,6 +562,11 @@
 ;; (package! trekker
 ;;   :recipe (:host github :repo "junghan0611/trekker" :branch "ko" :files("*.md" "*.el" "*.py")))
 
+
+;;;; password manager for nerds
+
+(package! password-store-menu)
+
 ;;; Applications
 ;;;; Calculator
 
@@ -573,7 +592,6 @@
 
 ;; (package! google-this)
 (package! webpaste)
-;; (package! password-store-menu)
 
 ;;;;; misc
 

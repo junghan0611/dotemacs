@@ -1,22 +1,7 @@
 ;;; +llm.el -*- lexical-binding: t; -*-
 
-;; (use-package! llm
-;;   :defer 5
-;;   :init
-;;   (setq llm-warn-on-nonfree nil)
-;;   (require 'llm-openai)
-;;   (setopt llm-gpt4o-provider (make-llm-openai
-;;                               :key user-openai-api-key
-;;                               :chat-model "gpt-4o-mini"))
-;;   ;; (require 'llm-gemini)
-;;   ;; (setq
-;;   ;;  my/llm-provider-gemini
-;;   ;;  ;; (make-llm-gemini :key (auth-source-pick-first-password :host "gemini") :chat-model "gemini-1.5-flash")
-;;   ;;  ;; (make-llm-gemini :key user-gemini-api-key)
-;;   ;;  (make-llm-gemini :key user-gemini-api-key :chat-model "gemini-1.5-flash"))
-;;   )
-
 ;;;; llm
+
 (use-package! llm
   :defer t
   :init
@@ -34,16 +19,13 @@
 (defun +llm-gpt-request (message cb &optional system-message use-16k-model)
   (require 'llm)
   (require 'llm-openai)
-  (let* ((model (if (eq use-16k-model 1)
-                    "gpt-4-turbo-preview"
-                  "gpt-3.5-turbo"))
+  (let* ((model (if (eq use-16k-model 1) "openai/gpt-4.1" "openai/gpt-4.1-mini"))
+         (api-key (auth-info-password (car (auth-source-search :host "openrouter.ai" :user "apikey"))))
          (provider (make-llm-openai-compatible
                     :url "https://openrouter.ai/api/v1/"
-                    :key user-openrouter-api-key
-                    :chat-model
-                    "openrouter/auto"
-                    "google/gemini-flash-2.5"
-                    ))
+                    :key api-key
+                    ;; user-openrouter-api-key
+                    :chat-model model))
          (first-message (make-llm-chat-prompt-interaction
                          :role 'user
                          :content message))
@@ -54,41 +36,7 @@
     (llm-chat-async provider
                     prompt
                     cb
-                    (lambda (_err-sym err-msg) (message "OpenAI Error: %S" err-msg)))))
-
-(defun +gpt-request (message cb &optional system-message use-16k-model)
-  (require 'request)
-  (require 'seq)
-  (request "https://api.openai.com/v1/chat/completions"
-    :type "POST"
-    :parser 'json-read
-    :encoding 'utf-8
-    :headers `(("Content-Type" . "application/json")
-               ("Authorization" . ,(concat "Bearer " +open-ai-api-key)))
-    :data (json-encode
-           `(,(if (eq use-16k-model 1)
-                  '("model" . "gpt-4-turbo-preview")
-                '("model" . "gpt-3.5-turbo"))
-             ("temperature" . 0.8)
-             ("messages" . [(("role" . "system")
-                             ("content" . ,(or system-message +gpt-system-message)))
-                            (("role" . "user")
-                             ("content" . ,message))])))
-    :success
-    (cl-function
-     (lambda (&key data &allow-other-keys)
-       (let ((msg (ignore-errors (thread-last data
-                                              (assoc-default 'choices)
-                                              (seq-first)
-                                              (assoc-default 'message)
-                                              (assoc-default 'content)))))
-         (funcall cb msg))))
-    :error
-    (cl-function (lambda (&rest arg &key error-thrown &key data &allow-other-keys)
-                   ;; (message "OpenAI Error: %S" error-thrown)
-                   (message "OpenAI Error: %S" (thread-last data
-                                                            (assoc-default 'error)
-                                                            (assoc-default 'message)))))))
+                    (lambda (_err-sym err-msg) (message "Openrouter.ai Error: %S" err-msg)))))
 
 ;;;###autoload
 (defun +summarize-current-elfeed-show-buffer (arg)

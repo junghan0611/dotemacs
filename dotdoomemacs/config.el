@@ -1578,6 +1578,31 @@ only those in the selected frame."
         :desc "browse at timestamp" :n "C-c C-o" #'youtube-sub-extractor-browse-ts-link
         :n "q" #'kill-buffer-and-window))
 
+;;;; :term
+
+;;;;; eshell : eshell-atuin
+
+(use-package! eshell-atuin
+  :when (executable-find "atuin")
+  :after eshell
+  :init (eshell-atuin-mode)
+  :config
+  (setopt
+   eshell-atuin-search-fields '(time duration command directory relativetime)
+   eshell-atuin-history-format "%-70c %>10r %-40i "
+   eshell-atuin-filter-mode 'global
+   eshell-atuin-search-options nil)
+
+  ;; (defadvice! eshell-atuin-history-fix-sorting-a (ofn &optional arg)
+  ;;   :around #'eshell-atuin-history
+  ;;   (let* ((vertico-sort-function nil))
+  ;;     (funcall ofn arg)))
+  )
+
+;; (use-package! eat
+;;   :defer t
+;;   :hook ((eshell-load . eat-eshell-mode)))
+
 ;;;; :tools writing
 
 
@@ -2126,7 +2151,7 @@ only those in the selected frame."
       ;; Don't restore the wconf after quitting magit, it's jarring
       magit-inhibit-save-previous-winconf t)
 
-;; (setq evil-collection-magit-want-horizontal-movement t) ; default nil
+(setq evil-collection-magit-want-horizontal-movement t) ; default nil
 
 ;; Location of Git repositories
 ;; define paths and level of sub-directories to search
@@ -3345,12 +3370,12 @@ ${content}"))
   (setq gptel-default-mode 'org-mode)
 
   ;; ~/sync/man/dotsamples/vanilla/gregoryg-dotfiles-gpt/README.org
-  (setq gptel-include-reasoning 'ignore
-        gptel-expert-commands t
-        )
-  (setq gptel-temperature 0.0) ; gptel 1.0, Perplexity 0.2
+  ;; (setq gptel-include-reasoning 'ignore)
+  (setq gptel-expert-commands t)
+  (setq gptel-temperature 0.2) ; gptel 1.0, Perplexity 0.2
 
   ;; (setq gptel-include-reasoning nil)
+  ;; (setq gptel-include-reasoning "*reasoning*")
 
 ;;;;;;; 02 - default prompt
 
@@ -3425,21 +3450,21 @@ ${content}"))
       (setq-local gptel-org-branching-context t)
       (message "Context: subheading")))
 
-  (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "@user\n"
-        (alist-get 'org-mode gptel-response-prefix-alist) "@assistant\n"
+  (setf (alist-get 'org-mode gptel-prompt-prefix-alist) "@user "
+        (alist-get 'org-mode gptel-response-prefix-alist) "@assistant "
         (alist-get 'markdown-mode gptel-prompt-prefix-alist) "#### ")
 
-  ;; (with-eval-after-load 'gptel-org
-  ;;   (setq-default gptel-org-branching-context t)) ; default nil
+  (with-eval-after-load 'gptel-org
+    (setq-default gptel-org-branching-context t)) ; default nil
 
 ;;;;;;; 05 - gptel backend configurations
 
   ;; ~/sync/man/dotsamples/doom/agzam-dot-doom/modules/custom/ai/config.el
   (require 'gptel-integrations)
 
-  (setq gptel-model 'claude-sonnet-4)
-  (setq gptel-copilot-backend (gptel-make-gh-copilot "Copilot"))
-  (setq gptel-backend gptel-copilot-backend)
+  ;; (setq gptel-model 'claude-sonnet-4)
+  ;; (setq gptel-copilot-backend (gptel-make-gh-copilot "Copilot"))
+  ;; (setq gptel-backend gptel-copilot-backend)
 
   (load! "+gptel") ; agzam-dot-doom
 
@@ -3455,9 +3480,9 @@ ${content}"))
   ;;             grok-2-image-1212))
 
   ;; Google - Gemini
-  (gptel-make-gemini "Gemini"
-    :key #'gptel-api-key
-    :stream t)
+  ;; (gptel-make-gemini "Gemini"
+  ;;   :key #'gptel-api-key
+  ;;   :stream t)
 
   ;; Anthropic - Claude
   ;; (gptel-make-anthropic "Claude"
@@ -3476,21 +3501,6 @@ ${content}"))
     :stream t
     :request-params '(:temperature 0.2) ; sonar's default 0.2
     :models '(sonar sonar-pro sonar-reasoning))
-
-  ;; DeepSeek offers an OpenAI compatible API
-  ;; The deepseek-chat model has been upgraded to DeepSeek-V3. deepseek-reasoner points to the new model DeepSeek-R1.
-  ;; USE CASE	TEMPERATURE
-  ;; Coding / Math	0.0
-  ;; Data Cleaning / Data Analysis	1.0
-  ;; General Conversation	1.3
-  ;; Translation	1.3
-  ;; Creative Writing / Poetry	1.5
-  ;; https://api-docs.deepseek.com/quick_start/parameter_settings
-  (gptel-make-deepseek "DeepSeek"
-    :stream t
-    :key #'gptel-api-key
-    ;; :request-params '(:temperature 0.0) ; 1.0 default
-    )
 
   ;; Upstage: solar
   ;; https://developers.upstage.ai/docs/apis/chat
@@ -3511,8 +3521,25 @@ ${content}"))
           :endpoint "/api/v1/chat/completions"
           :stream t
           :key #'gptel-api-key
-          ;; :request-params '(:temperature 0.0)
           :models gptel--openrouter-models))
+
+  (setq gptel-model   'google/gemini-2.5-flash) ;; anthropic/claude-sonnet-4
+  (setq gptel-backend gptel-openrouter-backend)
+
+  ;; DeepSeek offers an OpenAI compatible API
+  ;; The deepseek-chat model has been upgraded to DeepSeek-V3. deepseek-reasoner points to the new model DeepSeek-R1.
+  ;; USE CASE	TEMPERATURE
+  ;; Coding / Math	0.0
+  ;; Data Cleaning / Data Analysis	1.0
+  ;; General Conversation	1.3
+  ;; Translation	1.3
+  ;; Creative Writing / Poetry	1.5
+  ;; https://api-docs.deepseek.com/quick_start/parameter_settings
+  (gptel-make-deepseek "DeepSeek"
+    :stream t
+    :key #'gptel-api-key
+    ;; :request-params '(:temperature 0.0) ; 1.0 default
+    )
 
   ;; TODO 2025-07-04 테스트 필요
   ;; (gptel-make-openai "Github Copilot"
@@ -3759,6 +3786,28 @@ ${content}"))
   (setq gptel-elysium-temperature 0.1) ; 코딩용 설정
   )
 
+;;;;;; ob-gptel
+
+(after! gptel
+  (require 'ob-gptel)
+  ;; (add-to-list 'org-babel-load-languages '(gptel . t))
+  ;; (add-hook 'completion-at-point-functions 'ob-gptel-capf nil t)
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   (append org-babel-load-languages '((gptel . t))))
+  )
+
+;;;;;; gptel-prompt
+
+(after! gptel
+  (require 'gptel-prompts)
+  (setq gptel-prompts-directory (concat org-directory "resources"))
+
+  (gptel-prompts-update)
+  ;; Ensure prompts are updated if prompt files change
+  (gptel-prompts-add-update-watchers)
+  )
+
 ;;;;; llmclient: emigo
 
 ;; (use-package! emigo
@@ -3872,75 +3921,99 @@ Prefers existing sessions closer to current directory."
   ;;   :ttl nil)
   )
 
+
+;;;;; llmclient: claude-code.el
+
+(use-package! claude-code
+  :after vterm
+  :init
+  (setq claude-code-terminal-backend 'vterm)
+  :config
+  ;; Allow vterm windows to be as narrow as 40 columns
+  (setopt vterm-min-window-width 40)
+  ;; Increase vterm scrollback to 100000 lines (the maximum allowed)
+  ;; Note: This increases memory usage
+  (add-hook 'claude-code-start-hook
+            (lambda ()
+              ;; Only increase scrollback for vterm backend
+              (when (eq claude-code-terminal-backend 'vterm)
+                (setq-local vterm-max-scrollback 100000))))
+  (add-to-list 'display-buffer-alist
+               '("^\\*claude"
+                 (display-buffer-in-side-window)
+                 (side . right)
+                 (window-width . 90)))
+  (claude-code-mode))
+
 ;;;;; llmclient: github copilot
 
-(use-package! copilot
-  :defer 5
-  :commands (copilot-login copilot-diagnose)
-  :init
-  ;; Sometimes the copilot agent doesn't start. Restarting fixes the issue.
-  (setq copilot-indent-offset-warning-disable t
-        copilot-max-char 10000) ; default 100000
-  (setq copilot-version "1.282.0") ;; 2025-06-03 use stable version
-  (setq copilot-idle-delay 2) ; nil
-  :bind (:map copilot-completion-map
-              ("C-g" . 'copilot-clear-overlay)
-              ("M-P" . 'copilot-previous-completion)
-              ("M-N" . 'copilot-next-completion)
-              ("M-<tab>" . 'copilot-accept-completion) ; vscode
-              ;; ("TAB" . 'copilot-accept-completion) ; vscode
-              ("M-f" . 'copilot-accept-completion-by-word)
-              ("M-<return>" . 'copilot-accept-completion-by-line)
-              ("M-]" . 'copilot-next-completion) ; vscode
-              ("M-[" . 'copilot-next-completion) ; vscode
-              ;; ("C-'" . 'copilot-accept-completion)
-              ;; ("C-;" . 'copilot-accept-completion)
-                   )
-  ;; :hook ((prog-mode . copilot-mode))
-  ;; (org-mode . copilot-mode)
-  ;; (markdown-mode . copilot-mode)
-  )
+;; (use-package! copilot
+;;   :defer 5
+;;   :commands (copilot-login copilot-diagnose)
+;;   :init
+;;   ;; Sometimes the copilot agent doesn't start. Restarting fixes the issue.
+;;   (setq copilot-indent-offset-warning-disable t
+;;         copilot-max-char 10000) ; default 100000
+;;   (setq copilot-version "1.282.0") ;; 2025-06-03 use stable version
+;;   (setq copilot-idle-delay 2) ; nil
+;;   :bind (:map copilot-completion-map
+;;               ("C-g" . 'copilot-clear-overlay)
+;;               ("M-P" . 'copilot-previous-completion)
+;;               ("M-N" . 'copilot-next-completion)
+;;               ("M-<tab>" . 'copilot-accept-completion) ; vscode
+;;               ;; ("TAB" . 'copilot-accept-completion) ; vscode
+;;               ("M-f" . 'copilot-accept-completion-by-word)
+;;               ("M-<return>" . 'copilot-accept-completion-by-line)
+;;               ("M-]" . 'copilot-next-completion) ; vscode
+;;               ("M-[" . 'copilot-next-completion) ; vscode
+;;               ;; ("C-'" . 'copilot-accept-completion)
+;;               ;; ("C-;" . 'copilot-accept-completion)
+;;                    )
+;;   ;; :hook ((prog-mode . copilot-mode))
+;;   ;; (org-mode . copilot-mode)
+;;   ;; (markdown-mode . copilot-mode)
+;;   )
 
 ;;;;; llmclient: github copilot-chat
 
 ;; 2025-03-19 v2.0
-(use-package! copilot-chat
-  :defer 6
-  :after request
-  :bind (:map global-map
-              ("C-c C-y" . copilot-chat-yank)
-              ("C-c M-y" . copilot-chat-yank-pop)
-              ("C-c C-M-y" . (lambda () (interactive) (copilot-chat-yank-pop -1))))
-  :init
-  (setq copilot-chat-frontend 'markdown)
+;; (use-package! copilot-chat
+;;   :defer 6
+;;   :after request
+;;   :bind (:map global-map
+;;               ("C-c C-y" . copilot-chat-yank)
+;;               ("C-c M-y" . copilot-chat-yank-pop)
+;;               ("C-c C-M-y" . (lambda () (interactive) (copilot-chat-yank-pop -1))))
+;;   :init
+;;   (setq copilot-chat-frontend 'markdown)
 
-  ;; (setq copilot-chat-backend 'request)
-  ;; (setq! copilot-chat-model "claude-3.5-sonnet"
-  ;;        copilot-chat-frontend 'org)
-  ;; (set-popup-rules!
-  ;;   '(("^\\*Copilot-chat-prompt\\*$" :vslot -2 :size 0.15 :select t :quit t)
-  ;;     ("^\\*Copilot-chat-list\\*$" :slot 10 :side bottom :size 0.1 :select nil :quit t)
-  ;;     ("^\\*Copilot-chat\\*$" :slot 2 :side right :size 0.45 :select nil :quit t)))
-  :config
-  ;; From https://github.com/chep/copilot-chat.el/issues/24
-  (defun my/copilot-chat-display (prefix)
-    "Opens the Copilot chat window, adding the current buffer to the context.
-Called with a PREFIX, resets the context buffer list before opening"
-    (interactive "P")
+;;   ;; (setq copilot-chat-backend 'request)
+;;   ;; (setq! copilot-chat-model "claude-3.5-sonnet"
+;;   ;;        copilot-chat-frontend 'org)
+;;   ;; (set-popup-rules!
+;;   ;;   '(("^\\*Copilot-chat-prompt\\*$" :vslot -2 :size 0.15 :select t :quit t)
+;;   ;;     ("^\\*Copilot-chat-list\\*$" :slot 10 :side bottom :size 0.1 :select nil :quit t)
+;;   ;;     ("^\\*Copilot-chat\\*$" :slot 2 :side right :size 0.45 :select nil :quit t)))
+;;   :config
+;;   ;; From https://github.com/chep/copilot-chat.el/issues/24
+;;   (defun my/copilot-chat-display (prefix)
+;;     "Opens the Copilot chat window, adding the current buffer to the context.
+;; Called with a PREFIX, resets the context buffer list before opening"
+;;     (interactive "P")
 
-    (require 'copilot-chat)
-    (let ((buf (current-buffer)))
+;;     (require 'copilot-chat)
+;;     (let ((buf (current-buffer)))
 
-      ;; Explicit reset before doing anything, avoid it resetting later on
-      ;; target-fn and ignoring the added buffers
-      (unless (copilot-chat--ready-p)
-        (copilot-chat-reset))
+;;       ;; Explicit reset before doing anything, avoid it resetting later on
+;;       ;; target-fn and ignoring the added buffers
+;;       (unless (copilot-chat--ready-p)
+;;         (copilot-chat-reset))
 
-      (when prefix (copilot-chat--clear-buffers))
+;;       (when prefix (copilot-chat--clear-buffers))
 
-      (copilot-chat--add-buffer buf)
-      (copilot-chat-display)))
-  )
+;;       (copilot-chat--add-buffer buf)
+;;       (copilot-chat-display)))
+;;   )
 
 ;;;;; DONT llmclient: aider.el
 
@@ -5056,7 +5129,7 @@ Suitable for `imenu-create-index-function'."
     "My preferred `dired-preview-display-action-alist-function'."
     '((display-buffer-in-side-window)
       (side . right)
-      (width . 0.3)))
+      (width . 0.5)))
   ;; default' dired-preview-display-action-alist-dwim
   (setq dired-preview-display-action-alist-function #'my-dired-preview-to-the-right)
   )
@@ -7429,12 +7502,9 @@ Suitable for `imenu-create-index-function'."
 
 ;;;;; with ccmenu
 
-;; (use-package! password-store-menu
-;;   :config (password-store-menu-enable))
-
-;; (use-package! google-this
-;;   :init
-;;   (setq google-this-location-suffix "co.kr"))
+(use-package! password-store-menu
+  :defer t
+  :config (password-store-menu-enable))
 
 (use-package! webpaste
   :bind (("C-c C-p C-b" . webpaste-paste-buffer)
@@ -7534,6 +7604,96 @@ Suitable for `imenu-create-index-function'."
 
 ;; override and add doom keybindings
 (load! "+doomkeys")
+
+;;;; macher
+
+(use-package! macher
+  :after gptel magit
+  :commands (macher-implement macher-revise macher-discuss macher-abort)
+  :custom
+  ;; 'org' UI는 코드 블록과 설명을 구조화하기에 매우 좋습니다.
+  (macher-action-buffer-ui 'org)
+  :config
+  (macher-install)
+  (load! "+magit"))
+
+(progn
+  ;; [[denote:20250724T220236][#LLM: ◊diff-apply-unk Git 스타일 패치에서 새 파일 디렉토리 생성]]
+  (defun my/diff-apply-hunk-with-file-creation ()
+    "현재 hunk를 적용하면서, 필요한 디렉터리·파일을 자동으로 생성한다."
+    (interactive)
+    (save-excursion
+      (pcase-let* ((`(,old ,new) (my/diff--old-new-files))
+                   (target (if (string= old "/dev/null") new old))
+                   ;; b/ 접두사 제거 후 절대경로
+                   (target-path (expand-file-name target)))
+        (cond
+         ;; 1) 새 파일 추가(/dev/null → 실제 파일)
+         ((string= old "/dev/null")
+          (unless (file-directory-p (file-name-directory target-path))
+            (when (y-or-n-p (format "Directory `%s' does not exist! Create it? "
+                                    (file-name-directory target-path)))
+              (make-directory (file-name-directory target-path) t)))
+          (unless (file-exists-p target-path)
+            (write-region "" nil target-path))
+          (diff-apply-hunk))           ; 실제 패치 적용
+
+         ;; 2) 파일 삭제(실제 파일 → /dev/null)
+         ((string= new "/dev/null")
+          (when (y-or-n-p (format "Delete file `%s'? " old))
+            (diff-apply-hunk)))
+
+         ;; 3) 기존 파일 수정
+         (t
+          (diff-apply-hunk))))))
+
+;; gemini 2.5 pro
+(defun my/diff-apply-hunk-create-new-file (orig-fun &rest args)
+  "Create directory and file for new files in Git-style patches.
+
+This function is intended to be used as an :around advice for
+`diff-apply-hunk`.
+
+When applying a hunk for a new file (e.g., a diff from
+/dev/null to b/path/to/new-file), this function first
+creates the necessary parent directories and an empty file at the
+target path. It then calls the original `diff-apply-hunk`
+function to apply the changes."
+  ;; In a diff buffer, `default-directory` is usually set to the
+  ;; project root, so relative paths should work correctly.
+  (let ((file-names (diff-hunk-file-names)))
+    (when (and (listp file-names)
+               (stringp (car file-names))
+               (string-equal "/dev/null" (car file-names))
+               (stringp (cadr file-names)))
+      (let* ((new-file-git-path (cadr file-names))
+             ;; Strip the "b/" prefix from git diff paths.
+             (target-file (if (string-prefix-p "b/" new-file-git-path)
+                              (substring new-file-git-path 2)
+                            new-file-git-path))
+             (target-dir (file-name-directory target-file)))
+
+        ;; Create parent directories if they don't exist.
+        (when (and target-dir (not (file-directory-p target-dir)))
+          (make-directory target-dir 'parents))
+
+        ;; Create an empty file to apply the hunk to.
+        (unless (file-exists-p target-file)
+          (with-temp-file target-file
+            ;; This creates an empty file at the path `target-file`.
+            nil)))))
+
+  ;; Always call the original function to perform the actual patch application.
+  ;; For new files, it will now find the created empty file.
+  ;; For existing files or deletions, it will work as before.
+  (apply orig-fun args))
+
+;; Activate the custom behavior by advising `diff-apply-hunk`.
+(advice-add 'diff-apply-hunk :around #'my/diff-apply-hunk-create-new-file)
+
+;; To disable this behavior, you can run:
+;; (advice-remove 'diff-apply-hunk #'my/diff-apply-hunk-create-new-file)
+  )
 
 ;;;; linenote
 
@@ -7858,11 +8018,46 @@ Suitable for `imenu-create-index-function'."
   (setq mcp-hub-servers
         `(("filesystem" . (:command "npx" :args ("-y" "@modelcontextprotocol/server-filesystem"
                                                  ;; "/home/goqual/office/cube_res-v5.0.0-goqual-Nightly/"
-                                                 "~/sync/"
-                                                 "~/git/"
+                                                 "/home/goqual/sync/sandboxes/claude-desktop/"
                                                  )))
+          ("git" . (:command "uvx" :args ("mcp-server-git")))
+          ("nixos" . (:command "uvx" :args ("mcp-nixos")))
+          ;; ("docker-mcp" . (:command "uvx" :args ("docker-mcp")))
+          ("kagi" . (:command "uvx" :args ("kagimcp") :env (:KAGI_API_KEY ,(auth-info-password (car (auth-source-search :host "kagi.com" :user "apikey"))))))
           ("fetch" . (:command "uvx" :args ("mcp-server-fetch")))
-          ("qdrant" . (:url "http://localhost:8000/sse"))
+          ;; ("org-mcp" :command "uvx" :args ("--org-dir" ,org-directory))
+
+          ("mermaid" . (:command "npx"
+                        :args ("-y" "@peng-shawn/mermaid-mcp-server")))
+          ("brave-search" . (:command "npx"
+                             :args ("-y" "@modelcontextprotocol/server-brave-search")
+                             :env (:BRAVE_API_KEY ,(auth-info-password (car (auth-source-search :host "api.search.brave.com" :user "apikey"))))))
+          ;; ("qdrant" . (:url "http://localhost:8000/sse"))
+          ("n8n-mcp" . (:command "npx"
+                        :args ("n8n-mcp")
+                        :env (
+                              :MCP_MODE "stdio"
+                              :LOG_LEVEL "error"
+                              :DISABLE_CONSOLE_OUTPUT "true"
+                              :N8N_API_URL "http://hejdev1.goqual.com:5678"
+                              :N8N_API_KEY "eyJhbGciOiJII1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4MmJhMWM0MC1hNzAyLTQ0NGMtYTg5MC03NDQxODZiNjU3ZWIiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwiaWF0IjoxNzUzMjU5NTk5LCJleHAiOjE3NjcxMDY4MDB9.1yr3QauBv-EDk32yhHnMOgOgwz3dJc4dURKRuRxGvCU"
+                              )))
+          ("zammad" . (:command "zammad-mcp-go"
+                       :env (:ZAMMAD_URL "http://hejdev1.goqual.com:8085" :ZAMMAD_TOKEN "jEdBFY9Rklg8DBEVG0dJMZxFpzBaUWsnCUCy7mBVjtbjmavZfhwyvSLmpimOsOfD")))
+          ;; ("github" . (:command "docker"
+          ;;              :args ("run"
+          ;;                     "--name" "github-mcp"
+          ;;                     "--interactive"
+          ;;                     "--rm"
+          ;;                     "--env"
+          ;;                     "GITHUB_PERSONAL_ACCESS_TOKEN"
+          ;;                     "ghcr.io/github/github-mcp-server")
+          ;;              :env (:GITHUB_PERSONAL_ACCESS_TOKEN ,(auth-info-password (car (auth-source-search :host "github.com" :user "token"))))))
+          ;; ("zen"
+    ;;        :command "sh"
+    ;;        :args ("-c"
+    ;; "exec $(which uvx || echo uvx) --from git+https://github.com/BeehiveInnovations/zen-mcp-server.git zen-mcp-server")
+    ;;                     :env (:OPENROUTER_API_KEY (auth-info-password (car (auth-source-search :host "openrouter.ai.backup" :user "apikey")))))
           ;; ("graphlit" . (
           ;;                :command "npx"
           ;;                :args ("-y" "graphlit-mcp-server")
@@ -7871,8 +8066,25 @@ Suitable for `imenu-create-index-function'."
           ;;                      :GRAPHLIT_ENVIRONMENT_ID "your-environment-id"
           ;;                      :GRAPHLIT_JWT_SECRET "your-jwt-secret")))
           ))
-  :hook (after-init . mcp-hub-start-all-server)
+
+  (mcp-hub-start-all-server)
   )
+
+;;;; denote-silo
+
+(after! denote
+      (add-to-list 'denote-silo-directories (expand-file-name "~/sync/sandboxes/claude-desktop/"))
+      )
+
+;; (progn
+;;   (defun my/auto-load-claude-md ()
+;;     "프로젝트 루트의 CLAUDE.md 자동 로딩"
+;;     (when-let ((project-root (project-root (project-current)))
+;;                (claude-file (expand-file-name "CLAUDE.md" project-root)))
+;;       (when (file-exists-p claude-file)
+;;         (gptel-add-file claude-file))))
+
+;;   (add-hook 'gptel-mode-hook #'my/auto-load-claude-md))
 
 ;;; ccmenu: context-menu with casual
 
@@ -7885,6 +8097,5 @@ Suitable for `imenu-create-index-function'."
 ;;; Load office
 
 (load! "+office")
-
 
 ;;; left blank on purpose
