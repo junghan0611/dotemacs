@@ -19,7 +19,7 @@
 (defun +llm-gpt-request (message cb &optional system-message use-16k-model)
   (require 'llm)
   (require 'llm-openai)
-  (let* ((model (if (eq use-16k-model 1) "openai/gpt-4.1" "openai/gpt-4.1-mini"))
+  (let* ((model (if (eq use-16k-model 1) "openai/gpt-4.1-mini" "openai/gpt-4.1-mini"))
          (api-key (auth-info-password (car (auth-source-search :host "openrouter.ai" :user "apikey"))))
          (provider (make-llm-openai-compatible
                     :url "https://openrouter.ai/api/v1/"

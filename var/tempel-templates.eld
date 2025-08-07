@@ -400,7 +400,9 @@ alias:
 (ob-d2 "#+begin_src d2 exports: code" n> r> n> "#+end_src")
 
 (verse "#+BEGIN_VERSE" n> r> n> "#+END_VERSE")
-(bash "#+name:" n> "#+BEGIN_SRC bash :tangle no " n> r> n> "#+END_SRC") ;; :eval no :exports none
+(bash "#+BEGIN_SRC bash :results output" n> r> n> "#+END_SRC") ;; :eval no :exports none
+(bashsudo "#+BEGIN_SRC bash :dir /sudo:: :results output" n> r> n> "#+END_SRC") ;; :eval no :exports none
+
 (sh "#+begin_src shell :tangle no :eval no :exports none" n> r> n> "#+end_src")
 
 (hugo-relref "@@hugo:[Title]({{< relref \"docs\" >}})@@")
@@ -498,7 +500,7 @@ alias:
 ;; (emacslisp "#+BEGIN_SRC emacs-lisp :tangle no :eval no" n> r> n> "#+END_SRC")
 (clojure "#+BEGIN_SRC clojure :results code" n> r> n> "#+END_SRC")
 ;; (clj "#+BEGIN_SRC clojure :results code" n> r> n> "#+END_SRC")
-(markdown "#+BEGIN_SRC markdown" n> r> n> "#+END_SRC")
+(md "#+BEGIN_SRC markdown" n> r> n> "#+END_SRC")
 (typescript "#+BEGIN_SRC typescript " n> r> n> "#+END_SRC")
 (js "#+BEGIN_SRC javascript " n> r> n> "#+END_SRC")
 ;; (elispt "#+BEGIN_SRC emacs-lisp :tangle yes" n> r> n> "#+END_SRC") ; tangle yes

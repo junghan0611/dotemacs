@@ -152,6 +152,7 @@
 
 (package! info+)
 (package! list-unicode-display)
+;; (package! cursory)
 (package! spacious-padding)
 
 (unpin! doom-themes)
@@ -159,7 +160,8 @@
 (package! doom-themes :recipe (:host github :repo "junghan0611/doom-themes" :branch "ko"))
 
 (package! keycast)
-(package! outli :recipe (:host github :repo "jdtsmith/outli" :files ("*.el")))
+;; (package! outli :recipe (:host github :repo "jdtsmith/outli" :files ("*.el")))
+(package! outli)
 (package! fontaine) ; break custom.el
 (package! golden-ratio)
 (package! mode-minder :recipe (:host github :repo "jdtsmith/mode-minder"))
@@ -201,7 +203,6 @@
 (package! org-headline-card :recipe (:host github :repo "yibie/org-headline-card")) ; plantuml
 (package! org-todoist :recipe (:host github :repo "lillenne/org-todoist" :branch "main")) ;; (package! todoist)
 (package! orgbox)
-(package! org-side-tree)
 
 (package! org-fragtog) ;; interactive toggling of inline latex formulas
 (package! org-appear)
@@ -231,7 +232,7 @@
 (package! ox-leanpub) ;; https://github.com/junghan0611/ox-leanpub
 
 ;; (package! ob-mermaid)
-;; (package! mermaid-mode)
+(package! mermaid-mode)
 
 (package! org-ql)
 (package! org-kanban)
@@ -274,6 +275,8 @@
 (package! immersive-translate)
 (package! focus)
 
+(package! isbn :recipe (:host github :repo "cashpw/isbn.el"))
+
 ;; (package! quarto-mode :recipe (:host github :repo "quarto-dev/quarto-emacs" )) ; require polymode
 ;; (package! quarto-mode :pin "a7b974f7d22ef939eaed8b9919434bcf20b1438f")
 (package! ox-quarto :recipe (:host github :repo "jrgant/ox-quarto"))
@@ -292,6 +295,7 @@
 
 (package! denote)
 (package! denote-org)
+
 (package! denote-silo)
 (package! denote-sequence)
 (package! denote-markdown)
@@ -336,18 +340,23 @@
 (package! gptel-prompt :recipe (:host github :repo "jwiegley/gptel-prompts"))
 (package! ob-prompt :recipe (:host github :repo "jwiegley/ob-gptel"))
 (package! gptel-rag :recipe (:host github :repo "jwiegley/gptel-rag"))
+
+(package! uuidgen)
+(package! gptel-litellm :recipe (:host github :repo "jwiegley/gptel-litellm"))
+
 (package! macher :recipe (:host github :repo "kmontag/macher"))
+
+(package! ragmacs :recipe (:host github :repo "positron-solutions/ragmacs"))
 
 ;; (package! gpt-babel :recipe (:host github :repo "ElleNajt/gpt-babel" :branch "main" :files ("*.el")))
 (package! gpt-babel :recipe (:local-repo "~/git/default/gpt-babel/"))
 ;; (package! org-auto-tangle :recipe (:local-repo "~/git/default/org-auto-tangle/"))
 
-(package! eshell-atuin)
-
+;; (package! claude-code-ide :recipe (:local-repo "~/git/default/claude-code-ide.el"))
 ;; (package! claude-code :recipe (:host github :repo "stevemolitor/claude-code.el" ))
 (package! claude-code :recipe (:local-repo "~/git/default/claude-code.el/"))
 
-;; (package! eat)
+(package! eat)
 
 ;;;;; extra packages
 
@@ -416,8 +425,8 @@
 
 (package! bats-mode)
 
-(unpin! jupyter)
-(package! jupyter :recipe (:host github :repo "junghan0611/emacs-jupyter" :branch "ko"))
+;; (unpin! jupyter)
+;; (package! jupyter :recipe (:host github :repo "junghan0611/emacs-jupyter" :branch "ko"))
 
 (when (modulep! :lang python)
   (package! pydoc)
@@ -516,7 +525,7 @@
 (package! osm) ; OpenStreetMaps
 (package! gif-screencast)
 (package! lorem-ipsum)
-(package! go-translate)
+;; (package! go-translate)
 ;; (package! jira)
 
 ;; (package! ready-player)

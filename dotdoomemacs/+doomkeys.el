@@ -158,6 +158,8 @@
 
 (map! :leader
       (:prefix "f"
+      "y" #'+default/yank-buffer-absolute-path
+      "M-f" #'+default/yank-buffer-path
        :desc "" "d" nil  ; remove existing binding
        (:prefix ("d" . "diff")
         :desc "3 files" "3" #'ediff3
@@ -629,6 +631,7 @@
 (map! :leader
       (:prefix ("o" . "open")
        :desc "open workspaces" "o" #'my/open-workspaces
+       "h" #'proced
        ))
 
 ;;;; 'j' junghanacs hotkey
@@ -779,8 +782,6 @@
               "`"   #'toggle-input-method)
         (:map prog-mode-map
               "`"   #'toggle-input-method)
-        (:map text-mode-map
-              "`"   #'toggle-input-method)
         (:map minibuffer-mode-map
               "`"   #'toggle-input-method)
         (:map minibuffer-local-map
@@ -849,29 +850,34 @@
   (map! :map markdown-mode-map
         :localleader
         "RET" #'toc-org-markdown-follow-thing-at-point
-        "y" #'yank-as-org))
-;; (:prefix ("t" . "Table")
-;;  :desc "Header" "h" #'markdown-table-hline-at-point-p
-;;  :desc "Sort" "s" #'markdown-table-sort-lines
-;;  :desc "Region to table" "r" #'markdown-table-convert-region
-;;  :desc "Table insert" "t" #'markdown-insert-table
-;;  (:prefix ("d" . "Delete")
-;;   :desc "column" "c" #'markdown-table-delete-column
-;;   :desc "row" "r" #'markdown-table-delete-row)
-;;  (:prefix ("i" . "Insert")
-;;   :desc "Column" "c" #'markdown-table-insert-column
-;;   :desc "Row" "r" #'markdown-table-insert-row))
-
-;; (:prefix ("T" . "toggle")
-;;  :desc "Inline LaTeX"      "e" #'markdown-toggle-math
-;;  :desc "Code highlights"   "f" #'markdown-toggle-fontify-code-blocks-natively
-;;  :desc "Inline images"     "i" #'markdown-toggle-inline-images
-;;  :desc "URL hiding"        "l" #'markdown-toggle-url-hiding
-;;  :desc "Markup hiding"     "m" #'markdown-toggle-markup-hiding
-;;  :desc "Wiki links"        "w" #'markdown-toggle-wiki-links
-;;  :desc "GFM checkbox"      "x" #'markdown-toggle-gfm-checkbox)
-
-
+        "-" #'markdown-insert-list-item
+        ";" #'my/clear-nbsp-and-ascii-punctuations
+        ":" #'my/insert-nbsp-simple-all
+        ;; ":" #'my/insert-nbsp-all-with-wordlist-and-tags
+        ;; "M-;" #'my/add-to-glossary
+        ;; "M-'" #'my/add-newlines-between-paragraphs
+        "y" #'yank-as-org
+        (:prefix ("b" . "Table")
+         :desc "Header" "h" #'markdown-table-hline-at-point-p
+         :desc "Sort" "s" #'markdown-table-sort-lines
+         :desc "Region to table" "r" #'markdown-table-convert-region
+         :desc "Table insert" "t" #'markdown-insert-table
+         (:prefix ("d" . "Delete")
+          :desc "column" "c" #'markdown-table-delete-column
+          :desc "row" "r" #'markdown-table-delete-row)
+         (:prefix ("i" . "Insert")
+          :desc "Column" "c" #'markdown-table-insert-column
+          :desc "Row" "r" #'markdown-table-insert-row))
+        (:prefix ("t" . "toggle")
+         :desc "Inline LaTeX"      "e" #'markdown-toggle-math
+         :desc "Code highlights"   "f" #'markdown-toggle-fontify-code-blocks-natively
+         :desc "Inline images"     "i" #'markdown-toggle-inline-images
+         :desc "URL hiding"        "l" #'markdown-toggle-url-hiding
+         :desc "Markup hiding"     "m" #'markdown-toggle-markup-hiding
+         :desc "Wiki links"        "w" #'markdown-toggle-wiki-links
+         :desc "GFM checkbox"      "x" #'markdown-toggle-gfm-checkbox)
+        )
+  )
 
 ;;;; eww-mode-map
 
@@ -940,40 +946,40 @@
 ;;       "C-M-." #'lsp-find-references
 ;;       "C-c r" #'lsp-rename)
 
-;;;; TODO clojure-mode-map
+;;;; DONT clojure-mode-map
 
 ;; Lookup functions in Clojure - The Essentail Reference book
 ;; https://github.com/p3r7/clojure-essential-ref
 
 ;; /evil-dot-doom/modules/custom/parenthesis/config.el
 ;;;###autoload
-(defun bk/improve-last-parens ()
-  (interactive)
-  (evil-normal-state)
-  (evil-append-line 1))
+;; (defun bk/improve-last-parens ()
+;;   (interactive)
+;;   (evil-normal-state)
+;;   (evil-append-line 1))
 
 ;; TODO: review evaluation key bindings from Spacemacs
-(map! :after cider
-      :map cider-mode-map
-      :in "<f9>"   #'+treemacs/toggle
-      :in "<C-f9>" #'treemacs-find-file
-      :in "<M-f9>" #'treemacs-select-window
-      :i "M-9" #'insert-parentheses
-      :i "M-j" #'bk/improve-last-parens
-      :i "M-l" #'sp-forward-sexp
-      "M-RET" #'cider-eval-last-sexp
-      "M-S-<return>" #'cider-eval-defun-to-comment
-      "C-c M-RET" #'outline-insert-heading
-      :map clojure-mode-map
-      :localleader
-      :desc "REPL session" "'" #'sesman-start
-      :i "M-j" #'bk/improve-last-parens
-      :i "M-l" #'sp-forward-sexp
-      "M-RET" #'cider-eval-last-sexp
-      "M-S-<return>" #'cider-eval-defun-to-comment
-      "C-c M-RET" #'outline-insert-heading
-      (:prefix ("h" . "help")
-               "r" #'clojure-essential-ref))
+;; (map! :after cider
+;;       :map cider-mode-map
+;;       :in "<f8>"   #'+treemacs/toggle
+;;       :in "<C-f8>" #'treemacs-find-file
+;;       :in "<M-f8>" #'treemacs-select-window
+;;       :i "M-9" #'insert-parentheses
+;;       :i "M-j" #'bk/improve-last-parens
+;;       :i "M-l" #'sp-forward-sexp
+;;       "M-RET" #'cider-eval-last-sexp
+;;       "M-S-<return>" #'cider-eval-defun-to-comment
+;;       "C-c M-RET" #'outline-insert-heading
+;;       :map clojure-mode-map
+;;       :localleader
+;;       :desc "REPL session" "'" #'sesman-start
+;;       :i "M-j" #'bk/improve-last-parens
+;;       :i "M-l" #'sp-forward-sexp
+;;       "M-RET" #'cider-eval-last-sexp
+;;       "M-S-<return>" #'cider-eval-defun-to-comment
+;;       "C-c M-RET" #'outline-insert-heading
+;;       (:prefix ("h" . "help")
+;;                "r" #'clojure-essential-ref))
 
 ;;       ;; Debug Clojure
 ;;       (:prefix ("d" . "debug/inspect")
@@ -1199,18 +1205,24 @@
 ;; "C-c {" #'sp-wrap-curly
 
 
-;;;; treemacs - f9
+;;;; treemacs - f8
 
 (when (modulep! :ui treemacs)
   (map!
-   "<f9>"   #'+treemacs/toggle
-   "<C-f9>" #'treemacs-find-file
-   "<M-f9>" #'treemacs-select-window
+   "<f8>"   #'+treemacs/toggle
+   "<C-f8>" #'treemacs-find-file
+   "<M-f8>" #'treemacs-select-window
    (:map treemacs-mode-map
          "." #'consult-line)
    (:map evil-treemacs-state-map
          "." #'consult-line)))
 
+;;;; imenu-list - f9
+
+(after! imenu-list
+  (map!
+   "<f9>"   #'imenu-list-smart-toggle
+   "<M-f9>" #'spacemacs/imenu-list-smart-focus))
 
 ;;;; dired-mode-map
 
@@ -1226,6 +1238,8 @@
       :desc "*denote-insert* marked-notes" "i" #'my/denote-link-dired-marked-notes
       "g" #'prot-dired-grep-marked-files
       "l" #'prot-dired-limit-regexp
+
+      "y" #'+default/yank-buffer-absolute-path
 
       :desc "*denote-rename* files" "r" #'denote-dired-rename-files
       :desc "*denote-rename* using front-matter" "R" #'denote-dired-rename-marked-files-using-front-matter
@@ -1550,20 +1564,6 @@
         :n "M-k"    #'imenu-list-previous-entry-same-level
         :n "M-n"    #'evil-next-line
         :n "M-p"    #'evil-previous-line))
-
-;;;; org-side-tree-mode-map
-
-(map! :map org-side-tree-mode-map
-      "RET"         #'push-button
-      "<return>"    #'push-button
-      "d"    #'push-button
-      "M-j"    #'org-side-tree-next-heading
-      "M-k"    #'org-side-tree-previous-heading
-      "M-n"    #'evil-next-line
-      "M-p"    #'evil-previous-line
-      "j"    #'evil-next-line
-      "k"    #'evil-previous-line
-      )
 
 ;;;; leetcode
 

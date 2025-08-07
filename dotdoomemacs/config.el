@@ -248,7 +248,7 @@
   (setq which-key-idle-delay 0.4 ; important
         which-key-idle-secondary-delay 0.01)
   (setq which-key-use-C-h-commands t) ; paging key maps
-  (setq which-key-max-description-length 36) ; doom 27, spacemacs 36
+  ;; (setq which-key-max-description-length 36) ; doom 27, spacemacs 36
   )
 
 ;;;;; evil
@@ -475,7 +475,7 @@
 
       ;; =M-x eldoc-doc-buffer= 함수 호출로 표시하는 buffer 크기 조절
       ("^\\*eldoc for" :size 0.2 :vslot -1) ; "*eldoc*"
-      ("*Ilist*" :size 40 :side left :modeline t :select nil :quit nil) ; imenu-list 45
+      ("*Ilist*" :size 45 :side right :modeline t :select nil :quit nil) ; imenu-list 45
       ;; ("^ ?\\*Treemacs" :slot 7 :size 45 :side left :modeline nil :select nil :quit nil)
       ;; ("^ ?\\*NeoTree" :slot 7 :size 45 :side left :modeline t :slect nil :quit nil)
 
@@ -557,8 +557,9 @@
 ;; editing collaboratively with others.
 ;; README/doomemacs-git/lisp/doom-editor.el
 
-;; (ws-butler-keep-whitespace-before-point nil)
-;; (ws-butler-global-exempt-modes '(special-mode comint-mode term-mode eshell-mode diff-mode markdown-mode))
+(defun my/save-hook-delete-trailing-whitespace ()
+  (add-hook 'before-save-hook #'delete-trailing-whitespace nil t))
+(add-hook 'markdown-mode-hook #'my/save-hook-delete-trailing-whitespace)
 
 ;;;;; User Goto Functions
 
@@ -1402,14 +1403,11 @@ work computers.")
 
 ;; Show an outline summary of the current buffer.
 (use-package! imenu-list
-  :custom
-  (imenu-list-position 'left) ; why not work?!
-  (imenu-list-size 45)
   :init
   (setq imenu-list-focus-after-activation t)
   (setq imenu-list-auto-resize nil)
   (setq imenu-list-auto-update t)
-  (setq imenu-list-idle-update-delay 1.0)
+  (setq imenu-list-idle-update-delay 2.0)
   (add-hook 'imenu-list-major-mode-hook #'my/imenu-list-tuncates-without-tab-line)
   :config
 
@@ -1437,9 +1435,6 @@ only those in the selected frame."
               (doom-modeline 'imenu))))
     )
   )
-
-(global-set-key (kbd "<f8>") 'imenu-list-smart-toggle)
-(global-set-key (kbd "M-<f8>") 'spacemacs/imenu-list-smart-focus)
 
 ;; (after! winum
 ;;   (define-key
@@ -1578,30 +1573,27 @@ only those in the selected frame."
         :desc "browse at timestamp" :n "C-c C-o" #'youtube-sub-extractor-browse-ts-link
         :n "q" #'kill-buffer-and-window))
 
+;;;; proced process monitor htop - built-in
+
+(use-package! proced
+  :ensure nil
+  :commands proced
+  :custom
+  (proced-auto-update-flag t)
+  (proced-goal-attribute nil)
+  (proced-show-remote-processes t)
+  (proced-enable-color-flag t)
+  (proced-format 'custom)
+  :config
+  (add-to-list
+   'proced-format-alist
+   '(custom user pid ppid sess tree pcpu pmem rss start time state (args comm))))
+
 ;;;; :term
 
-;;;;; eshell : eshell-atuin
+;;;;; eshell : eat
 
-(use-package! eshell-atuin
-  :when (executable-find "atuin")
-  :after eshell
-  :init (eshell-atuin-mode)
-  :config
-  (setopt
-   eshell-atuin-search-fields '(time duration command directory relativetime)
-   eshell-atuin-history-format "%-70c %>10r %-40i "
-   eshell-atuin-filter-mode 'global
-   eshell-atuin-search-options nil)
-
-  ;; (defadvice! eshell-atuin-history-fix-sorting-a (ofn &optional arg)
-  ;;   :around #'eshell-atuin-history
-  ;;   (let* ((vertico-sort-function nil))
-  ;;     (funcall ofn arg)))
-  )
-
-;; (use-package! eat
-;;   :defer t
-;;   :hook ((eshell-load . eat-eshell-mode)))
+(use-package! eat)
 
 ;;;; :tools writing
 
@@ -1883,16 +1875,16 @@ only those in the selected frame."
 ;; - npm install -g @mermaid-js/mermaid-cli
 ;; - mmdc -i input.mmd -o output.svg
 
-;; (use-package! mermaid-mode
-;;   :config
-;;   (map! :localleader
-;;         :map (mermaid-mode-map)
-;;         "c" 'mermaid-compile
-;;         "f" 'mermaid-compile-file
-;;         "b" 'mermaid-compile-buffer
-;;         "r" 'mermaid-compile-region
-;;         "b" 'mermaid-open-browser
-;;         "d" 'mermaid-open-doc))
+(use-package! mermaid-mode
+  :config
+  (map! :localleader
+        :map (mermaid-mode-map)
+        "c" 'mermaid-compile
+        "f" 'mermaid-compile-file
+        "b" 'mermaid-compile-buffer
+        "r" 'mermaid-compile-region
+        "b" 'mermaid-open-browser
+        "d" 'mermaid-open-doc))
 
 ;; (use-package! d2-mode
 ;;   :mode "\\.d2\\'"
@@ -2084,7 +2076,7 @@ only those in the selected frame."
 
 ;;;;; treemacs
 
-(setq treemacs-position 'right)
+(setq treemacs-position 'left)
 (setq +treemacs-git-mode 'deferred)
 
 (after! treemacs
@@ -2092,7 +2084,6 @@ only those in the selected frame."
   ;; (setq treemacs-git-mode nil)
   ;; (setq treemacs-move-files-by-mouse-dragging nil)
   (setq
-   ;; treemacs-position 'right
    treemacs-width 45
    treemacs-imenu-scope 'current-project
    treemacs-indentation 1
@@ -2557,18 +2548,18 @@ ${content}"))
 (use-package! org-remark
   :after org
   :config (setq org-remark-notes-file-name (my/org-remark-file))
-  ;; (org-remark-create "red-line"
-  ;;                    '(:underline (:color "magenta" :style wave))
-  ;;                    '(CATEGORY "review" help-echo "Review this"))
-  ;; (org-remark-create "yellow"
-  ;;                    '(:underline "gold")
-  ;;                    '(CATEGORY "important"))
+  (org-remark-create "red-line"
+                     '(:underline (:color "magenta" :style wave))
+                     '(CATEGORY "review" help-echo "Review this"))
+  (org-remark-create "yellow"
+                     '(:underline "gold")
+                     '(CATEGORY "important"))
 
   ;; It is recommended that `org-remark-global-tracking-mode' be enabled when
   ;; Emacs initializes. Alternatively, you can put it to `after-init-hook' as in
   ;; the comment above
-  ;; (require 'org-remark-global-tracking)
-  ;; (org-remark-global-tracking-mode +1)
+  (require 'org-remark-global-tracking)
+  (org-remark-global-tracking-mode +1)
 
   ;; Optional if you would like to highlight websites via eww-mode
   ;; (with-eval-after-load 'eww (org-remark-eww-mode +1))
@@ -2645,31 +2636,6 @@ ${content}"))
 
   ;; B) If you use face-remapping-alist, this clears the scaling:
   ;; (setq-local face-remapping-alist '((default fixed-pitch default)))
-  )
-
-(after! org-tree-slide
-
-  ;; :bind (("<f8>" . 'org-tree-slide-mode)
-  ;;        ("S-<f8>" . 'org-tree-slide-skip-done-toggle)
-  ;;        :map org-tree-slide-mode-map
-  ;;        ("<f10>" . 'org-tree-slide-move-previous-tree)
-  ;;        ("<f10>" . 'org-tree-slide-move-next-tree)
-  ;;        ("<f11>" . 'org-tree-slide-content))
-
-  (add-hook 'org-tree-slide-play-hook 'my/presentation-setup)
-  (add-hook 'org-tree-slide-stop-hook 'my/presentation-end)
-
-  (setq +org-present-text-scale 2) ; 5
-
-  (setq
-   org-tree-slide-slide-in-effect nil
-   org-tree-slide-activate-message "Presentation started!"
-   org-tree-slide-deactivate-message "Presentation finished!"
-   org-tree-slide-header nil
-   org-tree-slide-breadcrumbs " > "
-   org-image-actual-width nil)
-
-  (setq org-tree-slide-skip-outline-level 4) ;; wow!!
   )
 
 ;;;;;; DONT org-excalidraw
@@ -3370,7 +3336,7 @@ ${content}"))
   (setq gptel-default-mode 'org-mode)
 
   ;; ~/sync/man/dotsamples/vanilla/gregoryg-dotfiles-gpt/README.org
-  ;; (setq gptel-include-reasoning 'ignore)
+  (setq gptel-include-reasoning 'ignore)
   (setq gptel-expert-commands t)
   (setq gptel-temperature 0.2) ; gptel 1.0, Perplexity 0.2
 
@@ -3454,8 +3420,8 @@ ${content}"))
         (alist-get 'org-mode gptel-response-prefix-alist) "@assistant "
         (alist-get 'markdown-mode gptel-prompt-prefix-alist) "#### ")
 
-  (with-eval-after-load 'gptel-org
-    (setq-default gptel-org-branching-context t)) ; default nil
+  ;; (with-eval-after-load 'gptel-org
+  ;;   (setq-default gptel-org-branching-context t)) ; default nil
 
 ;;;;;;; 05 - gptel backend configurations
 
@@ -3480,9 +3446,9 @@ ${content}"))
   ;;             grok-2-image-1212))
 
   ;; Google - Gemini
-  ;; (gptel-make-gemini "Gemini"
-  ;;   :key #'gptel-api-key
-  ;;   :stream t)
+  (gptel-make-gemini "Gemini"
+    :key #'gptel-api-key
+    :stream t)
 
   ;; Anthropic - Claude
   ;; (gptel-make-anthropic "Claude"
@@ -3523,8 +3489,10 @@ ${content}"))
           :key #'gptel-api-key
           :models gptel--openrouter-models))
 
-  (setq gptel-model   'google/gemini-2.5-flash) ;; anthropic/claude-sonnet-4
   (setq gptel-backend gptel-openrouter-backend)
+  (setq gptel-model   'deepseek/deepseek-r1-0528)
+  ;; google/gemini-2.5-flash
+  ;; anthropic/claude-sonnet-4
 
   ;; DeepSeek offers an OpenAI compatible API
   ;; The deepseek-chat model has been upgraded to DeepSeek-V3. deepseek-reasoner points to the new model DeepSeek-R1.
@@ -3598,7 +3566,7 @@ ${content}"))
 
   ) ; end-of gptel
 
-;;;;;; cashpwd - gptel-send with prompt
+;;;;;; TODO cashpwd - gptel-send with prompt
 
 (after! gptel
   ;; /home/junghan/sync/man/dotsamples/doom/cashpw-dotfiles-node/config/doom/config-personal.org
@@ -3628,12 +3596,11 @@ ${content}"))
                            (programming . ,cashpw/llm--programming-prompt)
                            (chat . ,cashpw/llm--chat-prompt)))
 
-;;;;###autoload
+;; ;;;###autoload
   (defun cashpw/gptel-send (prompt)
     "Invoke `gptel-send' with specific PROMPT."
     (let ((gptel--system-message prompt))
       (gptel-send)))
-
   )
 
 ;;;;;; TODO gptel-make-preset
@@ -3654,11 +3621,10 @@ ${content}"))
       (map! :map gptel-mode-map
             :iv "M-<return>" #'gptel-send
             :iv "M-RET" #'gptel-send
-            ;; :iv "C-RET" #'cashpw/gptel-send
-            ;; :iv "C-<return>" #'cashpw/gptel-send
             (:localleader
              :desc "gptel/default" "5" #'gptel-menu ;; TODO fixme
              "M-s" #'gptel-save-as-org-with-denote-metadata
+             "0" #'cashpw/gptel-send
              :desc "gptel/default" "1" (cmd! (cashpw/gptel-send (alist-get 'default gptel-directives)))
              :desc "gptel/chain of thought" "2" (cmd! (cashpw/gptel-send (alist-get 'chain-of-thought gptel-directives)))
              :desc "gptel/follow up" "3" (cmd! (cashpw/gptel-send (alist-get 'follow-up gptel-directives)))
@@ -3669,7 +3635,7 @@ ${content}"))
 
   (add-hook! 'gptel-mode-hook
     (defun cae-gptel-mode-setup-h ()
-      (setq-local nobreak-char-display nil)
+      ;; (setq-local nobreak-char-display nil) ; 2025-07-26 보는게 좋아
       (auto-fill-mode -1)
       (doom-mark-buffer-as-real-h)))
 
@@ -3706,6 +3672,8 @@ ${content}"))
     (require 'gptel-quick)
     (setq gptel-quick-word-count 30)
     (setq gptel-quick-timeout 20)
+    (setq gptel-quick-backend gptel-openrouter-backend
+          gptel-quick-model 'openai/gpt-4.1-nano) ; 2025-07-26
 
     ;;;;###autoload
     (defun gptel-quick (query-text &optional count)
@@ -3731,7 +3699,6 @@ ${content}"))
              (gptel-use-context (and gptel-quick-use-context 'system)))
         (gptel-request
          query-text
-         ;; :system (format "Explain in %d words or fewer using Korean" count)
          :system (format "1) Translate the question to English. 2) Respond in %d words or fewer using Korean." count)
          :context
          (list
@@ -3806,6 +3773,11 @@ ${content}"))
   (gptel-prompts-update)
   ;; Ensure prompts are updated if prompt files change
   (gptel-prompts-add-update-watchers)
+
+  (use-package! uuidgen)
+
+  (require 'gptel-litellm)
+  (gptel-litellm-install-sessions)
   )
 
 ;;;;; llmclient: emigo
@@ -3922,22 +3894,14 @@ Prefers existing sessions closer to current directory."
   )
 
 
-;;;;; llmclient: claude-code.el
+;;;;; llmclient: claude-code-ide.el
+
+;; (use-package! claude-code-ide)
 
 (use-package! claude-code
-  :after vterm
-  :init
-  (setq claude-code-terminal-backend 'vterm)
+  :after eat
   :config
-  ;; Allow vterm windows to be as narrow as 40 columns
-  (setopt vterm-min-window-width 40)
-  ;; Increase vterm scrollback to 100000 lines (the maximum allowed)
-  ;; Note: This increases memory usage
-  (add-hook 'claude-code-start-hook
-            (lambda ()
-              ;; Only increase scrollback for vterm backend
-              (when (eq claude-code-terminal-backend 'vterm)
-                (setq-local vterm-max-scrollback 100000))))
+  (map! "C-c c" claude-code-command-map)
   (add-to-list 'display-buffer-alist
                '("^\\*claude"
                  (display-buffer-in-side-window)
@@ -4423,12 +4387,13 @@ Prefers existing sessions closer to current directory."
 
 (add-hook 'python-mode-hook #'+indent-guides-init-maybe-h)
 
-;;;;;; custom emacs-jupyter/jupyter ob-jupyter
+;;;;;; DONT custom emacs-jupyter/jupyter ob-jupyter
 
-(require 'my-python-jupyter)
-(require 'my-org-literate)
+;; (require 'my-python-jupyter)
+;; (require 'my-org-literate)
 
-(setq jupyter-eval-use-overlays t)
+;; (require 'jupyter-tramp)
+;; (setq jupyter-eval-use-overlays t)
 
 ;;;;;; python with eglot - basedpyright
 
@@ -4700,7 +4665,7 @@ Prefers existing sessions closer to current directory."
     ;; The other side of `fontaine-restore-latest-preset'.
     ;; (add-hook 'kill-emacs-hook #'fontaine-store-latest-preset)
 
-    (if (string= (system-name) "jhnuc")
+    (if (string= (system-name) "xxjhkim2-goqual")
         (fontaine-set-preset 'regular17)
       (fontaine-set-preset 'regular14))
 
@@ -4965,6 +4930,7 @@ x×X .,·°;:¡!¿?`'‘’   ÄAÃÀ TODO
 
   ;; change default browser as eww
   ;; (setq +lookup-open-url-fn #'eww) ; doom browse-url
+  (setq browse-url-default-browser 'browse-url-firefox)
 
   ;; This function allows Imenu to offer HTML headings in EWW buffers,
   ;; helpful for navigating long, technical documents.
@@ -5115,6 +5081,22 @@ Suitable for `imenu-create-index-function'."
 
   ;; prot-dired-grep-marked-files
   (require 'prot-dired)
+
+;;;###autoload
+(defun +default/yank-buffer-absolute-path (&optional root)
+  "Copy the current buffer's absolute path to the kill ring."
+  (interactive)
+  (if-let* ((filename (or (buffer-file-name (buffer-base-buffer))
+                          (bound-and-true-p list-buffers-directory))))
+      (let ((path (expand-file-name  ; abbreviate-file-name 대신 expand-file-name 사용
+                   (if root
+                       (file-relative-name filename root)
+                     filename))))
+        (kill-new path)
+        (if (string= path (car kill-ring))
+            (message "Copied absolute path: %s" path)
+          (user-error "Couldn't copy filename in current buffer")))
+    (error "Couldn't find filename in current buffer")))
   )
 
 ;;;;; dired-preview
@@ -5601,77 +5583,78 @@ Suitable for `imenu-create-index-function'."
 
 ;; M-x gt-do-translate
 ;; /vanilla/douo-dotfiles-kitty/init.el
-(use-package! go-translate
-  :defer t
-  :after pdf-tools
-  :if window-system
-  :commands (douo/go-do-translate douo/pdf-view-translate)
-  :init
-  (setq gt-langs '(en ko))
-  ;; Translate by paragraph and insert each result at the end of source paragraph
-  ;; This configuration is suitable for translation work. That is: Translate -> Modify -> Save
-  (defun douo/go-do-translate (text-property-string)
-    (gt-start (gt-translator
-               :taker (gt-taker
-                       ;; 单个换行替换为空格
-                       :text (replace-regexp-in-string
-                              "\\([^\n]\\)\n\\([^\n]\\)" "\\1 \\2"
-                              text-property-string))
-               :engines (gt-google-engine)
-               :render (gt-posframe-pop-render))))
-  :custom
-  (gt-cache-p t)
-  (gt-default-translator
-   (gt-translator
-    :taker (gt-taker :langs '(en ko) :text (lambda () (replace-regexp-in-string
-                                                       "\\([^\n]\\)\n\\([^\n]\\)" "\\1 \\2"
-                                                       (thing-at-point 'paragraph)))
-                     :prompt t
-                     )
-    :engines (gt-google-engine)
-    :render (gt-buffer-render)))
-  :bind
-  (:map pdf-view-mode-map
-        ;; consult 不支持与 pdf-tools 的交互
-        ;; ("C-s" . isearch-forward)
-        ;; ("C-r" . isearch-backward)
-        ("C-t" . douo/pdf-view-translate))
-  (:map embark-prose-map ;; 覆盖 transpose-xxx
-        ("t" . douo/go-do-translate))
-  (:map embark-region-map ;; 覆盖 transpose-regions
-        ("t" . douo/go-do-translate))
-  :config
-  (setq gt-chatgpt-key
-        (auth-info-password
-         (car (auth-source-search
-               :host "api.openai.com"
-               :user "apikey"))))
-  (setq gt-chatgpt-model "gpt-4o-mini")
+;; (use-package! go-translate
+;;   :defer t
+;;   :after pdf-tools
+;;   :if window-system
+;;   :commands (douo/go-do-translate douo/pdf-view-translate)
+;;   :init
+;;   (setq gt-langs '(en ko))
+;;   ;; Translate by paragraph and insert each result at the end of source paragraph
+;;   ;; This configuration is suitable for translation work. That is: Translate -> Modify -> Save
+;;   (defun douo/go-do-translate (text-property-string)
+;;     (gt-start (gt-translator
+;;                :taker (gt-taker
+;;                        ;; 单个换行替换为空格
+;;                        :text (replace-regexp-in-string
+;;                               "\\([^\n]\\)\n\\([^\n]\\)" "\\1 \\2"
+;;                               text-property-string))
+;;                :engines (gt-google-engine)
+;;                :render (gt-posframe-pop-render))))
+;;   :custom
+;;   (gt-cache-p t)
+;;   (gt-default-translator
+;;    (gt-translator
+;;     :taker (gt-taker :langs '(en ko) :text (lambda () (replace-regexp-in-string
+;;                                                        "\\([^\n]\\)\n\\([^\n]\\)" "\\1 \\2"
+;;                                                        (thing-at-point 'paragraph)))
+;;                      :prompt t
+;;                      )
+;;     :engines (gt-google-engine)
+;;     :render (gt-buffer-render)))
+;;   :bind
+;;   (:map pdf-view-mode-map
+;;         ;; consult 不支持与 pdf-tools 的交互
+;;         ;; ("C-s" . isearch-forward)
+;;         ;; ("C-r" . isearch-backward)
+;;         ("C-t" . douo/pdf-view-translate))
+;;   (:map embark-prose-map ;; 覆盖 transpose-xxx
+;;         ("t" . douo/go-do-translate))
+;;   (:map embark-region-map ;; 覆盖 transpose-regions
+;;         ("t" . douo/go-do-translate))
+;;   :config
+;;   (setq gt-chatgpt-key
+;;         (auth-info-password
+;;          (car (auth-source-search
+;;                :host "api.openai.com"
+;;                :user "apikey"))))
+;;   (setq gt-chatgpt-model "gpt-4o-mini")
 
-  (require 'pdf-tools)
-  ;; 自定义 pdf 翻译文本提取器
-  ;; 如果有高亮返回高亮文本，无则返回整页文本
-  (defun douo/gts-pdf-view-selection-texter ()
-    (unless (pdf-view-active-region-p)
-      (pdf-view-mark-whole-page))
-    ;; remove-newline-characters-if-not-at-the-end-of-sentence
-    ;; ::HACK:: 解决 pdf 提取文本不能正确断行的问题
-    ;; 移除不是处于句尾[.!?]的换行符
-    (replace-regexp-in-string "\\([^.!?]\\)\n\\([^ ]\\)" "\\1 \\2"
-                              (car (pdf-view-active-region-text))))
-  (defvar douo/pdf-translater
-    (gt-translator
-     :taker (gt-taker :text 'douo/gts-pdf-view-selection-texter)
-     :engines (list (gt-google-engine))
-     :render (gt-buffer-render)
-     ;; :splitter (gts-paragraph-splitter)
-     ))
-  (defun douo/pdf-view-translate ()
-    (interactive)
-    (gt-start douo/pdf-translater)
-    ;;  cancel selection in emacs
-    (deactivate-mark))
-  ) ; end-of go-translate
+;;   (require 'pdf-tools)
+;;   ;; 自定义 pdf 翻译文本提取器
+;;   ;; 如果有高亮返回高亮文本，无则返回整页文本
+;;   (defun douo/gts-pdf-view-selection-texter ()
+;;     (unless (pdf-view-active-region-p)
+;;       (pdf-view-mark-whole-page))
+;;     ;; remove-newline-characters-if-not-at-the-end-of-sentence
+;;     ;; ::HACK:: 解决 pdf 提取文本不能正确断行的问题
+;;     ;; 移除不是处于句尾[.!?]的换行符
+;;     (replace-regexp-in-string "\\([^.!?]\\)\n\\([^ ]\\)" "\\1 \\2"
+;;                               (car (pdf-view-active-region-text))))
+;;   (defvar douo/pdf-translater
+;;     (gt-translator
+;;      :taker (gt-taker :text 'douo/gts-pdf-view-selection-texter)
+;;      :engines (list (gt-google-engine))
+;;      :render (gt-buffer-render)
+;;      ;; :splitter (gts-paragraph-splitter)
+;;      ))
+;;   (defun douo/pdf-view-translate ()
+;;     (interactive)
+;;     (gt-start douo/pdf-translater)
+;;     ;;  cancel selection in emacs
+;;     (deactivate-mark))
+;;   )
+; end-of go-translate
 
 ;; (setq gt-default-translator
 ;;       (gt-translator
@@ -6196,7 +6179,7 @@ Suitable for `imenu-create-index-function'."
 (use-package! diff-hl
   :config
   (setq diff-hl-disable-on-remote t) ; default nil
-  (setq diff-hl-flydiff-delay 0.8)  ; doom 0.5, default: 0.3
+  (setq diff-hl-flydiff-delay 1.5)  ; doom 0.5, default: 0.3
   ;; (remove-hook 'diff-hl-mode-hook #'diff-hl-flydiff-mode)
   ;; (remove-hook 'diff-hl-flydiff-mode-hook #'+vc-gutter-init-flydiff-mode-h)
   )
@@ -6258,7 +6241,7 @@ Suitable for `imenu-create-index-function'."
           (bg-heading-0 bg-inactive)
           (bg-heading-1 bg-blue-nuanced)
 
-          ; (overline-heading-0 unspecified)
+; (overline-heading-0 unspecified)
           (overline-heading-1 magenta-cooler)
           (overline-heading-2 magenta-warmer)
 
@@ -6308,8 +6291,6 @@ Suitable for `imenu-create-index-function'."
 
        ;; `(org-drawer ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata :height 0.8)))
        ;; `(org-special-keyword ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata)))
-
-       `(org-side-tree-heading-face ((,c :inherit variable-pitch :foreground ,fg-alt :height ,user-imenu-list-height)))
 
        `(imenu-list-entry-face-0 ((,c :inherit variable-pitch :foreground ,fg-heading-1 :height ,user-imenu-list-height)))
        `(imenu-list-entry-face-1 ((,c :inherit variable-pitch :foreground ,fg-heading-2 :height ,user-imenu-list-height)))
@@ -6401,8 +6382,6 @@ Suitable for `imenu-create-index-function'."
       `(consult-separator ((,c :inherit default :foreground ,yellow)))
       `(consult-notes-time ((,c :inherit default :foreground ,cyan)))
 
-      `(org-side-tree-heading-face ((,c :inherit variable-pitch :foreground ,fg-alt :height ,user-imenu-list-height)))
-
       `(imenu-list-entry-face-0 ((,c :inherit variable-pitch :foreground ,rainbow-1 :height ,user-imenu-list-height)))
       `(imenu-list-entry-face-1 ((,c :inherit variable-pitch :foreground ,rainbow-2 :height ,user-imenu-list-height)))
       `(imenu-list-entry-face-2 ((,c :inherit variable-pitch :foreground ,rainbow-3 :height ,user-imenu-list-height)))
@@ -6476,6 +6455,16 @@ Suitable for `imenu-create-index-function'."
 ;; (require 'my-themes)
 ;; (add-hook 'doom-load-theme-hook 'my/load-custom-set-faces 90) ; for doom themes
 
+;;;;; DONT cursory
+
+;; (use-package! cursory
+;;   :if window-system
+;;   :defer 3
+;;   :init
+;;   (cursory-set-preset 'cursory-defaults)
+;;   :config
+;;   (cursory-mode))
+
 ;;;;; spacious-padding
 
 (use-package! spacious-padding
@@ -6497,13 +6486,11 @@ Suitable for `imenu-create-index-function'."
   ;; (add-hook 'doom-load-theme-hook #'spacious-padding-mode)
   :config
   ;; (remove-hook 'doom-init-ui-hook #'window-divider-mode)
-  ;; (blink-cursor-mode t)
   ;; (when (fboundp 'tooltip-mode) (tooltip-mode 1))
   ;; (when (fboundp 'tool-bar-mode) (tool-bar-mode 1))
   ;; (when (display-graphic-p) ; gui
-  ;;   (menu-bar-mode +1))
-  (spacious-padding-mode +1)
-  )
+  ;;   (menu-bar-mode +1)) ; disable <f10>
+  (spacious-padding-mode +1))
 
 ;;;;; pulse : built-in - visual feedback
 
@@ -6516,8 +6503,7 @@ Suitable for `imenu-create-index-function'."
     (pulse-momentary-highlight-one-line (point)))
   (dolist (command
            '(scroll-up-command scroll-down-command recenter-top-bottom other-window))
-    (advice-add command :after #'pulse-line))
-  )
+    (advice-add command :after #'pulse-line)))
 
 ;;;;; DONT pulsar - performance issue
 
@@ -7808,19 +7794,6 @@ function to apply the changes."
   ;; (set-fontset-font "fontset-default" 'emoji (font-spec :family "Noto Emoji") nil 'prepend) ; default face
   )
 
-;;; org-side-tree
-
-(progn
-  (require 'org-side-tree)
-  (setq-local outline-regexp ";;;\\(;* [^ \t\n]\\)") ; for clojure lisp
-  (setq org-side-tree-persistent nil) ; default nil
-  ;; (setq org-side-tree-cursor 'box)
-  ;; (setq org-side-tree-fontify nil)
-  (setq org-side-tree-timer-delay 1) ; default 0.3
-  ;; (add-hook 'emacs-lisp-mode-hook (lambda () (setq-local outline-regexp ";;;\\(;* [^   \t\n]\\)")))
-  ;; (add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
-  )
-
 ;;;; mb-depth
 
 ;; from prot
@@ -7938,8 +7911,7 @@ function to apply the changes."
                                  :host "api-free.deepl.com"
                                  :user "apikey"))))
   (with-eval-after-load 'evil-org
-    (evil-define-key 'normal 'evil-org-mode-map (kbd "M-t") 'txl-translate-region-or-paragraph))
-  )
+    (evil-define-key 'normal 'evil-org-mode-map (kbd "M-t") 'txl-translate-region-or-paragraph)))
 
 ;;;;; org-zettel
 
@@ -7992,5 +7964,24 @@ function to apply the changes."
 ;;; Load office
 
 (load! "+office")
+
+;;; TODO khoj
+
+;; (
+;;  ;; ~/.emacs.d/init.el 또는 ~/.emacs에 추가
+;;  (add-to-list 'load-path "/home/goqual/git/clone/khoj/src/interface/emacs/")
+;;  (require 'khoj)
+
+;;  ;; 로컬 서버 설정
+;;  (setq khoj-server-url "http://localhost:42110"
+;;        khoj-auto-setup t)
+;;  ;; Install Khoj client from MELPA Stable
+;;  (setq khoj-index-directories '("~/sync/org/"))
+;;  ;; khoj-index-files '("~/docs/todo.org" "~/docs/work.org")))
+
+;;  ;; 키바인딩 설정 (선택사항)
+;;  (global-set-key (kbd "C-c s") 'khoj)
+;;  (global-set-key (kbd "C-c c") 'khoj-chat)
+;;  )
 
 ;;; left blank on purpose

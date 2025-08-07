@@ -121,7 +121,7 @@
  eww               ; Emacs' built-in web browser
 
  :term
- (:unless IS-TERMUX (eshell)) ; the elisp shell that works everywhere
+ ;; (:unless IS-TERMUX (eshell)) ; the elisp shell that works everywhere
  (:if (not (memq system-type '(cygwin windows-nt ms-dos))) vterm) ; the best terminal emulation in Emacs
 
  :checkers
@@ -213,7 +213,7 @@
   ;; +dragndrop                  ; drag & drop files/images into org buffers
   +hugo                     ; use Emacs for hugo blogging
   +noter                      ; enhanced PDF notetaking
-  +jupyter                    ; ipython/jupyter support for babel
+  ;; +jupyter                    ; ipython/jupyter support for babel
   +pandoc                     ; export-with-pandoc support
   +gnuplot                    ; who doesn't like pretty pictures
   +present                    ; using org-mode for presentations

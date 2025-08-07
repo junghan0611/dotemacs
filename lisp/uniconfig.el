@@ -808,43 +808,43 @@ Also see `prot-window-delete-popup-frame'." command)
   (setq markdown-display-remote-images t)
   (setq markdown-list-item-bullets '("◦" "-" "•" "–"))
 
-  (advice-add
-   'markdown-fontify-list-items :override
-   (lambda (last)
-     (when (markdown-match-list-items last)
-       (when (not (markdown-code-block-at-point-p (match-beginning 2)))
-         (let* ((indent (length (match-string-no-properties 1)))
-                (level (/ indent markdown-list-indent-width))
-                ;; level = 0, 1, 2, ...
-                (bullet (nth (mod level (length markdown-list-item-bullets))
-                             markdown-list-item-bullets)))
-           (add-text-properties
-            (match-beginning 2) (match-end 2) '(face markdown-list-face))
-           (cond
-            ;; Unordered lists
-            ((string-match-p "[\\*\\+-]" (match-string 2))
-             (add-text-properties
-              (match-beginning 2) (match-end 2) `(display ,bullet)))
-            ;; Definition lists
-            ((string-equal ":" (match-string 2))
-             (let ((display-string
-                    (char-to-string (markdown--first-displayable
-                                     markdown-definition-display-char))))
-               (add-text-properties (match-beginning 2) (match-end 2)
-                                    `(display ,display-string)))))))
-       t)))
+  ;; (advice-add
+  ;;  'markdown-fontify-list-items :override
+  ;;  (lambda (last)
+  ;;    (when (markdown-match-list-items last)
+  ;;      (when (not (markdown-code-block-at-point-p (match-beginning 2)))
+  ;;        (let* ((indent (length (match-string-no-properties 1)))
+  ;;               (level (/ indent markdown-list-indent-width))
+  ;;               ;; level = 0, 1, 2, ...
+  ;;               (bullet (nth (mod level (length markdown-list-item-bullets))
+  ;;                            markdown-list-item-bullets)))
+  ;;          (add-text-properties
+  ;;           (match-beginning 2) (match-end 2) '(face markdown-list-face))
+  ;;          (cond
+  ;;           ;; Unordered lists
+  ;;           ((string-match-p "[\\*\\+-]" (match-string 2))
+  ;;            (add-text-properties
+  ;;             (match-beginning 2) (match-end 2) `(display ,bullet)))
+  ;;           ;; Definition lists
+  ;;           ((string-equal ":" (match-string 2))
+  ;;            (let ((display-string
+  ;;                   (char-to-string (markdown--first-displayable
+  ;;                                    markdown-definition-display-char))))
+  ;;              (add-text-properties (match-beginning 2) (match-end 2)
+  ;;                                   `(display ,display-string)))))))
+  ;;      t)))
 
   (add-hook 'markdown-mode-hook #'visual-line-mode)
   ;; (add-hook 'markdown-mode-hook #'toggle-text-mode-auto-fill)
 
-  (add-hook
-   'markdown-mode-hook
-   (lambda ()
-     "Beautify Markdown em-dash and checkbox Symbol"
-     ;; (push '("--" . "—") prettify-symbols-alist)
-     (push '("->" . "→" ) prettify-symbols-alist)
-     (push '("=>" . "⟹") prettify-symbols-alist)
-     (prettify-symbols-mode)))
+  ;; (add-hook
+  ;;  'markdown-mode-hook
+  ;;  (lambda ()
+  ;;    "Beautify Markdown em-dash and checkbox Symbol"
+  ;;    ;; (push '("--" . "—") prettify-symbols-alist)
+  ;;    (push '("->" . "→" ) prettify-symbols-alist)
+  ;;    (push '("=>" . "⟹") prettify-symbols-alist)
+  ;;    (prettify-symbols-mode)))
 
   ;; Plain text (text-mode)
   (add-to-list 'auto-mode-alist '("\\(README\\|CHANGELOG\\|COPYING\\|LICENSE\\)\\'" . text-mode))

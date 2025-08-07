@@ -327,13 +327,6 @@
   ;; (global-set-key (kbd "M-g j") 'my/side-notes-toggle-daily-note)
   )
 
-;;;;; org-side-tree
-
-(when (locate-library "org-side-tree")
-  (global-set-key (kbd "M-<f7>") 'winum-select-window-2)
-  (global-set-key (kbd "<f7>") 'org-side-tree-toggle)
-  (global-set-key (kbd "M-g M-o") 'org-side-tree))
-
 ;;;;; markdown-mode-map
 
 (with-eval-after-load 'markdown-mode

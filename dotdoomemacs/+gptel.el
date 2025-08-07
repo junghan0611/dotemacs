@@ -250,14 +250,14 @@
      :output-cost 15
      :cutoff-date "2025-05")
 
-    ;; (anthropic/claude-opus-4
-    ;;  :description "Hybrid model capable of standard thinking and extended thinking modes"
-    ;;  :capabilities (media tool-use cache)
-    ;;  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
-    ;;  :context-window 200
-    ;;  :input-cost 15
-    ;;  :output-cost 75
-    ;;  :cutoff-date "2025-05")
+    (anthropic/claude-opus-4
+     :description "Hybrid model capable of standard thinking and extended thinking modes"
+     :capabilities (media tool-use cache)
+     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+     :context-window 200
+     :input-cost 15
+     :output-cost 75
+     :cutoff-date "2025-05")
 
     ;; (anthropic/claude-3.7-sonnet:thinking
     ;;  :description "Hybrid model capable of standard thinking and extended thinking modes"
@@ -274,14 +274,17 @@
 ;; google/gemini-2.5-flash
 ;; google/gemini-2.5-pro
 ;; anthropic/claude-sonnet-4
-;; anthropic/claude-3.7-sonnet
+;; anthropic/claude-3.5-haiku
 ;; deepseek/deepseek-chat
+;; deepseek/deepseek-r1-0528
+
+;; anthropic/claude-3.7-sonnet
 ;; openai/gpt-4.1
 ;; openai/gpt-4o-mini
 ;; qwen/qwen-2.5-7b-instruct
 
 ;;~/sync/man/dotsamples/doom/rajp152k-dot-all/doom/.config/doom/config.el
-  ;; (openai/gpt-4.1
+;; (openai/gpt-4.1
 ;;                     openai/gpt-4.1-nano
 ;;                     openai/gpt-4.1-mini
 ;;                     openai/o4-mini-high

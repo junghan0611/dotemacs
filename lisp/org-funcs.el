@@ -1662,7 +1662,7 @@ depending on which one is appropriate based on the context."
     ;; (centered-cursor-mode -1)
 
     (diff-hl-mode 1)
-    (display-line-numbers-mode 1)
+    ;; (display-line-numbers-mode 1)
     (org-toggle-inline-images -1)
     ;; (widen)
     ;; (visual-line-mode 1)
@@ -1988,13 +1988,13 @@ TARGET-FILES가 nil이면 `org-cite-global-bibliography`의 모든 파일을 검
           (goto-char (match-end 2))))
 
       ;; 4. 한글 조사 NBSP 삽입 - '1단어'
-      (goto-line 10)
-      (while (re-search-forward
-              "\\([가-힣]\\{2,\\}\\)\\(이\\|가\\|은\\|는\\|을\\|의\\|를\\|와\\|과\\|란\\)\\(\x20\\)" ; [[:space:]]
-              nil t)
-        (when (>= (length (match-string 1)) 2)
-          (push (match-string 1) word-list))
-        (replace-match "\\1 \\2 \\3"))
+      ;; (goto-line 10)
+      ;; (while (re-search-forward
+      ;;         "\\([가-힣]\\{2,\\}\\)\\(이\\|가\\|은\\|는\\|을\\|의\\|를\\|와\\|과\\|란\\)\\(\x20\\)" ; [[:space:]]
+      ;;         nil t)
+      ;;   (when (>= (length (match-string 1)) 2)
+      ;;     (push (match-string 1) word-list))
+      ;;   (replace-match "\\1 \\2 \\3"))
       ) ; end save-excursion
     ))
 

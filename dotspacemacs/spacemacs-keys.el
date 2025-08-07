@@ -239,15 +239,6 @@
 ;; (spacemacs/set-leader-keys "fed" 'goto-emacs-dotfiles.org)
 
 
-;;;;; imenu treemacs
-
-(global-set-key (kbd "<f8>") 'imenu-list-smart-toggle)
-(global-set-key (kbd "M-<f8>") 'spacemacs/imenu-list-smart-focus)
-(global-set-key (kbd "<f9>") 'spacemacs/treemacs-project-toggle)
-(global-set-key (kbd "M-<f9>") 'treemacs-select-window)
-
-;; (global-set-key (kbd "M-g l") 'spacemacs/toggle-relative-line-numbers) ; 'SPC t n r'
-
 ;;;; packages
 
 ;;;;; puni
