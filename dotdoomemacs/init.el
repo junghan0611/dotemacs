@@ -68,11 +68,11 @@
 ;; default. If you don't like GtkIMContext, you can disable it by writing as
 ;; follows in ~/.emacs: pgtk-use-im-context disable gtk im modules for
 ;; emacs-pgtk, add "Emacs*UseXIM: false" to ~/.Xresources to disable xim
-(if (eq window-system 'pgtk)
-    (pgtk-use-im-context nil))
+;; (if (eq window-system 'pgtk)
+;;     (pgtk-use-im-context nil))
 
-(when (boundp 'pgtk-use-im-context-on-new-connection)
-  (setq pgtk-use-im-context-on-new-connection nil))
+;; (when (boundp 'pgtk-use-im-context-on-new-connection)
+;;   (setq pgtk-use-im-context-on-new-connection nil))
 
 ;;; Doom Modules
 
@@ -121,7 +121,7 @@
  eww               ; Emacs' built-in web browser
 
  :term
- ;; (:unless IS-TERMUX (eshell)) ; the elisp shell that works everywhere
+ eshell ; the elisp shell that works everywhere
  (:if (not (memq system-type '(cygwin windows-nt ms-dos))) vterm) ; the best terminal emulation in Emacs
 
  :checkers
@@ -203,7 +203,7 @@
  (latex +latexmk +cdlatex) ; writing papers in Emacs has never been so fun
  ;;lean              ; for folks with too much to prove
  ledger            ; be audit you can be
- ;;lua               ; one-based indices? one-based indices
+ lua               ; one-based indices? one-based indices
  ;; (markdown +tree-sitter) ; writing docs for people to ignore
  markdown
  ;;nim               ; python + lisp at the speed of c
@@ -245,7 +245,7 @@
  ;;terra             ; Earth and Moon in alignment for performance.
  (web +lsp) ; the tubes
  yaml ; JSON, but readable
- ;;zig               ; C, but simpler
+ zig               ; C, but simpler
 
  ;; :email
  ;; (mu4e +org +gmail)

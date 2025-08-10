@@ -352,11 +352,20 @@
 (package! gpt-babel :recipe (:local-repo "~/git/default/gpt-babel/"))
 ;; (package! org-auto-tangle :recipe (:local-repo "~/git/default/org-auto-tangle/"))
 
-;; (package! claude-code-ide :recipe (:local-repo "~/git/default/claude-code-ide.el"))
+(package! claude-code-ide :recipe (:local-repo "~/git/default/claude-code-ide.el"))
 ;; (package! claude-code :recipe (:host github :repo "stevemolitor/claude-code.el" ))
 (package! claude-code :recipe (:local-repo "~/git/default/claude-code.el/"))
+;; (package! monet :recipe (:host github :repo "stevemolitor/monet" ))
 
-(package! eat)
+(package! eshell-atuin)
+(package! eat :recipe
+  (:host codeberg
+   :repo "akib/emacs-eat"
+   :files ("*.el" ("term" "term/*.el") "*.texi"
+           "*.ti" ("terminfo/e" "terminfo/e/*")
+           ("terminfo/65" "terminfo/65/*")
+           ("integration" "integration/*")
+           (:exclude ".dir-locals.el" "*-tests.el"))))
 
 ;;;;; extra packages
 
@@ -400,6 +409,7 @@
 ;; (package! aas)
 (package! laas)
 (package! math-symbol-lists)
+(package! adoc-mode)
 
 ;;;; Coding
 
@@ -427,6 +437,8 @@
 
 ;; (unpin! jupyter)
 ;; (package! jupyter :recipe (:host github :repo "junghan0611/emacs-jupyter" :branch "ko"))
+
+(package! docker-compose-mode)
 
 (when (modulep! :lang python)
   (package! pydoc)

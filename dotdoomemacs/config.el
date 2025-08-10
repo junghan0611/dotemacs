@@ -459,6 +459,7 @@
       ("^\\*doom:" :vslot -4 :size 0.35 :side right :autosave t :select t :modeline t :quit nil :ttl t) ; editing buffers (interaction required)
       ("^\\*doom:\\(?:v?term\\|e?shell\\)-popup" ; editing buffers (interaction required)
        :vslot -5 :size 0.35 :select t :modeline nil :quit nil :ttl nil)
+      ("^\\*eat*\\$" :vslot -5 :size 0.35 :select t :modeline nil :quit nil :ttl nil)
       ("^\\*jupyter-repl.*?\\(\\*\\|<[[:digit:]]>\\)$" :vslot -5 :side right :size 0.35 :select t :modeline t :quit nil :ttl t) ; 2025-02-27 python
       ("^\\*\\(?:Wo\\)?Man " :vslot -6 :size 0.45 :select t :quit t :ttl 0)
       ("^\\*Calc" :vslot -7 :side bottom :size 0.4 :select t :quit nil :ttl 0)
@@ -522,6 +523,7 @@
   ;; (set-popup-rule! "\\`\\*chatgpt\\* " :ttl t :side 'bottom :height 20 :quit t :select t)
   ;; ;; (set-popup-rule! "^\\*Messages\\*" :ttl t :side 'bottom :height 20 :quit t :ttl t)
   ;; (set-popup-rule! "^\\*doom:vterm*" :ttl t :side 'bottom :height 20 :quit t)
+
   ;; (set-popup-rule! "^\\*npm*" :ttl t :side 'bottom :height 20 :quit t)
   ;; (set-popup-rule! "^\\*Flycheck*" :ttl t :side 'bottom :height 20 :quit t)
 
@@ -1591,9 +1593,99 @@ only those in the selected frame."
 
 ;;;; :term
 
-;;;;; eshell : eat
+;;;;; eshell-atuin
 
-(use-package! eat)
+(use-package! eshell-atuin
+  :when (executable-find "atuin")
+  :after eshell
+  :init (eshell-atuin-mode)
+  :config
+  (setopt
+   eshell-atuin-search-fields '(time duration command directory relativetime)
+   eshell-atuin-history-format "%-70c %>10r %-40i "
+   eshell-atuin-filter-mode 'global
+   eshell-atuin-search-options nil)
+
+  (defadvice! eshell-atuin-history-fix-sorting-a (ofn &optional arg)
+    :around #'eshell-atuin-history
+    (let* ((vertico-sort-function nil))
+      (funcall ofn arg))))
+
+
+;;;;; eat
+
+(use-package! eat
+  :defer t
+  :hook ((eshell-load . eat-eshell-mode)))
+
+;; (use-package! eat
+;;   :commands (eat)
+;;   :hook ((fontaine-set-preset . krisb-eat--setup))
+;;   :init
+;;   ;; Add to your .bashrc
+;;   ;; [ -n "$EAT_SHELL_INTEGRATION_DIR" ] && \
+;;   ;; source "$EAT_SHELL_INTEGRATION_DIR/bash"
+
+;;   ;; Makes eat quicker
+;;   (setq process-adaptive-read-buffering nil)
+
+;;   ;; Runs not compatible eshell term stuff with eat on the same buffer
+;;   (add-hook 'eshell-mode-hook #'eat-eshell-mode)
+
+;;   ;; Runs listed 'visual-mode' eshell stuff with eat on separated buffer
+;;   ;; (takes precedence over the above setting)
+;;   ;; (add-hook 'eshell-mode-hook #'eat-eshell-visual-command-mode)
+
+;;   ;; Disabled line/number minor modes on modeline
+;;   (add-hook 'eat-mode-hook (lambda ()
+;;                              (setq-local line-number-mode nil)
+;;                              (setq-local column-number-mode nil)))
+
+;;   ;; (setq eat-term-name "xterm-256color")
+
+;;   (setq eat-term-name "xterm")
+;;   (setq eat-term-scrollback-size 131072)
+;;   (setq eat-enable-mouse t)
+;;   (setq eat-kill-buffer-on-exit t)
+;;   (setq eat-shell "/usr/bin/bash")
+;;   ;; (advice-add 'eat-semi-char-mode :after 'eat-line-mode)
+;;   (add-hook! 'eat-mode-hook
+;;     (defun cae-eat-mode-setup-h ()
+;;       ;; (setq-local nobreak-char-display nil)
+;;       ;; (auto-fill-mode -1)
+;;       (doom-mark-buffer-as-real-h)))
+;;   :config
+;;   ;; 2025-04-05: This resolves the continuation lines issue in EAT terminal
+;;   ;; (including eat-shell in `eat-eshell-visual-command-mode').  The
+;;   ;; continuation line issue results in, I think, the default font being too
+;;   ;; wide, causing the width of the characters to exceed the width of the
+;;   ;; window, resulting in ugly continuation lines that ruin the wrapping of the
+;;   ;; output.
+;;   (defun krisb-eat--setup ()
+;;     "Set up an EAT terminal shell."
+;;     (when (featurep 'fontaine)
+;;       (set-face-attribute 'eat-term-font-0 nil
+;;                           ;; This returns the default-family of the current
+;;                           ;; preset, whether explicitly or implicitly set
+;;                           :family (fontaine--get-preset-property fontaine-current-preset :term-family))))
+;;   ;; 기본 터미널 키들이 제대로 동작하도록
+;;   (evil-define-key '(insert emacs) eat-mode-map
+;;     (kbd "<up>") 'eat-self-input
+;;     (kbd "<down>") 'eat-self-input
+;;     (kbd "<left>") 'eat-self-input
+;;     (kbd "<right>") 'eat-self-input
+;;     (kbd "<backspace>") 'backward-delete-char
+;;     (kbd "<delete>") 'delete-char
+;;     (kbd "<return>") 'eat-self-input     ; 이 라인 추가!
+;;     (kbd "RET") 'eat-self-input          ; 이 라인도 추가!
+;;     (kbd "C-d") 'eat-self-input
+;;     (kbd "C-c") 'eat-self-input
+;;     (kbd "C-l") 'eat-self-input
+;;     (kbd "C-\\") 'toggle-input-method
+;;     (kbd "<hangul>") 'toggle-input-method
+;;     (kbd "<menu>") 'toggle-input-method
+;;     )
+;;   )
 
 ;;;; :tools writing
 
@@ -3301,6 +3393,12 @@ ${content}"))
   (require 'binder-tutorial)  ;; optional
   )
 
+;;;;; adoc-mode
+
+(use-package! adoc-mode
+  :custom-face
+  (adoc-title-0-face ((t (:height 1.0 :weight bold)))))
+
 ;;;; :custom AI
 
 ;;;;; llmclient: gptel - llmclient
@@ -3420,8 +3518,8 @@ ${content}"))
         (alist-get 'org-mode gptel-response-prefix-alist) "@assistant "
         (alist-get 'markdown-mode gptel-prompt-prefix-alist) "#### ")
 
-  ;; (with-eval-after-load 'gptel-org
-  ;;   (setq-default gptel-org-branching-context t)) ; default nil
+  (with-eval-after-load 'gptel-org
+    (setq-default gptel-org-branching-context t)) ; default nil
 
 ;;;;;;; 05 - gptel backend configurations
 
@@ -3893,15 +3991,17 @@ Prefers existing sessions closer to current directory."
   ;;   :ttl nil)
   )
 
-
 ;;;;; llmclient: claude-code-ide.el
 
-;; (use-package! claude-code-ide)
+(use-package! claude-code-ide
+  :config
+  (setq claude-code-ide-terminal-backend 'vterm)
+  ;; (claude-code-ide-emacs-tools-setup)
+  ) ; Optionally enable Emacs MCP tools
 
 (use-package! claude-code
-  :after eat
   :config
-  (map! "C-c c" claude-code-command-map)
+  (setq claude-code-terminal-backend 'vterm)
   (add-to-list 'display-buffer-alist
                '("^\\*claude"
                  (display-buffer-in-side-window)
@@ -4457,6 +4557,11 @@ Prefers existing sessions closer to current directory."
     (set-eglot-client! 'hy-mode '("hyuga")))
   )
 
+;;;;; docker-compose-mode
+
+(use-package! docker-compose-mode
+  :mode "docker-compose.*\\.ya?ml\\'")
+
 ;;;; :format
 
 ;;;;; elisp-autofmt
@@ -4854,9 +4959,9 @@ x×X .,·°;:¡!¿?`'‘’   ÄAÃÀ TODO
 
              org-cycle
              keyboard-quit
-             block-toggle-input-method
              save-buffer
-             toggle-input-method
+             ;; block-toggle-input-method
+             ;; toggle-input-method
 
              ;; evil-formal-state
              ;; evil-force-normal-state
@@ -6310,8 +6415,8 @@ Suitable for `imenu-create-index-function'."
        ;; `(tab-bar-tab-ungrouped ((,c :inherit tab-bar-tab-inactive)))
        `(fringe ((,c :background ,bg-dim)))
 
-       `(vterm-color-black ((,c :background "gray25" :foreground "gray25")))
-       `(vterm-color-yellow ((,c :background ,yellow-intense :foreground ,yellow-intense)))
+       ;; `(vterm-color-black ((,c :background "gray25" :foreground "gray25")))
+       ;; `(vterm-color-yellow ((,c :background ,yellow-intense :foreground ,yellow-intense)))
        `(org-mode-line-clock ((,c :inherit bold :foreground ,modeline-info)))
        `(org-mode-line-clock-overrun ((,c :inherit bold :foreground ,modeline-err)))
        `(jinx-misspelled ((,c :underline (:style wave :color ,magenta-cooler))))
@@ -7983,5 +8088,6 @@ function to apply the changes."
 ;;  (global-set-key (kbd "C-c s") 'khoj)
 ;;  (global-set-key (kbd "C-c c") 'khoj-chat)
 ;;  )
+
 
 ;;; left blank on purpose

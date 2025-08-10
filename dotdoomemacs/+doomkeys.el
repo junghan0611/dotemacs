@@ -780,6 +780,8 @@
   (interactive)
   (map! (:map vertico-map
               "`"   #'toggle-input-method)
+        (:map vterm-mode-map
+              "`"   #'toggle-input-method)
         (:map prog-mode-map
               "`"   #'toggle-input-method)
         (:map minibuffer-mode-map
@@ -1515,7 +1517,7 @@
 ;; "C-S-SPC" #'embark-preview+
 
 
-;;;; vterm-mode-map
+;;;;  vterm-mode-map
 
 (after! vterm
   (setq vterm-always-compile-module t) ;; Compile Vterm without asking.
@@ -2073,5 +2075,20 @@
 ;;        ;; "9" 'ctl-x-9-map
 ;;        )
 ;;  )
+
+;;; DONT eat
+
+;; (map! :leader
+;;       (:prefix ("o" . "open")
+;;        :desc "Eat terminal" "t" #'eat
+;;        :desc "Eat in project" "T" (lambda () (interactive)
+;;                                     (let ((default-directory (doom-project-root)))
+;;                                       (eat))))
+
+;;       (:prefix ("o1" . "claude")
+;;        :desc "Claude Code" "c" #'claude-code
+;;        :desc "Claude menu" "m" #'claude-code-transient
+;;        :desc "Continue session" "r" #'claude-code-continue
+;;        :desc "Kill Claude" "k" #'claude-code-kill))
 
 ;;; end-of-func
