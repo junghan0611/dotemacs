@@ -2098,6 +2098,7 @@ only those in the selected frame."
   (add-to-list 'outli-heading-config '(elixir-ts-mode "##" ?# t))
   (add-to-list 'outli-heading-config '(sh-mode "##" ?# t))
   (add-to-list 'outli-heading-config '(bash-ts-mode "##" ?# t))
+  (add-to-list 'outli-heading-config '(yaml-mode "##" ?# t))
 
   (add-to-list 'outli-heading-config '(clojure-mode ";;" ?\; t))
   (add-to-list 'outli-heading-config '(clojurescript-mode ";;" ?\; t))
@@ -4559,7 +4560,12 @@ Prefers existing sessions closer to current directory."
 ;;;;; docker-compose-mode
 
 (use-package! docker-compose-mode
-  :mode "docker-compose.*\\.ya?ml\\'")
+  :mode "docker-compose.*\\.ya?ml\\'"
+  :config
+  (after! outli
+    (add-to-list 'outli-heading-config '(docker-compose-mode "##" ?# t))
+    (add-hook 'docker-compose-mode-hook 'outli-mode))
+  )
 
 ;;;; :format
 
