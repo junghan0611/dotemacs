@@ -2078,17 +2078,19 @@
 
 ;;; DONT eat
 
-;; (map! :leader
-;;       (:prefix ("o" . "open")
-;;        :desc "Eat terminal" "t" #'eat
-;;        :desc "Eat in project" "T" (lambda () (interactive)
-;;                                     (let ((default-directory (doom-project-root)))
-;;                                       (eat))))
+(after! eat
+  (map! :leader
+        :desc "Eat in project" "p SPC" #'eat-project
+        (:prefix ("o" . "open")
+         :desc "Eat terminal" "0" #'eat
+         :desc "Eat in project" ")" #'eat-project)
 
-;;       (:prefix ("o1" . "claude")
-;;        :desc "Claude Code" "c" #'claude-code
-;;        :desc "Claude menu" "m" #'claude-code-transient
-;;        :desc "Continue session" "r" #'claude-code-continue
-;;        :desc "Kill Claude" "k" #'claude-code-kill))
+        (:prefix ("o1" . "claude")
+         :desc "Claude Code" "c" #'claude-code
+         :desc "Claude menu" "m" #'claude-code-transient
+         :desc "Continue session" "r" #'claude-code-continue
+         :desc "Kill Claude" "k" #'claude-code-kill)
+        )
+  )
 
 ;;; end-of-func

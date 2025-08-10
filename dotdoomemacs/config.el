@@ -121,13 +121,13 @@
 ;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
 
 (when (display-graphic-p) ; gui
-  (setq
-   doom-font (font-spec :family "Monoplex Nerd" :size 14.0)
-   doom-big-font (font-spec :family "Monoplex Nerd" :size 23.0))
+  ;; (setq doom-font (font-spec :family "Monoplex Nerd" :size 14.0)
+  ;;       doom-big-font (font-spec :family "Monoplex Nerd" :size 23.0))
+  (setq x-gtk-use-native-input t) ;; 2025-08-10 Important with ibus korean input
+  (setq doom-font (font-spec :family "Sarasa Term K Nerd Font" :size 13.6)
+        doom-big-font (font-spec :family "Sarasa Term K Nerd Font" :size 18.0))
   (setq doom-variable-pitch-font (font-spec :family "Pretendard Variable" :size 14.0))
   (setq doom-unicode-font (font-spec :family "Symbola" :size 14.0))
-  ;; (setq doom-font (font-spec :family "Sarasa Term K Nerd Font" :size 15.1)
-  ;;       doom-big-font (font-spec :family "Sarasa Term K Nerd Font" :size 21.1))
   )
 
 (unless (display-graphic-p) ; terminal
@@ -1612,80 +1612,79 @@ only those in the selected frame."
       (funcall ofn arg))))
 
 
+;;;;; eshell
+
+(after! eshell
+  ;; Set up `completion-at-point-functions'
+  (defun krisb-eshell-setup ()
+    "Buffer-local settings for eshell."
+    (set-display-table-slot standard-display-table 0 ?\ )
+    (setq-local scroll-margin 3
+                line-spacing 0
+                ;; TODO 2025-03-27: The `outline-regexp' and
+                ;; `imenu-generic-expression' settings don't work anymore.  Not
+                ;; sure why.
+                ;; `consult-outline' support for eshell prompts. See
+                ;; https://github.com/minad/consult/wiki#consult-outline-support-for-eshell-prompts
+                outline-regexp eshell-prompt-regexp
+                ;; Imenu with eshell prompt history
+                imenu-generic-expression `((nil ,eshell-prompt-regexp 0))))
+
+  (add-hook 'eshell-mode-hook #'krisb-eshell-setup)
+  )
+
+;;;;; vterm
+
+;; (after! vterm
+;;   ;; (setq vterm-module-cmake-args "-DUSE_SYSTEM_LIBVTERM=no")
+;;   )
+
 ;;;;; eat
 
 (use-package! eat
-  :defer t
-  :hook ((eshell-load . eat-eshell-mode)))
+  :commands (eat)
+  :init
+  ;; Makes eat quicker
+  (setq process-adaptive-read-buffering nil)
 
-;; (use-package! eat
-;;   :commands (eat)
-;;   :hook ((fontaine-set-preset . krisb-eat--setup))
-;;   :init
-;;   ;; Add to your .bashrc
-;;   ;; [ -n "$EAT_SHELL_INTEGRATION_DIR" ] && \
-;;   ;; source "$EAT_SHELL_INTEGRATION_DIR/bash"
+  ;; Runs not compatible eshell term stuff with eat on the same buffer
+  (add-hook 'eshell-mode-hook #'eat-eshell-mode)
 
-;;   ;; Makes eat quicker
-;;   (setq process-adaptive-read-buffering nil)
+  ;; Runs listed 'visual-mode' eshell stuff with eat on separated buffer (takes precedence over the above setting)
+  (add-hook 'eshell-mode-hook #'eat-eshell-visual-command-mode)
 
-;;   ;; Runs not compatible eshell term stuff with eat on the same buffer
-;;   (add-hook 'eshell-mode-hook #'eat-eshell-mode)
+  (setq eat-term-name "xterm-256color")
+  (setq eat-term-scrollback-size 131072)
+  (setq eat-enable-mouse t)
+  (setq eat-kill-buffer-on-exit t)
+  ;; (setq eat-shell "/usr/bin/bash")
+  ;; (advice-add 'eat-semi-char-mode :after 'eat-line-mode)
+  (add-hook! 'eat-mode-hook
+    (defun cae-eat-mode-setup-h ()
+      ;; (auto-fill-mode -1)
+      (doom-mark-buffer-as-real-h)))
+  :config
+  ;; 2025-04-05: This resolves the continuation lines issue in EAT terminal
+  ;; (including eat-shell in `eat-eshell-visual-command-mode').  The
+  ;; continuation line issue results in, I think, the default font being too
+  ;; wide, causing the width of the characters to exceed the width of the
+  ;; window, resulting in ugly continuation lines that ruin the wrapping of the
+  ;; output.
+  (defun krisb-eat--setup ()
+    "Set up an EAT terminal shell."
+    (when (featurep 'fontaine)
+      (setq-local nobreak-char-display nil)
+      (setq-local line-number-mode nil)
+      (setq-local column-number-mode nil)
+      (setq-local scroll-margin 3
+                  line-spacing nil)
+      (set-face-attribute 'eat-term-font-0 nil
+                          ;; This returns the default-family of the current
+                          ;; preset, whether explicitly or implicitly set
+                          :family (fontaine--get-preset-property fontaine-current-preset :term-family))))
 
-;;   ;; Runs listed 'visual-mode' eshell stuff with eat on separated buffer
-;;   ;; (takes precedence over the above setting)
-;;   ;; (add-hook 'eshell-mode-hook #'eat-eshell-visual-command-mode)
-
-;;   ;; Disabled line/number minor modes on modeline
-;;   (add-hook 'eat-mode-hook (lambda ()
-;;                              (setq-local line-number-mode nil)
-;;                              (setq-local column-number-mode nil)))
-
-;;   ;; (setq eat-term-name "xterm-256color")
-
-;;   (setq eat-term-name "xterm")
-;;   (setq eat-term-scrollback-size 131072)
-;;   (setq eat-enable-mouse t)
-;;   (setq eat-kill-buffer-on-exit t)
-;;   (setq eat-shell "/usr/bin/bash")
-;;   ;; (advice-add 'eat-semi-char-mode :after 'eat-line-mode)
-;;   (add-hook! 'eat-mode-hook
-;;     (defun cae-eat-mode-setup-h ()
-;;       ;; (setq-local nobreak-char-display nil)
-;;       ;; (auto-fill-mode -1)
-;;       (doom-mark-buffer-as-real-h)))
-;;   :config
-;;   ;; 2025-04-05: This resolves the continuation lines issue in EAT terminal
-;;   ;; (including eat-shell in `eat-eshell-visual-command-mode').  The
-;;   ;; continuation line issue results in, I think, the default font being too
-;;   ;; wide, causing the width of the characters to exceed the width of the
-;;   ;; window, resulting in ugly continuation lines that ruin the wrapping of the
-;;   ;; output.
-;;   (defun krisb-eat--setup ()
-;;     "Set up an EAT terminal shell."
-;;     (when (featurep 'fontaine)
-;;       (set-face-attribute 'eat-term-font-0 nil
-;;                           ;; This returns the default-family of the current
-;;                           ;; preset, whether explicitly or implicitly set
-;;                           :family (fontaine--get-preset-property fontaine-current-preset :term-family))))
-;;   ;; 기본 터미널 키들이 제대로 동작하도록
-;;   (evil-define-key '(insert emacs) eat-mode-map
-;;     (kbd "<up>") 'eat-self-input
-;;     (kbd "<down>") 'eat-self-input
-;;     (kbd "<left>") 'eat-self-input
-;;     (kbd "<right>") 'eat-self-input
-;;     (kbd "<backspace>") 'backward-delete-char
-;;     (kbd "<delete>") 'delete-char
-;;     (kbd "<return>") 'eat-self-input     ; 이 라인 추가!
-;;     (kbd "RET") 'eat-self-input          ; 이 라인도 추가!
-;;     (kbd "C-d") 'eat-self-input
-;;     (kbd "C-c") 'eat-self-input
-;;     (kbd "C-l") 'eat-self-input
-;;     (kbd "C-\\") 'toggle-input-method
-;;     (kbd "<hangul>") 'toggle-input-method
-;;     (kbd "<menu>") 'toggle-input-method
-;;     )
-;;   )
+  (add-hook 'eat-mode-hook #'krisb-eat--setup)
+  )
 
 ;;;; :tools writing
 
@@ -4708,9 +4707,8 @@ Prefers existing sessions closer to current directory."
    ;; 120, 140, 170, 190, 210, 230 ; monoplex kr nerd
    '(
      (small12 :default-height 120)
-     (regular14 :default-height 140)
-     (regular17 :default-height 170)
-     (large19 :default-height 190)
+     (regular14 :default-height 151)
+     (regular17 :default-height 180)
      (large21 :default-height 210)
      (present23
       :default-height 230
@@ -4719,12 +4717,15 @@ Prefers existing sessions closer to current directory."
       :bold-weight extrabold)
      (t
       ;; Following Prot’s example, keeping these for for didactic purposes.
-      :line-spacing 3
+      :line-spacing 2
       ;; :default-family "Sarasa Term K Nerd Font"
       ;; :default-height 151
-      :default-family "Monoplex Nerd"
-      :default-height 140
+      ;; :default-family "Monoplex Nerd"
+      ;; :default-height 140
+      :default-family "Sarasa Term K Nerd Font"
+      :default-height 136
       :default-weight regular
+      :term-family "Sarasa Term K Nerd Font"
       ;; :fixed-pitch-family "Sarasa Term K Nerd Font"
       ;; :fixed-pitch-height 151
       ;; :fixed-pitch-weight nil
