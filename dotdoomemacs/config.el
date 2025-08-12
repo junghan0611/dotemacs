@@ -120,12 +120,18 @@
 ;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
 ;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
 
+(defun get-font-size-from-script ()
+  "스크립트에서 폰트 크기를 float로 가져옴"
+  (let ((output (string-trim (shell-command-to-string
+                              "~/.local/bin/set-font-size.sh --font-size"))))
+    (read (format "%s" output))))  ; read 함수는 17.0을 실수로 파싱
+
 (when (display-graphic-p) ; gui
-  ;; (setq doom-font (font-spec :family "Monoplex Nerd" :size 14.0)
-  ;;       doom-big-font (font-spec :family "Monoplex Nerd" :size 23.0))
   (setq x-gtk-use-native-input t) ;; 2025-08-10 Important with ibus korean input
-  (setq doom-font (font-spec :family "Sarasa Term K Nerd Font" :size 13.6)
-        doom-big-font (font-spec :family "Sarasa Term K Nerd Font" :size 18.0))
+  (setq doom-font (font-spec :family "Monoplex Nerd" :size (get-font-size-from-script))
+        doom-big-font (font-spec :family "Monoplex Nerd" :size 23.0))
+  ;; (setq doom-font (font-spec :family "Sarasa Term K Nerd Font" :size 13.6)
+  ;;       doom-big-font (font-spec :family "Sarasa Term K Nerd Font" :size 18.0))
   (setq doom-variable-pitch-font (font-spec :family "Pretendard Variable" :size 14.0))
   (setq doom-unicode-font (font-spec :family "Symbola" :size 14.0))
   )
@@ -1635,9 +1641,20 @@ only those in the selected frame."
 
 ;;;;; vterm
 
-;; (after! vterm
-;;   ;; (setq vterm-module-cmake-args "-DUSE_SYSTEM_LIBVTERM=no")
-;;   )
+(after! vterm
+  (setq vterm-max-scrollback 10000)
+
+  ;; 빠른 원격 접속 함수
+  (defun my/connect-storage ()
+    "Connect to storage server"
+    (interactive)
+    (vterm)
+    (vterm-send-string "mosh goqual@storage-01")
+    (vterm-send-return))
+
+  ;; 키바인딩
+  (global-set-key (kbd "C-c -") 'my/connect-storage)
+  )
 
 ;;;;; eat
 
@@ -4713,8 +4730,9 @@ Prefers existing sessions closer to current directory."
    ;; 120, 140, 170, 190, 210, 230 ; monoplex kr nerd
    '(
      (small12 :default-height 120)
-     (regular14 :default-height 151)
-     (regular17 :default-height 180)
+     (regular14 :default-height 140)
+     (regular17 :default-height 170)
+     (regular19 :default-height 190)
      (large21 :default-height 210)
      (present23
       :default-height 230
@@ -4726,10 +4744,11 @@ Prefers existing sessions closer to current directory."
       :line-spacing 2
       ;; :default-family "Sarasa Term K Nerd Font"
       ;; :default-height 151
-      ;; :default-family "Monoplex Nerd"
-      ;; :default-height 140
-      :default-family "Sarasa Term K Nerd Font"
-      :default-height 136
+      :default-family "Monoplex Nerd"
+      :default-height (get-font-size-from-script)
+
+      ;; :default-family "Sarasa Term K Nerd Font"
+      ;; :default-height 136
       :default-weight regular
       :term-family "Sarasa Term K Nerd Font"
       ;; :fixed-pitch-family "Sarasa Term K Nerd Font"
@@ -4777,7 +4796,7 @@ Prefers existing sessions closer to current directory."
     ;; The other side of `fontaine-restore-latest-preset'.
     ;; (add-hook 'kill-emacs-hook #'fontaine-store-latest-preset)
 
-    (if (string= (system-name) "xxjhkim2-goqual")
+    (if (string= (system-name) "jhkim2-goqual")
         (fontaine-set-preset 'regular17)
       (fontaine-set-preset 'regular14))
 
@@ -6363,7 +6382,7 @@ Suitable for `imenu-create-index-function'."
         )
 
   (when (display-graphic-p) ; gui
-    (setq modus-themes-variable-pitch-ui t)
+    ;; (setq modus-themes-variable-pitch-ui t)
     ;; The `modus-themes-headings' is an alist: read the manual's
     ;; node about it or its doc string. Basically, it supports
     ;; per-level configurations for the optional use of
@@ -6468,7 +6487,7 @@ Suitable for `imenu-create-index-function'."
   (setq ef-themes-region '(intense no-extend neutral))
 
   (when (display-graphic-p) ; gui
-    (setq ef-themes-variable-pitch-ui t)
+    ;; (setq ef-themes-variable-pitch-ui t)
     (setq ef-themes-headings
           '(
             (0                . (bold 1.1)) ;; variable-pitch
@@ -6939,7 +6958,8 @@ Suitable for `imenu-create-index-function'."
     ;;   (keycast-tab-bar-mode +1))
 
     ;; load modus-themes
-    (modus-themes-toggle)
+    ;; (modus-themes-toggle)
+    (modus-themes-select 'modus-vivendi-tinted)
     )
 
   (add-hook 'doom-after-init-hook #'my/load-global-mode-string 80)
@@ -6954,7 +6974,7 @@ Suitable for `imenu-create-index-function'."
 
   ;; (message "my/open-workspaces")
   (+workspace/new-named "work")
-  (find-file user-project-directory)
+  (find-file "~/sync/sandboxes/claude-desktop/")
 
   (+workspace/new-named "git")
   (find-file user-project-directory)

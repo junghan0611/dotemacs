@@ -1519,10 +1519,23 @@
 
 ;;;;  vterm-mode-map
 
+
 (after! vterm
+
+  ;; sync/code/default/claude-code.el/claude-code.el
+  (defun my/vterm-send-alt-return ()
+    "Send <alt>-<return> to vterm."
+    (interactive)
+    (vterm-send-key "" nil t))
+
   (setq vterm-always-compile-module t) ;; Compile Vterm without asking.
-  (undefine-key! vterm-mode-map "M-1" "M-2" "M-3" "M-4" "M-5" "M-6" "M-7" "M-8" "M-9" "M-0") ;; 2025-07-13 Simpler
-  (map! :map vterm-mode-map "M-y" #'vterm-yank-pop))
+  (undefine-key! vterm-mode-map "M-," "M-e" "M-." "M-1" "M-2" "M-3" "M-4" "M-5" "M-6" "M-7" "M-8" "M-9" "M-0") ;; 2025-07-13 Simpler
+  (map! :map vterm-mode-map
+        :i "M-RET" #'my/vterm-send-alt-return
+        :inv "M-y" #'vterm-yank-pop
+        :inv "M-h" #'other-window
+        :inv "M-z" #'evil-collection-vterm-toggle-send-escape)
+  )
 
 ;;;; outli-mode-map / markdown-mode-map
 

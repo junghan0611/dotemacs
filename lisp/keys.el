@@ -461,6 +461,10 @@
     (define-key vterm-mode-map (kbd "<f10>") nil)
     (define-key vterm-mode-map (kbd "<f11>") nil)
     (define-key vterm-mode-map (kbd "<f12>") nil)
+    (define-key vterm-mode-map (kbd "C-w") nil)
+    (define-key vterm-mode-map (kbd "M-e") nil)
+    (define-key vterm-mode-map (kbd "M-.") nil)
+    (define-key vterm-mode-map (kbd "M-,") nil)
     )
   )
 

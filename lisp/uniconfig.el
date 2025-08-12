@@ -1246,6 +1246,7 @@ cd -
 
 ;;;; Dired with ultra lightweight icons
 
+; ;2025-08-13 disable on terminal
 ;; 2025-06-21 disable nerd-icons-dired first
 ;; https://emacs.dyerdwelling.family/emacs/20250612223745-emacs--emacs-dired-with-ultra-lightweight-visual-icons/
 (progn
@@ -1277,9 +1278,8 @@ cd -
               (error nil))
             (forward-line))))))
 
-  (add-hook 'dired-after-readin-hook 'dired-add-icons)
-  )
-
+  (when (display-graphic-p) ; gui
+    (add-hook 'dired-after-readin-hook 'dired-add-icons)))
 
 ;;;; my/diff-hl-dired-mark-modified
 

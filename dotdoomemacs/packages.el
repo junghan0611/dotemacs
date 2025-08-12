@@ -227,7 +227,7 @@
 (package! ox-reveal)
 (package! org-transclusion)
 (package! org-remark)
-(package! org-bookmarks)
+(package! org-bookmarks :recipe (:host github :repo "emacsmirror/org-bookmarks"))
 
 (package! ox-leanpub) ;; https://github.com/junghan0611/ox-leanpub
 
