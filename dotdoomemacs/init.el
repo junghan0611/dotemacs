@@ -153,7 +153,7 @@
  (:unless IS-TERMUX (pdf)) ; pdf enhancements
  ;;terraform         ; infrastructure as code
  ;;tmux              ; an API for interacting with tmux
- ;;tree-sitter ;; syntax and parsing, sitting in a tree...
+ tree-sitter ;; syntax and parsing, sitting in a tree...
  upload            ; map local to remote projects via ssh/ftp
 
  :os
@@ -167,7 +167,7 @@
 
  ;; (clojure +lsp) ; +tree-sitter java with a lisp
  ;; common-lisp ; if you've seen one lisp, you've seen them all
- ;; (:unless IS-TERMUX (coq)) ; proofs-as-programs
+ ;; coq ; proofs-as-programs
  ;;crystal           ; ruby at the speed of c
  ;;csharp            ; unity, .NET, and mono shenanigans
  data              ; config/data formats
@@ -187,16 +187,16 @@
  ;;fstar             ; (dependent) types and (monadic) effects and Z3
  ;;gdscript          ; the language you waited for
  ;;(go +lsp)         ; the hipster dialect
- ;;(graphql +lsp)    ; Give queries a REST
+ (graphql +lsp)    ; Give queries a REST
 
  ;; (haskell +lsp) ; a language that's lazier than I am
 
  ;; ;; hy ; custom - readability of scheme w/ speed of python
  ;;idris             ; a language you can depend on
 
- json ;; +tree-sitter  ; At least it ain't XML
+ (json +tree-sitter)  ; At least it ain't XML
  janet  ; Fun fact: Janet is me!
- (javascript +lsp) ;; +tree-sitter all(hope(abandon(ye(who(enter(here))))))
+ (javascript +lsp +tree-sitter) all(hope(abandon(ye(who(enter(here))))))
  ;;(java +lsp)       ; the poster child for carpal tunnel syndrome
  ;;julia             ; a better, faster MATLAB
  ;; (kotlin +lsp)       ; a better, slicker Java(Script)
@@ -207,7 +207,7 @@
  ;; (markdown +tree-sitter) ; writing docs for people to ignore
  markdown
  ;;nim               ; python + lisp at the speed of c
- (nix +lsp)               ; I hereby declare "nix geht mehr!"
+ (nix +lsp +tree-sitter)               ; I hereby declare "nix geht mehr!"
  ;;ocaml             ; an objective camel
  (org                         ; organize your plain life in plain text
   ;; +dragndrop                  ; drag & drop files/images into org buffers
@@ -244,7 +244,7 @@
  ;;swift             ; who asked for emoji variables?
  ;;terra             ; Earth and Moon in alignment for performance.
  (web +lsp) ; the tubes
- yaml ; JSON, but readable
+ (yaml +tree-sitter) ; JSON, but readable
  zig               ; C, but simpler
 
  ;; :email

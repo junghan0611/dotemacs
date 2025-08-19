@@ -352,9 +352,11 @@
 (package! gpt-babel :recipe (:local-repo "~/git/default/gpt-babel/"))
 ;; (package! org-auto-tangle :recipe (:local-repo "~/git/default/org-auto-tangle/"))
 
-(package! claude-code-ide :recipe (:local-repo "~/git/default/claude-code-ide.el"))
-;; (package! claude-code :recipe (:host github :repo "stevemolitor/claude-code.el" ))
-(package! claude-code :recipe (:local-repo "~/git/default/claude-code.el/"))
+(package! claude-code-ide :recipe (:host github :repo "manzaltu/claude-code-ide.el" ))
+(package! claude-code :recipe (:host github :repo "stevemolitor/claude-code.el" ))
+
+;; (package! claude-code-ide :recipe (:local-repo "~/git/default/claude-code-ide.el"))
+;; (package! claude-code :recipe (:local-repo "~/git/default/claude-code.el/"))
 ;; (package! monet :recipe (:host github :repo "stevemolitor/monet" ))
 
 (package! eshell-atuin)
@@ -370,7 +372,6 @@
 ;;;;; extra packages
 
 ;; (package! khoj)
-;; (package! minuet) ;; code completion using LLM
 ;; (package! aider)
 
 ;; (package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs" :files ("*.el")))

@@ -123,17 +123,16 @@
 (defun get-font-size-from-script ()
   "스크립트에서 폰트 크기를 float로 가져옴"
   (let ((output (string-trim (shell-command-to-string
-                              "~/.local/bin/set-font-size.sh --font-size"))))
+                              "~/.local/bin/set-font-size.sh --default-font-size"))))
     (read (format "%s" output))))  ; read 함수는 17.0을 실수로 파싱
 
 (when (display-graphic-p) ; gui
-  (setq x-gtk-use-native-input t) ;; 2025-08-10 Important with ibus korean input
   (setq doom-font (font-spec :family "Monoplex Nerd" :size (get-font-size-from-script))
         doom-big-font (font-spec :family "Monoplex Nerd" :size 23.0))
   ;; (setq doom-font (font-spec :family "Sarasa Term K Nerd Font" :size 13.6)
   ;;       doom-big-font (font-spec :family "Sarasa Term K Nerd Font" :size 18.0))
-  (setq doom-variable-pitch-font (font-spec :family "Pretendard Variable" :size 14.0))
-  (setq doom-unicode-font (font-spec :family "Symbola" :size 14.0))
+  (setq doom-variable-pitch-font (font-spec :family "Pretendard Variable" :size (get-font-size-from-script)))
+  (setq doom-unicode-font (font-spec :family "Symbola" :size (get-font-size-from-script)))
   )
 
 (unless (display-graphic-p) ; terminal
@@ -162,7 +161,7 @@
 ;; nil - truename 을 원치 않고, 심볼링링크 사용
 (setq find-file-visit-truename nil) ; doom t
 ;; Stop asking abount following symlinks to version controlled files
-(setq vc-follow-symlinks t) ; doom t
+;; (setq vc-follow-symlinks nil) ; doom t
 
 ;;;;; initial-scratch-message
 
@@ -1654,6 +1653,19 @@ only those in the selected frame."
 
   ;; 키바인딩
   (global-set-key (kbd "C-c -") 'my/connect-storage)
+  ;; (setq x-gtk-use-native-input nil) ;; 2025-08-10 Important with ibus korean input
+
+  ;; kime 환경변수 설정 (기존 코드 유지)
+  ;; (add-to-list 'vterm-environment "GTK_IM_MODULE=ibus")
+  ;; (add-to-list 'vterm-environment "QT_IM_MODULE=ibus")
+  ;; (add-to-list 'vterm-environment "XMODIFIERS=@im=ibus")
+
+  ;; (defun my/vterm-setup-native-input ()
+  ;;   "Setup native input for vterm buffer"
+  ;;   (when (eq major-mode 'vterm-mode)
+  ;;     (setq-local x-gtk-use-native-input t)))
+
+  ;; (add-hook 'vterm-mode-hook #'my/vterm-setup-native-input)
   )
 
 ;;;;; eat
@@ -2667,8 +2679,8 @@ ${content}"))
   ;; It is recommended that `org-remark-global-tracking-mode' be enabled when
   ;; Emacs initializes. Alternatively, you can put it to `after-init-hook' as in
   ;; the comment above
-  (require 'org-remark-global-tracking)
-  (org-remark-global-tracking-mode +1)
+  ;; (require 'org-remark-global-tracking)
+  ;; (org-remark-global-tracking-mode +1)
 
   ;; Optional if you would like to highlight websites via eww-mode
   ;; (with-eval-after-load 'eww (org-remark-eww-mode +1))
@@ -4745,7 +4757,7 @@ Prefers existing sessions closer to current directory."
       ;; :default-family "Sarasa Term K Nerd Font"
       ;; :default-height 151
       :default-family "Monoplex Nerd"
-      :default-height (get-font-size-from-script)
+      ;; :default-height (get-font-size-from-script)
 
       ;; :default-family "Sarasa Term K Nerd Font"
       ;; :default-height 136
@@ -4795,11 +4807,6 @@ Prefers existing sessions closer to current directory."
 
     ;; The other side of `fontaine-restore-latest-preset'.
     ;; (add-hook 'kill-emacs-hook #'fontaine-store-latest-preset)
-
-    (if (string= (system-name) "jhkim2-goqual")
-        (fontaine-set-preset 'regular17)
-      (fontaine-set-preset 'regular14))
-
     (my/load-font-cjk))
 
   (progn
@@ -4912,8 +4919,8 @@ x×X .,·°;:¡!¿?`'‘’   ÄAÃÀ TODO
   (setq doom-modeline-github t)
   (setq doom-modeline-lsp t)
   (setq doom-modeline-indent-info t)
-  (setq doom-modeline-hud nil)
-  (setq doom-modeline-buffer-file-name-style 'truncate-upto-project) ; default 'auto
+  ;; (setq doom-modeline-hud nil)
+  ;; (setq doom-modeline-buffer-file-name-style 'truncate-upto-project) ; default 'auto
 
   (remove-hook 'display-time-mode-hook #'doom-modeline-override-time)
   (remove-hook 'doom-modeline-mode-hook #'doom-modeline-override-time))
@@ -6909,16 +6916,16 @@ Suitable for `imenu-create-index-function'."
 ;; (set-popup-rules! '(("^\\*paw-view-note*" :size 0.35 :side right :quit t :modeline t :select nil :ttl nil :vslot 2 :slot 1)
 ;;                     ("^\\*paw-sub-note*" :height 0.5 :side right :quit t :modeline t :select t :ttl nil :vslot 2 :slot 2)))
 
+;;;; DONT persp-mode with tab-bar for open-workspaces
 
-;;;; persp-mode with tab-bar for open-workspaces
-
-(after! persp-mode
-  ;; shares a common set of buffers between perspectives
-  (defvar persp-shared-buffers
-    '("*scratch*" "*Org Agenda(n)*" "*Messages*" "*doom:scratch*"))
-
-  (add-hook 'persp-activated-functions
-            (lambda (_) (persp-add-buffer persp-shared-buffers))))
+;; 2025-08-19 disabled
+;; (after! persp-mode
+;;   ;; shares a common set of buffers between perspectives
+;; (setq persp-shared-buffers
+;;       '("*scratch*" "*Org Agenda(n)*" "*Messages*" "*doom:scratch*"))
+;; (add-hook 'persp-activated-functions
+;;           (lambda (_) (persp-add-buffer persp-shared-buffers)))
+;;   )
 
 ;;;;; custom tab-bar global-mode-string
 
@@ -6958,9 +6965,7 @@ Suitable for `imenu-create-index-function'."
     ;;   (keycast-tab-bar-mode +1))
 
     ;; load modus-themes
-    ;; (modus-themes-toggle)
-    (modus-themes-select 'modus-vivendi-tinted)
-    )
+    (modus-themes-toggle))
 
   (add-hook 'doom-after-init-hook #'my/load-global-mode-string 80)
   (add-hook 'doom-after-reload-hook #'my/load-global-mode-string)
@@ -8115,6 +8120,5 @@ function to apply the changes."
 ;;  (global-set-key (kbd "C-c s") 'khoj)
 ;;  (global-set-key (kbd "C-c c") 'khoj-chat)
 ;;  )
-
 
 ;;; left blank on purpose
