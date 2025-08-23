@@ -306,6 +306,8 @@
 
 (package! denote-regexp)
 
+;; (package! gptel-denote :recipe (:host github :repo "pprevos/gptel-denote"))
+
 (package! consult-notes)
 
 (package! consult-denote)
@@ -352,22 +354,22 @@
 (package! gpt-babel :recipe (:local-repo "~/git/default/gpt-babel/"))
 ;; (package! org-auto-tangle :recipe (:local-repo "~/git/default/org-auto-tangle/"))
 
-(package! claude-code-ide :recipe (:host github :repo "manzaltu/claude-code-ide.el" ))
+;; (package! claude-code-ide :recipe (:host github :repo "manzaltu/claude-code-ide.el" ))
 (package! claude-code :recipe (:host github :repo "stevemolitor/claude-code.el" ))
+;; (package! monet :recipe (:host github :repo "stevemolitor/monet" ))
 
 ;; (package! claude-code-ide :recipe (:local-repo "~/git/default/claude-code-ide.el"))
 ;; (package! claude-code :recipe (:local-repo "~/git/default/claude-code.el/"))
-;; (package! monet :recipe (:host github :repo "stevemolitor/monet" ))
 
 (package! eshell-atuin)
-(package! eat :recipe
-  (:host codeberg
-   :repo "akib/emacs-eat"
-   :files ("*.el" ("term" "term/*.el") "*.texi"
-           "*.ti" ("terminfo/e" "terminfo/e/*")
-           ("terminfo/65" "terminfo/65/*")
-           ("integration" "integration/*")
-           (:exclude ".dir-locals.el" "*-tests.el"))))
+;; (package! eat :recipe
+;;   (:host codeberg
+;;    :repo "akib/emacs-eat"
+;;    :files ("*.el" ("term" "term/*.el") "*.texi"
+;;            "*.ti" ("terminfo/e" "terminfo/e/*")
+;;            ("terminfo/65" "terminfo/65/*")
+;;            ("integration" "integration/*")
+;;            (:exclude ".dir-locals.el" "*-tests.el"))))
 
 ;;;;; extra packages
 
@@ -539,7 +541,7 @@
 (package! gif-screencast)
 (package! lorem-ipsum)
 ;; (package! go-translate)
-;; (package! jira)
+(package! jira)
 
 ;; (package! ready-player)
 ;; Very large files mode loads large files in chunks to open ridiculously large files.

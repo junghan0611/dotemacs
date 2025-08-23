@@ -222,15 +222,23 @@
      :input-cost 0.30
      :output-cost 2.5)
 
-    ;; openai/codex-mini  - https://openrouter.ai/openai/codex-mini
-    (openai/gpt-4.1
-     :description "Flagship model for complex tasks"
+    (openai/gpt-5-chat
+     :description "Flagship model for coding, reasoning, and agentic tasks across domains"
      :capabilities (media tool-use json url)
      :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
-     :context-window 1024
-     :input-cost 2.0
-     :output-cost 8.0
-     :cutoff-date "2024-05")
+     :context-window 400
+     :input-cost 1.25
+     :output-cost 10
+     :cutoff-date "2024-09")
+
+    (openai/gpt-5-mini
+     :description "Faster, more cost-efficient version of GPT-5"
+     :capabilities (media tool-use json url)
+     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
+     :context-window 400
+     :input-cost 0.25
+     :output-cost 2.0
+     :cutoff-date "2024-09")
 
     (anthropic/claude-3.5-haiku
      :description "enhanced capabilities in speed, coding accuracy, and tool use"
@@ -250,14 +258,14 @@
      :output-cost 15
      :cutoff-date "2025-05")
 
-    (anthropic/claude-opus-4
+    (anthropic/claude-opus-4.1
      :description "Hybrid model capable of standard thinking and extended thinking modes"
      :capabilities (media tool-use cache)
      :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
      :context-window 200
      :input-cost 15
      :output-cost 75
-     :cutoff-date "2025-05")
+     :cutoff-date "2025-07")
 
     ;; (anthropic/claude-3.7-sonnet:thinking
     ;;  :description "Hybrid model capable of standard thinking and extended thinking modes"

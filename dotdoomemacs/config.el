@@ -1616,27 +1616,26 @@ only those in the selected frame."
     (let* ((vertico-sort-function nil))
       (funcall ofn arg))))
 
+;;;;; TODO eshell
 
-;;;;; eshell
+;; (after! eshell
+;;   ;; Set up `completion-at-point-functions'
+;;   (defun krisb-eshell-setup ()
+;;     "Buffer-local settings for eshell."
+;;     (set-display-table-slot standard-display-table 0 ?\ )
+;;     (setq-local scroll-margin 3
+;;                 line-spacing 0
+;;                 ;; TODO 2025-03-27: The `outline-regexp' and
+;;                 ;; `imenu-generic-expression' settings don't work anymore.  Not
+;;                 ;; sure why.
+;;                 ;; `consult-outline' support for eshell prompts. See
+;;                 ;; https://github.com/minad/consult/wiki#consult-outline-support-for-eshell-prompts
+;;                 outline-regexp eshell-prompt-regexp
+;;                 ;; Imenu with eshell prompt history
+;;                 imenu-generic-expression `((nil ,eshell-prompt-regexp 0))))
 
-(after! eshell
-  ;; Set up `completion-at-point-functions'
-  (defun krisb-eshell-setup ()
-    "Buffer-local settings for eshell."
-    (set-display-table-slot standard-display-table 0 ?\ )
-    (setq-local scroll-margin 3
-                line-spacing 0
-                ;; TODO 2025-03-27: The `outline-regexp' and
-                ;; `imenu-generic-expression' settings don't work anymore.  Not
-                ;; sure why.
-                ;; `consult-outline' support for eshell prompts. See
-                ;; https://github.com/minad/consult/wiki#consult-outline-support-for-eshell-prompts
-                outline-regexp eshell-prompt-regexp
-                ;; Imenu with eshell prompt history
-                imenu-generic-expression `((nil ,eshell-prompt-regexp 0))))
-
-  (add-hook 'eshell-mode-hook #'krisb-eshell-setup)
-  )
+;;   (add-hook 'eshell-mode-hook #'krisb-eshell-setup)
+;;   )
 
 ;;;;; vterm
 
@@ -1660,60 +1659,79 @@ only those in the selected frame."
   ;; (add-to-list 'vterm-environment "QT_IM_MODULE=ibus")
   ;; (add-to-list 'vterm-environment "XMODIFIERS=@im=ibus")
 
-  ;; (defun my/vterm-setup-native-input ()
-  ;;   "Setup native input for vterm buffer"
-  ;;   (when (eq major-mode 'vterm-mode)
-  ;;     (setq-local x-gtk-use-native-input t)))
+  (defun my/vterm-setup-gtk-use-native-input ()
+    "Setup native input for vterm buffer"
+    (interactive)
+    (when (eq major-mode 'vterm-mode)
+      (setq-local x-gtk-use-native-input t)))
+  ;; (add-hook 'vterm-mode-hook #'my/vterm-setup-gtk-use-native-input 90)
 
-  ;; (add-hook 'vterm-mode-hook #'my/vterm-setup-native-input)
-  )
-
-;;;;; eat
-
-(use-package! eat
-  :commands (eat)
-  :init
-  ;; Makes eat quicker
-  (setq process-adaptive-read-buffering nil)
-
-  ;; Runs not compatible eshell term stuff with eat on the same buffer
-  (add-hook 'eshell-mode-hook #'eat-eshell-mode)
-
-  ;; Runs listed 'visual-mode' eshell stuff with eat on separated buffer (takes precedence over the above setting)
-  (add-hook 'eshell-mode-hook #'eat-eshell-visual-command-mode)
-
-  (setq eat-term-name "xterm-256color")
-  (setq eat-term-scrollback-size 131072)
-  (setq eat-enable-mouse t)
-  (setq eat-kill-buffer-on-exit t)
-  ;; (setq eat-shell "/usr/bin/bash")
-  ;; (advice-add 'eat-semi-char-mode :after 'eat-line-mode)
-  (add-hook! 'eat-mode-hook
-    (defun cae-eat-mode-setup-h ()
-      ;; (auto-fill-mode -1)
-      (doom-mark-buffer-as-real-h)))
-  :config
-  ;; 2025-04-05: This resolves the continuation lines issue in EAT terminal
-  ;; (including eat-shell in `eat-eshell-visual-command-mode').  The
-  ;; continuation line issue results in, I think, the default font being too
-  ;; wide, causing the width of the characters to exceed the width of the
-  ;; window, resulting in ugly continuation lines that ruin the wrapping of the
-  ;; output.
-  (defun krisb-eat--setup ()
-    "Set up an EAT terminal shell."
-    (when (featurep 'fontaine)
+  (defun my/vterm-setup-terminal-font ()
+    "Setup terminal font for vterm using fontaine"
+    (when (and (eq major-mode 'vterm-mode)
+               (featurep 'fontaine))
       (setq-local nobreak-char-display nil)
       (setq-local line-number-mode nil)
       (setq-local column-number-mode nil)
       (setq-local scroll-margin 3
                   line-spacing nil)
-      (set-face-attribute 'eat-term-font-0 nil
-                          ;; This returns the default-family of the current
-                          ;; preset, whether explicitly or implicitly set
-                          :family (fontaine--get-preset-property fontaine-current-preset :term-family))))
-
-  (add-hook 'eat-mode-hook #'krisb-eat--setup)
+      ;; vterm의 default face에 터미널 폰트 적용
+      (face-remap-add-relative 'default
+                               :family (fontaine--get-preset-property
+                                        fontaine-current-preset :term-family))))
+  (add-hook 'vterm-mode-hook #'my/vterm-setup-terminal-font)
   )
+
+;;;;; DONT eat
+
+;; (use-package! eat
+;;   :commands (eat)
+;;   :init
+;;   ;; Runs not compatible eshell term stuff with eat on the same buffer
+;;   ;; (add-hook 'eshell-mode-hook #'eat-eshell-mode)
+;;   ;; Runs listed 'visual-mode' eshell stuff with eat on separated buffer (takes precedence over the above setting)
+;;   ;; (add-hook 'eshell-mode-hook #'eat-eshell-visual-command-mode)
+
+;;   (setq eat-term-name "xterm-256color")
+;;   (setq eat-term-scrollback-size 131072)
+;;   (setq eat-enable-mouse nil) ; default t
+;;   (setq eat-kill-buffer-on-exit t)
+;;   (setq eat-shell "/usr/bin/bash")
+;;   ;; (advice-add 'eat-semi-char-mode :after 'eat-line-mode)
+;;   (add-hook! 'eat-mode-hook
+;;     (defun cae-eat-mode-setup-h ()
+;;       ;; (auto-fill-mode -1)
+;;       (doom-mark-buffer-as-real-h)))
+;;   :config
+
+;;   (defun my/eat-send-return ()
+;;     "Send <return> to eat."
+;;     (interactive)
+;;     (eat-term-send-string eat-terminal (kbd "RET")))
+
+;;   ;; 2025-04-05: This resolves the continuation lines issue in EAT terminal
+;;   ;; (including eat-shell in `eat-eshell-visual-command-mode').  The
+;;   ;; continuation line issue results in, I think, the default font being too
+;;   ;; wide, causing the width of the characters to exceed the width of the
+;;   ;; window, resulting in ugly continuation lines that ruin the wrapping of the
+;;   ;; output.
+;;   (defun krisb-eat--setup ()
+;;     "Set up an EAT terminal shell."
+;;     (interactive)
+;;     (when (eq major-mode 'eat-mode)
+;;       (setq-local x-gtk-use-native-input t))
+;;     (when (featurep 'fontaine)
+;;       (setq-local nobreak-char-display nil)
+;;       (setq-local line-number-mode nil)
+;;       (setq-local column-number-mode nil)
+;;       (setq-local scroll-margin 3
+;;                   line-spacing nil)
+;;       (set-face-attribute 'eat-term-font-0 nil
+;;                           ;; This returns the default-family of the current
+;;                           ;; preset, whether explicitly or implicitly set
+;;                           :family (fontaine--get-preset-property fontaine-current-preset :term-family))))
+;;   ;; (add-hook 'eat-mode-hook #'krisb-eat--setup)
+;;   )
 
 ;;;; :tools writing
 
@@ -3597,14 +3615,14 @@ ${content}"))
 
   ;; Upstage: solar
   ;; https://developers.upstage.ai/docs/apis/chat
-  (gptel-make-openai "Upstage"
-    :host "api.upstage.ai/v1/solar"
-    :key #'gptel-api-key
-    :endpoint "/chat/completions"
-    :stream t
-    :request-params '(:temperature 0.5)
-    :models '(solar-pro
-              solar-mini))
+  ;; (gptel-make-openai "Upstage"
+  ;;   :host "api.upstage.ai/v1/solar"
+  ;;   :key #'gptel-api-key
+  ;;   :endpoint "/chat/completions"
+  ;;   :stream t
+  ;;   :request-params '(:temperature 0.5)
+  ;;   :models '(solar-pro
+  ;;             solar-mini))
 
   ;; OpenRouter offers an OpenAI compatible API
   ;; https://openrouter.ai/
@@ -3617,9 +3635,7 @@ ${content}"))
           :models gptel--openrouter-models))
 
   (setq gptel-backend gptel-openrouter-backend)
-  (setq gptel-model   'deepseek/deepseek-r1-0528)
-  ;; google/gemini-2.5-flash
-  ;; anthropic/claude-sonnet-4
+  (setq gptel-model 'openai/gpt-5-chat) ; 2025-08-22
 
   ;; DeepSeek offers an OpenAI compatible API
   ;; The deepseek-chat model has been upgraded to DeepSeek-V3. deepseek-reasoner points to the new model DeepSeek-R1.
@@ -4022,21 +4038,34 @@ Prefers existing sessions closer to current directory."
 
 ;;;;; llmclient: claude-code-ide.el
 
-(use-package! claude-code-ide
-  :config
-  (setq claude-code-ide-terminal-backend 'vterm)
-  ;; (claude-code-ide-emacs-tools-setup)
-  ) ; Optionally enable Emacs MCP tools
+;; (use-package! claude-code-ide
+;;   :config
+;;   (setq claude-code-ide-terminal-backend 'vterm)
+;;   ;; (claude-code-ide-emacs-tools-setup)
+;;   ) ; Optionally enable Emacs MCP tools
 
 (use-package! claude-code
   :config
   (setq claude-code-terminal-backend 'vterm)
-  (add-to-list 'display-buffer-alist
-               '("^\\*claude"
-                 (display-buffer-in-side-window)
-                 (side . right)
-                 (window-width . 90)))
-  (claude-code-mode))
+  (defun my-claude-notify-with-sound (title message)
+    "Display a Linux notification with sound."
+    (when (executable-find "notify-send")
+      (call-process "notify-send" nil nil nil title message))
+    ;; Play sound if paplay is available
+    (when (executable-find "paplay")
+      (call-process "paplay" nil nil nil "/usr/share/sounds/freedesktop/stereo/complete.oga")))
+  (setq claude-code-notification-function #'my-claude-notify-with-sound)
+
+  (set-popup-rule! "^\\*claude" :width 90 :side 'right :ttl t :select t :quit nil :modeline t)
+  (claude-code-mode)
+
+  (add-hook 'claude-code-start-hook
+            (lambda ()
+              ;; Only increase scrollback for vterm backend
+              (when (eq claude-code-terminal-backend 'vterm)
+                (setq-local x-gtk-use-native-input t)
+                (setq-local vterm-max-scrollback 100000))))
+  )
 
 ;;;;; llmclient: github copilot
 
@@ -4753,7 +4782,7 @@ Prefers existing sessions closer to current directory."
       :bold-weight extrabold)
      (t
       ;; Following Prot’s example, keeping these for for didactic purposes.
-      :line-spacing 2
+      ;; :line-spacing 2
       ;; :default-family "Sarasa Term K Nerd Font"
       ;; :default-height 151
       :default-family "Monoplex Nerd"
