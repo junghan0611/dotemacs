@@ -674,7 +674,7 @@
 
 ;;;;; Packages: jh-coding
 
-     jupyter
+     ;; jupyter
 
      ;; > tools
      apheleia
@@ -718,8 +718,8 @@
      devdocs-browser ; with EWW
 
      ;; > practice
-     exercism
-     leetcode
+     ;; exercism
+     ;; leetcode
 
      ;; > AI
 
@@ -1055,10 +1055,11 @@
 ;;;; Configuration
 
    dotspacemacs-themes '(;; (modus-operandi :package modus-themes)
-                         spacemacs-dark
-                         spacemacs-light
+                         modus-operandi
                          modus-operandi-tinted
                          modus-vivendi-tinted
+                         spacemacs-dark
+                         spacemacs-light
                          )
 
    dotspacemacs-mode-line-theme '(doom)
@@ -4356,36 +4357,36 @@ For instance pass En as source for English."
   ;;   ;; You can also bind multiple items and we will match the first one we can find
   ;;   (define-key evil-outer-text-objects-map "a" (evil-textobj-tree-sitter-get-textobj ("conditional.outer" "loop.outer"))))
 
-;;;;; jh-coding > practices
+;;;;; DONT jh-coding > practices
 
-  (use-package exercism
-    :ensure t
-    :if (not (or *is-windows* my/remote-server IS-TERMUX))
-    :custom (exercism-display-tests-after-run t)
-    :commands exercism
-    :config
+  ;; (use-package exercism
+  ;;   :ensure t
+  ;;   :if (not (or *is-windows* my/remote-server IS-TERMUX))
+  ;;   :custom (exercism-display-tests-after-run t)
+  ;;   :commands exercism
+  ;;   :config
 
-    (defun ert/eval-and-run-all-tests-in-buffer ()
-      "Deletes all loaded tests from the runtime, evaluates the current buffer and runs all loaded tests with ert."
-      (interactive)
-      (ert-delete-all-tests)
-      (eval-buffer)
-      (ert 't))
-    )
+  ;;   (defun ert/eval-and-run-all-tests-in-buffer ()
+  ;;     "Deletes all loaded tests from the runtime, evaluates the current buffer and runs all loaded tests with ert."
+  ;;     (interactive)
+  ;;     (ert-delete-all-tests)
+  ;;     (eval-buffer)
+  ;;     (ert 't))
+  ;;   )
 
-  (use-package leetcode
-    :if (not (or *is-windows* my/remote-server IS-TERMUX))
-    :defer 5
-    :init
-    (setq leetcode-prefer-language "python")
-    (setq leetcode-prefer-sql "mysql")
-    (setq leetcode-save-solutions t)
-    (setq leetcode-directory "~/leetcode")
-    (setq leetcode-show-problem-by-slug t)
-    ;; :config
-    ;; (add-hook 'leetcode-solution-mode-hook
-    ;;           (lambda() (flycheck-mode -1)))
-    )
+  ;; (use-package leetcode
+  ;;   :if (not (or *is-windows* my/remote-server IS-TERMUX))
+  ;;   :defer 5
+  ;;   :init
+  ;;   (setq leetcode-prefer-language "python")
+  ;;   (setq leetcode-prefer-sql "mysql")
+  ;;   (setq leetcode-save-solutions t)
+  ;;   (setq leetcode-directory "~/leetcode")
+  ;;   (setq leetcode-show-problem-by-slug t)
+  ;;   ;; :config
+  ;;   ;; (add-hook 'leetcode-solution-mode-hook
+  ;;   ;;           (lambda() (flycheck-mode -1)))
+  ;;   )
 
 ;;;;; jh-coding > clojure and cider
 
@@ -4485,15 +4486,15 @@ For instance pass En as source for English."
 
 ;;;;; jh-org > packages
 
-;;;;;;  jupyter / ob-jupyter
+;;;;;;  DONT jupyter / ob-jupyter
 
-  (setq org-confirm-babel-evaluate nil)
-  (use-package jupyter
-    :config
-    (require 'ob-jupyter)
-    ;; (org-babel-jupyter-override-src-block "python")
-    (org-babel-do-load-languages 'org-babel-load-languages
-                                 (append org-babel-load-languages '((jupyter . t)))))
+  ;; (setq org-confirm-babel-evaluate nil)
+  ;; (use-package jupyter
+  ;;   :config
+  ;;   (require 'ob-jupyter)
+  ;;   ;; (org-babel-jupyter-override-src-block "python")
+  ;;   (org-babel-do-load-languages 'org-babel-load-languages
+  ;;                                (append org-babel-load-languages '((jupyter . t)))))
 
 ;;;;;; jh-org > packages > remember
 
@@ -5246,7 +5247,7 @@ For instance pass En as source for English."
   (load-file (concat user-dotemacs-dir "lisp/keys.el"))
   (load-file (concat user-dotemacs-dir "lisp/hydrakeys.el"))
 
-  (load-file (concat user-dotemacs-dir "lisp/my-python-jupyter.el"))
+  ;; (load-file (concat user-dotemacs-dir "lisp/my-python-jupyter.el"))
   (load-file (concat user-dotemacs-dir "lisp/my-org-literate.el"))
 
 ;;;; Load spacemacs-keys
