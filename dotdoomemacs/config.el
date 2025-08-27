@@ -1655,9 +1655,10 @@ only those in the selected frame."
   ;; (setq x-gtk-use-native-input nil) ;; 2025-08-10 Important with ibus korean input
 
   ;; kime 환경변수 설정 (기존 코드 유지)
-  ;; (add-to-list 'vterm-environment "GTK_IM_MODULE=ibus")
-  ;; (add-to-list 'vterm-environment "QT_IM_MODULE=ibus")
-  ;; (add-to-list 'vterm-environment "XMODIFIERS=@im=ibus")
+  (add-to-list 'vterm-environment "GTK_IM_MODULE=ibus")
+  (add-to-list 'vterm-environment "QT_IM_MODULE=ibus")
+  (add-to-list 'vterm-environment "XMODIFIERS=@im=ibus")
+  (setq vterm-shell "/usr/bin/bash")
 
   (defun my/vterm-setup-gtk-use-native-input ()
     "Setup native input for vterm buffer"
@@ -1675,6 +1676,7 @@ only those in the selected frame."
       (setq-local column-number-mode nil)
       (setq-local scroll-margin 3
                   line-spacing nil)
+      (setq-local x-gtk-use-native-input t)
       ;; vterm의 default face에 터미널 폰트 적용
       (face-remap-add-relative 'default
                                :family (fontaine--get-preset-property
@@ -2102,11 +2104,13 @@ only those in the selected frame."
 
 ;;;;; immersive-translate
 
-;; use trans-shell
 (use-package! immersive-translate
   :defer 5
   :init
   (setq immersive-translate-backend 'trans)
+  ;; (setq immersive-translate-backend 'lmstudio)
+  ;; (setq immersive-translate-lmstudio-model "llama-3-korean-bllossom-8b")
+
   (setq immersive-translate-failed-message "💢")
   (setq immersive-translate-trans-target-language "ko")
   ;; (setq immersive-translate-auto-idle 2.0) ; default 0.5
@@ -2345,89 +2349,89 @@ only those in the selected frame."
     (magit-log-buffer-file t))
   )
 
-;;;;; git-commit : categories
+;;;;; DONT git-commit : categories
 
 ;; from /doom/cashpw-dotfiles-node/config/doom/config-personal.org
 
-(progn
-  (require 'git-commit)
+;; (progn
+;;   (require 'git-commit)
 
-  (defgroup cashpw/source-control nil
-    "Source control."
-    :group 'cashpw)
+;;   (defgroup cashpw/source-control nil
+;;     "Source control."
+;;     :group 'cashpw)
 
-  (defcustom cashpw/source-control--commit-categories
-    '(("Fix" . (:symbol "🐛"
-                :shortcode ":bug:"))
-      ("UI" . (:symbol "💄"
-               :shortcode ":lipstick:"))
-      ("UX" . (:symbol "💄"
-               :shortcode ":lipstick:"))
-      ("Add" . (:symbol "✨"
-                :shortcode ":sparkles:"))
-      ("Feature" . (:symbol "✨"
-                    :shortcode ":sparkles:"))
-      ("Document" . (:symbol "📝"
-                     :shortcode ":memo:"))
-      ("Typo" . (:symbol "✏️"
-                 :shortcode ":pencil2:"))
-      ("Refactor" . (:symbol "♻"
-                     :shortcode ":recycle:"))
-      ("Rollout" . (:symbol "🚀"
-                    :shortcode ":rocket:"))
-      ("Launch" . (:symbol "🚀"
-                   :shortcode ":rocket:"))
-      ("Version" . (:symbol "🔖"
-                    :shortcode ":bookmark:"))
-      ("Release" . (:symbol "🔖"
-                    :shortcode ":bookmark:"))
-      ("Deploy" . (:symbol "🚀"
-                   :shortcode ":rocket:"))
-      ("Delete" . (:symbol "🔥"
-                   :shortcode ":fire:"))
-      ("Remove" . (:symbol "🔥"
-                   :shortcode ":fire:"))
-      ("Test" . (:symbol "✅"
-                 :shortcode ":white_check_mark:")))
-    "Alist of commit categories and extras."
-    :group 'cashpw/source-control
-    :type 'string)
+;;   (defcustom cashpw/source-control--commit-categories
+;;     '(("Fix" . (:symbol "🐛"
+;;                 :shortcode ":bug:"))
+;;       ("UI" . (:symbol "💄"
+;;                :shortcode ":lipstick:"))
+;;       ("UX" . (:symbol "💄"
+;;                :shortcode ":lipstick:"))
+;;       ("Add" . (:symbol "✨"
+;;                 :shortcode ":sparkles:"))
+;;       ("Feature" . (:symbol "✨"
+;;                     :shortcode ":sparkles:"))
+;;       ("Document" . (:symbol "📝"
+;;                      :shortcode ":memo:"))
+;;       ("Typo" . (:symbol "✏️"
+;;                  :shortcode ":pencil2:"))
+;;       ("Refactor" . (:symbol "♻"
+;;                      :shortcode ":recycle:"))
+;;       ("Rollout" . (:symbol "🚀"
+;;                     :shortcode ":rocket:"))
+;;       ("Launch" . (:symbol "🚀"
+;;                    :shortcode ":rocket:"))
+;;       ("Version" . (:symbol "🔖"
+;;                     :shortcode ":bookmark:"))
+;;       ("Release" . (:symbol "🔖"
+;;                     :shortcode ":bookmark:"))
+;;       ("Deploy" . (:symbol "🚀"
+;;                    :shortcode ":rocket:"))
+;;       ("Delete" . (:symbol "🔥"
+;;                    :shortcode ":fire:"))
+;;       ("Remove" . (:symbol "🔥"
+;;                    :shortcode ":fire:"))
+;;       ("Test" . (:symbol "✅"
+;;                  :shortcode ":white_check_mark:")))
+;;     "Alist of commit categories and extras."
+;;     :group 'cashpw/source-control
+;;     :type 'string)
 
-  (defun cashpw/source-control--read-commit-category ()
-    "Return commit noun as selected by user."
-    (let ((category (completing-read "Category: "
-                                     cashpw/source-control--commit-categories
-                                     ;; predicate
-                                     nil
-                                     ;; require-match
-                                     t)))
-      (assoc category
-             cashpw/source-control--commit-categories)))
+;;   (defun cashpw/source-control--read-commit-category ()
+;;     "Return commit noun as selected by user."
+;;     (let ((category (completing-read "Category: "
+;;                                      cashpw/source-control--commit-categories
+;;                                      ;; predicate
+;;                                      nil
+;;                                      ;; require-match
+;;                                      t)))
+;;       (assoc category
+;;              cashpw/source-control--commit-categories)))
 
-  (defun cashpw/source-control--commit--section (title content)
-    "Return formatted section for a commit message."
-    (s-lex-format "## ${title}
+;;   (defun cashpw/source-control--commit--section (title content)
+;;     "Return formatted section for a commit message."
+;;     (s-lex-format "## ${title}
 
-${content}"))
+;; ${content}"))
 
-  (defun cashpw/source-control--commit--build-message ()
-    "Return commit message template."
-    (let* ((category (cashpw/source-control--read-commit-category))
-           (emoji (plist-get (cdr category) :symbol))
-           ;; (what-section (cashpw/source-control--commit--section "What does this change?"
-           ;;                                                       "1. TODO"))
-           ;; (why-section (cashpw/source-control--commit--section "Why make these changes?"
-           ;;                                                      "TODO"))
-           )
-      (s-lex-format "${emoji} ")))
+;;   (defun cashpw/source-control--commit--build-message ()
+;;     "Return commit message template."
+;;     (let* ((category (cashpw/source-control--read-commit-category))
+;;            (emoji (plist-get (cdr category) :symbol))
+;;            ;; (what-section (cashpw/source-control--commit--section "What does this change?"
+;;            ;;                                                       "1. TODO"))
+;;            ;; (why-section (cashpw/source-control--commit--section "Why make these changes?"
+;;            ;;                                                      "TODO"))
+;;            )
+;;       (s-lex-format "${emoji} ")))
 
-  (defun cashpw/source-control--commit--insert-message ()
-    "Insert my commit message template."
-    (insert (cashpw/source-control--commit--build-message)))
+;;   (defun cashpw/source-control--commit--insert-message ()
+;;     "Insert my commit message template."
+;;     (insert (cashpw/source-control--commit--build-message)))
 
-  (add-hook! 'git-commit-setup-hook
-             'cashpw/source-control--commit--insert-message)
-  )
+;;   (add-hook! 'git-commit-setup-hook
+;;              'cashpw/source-control--commit--insert-message)
+;;   )
 
 ;;;;; magit-todos
 
@@ -3579,6 +3583,19 @@ ${content}"))
 
   (load! "+gptel") ; agzam-dot-doom
 
+  ;; OpenRouter offers an OpenAI compatible API
+  ;; https://openrouter.ai/
+  (setq gptel-openrouter-backend
+        (gptel-make-openai "OpenRouter"
+          :host "openrouter.ai"
+          :endpoint "/api/v1/chat/completions"
+          :stream t
+          :key #'gptel-api-key
+          :models gptel--openrouter-models))
+
+  (setq gptel-backend gptel-openrouter-backend)
+  (setq gptel-model 'openai/gpt-5-chat) ; 2025-08-22
+
   ;; xAI offers an OpenAI compatible API
   ;; (gptel-make-openai "xAI"
   ;;   :host "api.x.ai"
@@ -3591,9 +3608,9 @@ ${content}"))
   ;;             grok-2-image-1212))
 
   ;; Google - Gemini
-  (gptel-make-gemini "Gemini"
-    :key #'gptel-api-key
-    :stream t)
+  ;; (gptel-make-gemini "Gemini"
+  ;;   :key #'gptel-api-key
+  ;;   :stream t)
 
   ;; Anthropic - Claude
   ;; (gptel-make-anthropic "Claude"
@@ -3623,19 +3640,6 @@ ${content}"))
   ;;   :request-params '(:temperature 0.5)
   ;;   :models '(solar-pro
   ;;             solar-mini))
-
-  ;; OpenRouter offers an OpenAI compatible API
-  ;; https://openrouter.ai/
-  (setq gptel-openrouter-backend
-        (gptel-make-openai "OpenRouter"
-          :host "openrouter.ai"
-          :endpoint "/api/v1/chat/completions"
-          :stream t
-          :key #'gptel-api-key
-          :models gptel--openrouter-models))
-
-  (setq gptel-backend gptel-openrouter-backend)
-  (setq gptel-model 'openai/gpt-5-chat) ; 2025-08-22
 
   ;; DeepSeek offers an OpenAI compatible API
   ;; The deepseek-chat model has been upgraded to DeepSeek-V3. deepseek-reasoner points to the new model DeepSeek-R1.
@@ -3857,12 +3861,12 @@ ${content}"))
 
 ;;;;;;  gpt-babel
 
-(use-package! gpt-babel
-  :after gptel org
-  :init
-  (setq gpt-babel/error-action 'nil)  ; Options: nil, 'send, or 'fix
-  :defer 2)
-
+; (use-package! gpt-babel
+;   :after gptel org
+;   :init
+;   (setq gpt-babel/error-action 'nil)  ; Options: nil, 'send, or 'fix
+;   :defer 2)
+;
 ;;;;;; elysium for pair programming
 
 (use-package! elysium
@@ -3936,114 +3940,21 @@ ${content}"))
 ;;   ;; (emigo-api-key (getenv "OPENROUTER_API_KEY"))
 ;;   )
 
-;;;;; llmclient: aidermacs
-
-(use-package! aidermacs
-  :defer 1
-  :init
-  (autoload 'aidermacs-transient-menu "aidermacs" nil t)
-
-;;;###autoload
-  (defun aidermacs-buffer-name ()
-    "Generate the aidermacs buffer name based on project root or current directory.
-Prefers existing sessions closer to current directory."
-    (let* ((root (aidermacs-project-root))
-           (current-dir (file-truename default-directory))
-           ;; Get all existing aidermacs buffers
-           (aidermacs-buffers
-            (cl-remove-if-not
-             (lambda (buf)
-               (string-match-p "^\\*aidermacs:" (buffer-name buf)))
-             (buffer-list)))
-           ;; Extract directory paths and subtree status from buffer names
-           (buffer-dirs
-            (mapcar
-             (lambda (buf)
-               (when (string-match "^\\*aidermacs:\\(.*?\\)\\*$"
-                                   (buffer-name buf))
-                 (cons (match-string 1 (buffer-name buf))
-                       (match-string 2 (buffer-name buf)))))
-             aidermacs-buffers))
-           ;; Find closest parent directory that has an aidermacs session
-           (closest-parent
-            (car
-             (car
-              (sort
-               (cl-remove-if-not
-                (lambda (dir-info)
-                  (and (car dir-info)
-                       (string-prefix-p (car dir-info) current-dir)
-                       (file-exists-p (car dir-info))))
-                buffer-dirs)
-               (lambda (a b)
-                 ;; Sort by path length (deeper paths first)
-                 (> (length (car a)) (length (car b))))))))
-           (display-root (cond
-                          ;; Use current directory for new subtree session
-                          (aidermacs-subtree-only current-dir)
-                          ;; Use closest parent if it exists
-                          (closest-parent closest-parent)
-                          ;; Fall back to project root for new non-subtree session
-                          (t root))))
-      (format "*aidermacs:%s*"
-              (file-truename display-root))))
-
-  (setq aidermacs-auto-commits nil)
-  (setq aidermacs-default-chat-mode 'ask)
-  (setq aidermacs-auto-accept-architect t)
-  ;; (setq aidermacs-show-diff-after-change nil)
-  ;; (setq aidermacs-backend 'vterm) ; 'comint
-  (setq aidermacs-default-model "openrouter/anthropic/claude-sonnet-4")
-  (setq aidermacs-weak-model "openrouter/anthropic/claude-3-5-haiku")
-  ;;"openrouter/deepseek/deekseek-r1"
-  ;; "openrouter/deepseek/deepseek-chat-v3-0324")
-  ;; (setq aidermacs-default-model "deepseek/deepseek-reasoner")
-  ;; (setq aidermacs-weak-model "deepseek/deepseek-coder")
-
-  ;; Comint backend:
-  ;; (setq aidermacs-comint-multiline-newline-key "S-<return>")
-  ;; ;; Vterm backend:
-  ;; (setq aidermacs-vterm-multiline-newline-key "S-<return>")
-
-  (setq aidermacs-extra-args
-        '(
-          ;; "--cache-prompts"
-          ;; "--cache-keepalive-pings" "6"
-          "--watch-files"
-          ;;"--auto-test"
-          ;;"--timeout" "120"
-          ;;"--test"
-          ;; "--auto-commits"
-          ;; "--auto-accept-architect"
-          ;;"--install-tree-sitter-language-pack"
-          "--chat-language" "ko" ; "English"
-          ;;"--editor-edit-format" "editor-whole"
-          ))
-
-  (defadvice! my/aidermacs-run-make-real-buffer-a ()
-    :after #'aidermacs-run
-    (when-let ((buf (get-buffer (aidermacs-buffer-name)))
-               (_ (buffer-live-p buf)))
-      (doom-set-buffer-real buf t)))
-
-  ;; (set-popup-rule!
-  ;;   (lambda (bname _action)
-  ;;     (and (null gptel-display-buffer-action)
-  ;;          (buffer-local-value 'gptel-mode (get-buffer bname))))
-  ;;   :select t
-  ;;   :size 0.3
-  ;;   :quit nil
-  ;;   :ttl nil)
-  )
-
 ;;;;; llmclient: claude-code-ide.el
 
-;; (use-package! claude-code-ide
-;;   :config
-;;   (setq claude-code-ide-terminal-backend 'vterm)
-;;   ;; (claude-code-ide-emacs-tools-setup)
-;;   ) ; Optionally enable Emacs MCP tools
+(use-package! claude-code-ide
+  :init
+  (setq claude-code-ide-window-side 'right
+        claude-code-ide-window-width 90)
+  :config
+  (setq claude-code-ide-terminal-backend 'vterm)
+  (setq claude-code-ide-use-ide-diff nil)
+  (claude-code-ide-emacs-tools-setup)
+  ) ; Optionally enable Emacs MCP tools
 
+;;;;; llmclient: claude-code.el
+
+(use-package! monet)
 (use-package! claude-code
   :config
   (setq claude-code-terminal-backend 'vterm)
@@ -4056,7 +3967,13 @@ Prefers existing sessions closer to current directory."
       (call-process "paplay" nil nil nil "/usr/share/sounds/freedesktop/stereo/complete.oga")))
   (setq claude-code-notification-function #'my-claude-notify-with-sound)
 
-  (set-popup-rule! "^\\*claude" :width 90 :side 'right :ttl t :select t :quit nil :modeline t)
+  ;; optional IDE integration with Monet
+  (require 'monet)
+  (add-hook 'claude-code-process-environment-functions #'monet-start-server-function)
+  (monet-mode 1)
+
+  (set-popup-rule! "^\\*claude" :vslot -15 :width 90 :side 'right :ttl t :select t :quit nil :modeline t)
+
   (claude-code-mode)
 
   (add-hook 'claude-code-start-hook
@@ -4414,7 +4331,7 @@ Prefers existing sessions closer to current directory."
   :bind (("M-s-," . devdocs-browser-open) ;; M-s-/ yas-next-field
          ("M-s-." . devdocs-browser-open-in))
   :config
-  (set-popup-rule! "*devdocs-.*\\*" :width 84 :side 'right :ttl t :select nil :quit nil :ttl 0)
+  (set-popup-rule! "*devdocs-.*\\*" :width 84 :side 'right :select nil :quit nil :ttl 0)
   (setq devdocs-browser-data-directory (concat doom-emacs-dir "devdocs-browser"))
   (add-to-list 'devdocs-browser-major-mode-docs-alist '(js2-mode "javascript" "node"))
   (add-to-list 'devdocs-browser-major-mode-docs-alist '(python-mode "Python" "NumPy" "pandas"))
@@ -4518,10 +4435,6 @@ Prefers existing sessions closer to current directory."
   (define-key yas/keymap (kbd "M-n") 'yas-next-field-or-maybe-expand)
   (define-key yas/keymap (kbd "M-p") 'yas-prev-field)
   )
-
-;;;;; bats-mode for testing awk bash
-
-(use-package! bats-mode :defer t)
 
 ;;;;; :lang python
 
@@ -4949,7 +4862,7 @@ x×X .,·°;:¡!¿?`'‘’   ÄAÃÀ TODO
   (setq doom-modeline-lsp t)
   (setq doom-modeline-indent-info t)
   ;; (setq doom-modeline-hud nil)
-  ;; (setq doom-modeline-buffer-file-name-style 'truncate-upto-project) ; default 'auto
+  (setq doom-modeline-buffer-file-name-style 'truncate-upto-project) ; default 'auto
 
   (remove-hook 'display-time-mode-hook #'doom-modeline-override-time)
   (remove-hook 'doom-modeline-mode-hook #'doom-modeline-override-time))
@@ -5504,39 +5417,6 @@ Suitable for `imenu-create-index-function'."
 
 ;;;;; :app @ebooks
 
-;;;;; :app @exercism
-
-(use-package! exercism
-  :defer t
-  :if (not IS-TERMUX)
-  :custom (exercism-display-tests-after-run t)
-  :commands exercism
-  :config
-  (defun ert/eval-and-run-all-tests-in-buffer ()
-    "Deletes all loaded tests from the runtime, evaluates the current buffer and runs all loaded tests with ert."
-    (interactive)
-    (ert-delete-all-tests)
-    (eval-buffer)
-    (ert 't))
-  )
-
-;;;;; :app @leetcode
-
-(use-package! leetcode
-  :if (not IS-TERMUX)
-  :defer t
-  :commands leetcode
-  :init
-  (setq leetcode-prefer-language "python")
-  (setq leetcode-prefer-sql "mysql")
-  (setq leetcode-save-solutions t)
-  (setq leetcode-directory "~/leetcode/")
-  (setq leetcode-show-problem-by-slug t)
-  ;; :config
-  ;; (add-hook 'leetcode-solution-mode-hook
-  ;;           (lambda() (flycheck-mode -1)))
-  )
-
 ;;;;; :app @osm OpenStreetMaps
 
 ;; Very cool and the nice thing is it integrates itself with the built-in
@@ -6081,6 +5961,31 @@ Suitable for `imenu-create-index-function'."
 ;;       (consult-omni-brave-autosuggest input)))
 ;;   )
 ; end-of consult-omni
+
+;;;;; :app wakatime-mode
+
+;; python3 -c "$(wget -q -O - https://raw.githubusercontent.com/wakatime/vim-wakatime/master/scripts/install_cli.py)"
+
+(use-package! wakatime-mode
+  ;; :if (and (or
+  ;;              (string= (system-name) "jhnuc")
+  ;;              (string= (system-name) "junghan-laptop")
+  ;;              )
+  ;;         (not my/slow-ssh)
+  ;;         (not my/remote-server))
+  :init
+  (add-hook 'prog-mode-hook 'wakatime-mode)
+  (add-hook 'org-mode-hook 'wakatime-mode)
+  (add-hook 'markdown-mode-hook 'wakatime-mode)
+  :defer 5
+  :config
+  (advice-add 'wakatime-init :after (lambda () (setq wakatime-cli-path (expand-file-name "~/.wakatime/wakatime-cli"))))
+
+  ;; wakatime-api-key  "your-api-key" in permachine.el
+  (defun my/wakatime-dashboard ()
+    (interactive)
+    (browse-url "https://wakatime.com/dashboard"))
+  )
 
 ;;;; :os tty
 

@@ -1229,6 +1229,8 @@
 ;;;; dired-mode-map
 
 (map! :map dired-mode-map
+      :n "r" #'revert-buffer
+
       :localleader
       "h" #'dired-omit-mode
       "H" #'dired-hide-details-mode

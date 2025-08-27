@@ -4859,82 +4859,6 @@ For instance pass En as source for English."
     :defer (spacemacs/defer)
     :commands (redacted-mode))
 
-;;;;; DONT jh-misc > terminal : term-keys / xclip
-
-  ;; (use-package term-keys
-  ;;   :unless window-system
-  ;;   :demand
-  ;;   :config
-  ;;   (term-keys-mode t)
-  ;;   )
-
-  ;; (use-package xclip
-  ;;   :if (not (or my/remote-server IS-TERMUX))
-  ;;   :config
-  ;;   (unless (display-graphic-p)
-  ;;     (xclip-mode 1)))
-
-
-;;;;; jh-misc > wakatime-mode
-
-  ;; $ python3 -c "$(wget -q -O - https://raw.githubusercontent.com/wakatime/vim-wakatime/master/scripts/install_cli.py)"
-  ;; (use-package wakatime-mode
-  ;;     :if (and (or
-  ;;                  (string= (system-name) "jhnuc")
-  ;;                  (string= (system-name) "junghan-laptop")
-  ;;                  )
-  ;;             (not my/slow-ssh)
-  ;;             (not my/remote-server))
-  ;;     :init
-  ;;     (add-hook 'prog-mode-hook 'wakatime-mode)
-  ;;     (add-hook 'org-mode-hook 'wakatime-mode)
-  ;;     (add-hook 'markdown-mode-hook 'wakatime-mode)
-  ;;     :defer 5
-  ;;     :config
-  ;;     (advice-add 'wakatime-init :after (lambda () (setq wakatime-cli-path (expand-file-name "~/.wakatime/wakatime-cli"))))
-
-  ;;     ;; wakatime-api-key  "your-api-key" in permachine.el
-  ;;     (defun spacemacs/wakatime-dashboard ()
-  ;;         (interactive)
-  ;;         (browse-url "https://wakatime.com/dashboard"))
-  ;;     (global-wakatime-mode)
-  ;;     )
-
-
-;;;;; DONT jh-misc > engine-mode
-
-  ;; (use-package engine-mode
-  ;;   :init
-  ;;   (setq engine/browser-function 'eww-browse-url)
-  ;;   :config
-  ;;   (defengine google
-  ;;     "http://www.google.com/search?ie=utf-8&oe=utf-8&q=%s"
-  ;;     :keybinding "g")
-
-  ;;   (defengine google-images
-  ;;     "http://www.google.com/images?hl=en&source=hp&biw=1440&bih=795&gbv=2&aq=f&aqi=&aql=&oq=&q=%s"
-  ;;     :browser 'browse-url-default-browser
-  ;;     :keybinding "i")
-
-  ;;   (defengine github
-  ;;     "https://github.com/search?ref=simplesearch&q=%s"
-  ;;     :browser 'browse-url-default-browser
-  ;;     :keybinding "h")
-
-  ;;   (defengine wikipedia
-  ;;     "http://www.wikipedia.org/search-redirect.php?language=en&go=Go&search=%s"
-  ;;     :keybinding "w")
-
-  ;;   (defengine wiktionary
-  ;;     "https://www.wikipedia.org/search-redirect.php?family=wiktionary&language=en&go=Go&search=%s"
-  ;;     :keybinding "d")
-
-  ;;   (defengine youtube
-  ;;     "http://www.youtube.com/results?aq=f&oq=&search_query=%s"
-  ;;     :browser 'browse-url-default-browser
-  ;;     :keybinding "v")
-  ;;   (add-hook 'spacemacs-post-user-config-hook #'engine-mode))
-
 ;;;;; jh-misc > plantuml
 
   (use-package plantuml-mode
@@ -4943,11 +4867,7 @@ For instance pass En as source for English."
     (setq plantuml-jar-path (concat user-emacs-directory ".cache/plantuml.jar")
           org-plantuml-jar-path plantuml-jar-path))
 
-
 ;;;; jh-pkm
-
-
-;;;;; jh-pkm > denote/citar/consult-notes
 
 ;;;;;; jh-pkm > denote
 
@@ -5151,7 +5071,10 @@ For instance pass En as source for English."
 ;;;;;;; end-of denote
     ) ;; end-of denote
 
-;;;;;; jh-pkm > denote > custom modules
+
+;;;; Load shared dotfiles
+
+;;;;; denote shared
 
   (with-eval-after-load 'denote
     (message "Load: custom denote")
@@ -5161,87 +5084,7 @@ For instance pass En as source for English."
     (load-file (concat user-dotemacs-dir "lisp/denote-hugo.el"))
     )
 
-;;;;; jh-pkm > ekg/triples/llm
-
-  ;; (use-package triples)
-  ;; (use-package llm)
-
-  ;; (use-package ekg
-  ;;   :ensure t
-  ;;   :init
-  ;;   (setq ekg-db-file (concat user-org-directory "ekg/ekg.db"))
-  ;;   :commands (ekg-dispatch ekg-capture ekg-capture-url ekg-show-notes-with-all-tags)
-  ;;   :bind (("C-c n u" . ekg-show-notes-with-all-tags)
-  ;;          ("C-c n U" . ekg-capture)
-  ;;          (:map ekg-notes-mode-map
-  ;;                (("<return>" . ekg-notes-open)
-  ;;                 ("C-c C-o" . org-open-at-point))))
-  ;;   :config
-  ;;   (require 'ekg-auto-save)
-  ;;   (require 'ekg-embedding)
-  ;;   (ekg-embedding-generate-on-save)
-  ;;   (require 'ekg-llm)
-
-  ;;   (setq llm-warn-on-nonfree nil)
-  ;;   (require 'llm-openai)  ;; The specific provider you are using must be loaded.
-  ;;   ;; (require 'llm-gemini)
-
-  ;;   (let ((my-provider (make-llm-openai :key my-openai-api-key)))
-  ;;     (setq ekg-llm-provider my-provider
-  ;;           ekg-embedding-provider my-provider))
-
-  ;;   ;; (let ((my-provider (make-llm-gemini :key my-gemini-api-key)))
-  ;;   ;;   (setq ekg-llm-provider my-provider
-  ;;   ;;     ekg-embedding-provider my-provider))
-
-  ;;   ;; (defun ash/capture-literature-note ()
-  ;;   ;;   (interactive)
-  ;;   ;;   (ekg-capture-url (ash/get-current-url) (ash/get-current-title)))
-
-  ;;   ;; org-mode 를 고집할 필요가 있나?!
-  ;;   ;; (setq ekg-capture-default-mode 'markdown-mode) ; default 'org-mode
-
-  ;;   (setq ekg-metadata-separator-text "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-  ;;   (setq ekg-display-note-template "%n(id)%n(tagged)%n(titled)%n(text 50)%n(other)")
-  ;;   (setq ekg-notes-display-images nil)
-  ;;   (setq ekg-inline-custom-tag-completion-symbols
-  ;;         '((?@ . "person")
-  ;;           (?! . "idea")
-  ;;           ;; (?$ . "term")
-  ;;           ;; (?% . "doc")
-  ;;           ;; (?\& . "project")
-  ;;           ))
-
-  ;;   (unless IS-TERMUX
-  ;;     ;; gleek-dotfiles-ekg/core/lang/core-org.el:802
-  ;;     (defun +ekg-logseq-sync(&rest args)
-  ;;       (require 'ekg-logseq)
-  ;;       ;; (setq ekg-logseq-dir (concat +ekg-directory "logseq/"))
-  ;;       (setq ekg-logseq-dir "~/sync/logseq/logseqfiles/")
-  ;;       (ekg-logseq-sync))
-  ;;     ;; (add-hook 'ekg-note-save-hook '+ekg-logseq-sync)
-  ;;     )
-
-  ;;   ;; /ahyatt-dotfiles/.emacs.d/emacs.org:1098
-  ;;   (defun ash/log-to-ekg (text &optional org-mode)
-  ;;     "Log TEXT as a note to EKG's date, appending if possible."
-  ;;     (let ((notes (ekg-get-notes-with-tags (list (ekg-tag-for-date) "log"))))
-  ;;       (if notes
-  ;;           (progn
-  ;;             (message "ash/log-to-ekg...")
-  ;;             (setf (ekg-note-text (car notes)) (concat (ekg-note-text (car notes)) "\n" text))
-  ;;             (ekg-save-note (car notes)))
-  ;;         (ekg-save-note (ekg-note-create :text text :mode (if org-mode 'org-mode 'text-mode)
-  ;;                                         :tags `(,(ekg-tag-for-date) "log"))))))
-
-  ;;   ;; load-transient
-  ;;   (setup-ekg-transients) ; only run this once all ekg funcs are loaded
-  ;;   )
-  ;; end-of ekg
-
-;;;; TODO jh-llm
-
-;;;; Load shared dotfiles
+;;;;; shared lisp
 
   (load-file (concat user-dotemacs-dir "lisp/uniconfig.el"))
   (load-file (concat user-dotemacs-dir "lisp/keys.el"))
@@ -5250,16 +5093,12 @@ For instance pass En as source for English."
   ;; (load-file (concat user-dotemacs-dir "lisp/my-python-jupyter.el"))
   (load-file (concat user-dotemacs-dir "lisp/my-org-literate.el"))
 
-;;;; Load spacemacs-keys
+;;;;; spacemacs-keys
 
   (load-file (concat dotspacemacs-directory "spacemacs-keys.el"))
 
-;;;; ccmenu
-
-  ;; (when (display-graphic-p) ;; gui
-  ;;   (require 'ccmenu))
-
 ;;;; end-of user-config
+
   ) ;; end-of user-config
 
 ;;; End-Of File

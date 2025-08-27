@@ -273,6 +273,7 @@
 (package! olivetti)
 (package! palimpsest)
 (package! immersive-translate)
+;; (package! immersive-translate :recipe (:local-repo "~/git/clone/emacs-immersive-translate/"))
 (package! focus)
 
 (package! isbn :recipe (:host github :repo "cashpw/isbn.el"))
@@ -333,8 +334,8 @@
 ;;            :files (:defaults "awk" "demo.org")))
 ;;;; modules/tools llm
 
-(unpin! gptel)
-(package! gptel :recipe (:host github :repo "karthink/gptel") :pin "7218aedd6f8294af5be876c0c18a733863156b7b")
+;; (unpin! gptel)
+;; (package! gptel :recipe (:host github :repo "karthink/gptel") :pin "7218aedd6f8294af5be876c0c18a733863156b7b")
 
 (package! mcp)
 (package! yaml) ; for gptel-prompt
@@ -351,15 +352,12 @@
 (package! ragmacs :recipe (:host github :repo "positron-solutions/ragmacs"))
 
 ;; (package! gpt-babel :recipe (:host github :repo "ElleNajt/gpt-babel" :branch "main" :files ("*.el")))
-(package! gpt-babel :recipe (:local-repo "~/git/default/gpt-babel/"))
+;; (package! gpt-babel :recipe (:local-repo "~/git/default/gpt-babel/"))
 ;; (package! org-auto-tangle :recipe (:local-repo "~/git/default/org-auto-tangle/"))
 
-;; (package! claude-code-ide :recipe (:host github :repo "manzaltu/claude-code-ide.el" ))
+(package! claude-code-ide :recipe (:host github :repo "manzaltu/claude-code-ide.el" ))
 (package! claude-code :recipe (:host github :repo "stevemolitor/claude-code.el" ))
-;; (package! monet :recipe (:host github :repo "stevemolitor/monet" ))
-
-;; (package! claude-code-ide :recipe (:local-repo "~/git/default/claude-code-ide.el"))
-;; (package! claude-code :recipe (:local-repo "~/git/default/claude-code.el/"))
+(package! monet :recipe (:host github :repo "stevemolitor/monet" ))
 
 (package! eshell-atuin)
 ;; (package! eat :recipe
@@ -374,36 +372,21 @@
 ;;;;; extra packages
 
 ;; (package! khoj)
-;; (package! aider)
 
 ;; (package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs" :files ("*.el")))
-(package! aidermacs :recipe (:local-repo "~/git/default/aidermacs/"))
-
-;; (package! emigo :recipe (:host github :repo "MatthewZMD/emigo"))
 
 (package! llm)
 (package! semext :recipe (:host github :repo "ahyatt/semext"))
-
-;; (package! kagi)
-;; (package! chatgpt-shell)
 (package! pcsv)
 
-;; gptel plugins
-;; (package! elysium)
-(package! elysium :recipe (:local-repo "~/git/junghan0611/elysium/"))
+(package! elysium)
+;; (package! elysium :recipe (:local-repo "~/git/junghan0611/elysium/"))
 
-;; (package! copilot :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))) ; github copilot
-;; (package! copilot-chat :recipe (:host github :repo "chep/copilot-chat.el" :files ("*.el"))) ; github copilot
-
-(package! whisper :recipe (:host github :repo "natrys/whisper.el"))
-(package! ellama)
-
-;; ~/sync/man/dotsamples/doom/lemon-dot-doom/modules/cae/ai/config.el
-;; (package! greader)
+;; (package! whisper :recipe (:host github :repo "natrys/whisper.el"))
+;; (package! ellama)
 
 ;; git@github.com:ziova/wolfram.el.git
 ;; (package! wolfram :recipe (:host github :repo "ziova/wolfram.el"))
-;; (package! org-ai)
 
 ;;;; :lang
 
@@ -432,11 +415,6 @@
 ;;   (package! clj-deps-new)
 ;;   (package! clojure-essential-ref-nov)
 ;;   (package! clay))
-
-(package! exercism)
-(package! leetcode)
-
-(package! bats-mode)
 
 ;; (unpin! jupyter)
 ;; (package! jupyter :recipe (:host github :repo "junghan0611/emacs-jupyter" :branch "ko"))
@@ -519,11 +497,11 @@
 (package! org-books :recipe (:local-repo "~/emacs/git/junghan0611/org-books"))
 
 ;; (package! org-zettel-ref-mode :recipe (:host github :repo "junghan0611/org-zettel-ref-mode" :branch "ko"))
-(package! org-zettel-ref-mode :recipe (:local-repo "~/emacs/git/junghan0611/org-zettel-ref-mode/"))
+;; (package! org-zettel-ref-mode :recipe (:local-repo "~/emacs/git/junghan0611/org-zettel-ref-mode/"))
 
-;; (package! org-supertag :recipe (:host github :repo "yibie/org-supertag")) ; require epc
-(package! org-supertag :recipe (:local-repo "~/emacs/git/junghan0611/org-supertag/"))
-(package! org-zotero-client :recipe (:local-repo "~/git/default/zotero-cli/elisp/"))
+(package! org-supertag :recipe (:host github :repo "yibie/org-supertag")) ; require epc
+;; (package! org-supertag :recipe (:local-repo "~/emacs/git/junghan0611/org-supertag/"))
+;; (package! org-zotero-client :recipe (:local-repo "~/git/default/zotero-cli/elisp/"))
 
 ;;;; Workspace
 
@@ -625,6 +603,7 @@
 ;; (package! selectric-mode)
 
 (package! wiki-summary :recipe (:host github :repo "rnkn/wiki-summary.el"))
+(package! wakatime-mode)
 
 ;;;; DONT Emacs Application Framework (EAF)
 
