@@ -224,16 +224,25 @@
 
     (openai/gpt-5-chat
      :description "Flagship model for coding, reasoning, and agentic tasks across domains"
-     :capabilities (media tool-use json url)
+     :capabilities (media json url)
      :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
      :context-window 400
      :input-cost 1.25
      :output-cost 10
      :cutoff-date "2024-09")
 
+    (openai/gpt-oss-120b
+     :description "gpt-oss-120b is an open-weight, 117B-parameter Mixture-of-Experts (MoE) language model from OpenAI designed for high-reasoning, agentic, and general-purpose production use cases."
+     :capabilities (media tool-use json url)
+     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
+     :context-window 131
+     :input-cost 0.072
+     :output-cost 0.28
+     :cutoff-date "2025-08")
+
     (openai/gpt-5-mini
      :description "Faster, more cost-efficient version of GPT-5"
-     :capabilities (media tool-use json url)
+     :capabilities (media json url)
      :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
      :context-window 400
      :input-cost 0.25

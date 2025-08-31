@@ -452,10 +452,9 @@
 
 ;; (package! mise :recipe (:host github :repo "eki3z/mise.el"))
 
-;;;;; DONT treesit
+;;;;; treesit
 
-;; (package! treesit-auto)
-;; (package! clojure-ts-mode :recipe (:host github :repo "clojure-emacs/clojure-ts-mode"))
+(package! combobulate)
 
 ;;;; Git
 
