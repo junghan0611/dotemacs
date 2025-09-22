@@ -248,9 +248,9 @@
  (yaml +tree-sitter) ; JSON, but readable
  (zig +tree-sitter)              ; C, but simpler
 
- ;; :email
+ :email
  ;; (mu4e +org +gmail)
- ;; (notmuch +org)
+ (notmuch +org)
  ;; (wanderlust +gmail)
 
  :app
