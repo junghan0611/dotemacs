@@ -17,6 +17,8 @@
 ;;; Pre-init
 ;;;; Variables
 
+(setq package-enable-at-startup nil)
+
 ;; This is so that I don't accidentally start Emacs as a daemon.
 (when (daemonp) (kill-emacs))
 
@@ -137,8 +139,8 @@
  debugger ; FIXME stepping through code, to help you add bugs
  direnv
 
- (docker +lsp)
- ;; editorconfig     ; let someone else argue about tabs vs spaces
+ (docker +lsp +tree-sitter)
+ editorconfig     ; let someone else argue about tabs vs spaces
 
  (eval +overlay)     ; run code, run (also, repls)
  lookup              ; only dumb-jump
@@ -163,7 +165,7 @@
  :lang
  ;;agda              ; types of types of types of types...
  beancount         ; mind the GAAP
- (cc +lsp) ;; +tree-sitter         ; C > C++ == 1
+ (cc +lsp +tree-sitter)        ; C > C++ == 1
 
  ;; (clojure +lsp) ; +tree-sitter java with a lisp
  ;; common-lisp ; if you've seen one lisp, you've seen them all
@@ -195,8 +197,8 @@
  ;;idris             ; a language you can depend on
 
  (json +tree-sitter)  ; At least it ain't XML
- janet  ; Fun fact: Janet is me!
- (javascript +lsp +tree-sitter) all(hope(abandon(ye(who(enter(here))))))
+ (janet +tree-sitter)  ; Fun fact: Janet is me!
+ (javascript +lsp +tree-sitter) ; all(hope(abandon(ye(who(enter(here))))))
  ;;(java +lsp)       ; the poster child for carpal tunnel syndrome
  ;;julia             ; a better, faster MATLAB
  ;; (kotlin +lsp)       ; a better, slicker Java(Script)
@@ -204,8 +206,7 @@
  ;;lean              ; for folks with too much to prove
  ledger            ; be audit you can be
  lua               ; one-based indices? one-based indices
- ;; (markdown +tree-sitter) ; writing docs for people to ignore
- markdown
+ (markdown +tree-sitter) ; writing docs for people to ignore
  ;;nim               ; python + lisp at the speed of c
  (nix +lsp +tree-sitter)               ; I hereby declare "nix geht mehr!"
  ;;ocaml             ; an objective camel
@@ -228,7 +229,7 @@
  plantuml            ; diagrams for confusing people more
  graphviz
  ;;purescript        ; javascript, but functional
- (python +lsp +pyright +poetry +pyenv) ;; +conda +tree-sitter ; beautiful is better than ugly
+ (python +lsp +pyright +poetry +pyenv +tree-sitter) ;; +conda ; beautiful is better than ugly
  ;; qt                ; the 'cutest' gui framework ever
  ;; racket ; a DSL for DSLs
  ;;raku              ; the artist formerly known as perl6
@@ -243,9 +244,9 @@
  ;;solidity          ; do you need a blockchain? No.
  ;;swift             ; who asked for emoji variables?
  ;;terra             ; Earth and Moon in alignment for performance.
- (web +lsp) ; the tubes
+ (web +lsp +tree-sitter) ; the tubes
  (yaml +tree-sitter) ; JSON, but readable
- zig               ; C, but simpler
+ (zig +tree-sitter)              ; C, but simpler
 
  ;; :email
  ;; (mu4e +org +gmail)

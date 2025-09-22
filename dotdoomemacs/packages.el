@@ -307,7 +307,7 @@
 
 (package! denote-regexp)
 
-;; (package! gptel-denote :recipe (:host github :repo "pprevos/gptel-denote"))
+(package! gptel-denote :recipe (:host github :repo "pprevos/gptel-denote"))
 
 (package! consult-notes)
 
@@ -525,7 +525,7 @@
 ;; (package! vlf :recipe (:host github :repo "m00natic/vlfi" :files ("*.el"))
 ;;   :pin "cc02f2533782d6b9b628cec7e2dcf25b2d05a27c" :disable t)
 
-;; (package! zoxide)
+(package! zoxide)
 ;; (package! telega) ; telegram
 
 ;;;; Transient
@@ -601,7 +601,7 @@
 ;; (package! oneko-macs :recipe (:host github :repo "ElleNajt/oneko-macs")) ; sudo apt-get install oneko
 ;; (package! selectric-mode)
 
-(package! wiki-summary :recipe (:host github :repo "rnkn/wiki-summary.el"))
+;; (package! wiki-summary :recipe (:host github :repo "rnkn/wiki-summary.el"))
 (package! wakatime-mode)
 
 ;;;; DONT Emacs Application Framework (EAF)

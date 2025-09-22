@@ -62,11 +62,11 @@
 
 (defconst user-project-directory (if (getenv "PROJECT_DIRECTORY")
                                      (getenv "PROJECT_DIRECTORY")
-                                   "~/git/"))
+                                   "~/repos/"))
 
 ;; org-hugo-base-dir
-(defconst user-hugo-blog-dir (concat user-project-directory "blog/"))
-(defconst user-hugo-notes-dir (concat user-project-directory "notes/"))
+(defconst user-hugo-blog-dir (concat user-project-directory "gh/blog/"))
+(defconst user-hugo-notes-dir (concat user-project-directory "gh/notes/"))
 
 ;;;; directories
 

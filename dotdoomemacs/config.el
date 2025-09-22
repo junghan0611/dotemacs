@@ -2204,7 +2204,7 @@ only those in the selected frame."
   ;; (setq projectile-project-search-path '(("~/code" . 2) ("~/git" . 2)))
 
   ;; direct projectile to look for code in a specific folder.
-  (setq projectile-project-search-path '("~/git" . 2))
+  (setq projectile-project-search-path '("~/repos" . 2))
 
   (map! :leader
         :desc "Toggle Impl & Test" "pt" #'projectile-toggle-between-implementation-and-test
@@ -4566,6 +4566,17 @@ only those in the selected frame."
 ;; 2) To disable this behavior in one mode:
 ;; ;; (setq-hook! 'python-mode-hook +format-with-lsp nil) ; python
 
+
+;;;;; nix
+
+(after! nix-mode
+  ;; alejandra를 기본 포맷터로 설정
+  (setq nix-nixfmt-bin "~/.local/bin/alejandra"))
+
+(add-hook 'nix-mode-hook
+          (lambda ()
+            (add-hook 'before-save-hook 'nix-format-buffer nil t)))
+
 ;;;; :ui
 
 ;;;;; doom-dashboard
@@ -4971,7 +4982,8 @@ x×X .,·°;:¡!¿?`'‘’   ÄAÃÀ TODO
 ;;;;; custom eww
 
 (after! eww
-  (add-to-list 'evil-buffer-regexps '("\\*eww\\*" . normal))
+  (after! evil
+    (add-to-list 'evil-buffer-regexps '("\\*eww\\*" . normal)))
 
   (require 'eww-load) ; custom module
 
@@ -5286,10 +5298,10 @@ Suitable for `imenu-create-index-function'."
 
 ;;;; :app
 
-;;;;; :app wiki-summary
+;;;;; DONT :app wiki-summary
 
-(require 'wiki-summary)
-(setq wiki-summary-language-string "ko")
+;; (require 'wiki-summary)
+;; (setq wiki-summary-language-string "ko")
 
 ;;;;; :app calendar
 
@@ -6913,9 +6925,9 @@ Suitable for `imenu-create-index-function'."
 
   ;; (message "my/open-workspaces")
   (+workspace/new-named "work")
-  (find-file "~/sync/sandboxes/claude-desktop/")
+  (find-file "~/repos/work")
 
-  (+workspace/new-named "git")
+  (+workspace/new-named "repos")
   (find-file user-project-directory)
 
   (+workspace/new-named "dots")

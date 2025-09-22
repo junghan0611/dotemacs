@@ -307,7 +307,7 @@
        :desc "org-web-tools: read-url-as-org" "T" #'org-web-tools-convert-links-to-page-entries
        :desc "jao-eww-to-org" "e" #'jao-eww-to-org
        :desc "wikinforg" "w" #'wikinforg
-       :desc "wiki-summary" "s" #'wiki-summary-insert
+       ;; :desc "wiki-summary" "s" #'wiki-summary-insert
        :desc "remember" "r" #'remember
        :desc "remember-notes" "R" #'remember-notes
        "i" #'bh/insert-inactive-timestamp
