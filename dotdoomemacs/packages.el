@@ -200,9 +200,8 @@
 
 ;;;; :lang org-mode
 
-(package! org-headline-card :recipe (:host github :repo "yibie/org-headline-card")) ; plantuml
-(package! org-todoist :recipe (:host github :repo "lillenne/org-todoist" :branch "main")) ;; (package! todoist)
-(package! orgbox)
+;; (package! org-headline-card :recipe (:host github :repo "yibie/org-headline-card")) ; plantuml
+;; (package! orgbox)
 
 (package! org-fragtog) ;; interactive toggling of inline latex formulas
 (package! org-appear)

@@ -2924,36 +2924,36 @@ only those in the selected frame."
   :after org
   :bind ("M-g l" . org-marked-text-overview-mode))
 
-;;;;;; org-headline-card
+;;;;;; DONT org-headline-card
 
-(use-package! org-headline-card
-  :defer 10
-  :after org
-  :commands (org-headline-card-at-point)
-  :config
-  (setq org-headline-card-directory "~/org/temp/card/") ;; set output path
-  (setq plantuml-default-exec-mode 'jar)
-  ;; (setq plantuml-jar-path "~/Documents/emacs/package/plantuml.jar") ;; to replace your plantuml.jar path with it.
-  (setq org-headline-card-base-theme
-        '((dpi . "300") (defaultMonospacedFontSize . "26") (padding . "40")
-          (roundCorner . "40") (shadowing . "false") (handwritten . "false")
-          (lineHeight . "1.4") (rectangleBorderThickness . "1") (titleFontSize . "32")
-          (contentFontSize . "26")))
-  ;; '((dpi . "300")                     ; Image resolution
-  ;;   (padding . "40")                  ; Padding
-  ;;   (roundCorner . "40")             ; Corner radius
-  ;;   (titleFontSize . "32")           ; Title font size
-  ;;   (contentFontSize . "26")))       ; Content font size
-  ;; Add a light purple theme
-  (setq org-headline-card-current-theme 'purple-light)
-  (add-to-list 'org-headline-card-themes
-               '(purple-light . ((defaultFontName . "Hahmlet")
-                                 (defaultFontSize . "16")
-                                 (backgroundColor . "#F8F5FF")
-                                 (rectangleBorderColor . "#E6E0F3")
-                                 (rectangleFontColor . "#2C2C2C")
-                                 (rectangleBackgroundColor . "#FDFAFF"))))
-  )
+;; (use-package! org-headline-card
+;;   :defer 10
+;;   :after org
+;;   :commands (org-headline-card-at-point)
+;;   :config
+;;   (setq org-headline-card-directory "~/org/temp/card/") ;; set output path
+;;   (setq plantuml-default-exec-mode 'jar)
+;;   ;; (setq plantuml-jar-path "~/Documents/emacs/package/plantuml.jar") ;; to replace your plantuml.jar path with it.
+;;   (setq org-headline-card-base-theme
+;;         '((dpi . "300") (defaultMonospacedFontSize . "26") (padding . "40")
+;;           (roundCorner . "40") (shadowing . "false") (handwritten . "false")
+;;           (lineHeight . "1.4") (rectangleBorderThickness . "1") (titleFontSize . "32")
+;;           (contentFontSize . "26")))
+;;   ;; '((dpi . "300")                     ; Image resolution
+;;   ;;   (padding . "40")                  ; Padding
+;;   ;;   (roundCorner . "40")             ; Corner radius
+;;   ;;   (titleFontSize . "32")           ; Title font size
+;;   ;;   (contentFontSize . "26")))       ; Content font size
+;;   ;; Add a light purple theme
+;;   (setq org-headline-card-current-theme 'purple-light)
+;;   (add-to-list 'org-headline-card-themes
+;;                '(purple-light . ((defaultFontName . "Hahmlet")
+;;                                  (defaultFontSize . "16")
+;;                                  (backgroundColor . "#F8F5FF")
+;;                                  (rectangleBorderColor . "#E6E0F3")
+;;                                  (rectangleFontColor . "#2C2C2C")
+;;                                  (rectangleBackgroundColor . "#FDFAFF"))))
+;;   )
 
 ;;;;;; org-glossary
 
@@ -7570,10 +7570,6 @@ Suitable for `imenu-create-index-function'."
 
 ;;;;; with ccmenu
 
-(use-package! password-store-menu
-  :defer t
-  :config (password-store-menu-enable))
-
 (use-package! webpaste
   :bind (("C-c C-p C-b" . webpaste-paste-buffer)
          ("C-c C-p C-r" . webpaste-paste-region)
@@ -7615,24 +7611,23 @@ Suitable for `imenu-create-index-function'."
 ;;   ;; emacs-everywhere-frame-name-format "Edit ∷ %s — %s"
 ;;   (setq emacs-everywhere-major-mode-function #'org-mode))
 
-;;;;; command-log-mode - keycast alternative
+;;;;; DONT command-log-mode - keycast alternative
 
 ;; For showing which keys I'm pressing during screencasts, presentations, or pairing sessions.
 ;; - [[https://gitlab.com/screenkey/screenkey][screenkey]]: "A screencast tool to display your keys inspired by Screenflick"
+;; (use-package! command-log-mode
+;;   :config
+;;   (setq
+;;    command-log-mode-open-log-turns-on-mode t
+;;    command-log-mode-window-size 80
+;;    command-log-mode-is-global t))
 
-(use-package! command-log-mode
-  :config
-  (setq
-   command-log-mode-open-log-turns-on-mode t
-   command-log-mode-window-size 80
-   command-log-mode-is-global t))
+;;;;; DONT code-cells for python jupyter
 
-;;;;; code-cells for python jupyter
-
-(use-package! code-cells
-  :commands (code-cells-mode)
-  :init (add-hook 'python-mode-hook 'code-cells-mode)
-  )
+;; (use-package! code-cells
+;;   :commands (code-cells-mode)
+;;   :init (add-hook 'python-mode-hook 'code-cells-mode)
+;;   )
 
 ;;;;; TODO embark-indicators
 
@@ -7779,16 +7774,16 @@ function to apply the changes."
 (progn
   ;; /home/junghan/sync/man/dotsamples/dotall/yqrashawn-dot-doom-clj/.doom.d/org.el
 
-  (use-package! org-todoist
-    :defer 5
-    :init
-    (setq org-todoist-priority-default 67)
-    (setq org-todoist-deleted-keyword "DONT")
-    :config
-    (setq org-todoist-api-token user-todoist-token)
-    (setq org-todoist-storage-dir (concat org-directory ".cache")) ; for cache
-    (setq org-todoist-file "private/20250327T064848--org-todoist__aprj.org")
-    )
+  ;; (use-package! org-todoist
+  ;;   :defer 5
+  ;;   :init
+  ;;   (setq org-todoist-priority-default 67)
+  ;;   (setq org-todoist-deleted-keyword "DONT")
+  ;;   :config
+  ;;   (setq org-todoist-api-token user-todoist-token)
+  ;;   (setq org-todoist-storage-dir (concat org-directory ".cache")) ; for cache
+  ;;   (setq org-todoist-file "private/20250327T064848--org-todoist__aprj.org")
+  ;;   )
 
   ;; (use-package! todoist
   ;;   :commands (todoist)
@@ -7797,13 +7792,13 @@ function to apply the changes."
   ;;          ;; todoist-use-scheduled-instead-of-deadline
   ;;          todoist-backing-buffer (concat org-directory ".cache/todoist.org")))
 
-  (use-package! orgbox
-    :after org
-    :commands (orgbox orgbox-schedule)
-    :init
-    (setq! orgbox-start-time-of-day "9:30"
-           orgbox-start-time-of-weekends "11:00"
-           orgbox-start-time-of-evening "20:00"))
+  ;; (use-package! orgbox
+  ;;   :after org
+  ;;   :commands (orgbox orgbox-schedule)
+  ;;   :init
+  ;;   (setq! orgbox-start-time-of-day "9:30"
+  ;;          orgbox-start-time-of-weekends "11:00"
+  ;;          orgbox-start-time-of-evening "20:00"))
 
   (defun ar/org-insert-link-dwim ()
     "Like `org-insert-link' but with personal dwim preferences."
@@ -8047,27 +8042,9 @@ function to apply the changes."
 
 (load! "+office")
 
-;;; TODO khoj
+;;; Additional Packages
 
-;; (
-;;  ;; ~/.emacs.d/init.el 또는 ~/.emacs에 추가
-;;  (add-to-list 'load-path "/home/goqual/git/clone/khoj/src/interface/emacs/")
-;;  (require 'khoj)
-
-;;  ;; 로컬 서버 설정
-;;  (setq khoj-server-url "http://localhost:42110"
-;;        khoj-auto-setup t)
-;;  ;; Install Khoj client from MELPA Stable
-;;  (setq khoj-index-directories '("~/sync/org/"))
-;;  ;; khoj-index-files '("~/docs/todo.org" "~/docs/work.org")))
-
-;;  ;; 키바인딩 설정 (선택사항)
-;;  (global-set-key (kbd "C-c s") 'khoj)
-;;  (global-set-key (kbd "C-c c") 'khoj-chat)
-;;  )
-
-
-;;; Notmuch 이메일 설정
+;;;; Notmuch 이메일 설정
 
 (after! notmuch
   ;; 다중 계정 설정
@@ -8106,5 +8083,40 @@ function to apply the changes."
           (:name "🗓️ Today"
            :query "date:today"
            :key "t"))))
+
+;;;; pass + auth
+
+(after! pass
+  (setq pass-username-field "login"
+        password-store-password-length 24))
+
+(use-package! password-store-menu
+  :defer 2
+  :commands (password-store-menu-enable)
+  :custom (password-store-menu-key "C-c p")
+  :config
+  (password-store-menu-enable))
+
+(setq auth-sources '(password-store "~/.authinfo.gpg"))
+
+;;; TODO khoj
+
+;; (
+;;  ;; ~/.emacs.d/init.el 또는 ~/.emacs에 추가
+;;  (add-to-list 'load-path "/home/goqual/git/clone/khoj/src/interface/emacs/")
+;;  (require 'khoj)
+
+;;  ;; 로컬 서버 설정
+;;  (setq khoj-server-url "http://localhost:42110"
+;;        khoj-auto-setup t)
+;;  ;; Install Khoj client from MELPA Stable
+;;  (setq khoj-index-directories '("~/sync/org/"))
+;;  ;; khoj-index-files '("~/docs/todo.org" "~/docs/work.org")))
+
+;;  ;; 키바인딩 설정 (선택사항)
+;;  (global-set-key (kbd "C-c s") 'khoj)
+;;  (global-set-key (kbd "C-c c") 'khoj-chat)
+;;  )
+
 
 ;;; left blank on purpose

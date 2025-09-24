@@ -112,6 +112,7 @@
  rotate-text       ; cycle region at point between text candidates
  snippets          ; my elves. They type so I don't have to
  ;;word-wrap         ; soft wrapping with language-aware indent
+ (whitespace +guess +trim)  ; a butler for your whitespace
 
  :emacs
  electric          ; smarter, keyword-based electric-indent
@@ -151,7 +152,7 @@
  (magit -forge) ; a git porcelain for Emacs
 
  make              ; run make tasks from Emacs
- pass              ; password manager for nerds
+ (pass +auth)        ; password manager for nerds
  (:unless IS-TERMUX (pdf)) ; pdf enhancements
  ;;terraform         ; infrastructure as code
  ;;tmux              ; an API for interacting with tmux
@@ -221,7 +222,7 @@
   +contacts
   +journal
   +pretty
-  +passwords
+  ;; +passwords
   ;; +pomodoro                 ; be fruitful with the tomato technique
   )                     ; wander around notes
 

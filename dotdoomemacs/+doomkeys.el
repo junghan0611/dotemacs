@@ -48,7 +48,7 @@
   (global-set-key (kbd "C-s-[") '+workspace/switch-left)
   (global-set-key (kbd "C-s-]") '+workspace/switch-right))
 
-;;;; DONT 'l' Layout keys - disable `SPC TAB' workspace prefix
+;;;; 'l' Layout keys - disable `SPC TAB' workspace prefix
 
 ;; spacemacs's style
 (map! :leader
