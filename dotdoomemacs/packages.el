@@ -368,6 +368,12 @@
 ;;            ("integration" "integration/*")
 ;;            (:exclude ".dir-locals.el" "*-tests.el"))))
 
+;;;; ACP (Agent Client Protocol)
+
+(package! shell-maker)
+(package! acp :recipe (:host github :repo "xenodium/acp.el"))
+(package! agent-shell :recipe (:host github :repo "xenodium/agent-shell"))
+
 ;;;;; extra packages
 
 ;; (package! khoj)
