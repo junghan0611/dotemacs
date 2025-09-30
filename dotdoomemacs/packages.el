@@ -63,7 +63,11 @@
 
 ;;; doom-disabled-packages
 
+(unpin! demangle-mode) ;; 2025-09-30
+
 (disable-packages!
+ cuda-mode
+ opencl-mode
  ;; yasnippet-capf ; too much information
  ;; lsp-mode
  ;; consult-lsp
@@ -332,9 +336,6 @@
 ;;            :branch "feat/classes"
 ;;            :files (:defaults "awk" "demo.org")))
 ;;;; modules/tools llm
-
-;; (unpin! gptel)
-;; (package! gptel :recipe (:host github :repo "karthink/gptel") :pin "7218aedd6f8294af5be876c0c18a733863156b7b")
 
 (package! mcp)
 (package! yaml) ; for gptel-prompt

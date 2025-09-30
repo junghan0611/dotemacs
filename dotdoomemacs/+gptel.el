@@ -200,11 +200,13 @@
      :input-cost 0.55
      :output-cost 2.19)
 
-    (deepseek/deepseek-chat-v3-0324
-     :capabilities (tool)
+    ;; https://openrouter.ai/deepseek/deepseek-v3.1-terminus
+    (deepseek/deepseek-v3.1-terminus
+     :capabilities (tool reasoning)
      :context-window 131
      :input-cost 0.27
-     :output-cost 1.1)
+     :output-cost 1
+     :cutoff-date "2025-09")
 
     ;; https://openrouter.ai/google/gemini-2.5-pro
     (google/gemini-2.5-pro
@@ -214,13 +216,21 @@
      :input-cost 1.25
      :output-cost 10)
 
-    ;; https://openrouter.ai/google/gemini-2.5-flash
     (google/gemini-2.5-flash
      :capabilities (media tool-use cache)
      :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
      :context-window 1048
      :input-cost 0.30
      :output-cost 2.5)
+
+    (openai/gpt-oss-120b
+     :description "gpt-oss-120b is an open-weight, 117B-parameter Mixture-of-Experts (MoE) language model from OpenAI designed for high-reasoning, agentic, and general-purpose production use cases."
+     :capabilities (media tool-use json url)
+     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
+     :context-window 131
+     :input-cost 0.04
+     :output-cost 0.4
+     :cutoff-date "2025-08")
 
     (openai/gpt-5-chat
      :description "Flagship model for coding, reasoning, and agentic tasks across domains"
@@ -229,15 +239,6 @@
      :context-window 400
      :input-cost 1.25
      :output-cost 10
-     :cutoff-date "2024-09")
-
-    (openai/gpt-oss-120b
-     :description "gpt-oss-120b is an open-weight, 117B-parameter Mixture-of-Experts (MoE) language model from OpenAI designed for high-reasoning, agentic, and general-purpose production use cases."
-     :capabilities (media tool-use json url)
-     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
-     :context-window 131
-     :input-cost 0.072
-     :output-cost 0.28
      :cutoff-date "2025-08")
 
     (openai/gpt-5-mini
@@ -247,43 +248,35 @@
      :context-window 400
      :input-cost 0.25
      :output-cost 2.0
-     :cutoff-date "2024-09")
+     :cutoff-date "2025-08")
 
-    (anthropic/claude-3.5-haiku
-     :description "enhanced capabilities in speed, coding accuracy, and tool use"
-     :capabilities (tool-use cache)
-     :context-window 200
-     :input-cost 0.8
-     :output-cost 4
-     :cutoff-date "2024-11")
+    (openai/gpt-5-nano
+     :description "GPT-5-Nano is the smallest and fastest variant in the GPT-5 system, optimized for developer tools, rapid interactions, and ultra-low latency environments."
+     :capabilities (media json url)
+     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
+     :context-window 400
+     :input-cost 0.05
+     :output-cost 0.4
+     :cutoff-date "2025-08")
 
     ;; https://openrouter.ai/anthropic/claude-sonnet-4
-    (anthropic/claude-sonnet-4
-     :description "Hybrid model capable of standard thinking and extended thinking modes"
-     :capabilities (media tool-use cache)
-     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
-     :context-window 200
-     :input-cost 3
-     :output-cost 15
-     :cutoff-date "2025-05")
-
-    (anthropic/claude-opus-4.1
-     :description "Hybrid model capable of standard thinking and extended thinking modes"
-     :capabilities (media tool-use cache)
-     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
-     :context-window 200
-     :input-cost 15
-     :output-cost 75
-     :cutoff-date "2025-07")
-
-    ;; (anthropic/claude-3.7-sonnet:thinking
+    ;; (anthropic/claude-sonnet-4
     ;;  :description "Hybrid model capable of standard thinking and extended thinking modes"
     ;;  :capabilities (media tool-use cache)
     ;;  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
     ;;  :context-window 200
     ;;  :input-cost 3
     ;;  :output-cost 15
-    ;;  :cutoff-date "2025-02")
+    ;;  :cutoff-date "2025-05")
+
+    ;; (anthropic/claude-opus-4.1
+    ;;  :description "Hybrid model capable of standard thinking and extended thinking modes"
+    ;;  :capabilities (media tool-use cache)
+    ;;  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+    ;;  :context-window 200
+    ;;  :input-cost 15
+    ;;  :output-cost 75
+    ;;  :cutoff-date "2025-07")
     ))
 
 ;;;; openrouter

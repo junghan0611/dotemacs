@@ -154,7 +154,7 @@
  make              ; run make tasks from Emacs
  (pass +auth)        ; password manager for nerds
  (:unless IS-TERMUX (pdf)) ; pdf enhancements
- ;;terraform         ; infrastructure as code
+ terraform         ; infrastructure as code
  ;;tmux              ; an API for interacting with tmux
  tree-sitter ;; syntax and parsing, sitting in a tree...
  upload            ; map local to remote projects via ssh/ftp
@@ -234,7 +234,7 @@
  ;; qt                ; the 'cutest' gui framework ever
  ;; racket ; a DSL for DSLs
  ;;raku              ; the artist formerly known as perl6
- ;;rest              ; Emacs as a REST client
+ rest              ; Emacs as a REST client
  rst                 ; ReST in peace
  ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
  ;;(rust +lsp)       ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
@@ -247,7 +247,7 @@
  ;;terra             ; Earth and Moon in alignment for performance.
  (web +lsp +tree-sitter) ; the tubes
  (yaml +tree-sitter) ; JSON, but readable
- (zig +tree-sitter)              ; C, but simpler
+ (zig +lsp +tree-sitter)  ; C, but simpler
 
  :email
  ;; (mu4e +org +gmail)

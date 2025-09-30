@@ -1583,7 +1583,6 @@ only those in the selected frame."
 ;;;; proced process monitor htop - built-in
 
 (use-package! proced
-  :ensure nil
   :commands proced
   :custom
   (proced-auto-update-flag t)
@@ -3593,7 +3592,7 @@ only those in the selected frame."
           :models gptel--openrouter-models))
 
   (setq gptel-backend gptel-openrouter-backend)
-  (setq gptel-model 'openai/gpt-5-chat) ; 2025-08-22
+  (setq gptel-model 'deepseek/deepseek-v3.1-terminus)
 
   ;; xAI offers an OpenAI compatible API
   ;; (gptel-make-openai "xAI"
@@ -6279,59 +6278,7 @@ Suitable for `imenu-create-index-function'."
             '(modus-operandi modus-vivendi-tinted))))
   :config
   (setq modus-themes-italic-constructs t
-        modus-themes-bold-constructs t
-        modus-themes-custom-auto-reload t
-
-        ;; Options for `modus-themes-prompts' are either nil (the
-        ;; default), or a list of properties that may include any of those
-        ;; symbols: `italic', `WEIGHT'
-        ;; modus-themes-prompts '(bold)
-
-        ;; The `modus-themes-completions' is an alist that reads two
-        ;; keys: `matches', `selection'.  Each accepts a nil value (or
-        ;; empty list) or a list of properties that can include any of
-        ;; the following (for WEIGHT read further below):
-        ;; `matches'   :: `underline', `italic', `WEIGHT'
-        ;; `selection' :: `underline', `italic', `WEIGHT'
-        ;; modus-themes-completions
-        ;; '((matches   . (semibold))
-        ;;   (selection . (semibold text-also)))
-        )
-  (setq modus-themes-common-palette-overrides
-        `(
-          ;; Comments are yellow, strings are green
-          (comment yellow-cooler)
-          (string green-warmer)
-
-          ;; "Make matching parenthesis more or less intense"
-          (bg-paren-match bg-magenta-intense)
-          (underline-paren-match unspecified)
-
-          ;; Intense magenta background combined with the main foreground
-          ;; (bg-region bg-magenta-subtle)
-          ;; (fg-region fg-main)
-
-          ;;   ;; Links
-          ;;   ;; (underline-link border)
-          ;;   ;; (underline-link-visited border)
-          ;;   ;; (underline-link-symbolic border)
-
-          ;; (fg-heading-0 blue-cooler)
-          ;; (fg-heading-1 magenta-cooler)
-          ;; (fg-heading-2 magenta-warmer)
-          ;; (fg-heading-3 blue)
-
-          (bg-heading-0 bg-inactive)
-          (bg-heading-1 bg-blue-nuanced)
-
-; (overline-heading-0 unspecified)
-          (overline-heading-1 magenta-cooler)
-          (overline-heading-2 magenta-warmer)
-
-          ;; ,@modus-themes-preset-overrides-faint
-          ;; ,@modus-themes-preset-overrides-intense
-          )
-        )
+        modus-themes-bold-constructs t)
 
   (when (display-graphic-p) ; gui
     ;; (setq modus-themes-variable-pitch-ui t)
@@ -6360,48 +6307,48 @@ Suitable for `imenu-create-index-function'."
     (interactive)
     ;; (message "modus-themes-after-hook : my-modus-themes-custom-faces")
     (modus-themes-with-colors
-      (custom-set-faces
-       `(consult-separator ((,c :inherit default :foreground ,yellow-intense)))
-       `(consult-notes-time ((,c :inherit default :foreground ,cyan-intense)))
-       `(org-list-dt ((,c :foreground ,fg-main :weight bold))) ;; 2025-01-14
-       ;; `(org-tag ((,c :background ,bg-yellow-nuanced :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
+     (custom-set-faces
+      `(consult-separator ((,c :inherit default :foreground ,yellow-intense)))
+      `(consult-notes-time ((,c :inherit default :foreground ,cyan-intense)))
+      `(org-list-dt ((,c :foreground ,fg-main :weight bold))) ;; 2025-01-14
+      ;; `(org-tag ((,c :background ,bg-yellow-nuanced :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
 
-       `(diredp-file-name ((,c :foreground ,fg-main)))
-       ;; `(org-agenda-diary ((,c :inherit org-agenda-calendar-sexp :foreground ,fg-main :weight semibold)))
+      `(diredp-file-name ((,c :foreground ,fg-main)))
+      ;; `(org-agenda-diary ((,c :inherit org-agenda-calendar-sexp :foreground ,fg-main :weight semibold)))
 
-       ;; `(org-link ((,c :inherit link :weight bold)))
-       ;; `(denote-faces-link ((,c :inherit link :weight bold :slant italic)))
+      ;; `(org-link ((,c :inherit link :weight bold)))
+      ;; `(denote-faces-link ((,c :inherit link :weight bold :slant italic)))
 
-       ;; `(org-drawer ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata :height 0.8)))
-       ;; `(org-special-keyword ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata)))
+      ;; `(org-drawer ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata :height 0.8)))
+      ;; `(org-special-keyword ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata)))
 
-       `(imenu-list-entry-face-0 ((,c :inherit variable-pitch :foreground ,fg-heading-1 :height ,user-imenu-list-height)))
-       `(imenu-list-entry-face-1 ((,c :inherit variable-pitch :foreground ,fg-heading-2 :height ,user-imenu-list-height)))
-       `(imenu-list-entry-face-2 ((,c :inherit variable-pitch :foreground ,fg-heading-3 :height ,user-imenu-list-height)))
-       `(imenu-list-entry-face-3 ((,c :inherit variable-pitch :foreground ,fg-heading-4 :height ,user-imenu-list-height)))
-       `(imenu-list-entry-subalist-face-0 ((,c :inherit variable-pitch :foreground ,fg-heading-1 :underline t :height ,user-imenu-list-height)))
-       `(imenu-list-entry-subalist-face-1 ((,c :inherit variable-pitch :foreground ,fg-heading-2 :underline t :height ,user-imenu-list-height)))
-       `(imenu-list-entry-subalist-face-2 ((,c :inherit variable-pitch :foreground ,fg-heading-3 :underline t :height ,user-imenu-list-height)))
-       `(imenu-list-entry-subalist-face-3 ((,c :inherit variable-pitch :foreground ,fg-heading-4 :underline t :height ,user-imenu-list-height)))
+      `(imenu-list-entry-face-0 ((,c :inherit variable-pitch :foreground ,fg-heading-1 :height ,user-imenu-list-height)))
+      `(imenu-list-entry-face-1 ((,c :inherit variable-pitch :foreground ,fg-heading-2 :height ,user-imenu-list-height)))
+      `(imenu-list-entry-face-2 ((,c :inherit variable-pitch :foreground ,fg-heading-3 :height ,user-imenu-list-height)))
+      `(imenu-list-entry-face-3 ((,c :inherit variable-pitch :foreground ,fg-heading-4 :height ,user-imenu-list-height)))
+      `(imenu-list-entry-subalist-face-0 ((,c :inherit variable-pitch :foreground ,fg-heading-1 :underline t :height ,user-imenu-list-height)))
+      `(imenu-list-entry-subalist-face-1 ((,c :inherit variable-pitch :foreground ,fg-heading-2 :underline t :height ,user-imenu-list-height)))
+      `(imenu-list-entry-subalist-face-2 ((,c :inherit variable-pitch :foreground ,fg-heading-3 :underline t :height ,user-imenu-list-height)))
+      `(imenu-list-entry-subalist-face-3 ((,c :inherit variable-pitch :foreground ,fg-heading-4 :underline t :height ,user-imenu-list-height)))
 
-       ;; 2024-07-03 spacious-padding
-       ;; `(tab-bar ((,c :background ,bg-tab-bar)))
-       ;; `(tab-bar-tab-group-current ((,c :inherit bold :background ,bg-tab-current :box (:line-width -2 :color ,bg-tab-current) :foreground ,fg-alt)))
-       ;; `(tab-bar-tab-group-inactive ((,c :background ,bg-tab-bar :box (:line-width -2 :color ,bg-tab-bar) :foreground ,fg-alt)))
-       ;; `(tab-bar-tab ((,c :inherit bold :box (:line-width -2 :color ,bg-tab-current) :background ,bg-tab-current)))
-       ;; `(tab-bar-tab-inactive ((,c :box (:line-width -2 :color ,bg-tab-other) :background ,bg-tab-other)))
-       ;; `(tab-bar-tab-ungrouped ((,c :inherit tab-bar-tab-inactive)))
-       `(fringe ((,c :background ,bg-dim)))
+      ;; 2024-07-03 spacious-padding
+      ;; `(tab-bar ((,c :background ,bg-tab-bar)))
+      ;; `(tab-bar-tab-group-current ((,c :inherit bold :background ,bg-tab-current :box (:line-width -2 :color ,bg-tab-current) :foreground ,fg-alt)))
+      ;; `(tab-bar-tab-group-inactive ((,c :background ,bg-tab-bar :box (:line-width -2 :color ,bg-tab-bar) :foreground ,fg-alt)))
+      ;; `(tab-bar-tab ((,c :inherit bold :box (:line-width -2 :color ,bg-tab-current) :background ,bg-tab-current)))
+      ;; `(tab-bar-tab-inactive ((,c :box (:line-width -2 :color ,bg-tab-other) :background ,bg-tab-other)))
+      ;; `(tab-bar-tab-ungrouped ((,c :inherit tab-bar-tab-inactive)))
+      `(fringe ((,c :background ,bg-dim)))
 
-       ;; `(vterm-color-black ((,c :background "gray25" :foreground "gray25")))
-       ;; `(vterm-color-yellow ((,c :background ,yellow-intense :foreground ,yellow-intense)))
-       `(org-mode-line-clock ((,c :inherit bold :foreground ,modeline-info)))
-       `(org-mode-line-clock-overrun ((,c :inherit bold :foreground ,modeline-err)))
-       `(jinx-misspelled ((,c :underline (:style wave :color ,magenta-cooler))))
-       ;; `(ten-id-face ((,c :inherit font-lock-keyword-face :underline (:style double-line :color ,cyan))))
-       ;; `(keycast-command ((,c :inherit default :height 0.9)))
-       )
+      ;; `(vterm-color-black ((,c :background "gray25" :foreground "gray25")))
+      ;; `(vterm-color-yellow ((,c :background ,yellow-intense :foreground ,yellow-intense)))
+      `(org-mode-line-clock ((,c :inherit bold :foreground ,modeline-info)))
+      `(org-mode-line-clock-overrun ((,c :inherit bold :foreground ,modeline-err)))
+      `(jinx-misspelled ((,c :underline (:style wave :color ,magenta-cooler))))
+      ;; `(ten-id-face ((,c :inherit font-lock-keyword-face :underline (:style double-line :color ,cyan))))
+      ;; `(keycast-command ((,c :inherit default :height 0.9)))
       )
+     )
     (when (display-graphic-p) ; gui
       (when (locate-library "spacious-padding")
         (spacious-padding-mode +1)))
@@ -6908,9 +6855,7 @@ Suitable for `imenu-create-index-function'."
 
     ;; (when (string= (system-name) "jhnuc")
     ;;   (keycast-tab-bar-mode +1))
-
-    ;; load modus-themes
-    (modus-themes-toggle))
+    )
 
   (add-hook 'doom-after-init-hook #'my/load-global-mode-string 80)
   (add-hook 'doom-after-reload-hook #'my/load-global-mode-string)
@@ -6945,6 +6890,8 @@ Suitable for `imenu-create-index-function'."
   ;; (my/add-today-journal-to-agenda) -- use org-journal-enable-agenda-integration
   (my/refresh-agenda-files)
   ;; (ash-goto-org-agenda) ; tab-bar
+
+  (modus-themes-toggle)
 
   ;; (setq tab-bar-close-button nil)
   ;; (tab-bar-new-tab)
