@@ -63,9 +63,10 @@
 
 ;;; doom-disabled-packages
 
-(unpin! demangle-mode) ;; 2025-09-30
+;; (unpin! demangle-mode) ;; 2025-09-30
 
 (disable-packages!
+ demangle-mode
  cuda-mode
  opencl-mode
  ;; yasnippet-capf ; too much information
