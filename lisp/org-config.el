@@ -318,7 +318,7 @@
 (setq org-export-headline-levels 5) ; default 3
 (setq org-export-with-toc nil) ; default t - turn off on hugo toc
 
-(setq org-export-exclude-tags '("private" "OFFICE" "FILE" "LOG" "LLMLOG" "CREDENTIAL" "REFILED" "LOCAL" "noexport" "ignore" "crypt"))
+(setq org-export-exclude-tags '("private" "OFFICE" "FILE" "LOG" "CREDENTIAL" "REFILED" "LOCAL" "noexport" "ignore" "crypt")) ;; "LLMLOG"
 
 (progn
   (setq org-publish-use-timestamps-flag t) ; default t

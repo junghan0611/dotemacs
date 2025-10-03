@@ -163,81 +163,28 @@
 ;; | abcdefghij | abcdefghij |
 ;; +------------+------------+
 
-(progn
-  (defun my/set-fonts-scale (
-                             ;; default-font-name
-                             ;; default-font-height
-                             ;; cjk-font-name
-                             ;; cjk-font-scale
-                             unicode-font-name
-                             unicode-font-scale
-                             emoji-font-name
-                             emoji-font-scale
-                             )
-    "Helper function to set the default, CJK and Emoji fonts."
-    ;; Set the default font
-    ;; (when (member default-font-name (font-family-list))
-    ;;   (set-face-attribute 'default nil
-    ;;                       :family default-font-name
-    ;;                       :height default-font-height)
-    ;;   (set-frame-font default-font-name nil t))
-
-    ;; Set the CJK font in the default fontset.
-    ;; (when (member cjk-font-name (font-family-list))
-    ;;   (dolist (script (list 'han 'kana 'cjk-misc))
-    ;;     (set-fontset-font t script cjk-font-name)))
-
-    (when (member unicode-font-name (font-family-list))
-      (set-fontset-font t 'unicode unicode-font-name nil 'prepend)
-      (set-fontset-font t 'mathematical unicode-font-name nil 'prepend)
-      (set-fontset-font t 'symbol unicode-font-name nil 'prepend)
-      )
-
-    ;; Set the Emoji font in the default fontset.
-    (when (member emoji-font-name (font-family-list))
-      (set-fontset-font t 'emoji emoji-font-name nil 'prepend))
-
-    ;; Rescale the CJK and emoji fonts.
-    (setq face-font-rescale-alist
-          `(;; (,(format ".*%s.*" cjk-font-name) . ,cjk-font-scale)
-            (,(format ".*%s.*" unicode-font-name) . ,unicode-font-scale)
-            (,(format ".*%s.*" emoji-font-name) . ,emoji-font-scale)
-            )))
-
+(unless (string-equal system-type "android")
 ;;;###autoload
-  (defun my/emoji-set-font ()
+  (defun my/set-emoji-symbol-font ()
     (interactive)
 
+    (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family)))
+
     (when (display-graphic-p) ; gui
-      ;; (set-fontset-font t 'unicode (font-spec :family "Symbola") nil 'prepend) ;; 2024-09-16 테스트 -- 𝑀＜1
-      ;; (set-fontset-font t 'mathematical (font-spec :family "Symbola") nil 'prepend) ; best
-      ;; ;; https://fonts.google.com/noto/specimen/Noto+Sans+Math
-      ;; ;; (set-fontset-font t 'mathematical (font-spec :family "Noto Sans Math") nil 'prepend) ;; 2024-10-26 테스트 DONT
-      ;; ;; (set-fontset-font t 'mathematical "DejaVu Math TeX Gyre" nil 'prepend) ; DONT for test
-      ;; (set-fontset-font t 'emoji (font-spec :family "Noto Color Emoji") nil)
-      (set-fontset-font t 'emoji (font-spec :family "Noto Emoji") nil 'prepend) ; Top - my choice
-
-      ;; Noto Emoji, Noto Color Emoji,
-      ;; Different computers might need different scaling factors with the same fonts.
-      (my/set-fonts-scale
-       "Symbola" 0.90 ; unicode
-       "Noto Color Emoji" 0.95)
-
-      (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family))) ; default face
-      (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'variable-pitch :family)) nil 'append) ; important 2025-03-14 가변 한글 필수!
+      (set-fontset-font t 'unicode (font-spec :family "Symbola") nil 'prepend) ;; 2024-09-16 테스트 -- 𝑀＜1
+      (set-fontset-font t 'mathematical (font-spec :family "Symbola") nil 'prepend) ; best
+      (set-fontset-font t 'emoji (font-spec :family "Noto Color Emoji") nil)
+      (set-fontset-font t 'emoji (font-spec :family "Noto Emoji") nil 'prepend) ; Top
       )
-
     (unless (display-graphic-p) ; terminal
+      ;; 터미널에서는 Noto Color Emoji 사용 (컬러 이모지 지원시)
+      (set-fontset-font "fontset-default" 'emoji (font-spec :family "Noto Emoji") nil)
       ;; 터미널에서 폰트 스케일 조정 (이모지 크기 일정하게)
       (setq face-font-rescale-alist
             '(("Noto Color Emoji" . 0.9)
               ("Noto Emoji" . 0.9)
               ("Symbola" . 0.9)))
-      ;; 터미널에서는 Noto Color Emoji 사용 (컬러 이모지 지원시)
-      (set-fontset-font "fontset-default" 'emoji (font-spec :family "Noto Emoji") nil)
-      (set-fontset-font "fontset-default" 'emoji (font-spec :family "Noto Color Emoji") 'append)
-      ;; 폴백 폰트 설정 (Noto Emoji가 없는 경우)
-      (set-fontset-font "fontset-default" 'unicode (font-spec :family "DejaVu Sans Mono") nil 'append)
+
       ;; 이모지 문자의 너비를 2로 고정 (double-width)
       ;; 주요 이모지 범위들
       (dolist (range '((#x1F300 . #x1F6FF)  ; Misc Symbols and Pictographs
@@ -263,14 +210,119 @@
                            #x26AA #x1F7E4 #x1F536 #x1F537 #x1F538 #x1F539 #x1F53A #x1F53B #x1F4A0 #x1F532))
         (set-char-table-range char-width-table codepoint 2)))
 
-    ;; (set-fontset-font t 'symbol (font-spec :family "Symbola") nil 'prepend)
-    ;; (set-fontset-font t 'symbol (font-spec :family "Noto Sans Symbols 2") nil 'prepend)
-    ;; (set-fontset-font t 'symbol (font-spec :family "Noto Sans Symbols") nil 'prepend)
-    )
+    (set-fontset-font t 'symbol (font-spec :family "Symbola") nil 'prepend)
+    (set-fontset-font t 'symbol (font-spec :family "Noto Sans Symbols 2") nil 'prepend)
+    (set-fontset-font t 'symbol (font-spec :family "Noto Sans Symbols") nil 'prepend))
 
-  (my/emoji-set-font)
-  (add-hook 'after-setting-font-hook #'my/emoji-set-font)
-  )
+  (add-hook 'after-setting-font-hook #'my/set-emoji-symbol-font))
+
+;; (progn
+;;   (defun my/set-fonts-scale (
+;;                              ;; default-font-name
+;;                              ;; default-font-height
+;;                              ;; cjk-font-name
+;;                              ;; cjk-font-scale
+;;                              unicode-font-name
+;;                              unicode-font-scale
+;;                              emoji-font-name
+;;                              emoji-font-scale
+;;                              )
+;;     "Helper function to set the default, CJK and Emoji fonts."
+;;     ;; Set the default font
+;;     ;; (when (member default-font-name (font-family-list))
+;;     ;;   (set-face-attribute 'default nil
+;;     ;;                       :family default-font-name
+;;     ;;                       :height default-font-height)
+;;     ;;   (set-frame-font default-font-name nil t))
+
+;;     ;; Set the CJK font in the default fontset.
+;;     ;; (when (member cjk-font-name (font-family-list))
+;;     ;;   (dolist (script (list 'han 'kana 'cjk-misc))
+;;     ;;     (set-fontset-font t script cjk-font-name)))
+
+;;     (when (member unicode-font-name (font-family-list))
+;;       (set-fontset-font t 'unicode unicode-font-name nil 'prepend)
+;;       (set-fontset-font t 'mathematical unicode-font-name nil 'prepend)
+;;       (set-fontset-font t 'symbol unicode-font-name nil 'prepend)
+;;       )
+
+;;     ;; Set the Emoji font in the default fontset.
+;;     (when (member emoji-font-name (font-family-list))
+;;       (set-fontset-font t 'emoji emoji-font-name nil 'prepend))
+
+;;     ;; Rescale the CJK and emoji fonts.
+;;     (setq face-font-rescale-alist
+;;           `(;; (,(format ".*%s.*" cjk-font-name) . ,cjk-font-scale)
+;;             (,(format ".*%s.*" unicode-font-name) . ,unicode-font-scale)
+;;             (,(format ".*%s.*" emoji-font-name) . ,emoji-font-scale)
+;;             )))
+
+;; ;;;###autoload
+;;   (defun my/emoji-set-font ()
+;;     (interactive)
+
+;;     (when (display-graphic-p) ; gui
+;;       ;; (set-fontset-font t 'unicode (font-spec :family "Symbola") nil 'prepend) ;; 2024-09-16 테스트 -- 𝑀＜1
+;;       ;; (set-fontset-font t 'mathematical (font-spec :family "Symbola") nil 'prepend) ; best
+;;       ;; ;; https://fonts.google.com/noto/specimen/Noto+Sans+Math
+;;       ;; ;; (set-fontset-font t 'mathematical (font-spec :family "Noto Sans Math") nil 'prepend) ;; 2024-10-26 테스트 DONT
+;;       ;; ;; (set-fontset-font t 'mathematical "DejaVu Math TeX Gyre" nil 'prepend) ; DONT for test
+;;       ;; (set-fontset-font t 'emoji (font-spec :family "Noto Color Emoji") nil)
+;;       (set-fontset-font t 'emoji (font-spec :family "Noto Emoji") nil 'prepend) ; Top - my choice
+
+;;       ;; Noto Emoji, Noto Color Emoji,
+;;       ;; Different computers might need different scaling factors with the same fonts.
+;;       (my/set-fonts-scale
+;;        "Symbola" 0.90 ; unicode
+;;        "Noto Color Emoji" 0.95)
+
+;;       (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family))) ; default face
+;;       (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'variable-pitch :family)) nil 'append) ; important 2025-03-14 가변 한글 필수!
+;;       )
+
+;;     (unless (display-graphic-p) ; terminal
+;;       ;; 터미널에서 폰트 스케일 조정 (이모지 크기 일정하게)
+;;       (setq face-font-rescale-alist
+;;             '(("Noto Color Emoji" . 0.9)
+;;               ("Noto Emoji" . 0.9)
+;;               ("Symbola" . 0.9)))
+;;       ;; 터미널에서는 Noto Color Emoji 사용 (컬러 이모지 지원시)
+;;       (set-fontset-font "fontset-default" 'emoji (font-spec :family "Noto Emoji") nil)
+;;       (set-fontset-font "fontset-default" 'emoji (font-spec :family "Noto Color Emoji") 'append)
+;;       ;; 폴백 폰트 설정 (Noto Emoji가 없는 경우)
+;;       (set-fontset-font "fontset-default" 'unicode (font-spec :family "DejaVu Sans Mono") nil 'append)
+;;       ;; 이모지 문자의 너비를 2로 고정 (double-width)
+;;       ;; 주요 이모지 범위들
+;;       (dolist (range '((#x1F300 . #x1F6FF)  ; Misc Symbols and Pictographs
+;;                        (#x1F700 . #x1F77F)  ; Alchemical Symbols
+;;                        (#x1F780 . #x1F7FF)  ; Geometric Shapes Extended
+;;                        (#x1F900 . #x1F9FF)  ; Supplemental Symbols and Pictographs
+;;                        (#x1FA00 . #x1FA6F)  ; Chess Symbols
+;;                        (#x1FA70 . #x1FAFF)  ; Symbols and Pictographs Extended-A
+;;                        (#x2600 . #x26FF)    ; Miscellaneous Symbols
+;;                        (#x2700 . #x27BF)    ; Dingbats
+;;                        (#xFE00 . #xFE0F)    ; Variation Selectors
+;;                        (#x1F000 . #x1F02F)  ; Mahjong Tiles
+;;                        (#x1F030 . #x1F09F)  ; Domino Tiles
+;;                        (#x1F0A0 . #x1F0FF))) ; Playing Cards
+;;         (set-char-table-range char-width-table range 2))
+;;       ;; 특정 이모지들을 유니코드 코드포인트로 너비 설정
+;;       (dolist (codepoint '(#x1F600 #x1F603 #x1F604 #x1F601 #x1F606 #x1F605 #x1F602 #x1F923 #x1F60A #x1F607
+;;                            #x1F642 #x1F643 #x1F609 #x1F60C #x1F60D #x1F970 #x1F618 #x1F617 #x1F619 #x1F61A
+;;                            #x1F60B #x1F61B #x1F61C #x1F92A #x1F61D #x1F911 #x1F917 #x1F92D #x1F92B #x1F914
+;;                            #x1F525 #x1F4AF #x2728 #x2B50 #x1F31F #x1F4AB #x1F308 #x2600 #x1F31E #x1F31D
+;;                            #x2764 #x1F9E1 #x1F49B #x1F49A #x1F499 #x1F49C #x1F5A4 #x1F90D #x1F90E #x1F494
+;;                            #x2705 #x274C #x2B55 #x1F534 #x1F7E0 #x1F7E1 #x1F7E2 #x1F535 #x1F7E3 #x26AB
+;;                            #x26AA #x1F7E4 #x1F536 #x1F537 #x1F538 #x1F539 #x1F53A #x1F53B #x1F4A0 #x1F532))
+;;         (set-char-table-range char-width-table codepoint 2)))
+
+;;     (set-fontset-font t 'symbol (font-spec :family "Symbola") nil 'prepend)
+;;     (set-fontset-font t 'symbol (font-spec :family "Noto Sans Symbols 2") nil 'prepend)
+;;     (set-fontset-font t 'symbol (font-spec :family "Noto Sans Symbols") nil 'prepend))
+
+;;   ;; (my/emoji-set-font)
+;;   (add-hook 'after-setting-font-hook #'my/emoji-set-font)
+;;   )
 
 
 ;;;; show-paren-delay 0

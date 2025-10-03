@@ -4797,6 +4797,7 @@ x×X .,·°;:¡!¿?`'‘’   ÄAÃÀ TODO
 
 ;;;;; doom-modeline
 
+
 (after! doom-modeline
   (doom-modeline-def-modeline
     'main
@@ -5234,19 +5235,19 @@ Suitable for `imenu-create-index-function'."
   (setq lin-face 'lin-blue)
   (lin-global-mode 1))
 
-;;;;; DONT my/switch-themes-toggle
+;;;;; my/switch-themes-toggle
 
-;; (defun my/switch-themes-toggle ()
-;;   (interactive)
-;;   ;; (message "my/switch-themes-toggle")
+(defun my/switch-themes-toggle ()
+  (interactive)
+  ;; (message "my/switch-themes-toggle")
 
-;;   (setq doom-theme (car modus-themes-to-toggle)) ; modus-themes-to-toggle
-;;   (load-theme doom-theme t)
-;;   (my/modus-themes-custom-faces) ;; (my/ef-themes-custom-faces)
-;;   )
+  (setq doom-theme (car modus-themes-to-toggle)) ; modus-themes-to-toggle
+  (load-theme doom-theme t)
+  (my/modus-themes-custom-faces) ;; (my/ef-themes-custom-faces)
+  )
 
-;; (add-hook 'doom-after-init-hook #'my/switch-themes-toggle)
-;; (add-hook 'doom-after-reload-hook #'my/switch-themes-toggle)
+(add-hook 'doom-after-init-hook #'my/switch-themes-toggle)
+(add-hook 'doom-after-reload-hook #'my/switch-themes-toggle)
 
 ;;;;; DONT auto-highlight-symbol
 
@@ -6891,8 +6892,6 @@ Suitable for `imenu-create-index-function'."
   (my/refresh-agenda-files)
   ;; (ash-goto-org-agenda) ; tab-bar
 
-  (modus-themes-toggle)
-
   ;; (setq tab-bar-close-button nil)
   ;; (tab-bar-new-tab)
   ;; (bh/switch-to-scratch)
@@ -8077,5 +8076,6 @@ function to apply the changes."
 ;;  (global-set-key (kbd "C-c c") 'khoj-chat)
 ;;  )
 
+(add-hook 'doom-first-input-hook #'modus-themes-toggle)
 
 ;;; left blank on purpose
