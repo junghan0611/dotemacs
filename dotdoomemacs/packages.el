@@ -53,7 +53,7 @@
 ;;; DONT consult-omni consult-gh
 
 (package! consult-omni :recipe (:host github :repo "armindarvish/consult-omni" :files (:defaults "sources/*.el")))
-(package! consult-gh :recipe (:host github :repo "armindarvish/consult-gh" :files ("*")) :pin  "eeb1a4371ca35526d6e282f639ce39a9aa371acd")
+(package! consult-gh :recipe (:host github :repo "armindarvish/consult-gh" :files ("*")))
 
 ;;; DONT NEVER use built-in on emacs 30
 
@@ -85,8 +85,6 @@
  solaire-mode
  ace-window
  flycheck-popup-tip) ; conflict
-
-;; (package! paredit :disable t) ; clojure module
 ;; (package! flycheck-plantuml :disable t)
 
 (package! emojify :disable t) ; from mastodon
@@ -98,47 +96,12 @@
 
 ;; Disable tty module
 (package! evil-terminal-cursor-changer :disable t) ; conflict on kitty
-(package! kkp :disable t) ; conflict on term-keys
-
-;;; DONT org-mode for latex-preview-auto-mode
-
-;; cd doom-emacs-dir
-;; rm -Rf eln-cache
-;; cd .local/straight
-;; rm -Rf build-30.0.93/org or build-29.4.50/org
-;; rm -Rf repos/org
-;; doom sync -u
-
-;; (package! org :recipe
-;;   (:host nil :repo "https://git.tecosaur.net/mirrors/org-mode.git" :remote "mirror" :fork
-;;    (:host nil :repo "https://git.tecosaur.net/tec/org-mode.git" :branch "dev" :remote "tecosaur")
-;;    :files
-;;    (:defaults "etc")
-;;    :build t :pre-build
-;;    (with-temp-file "org-version.el"
-;;      (require 'lisp-mnt)
-;;      (let
-;;          ((version
-;;            (with-temp-buffer
-;;              (insert-file-contents "lisp/org.el")
-;;              (lm-header "version")))
-;;           (git-version
-;;            (string-trim
-;;             (with-temp-buffer
-;;               (call-process "git" nil t nil "rev-parse" "--short" "HEAD")
-;;               (buffer-string)))))
-;;        (insert
-;;         (format "(defun org-release () \"The release version of Org.\" %S)\n" version)
-;;         (format "(defun org-git-version () \"The truncate git commit hash of Org mode.\" %S)\n" git-version)
-;;         "(provide 'org-version)\n"))))
-;;   :pin nil)
-;; (unpin! org)
 
 ;;; additional packages
 
 ;;;; :os tty
 
-(package! term-keys :recipe (:host github :repo "junghan0611/term-keys"))
+;; (package! term-keys :recipe (:host github :repo "junghan0611/term-keys"))
 
 ;;;; :ui - visual
 
@@ -153,15 +116,13 @@
 (package! doric-themes)
 
 (package! show-font)
-;; (package! hammy)
+(package! hammy) ; cutte timmer
 
 (package! info+)
 (package! list-unicode-display)
-;; (package! cursory)
 (package! spacious-padding)
 
 (unpin! doom-themes)
-;; https://github.com/junghan0611/doom-themes/commit/9baa0ae4cef9a2b46eea0101964ac0d04c1c31c1
 (package! doom-themes :recipe (:host github :repo "junghan0611/doom-themes" :branch "ko"))
 
 (package! keycast)
@@ -306,12 +267,12 @@
 (package! denote-markdown)
 ;; (package! denote-journal)
 
-(package! denote-explore)
 (package! denote-search)
 
 (package! denote-regexp)
 
 (package! gptel-denote :recipe (:host github :repo "pprevos/gptel-denote"))
+(package! denote-explore :recipe (:host github :repo "pprevos/denote-explore"))
 
 (package! consult-notes)
 

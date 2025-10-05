@@ -124,7 +124,7 @@
        "K" nil
        "h" nil
        :desc "Ash-Goto-Agenda" "A" #'ash-goto-org-agenda
-       ;; :desc "Dashboard" "h" #'+doom-dashboard/open
+       :desc "Dashboard" "h" #'+doom-dashboard/open
        :desc "switch-workspace-buffer" "b" #'+vertico/switch-workspace-buffer ; default
        :desc "consult-buffer" "SPC" #'consult-buffer
        :desc "consult-buffer" "." #'consult-buffer

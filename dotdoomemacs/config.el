@@ -2132,6 +2132,7 @@ only those in the selected frame."
 
 (use-package! outli
   :init (setq outli-speed-commands nil)
+  :hook (prog-mode . outli-mode)
   :config
   (add-to-list 'outli-heading-config '(tex-mode "%%" ?% t))
   (add-to-list 'outli-heading-config '(bibtex-mode "%%" ?% t))
@@ -2152,7 +2153,6 @@ only those in the selected frame."
   (add-to-list 'outli-heading-config '(clojure-mode ";;" ?\; t))
   (add-to-list 'outli-heading-config '(clojurescript-mode ";;" ?\; t))
 
-  (add-hook 'prog-mode-hook 'outli-mode) ; not markdown-mode!
   (add-hook 'bibtex-mode-hook 'outli-mode) ; not markdown-mode!
   ;; (add-hook 'org-mode-hook 'outli-mode)
 
@@ -4577,32 +4577,29 @@ only those in the selected frame."
 
 ;;;; :ui
 
-;;;;; doom-dashboard
+;;;;; doom-dashboard - splash
 
 (progn
-  ;; (defun emacs-dashboard-draw-ascii-banner-fn ()
-  ;;   (let* ((banner
-  ;;           '("Welcome to                                 "
-  ;;             "███████╗███╗   ███╗ █████╗  ██████╗███████╗"
-  ;;             "██╔════╝████╗ ████║██╔══██╗██╔════╝██╔════╝"
-  ;;             "█████╗  ██╔████╔██║███████║██║     ███████╗"
-  ;;             "██╔══╝  ██║╚██╔╝██║██╔══██║██║     ╚════██║"
-  ;;             "███████╗██║ ╚═╝ ██║██║  ██║╚██████╗███████║"
-  ;;             "╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝"))
-  ;;          (longest-line (apply #'max (mapcar #'length banner))))
-  ;;     (put-text-property
-  ;;      (point)
-  ;;      (dolist (line banner (point))
-  ;;        (insert
-  ;;         (+doom-dashboard--center
-  ;;          +doom-dashboard--width
-  ;;          (concat line (make-string (max 0 (- longest-line (length line))) 32)))
-  ;;         "\n"))
-  ;;      'face 'bold)))
-
-  ;; doom-dashboard-banner
-  ;; (when (display-graphic-p) ; gui
-  ;;   (setq +doom-dashboard-ascii-banner-fn 'emacs-dashboard-draw-ascii-banner-fn))
+  (defun emacs-dashboard-draw-ascii-banner-fn ()
+    (let* ((banner
+            '("Welcome to                                 "
+              "███████╗███╗   ███╗ █████╗  ██████╗███████╗"
+              "██╔════╝████╗ ████║██╔══██╗██╔════╝██╔════╝"
+              "█████╗  ██╔████╔██║███████║██║     ███████╗"
+              "██╔══╝  ██║╚██╔╝██║██╔══██║██║     ╚════██║"
+              "███████╗██║ ╚═╝ ██║██║  ██║╚██████╗███████║"
+              "╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝"))
+           (longest-line (apply #'max (mapcar #'length banner))))
+      (put-text-property
+       (point)
+       (dolist (line banner (point))
+         (insert
+          (+doom-dashboard--center
+           +doom-dashboard--width
+           (concat line (make-string (max 0 (- longest-line (length line))) 32)))
+          "\n"))
+       'face 'bold)))
+  (setq +doom-dashboard-ascii-banner-fn 'emacs-dashboard-draw-ascii-banner-fn)
 
   (setq fancy-splash-image (concat user-dotemacs-dir "var/logo.png"))
 
@@ -4610,7 +4607,8 @@ only those in the selected frame."
         '(doom-dashboard-widget-banner
           doom-dashboard-widget-shortmenu
           my/dashboard-widget-fortune ;; fortune
-          doom-dashboard-widget-loaded doom-dashboard-widget-footer))
+          doom-dashboard-widget-loaded
+          doom-dashboard-widget-footer))
 
   (defun my/dashboard-widget-fortune ()
     (let* ((quotestring
@@ -4625,7 +4623,6 @@ only those in the selected frame."
                       "fortune -c 90% advice 10% .")))))))) ;; 10% samples
       (+doom-dashboard--center
        (- +doom-dashboard--width 2)
-       ;; (insert (nerd-icons-faicon "nf-fa-pencil" :face 'doom-dashboard-footer-icon :height 1.0 :v-adjust -0.15))
        (insert quotestring "\n"))))
   )
 
@@ -5237,17 +5234,17 @@ Suitable for `imenu-create-index-function'."
 
 ;;;;; my/switch-themes-toggle
 
-(defun my/switch-themes-toggle ()
-  (interactive)
-  ;; (message "my/switch-themes-toggle")
+;; (defun my/switch-themes-toggle ()
+;;   (interactive)
+;;   ;; (message "my/switch-themes-toggle")
 
-  (setq doom-theme (car modus-themes-to-toggle)) ; modus-themes-to-toggle
-  (load-theme doom-theme t)
-  (my/modus-themes-custom-faces) ;; (my/ef-themes-custom-faces)
-  )
+;;   (setq doom-theme (car modus-themes-to-toggle)) ; modus-themes-to-toggle
+;;   (load-theme doom-theme t)
+;;   (my/modus-themes-custom-faces) ;; (my/ef-themes-custom-faces)
+;;   )
 
-(add-hook 'doom-after-init-hook #'my/switch-themes-toggle)
-(add-hook 'doom-after-reload-hook #'my/switch-themes-toggle)
+;; (add-hook 'doom-after-init-hook #'my/switch-themes-toggle)
+;; (add-hook 'doom-after-reload-hook #'my/switch-themes-toggle)
 
 ;;;;; DONT auto-highlight-symbol
 
@@ -6002,11 +5999,11 @@ Suitable for `imenu-create-index-function'."
 
 ;;;;; DONT term-keys
 
-(use-package! term-keys
-  :unless window-system
-  :config
-  (unless (display-graphic-p) ; terminal
-    (term-keys-mode t)))
+;; (use-package! term-keys
+;;   :unless window-system
+;;   :config
+;;   (unless (display-graphic-p) ; terminal
+;;     (term-keys-mode t)))
 
 ;;;;;; usage
 
@@ -6022,7 +6019,6 @@ Suitable for `imenu-create-index-function'."
 ;;   (require 'kkp)
 ;;   (setq kkp-alt-modifier 'alt) ;; use this if you want to map the Alt keyboard modifier to Alt in Emacs (and not to Meta)
 ;;   )
-
 
 ;;;; end-of user-configs
 ;;;; :lang org
@@ -6271,13 +6267,8 @@ Suitable for `imenu-create-index-function'."
 
 (use-package! modus-themes
   :commands (modus-themes-toggle)
-  :init
-  (setq modus-themes-to-toggle
-        (let ((hr (nth 2 (decode-time))))
-          (if (or (< hr 6) (< 19 hr)) ; between 8 PM and 7 AM
-              '(modus-vivendi-tinted modus-operandi) ; load dark theme first
-            '(modus-operandi modus-vivendi-tinted))))
   :config
+  (setq modus-themes-to-toggle '(modus-vivendi-tinted modus-operandi)) ; load dark theme first
   (setq modus-themes-italic-constructs t
         modus-themes-bold-constructs t)
 
@@ -6308,52 +6299,51 @@ Suitable for `imenu-create-index-function'."
     (interactive)
     ;; (message "modus-themes-after-hook : my-modus-themes-custom-faces")
     (modus-themes-with-colors
-     (custom-set-faces
-      `(consult-separator ((,c :inherit default :foreground ,yellow-intense)))
-      `(consult-notes-time ((,c :inherit default :foreground ,cyan-intense)))
-      `(org-list-dt ((,c :foreground ,fg-main :weight bold))) ;; 2025-01-14
-      ;; `(org-tag ((,c :background ,bg-yellow-nuanced :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
+      (custom-set-faces
+       ;; `(consult-separator ((,c :inherit default :foreground ,yellow-intense)))
+       ;; `(consult-notes-time ((,c :inherit default :foreground ,cyan-intense)))
+       `(org-list-dt ((,c :foreground ,fg-main :weight bold))) ;; 2025-01-14
+       ;; `(org-tag ((,c :background ,bg-yellow-nuanced :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
 
-      `(diredp-file-name ((,c :foreground ,fg-main)))
-      ;; `(org-agenda-diary ((,c :inherit org-agenda-calendar-sexp :foreground ,fg-main :weight semibold)))
+       `(diredp-file-name ((,c :foreground ,fg-main)))
+       ;; `(org-agenda-diary ((,c :inherit org-agenda-calendar-sexp :foreground ,fg-main :weight semibold)))
 
-      ;; `(org-link ((,c :inherit link :weight bold)))
-      ;; `(denote-faces-link ((,c :inherit link :weight bold :slant italic)))
+       ;; `(org-link ((,c :inherit link :weight bold)))
+       ;; `(denote-faces-link ((,c :inherit link :weight bold :slant italic)))
 
-      ;; `(org-drawer ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata :height 0.8)))
-      ;; `(org-special-keyword ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata)))
+       ;; `(org-drawer ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata :height 0.8)))
+       ;; `(org-special-keyword ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata)))
 
-      `(imenu-list-entry-face-0 ((,c :inherit variable-pitch :foreground ,fg-heading-1 :height ,user-imenu-list-height)))
-      `(imenu-list-entry-face-1 ((,c :inherit variable-pitch :foreground ,fg-heading-2 :height ,user-imenu-list-height)))
-      `(imenu-list-entry-face-2 ((,c :inherit variable-pitch :foreground ,fg-heading-3 :height ,user-imenu-list-height)))
-      `(imenu-list-entry-face-3 ((,c :inherit variable-pitch :foreground ,fg-heading-4 :height ,user-imenu-list-height)))
-      `(imenu-list-entry-subalist-face-0 ((,c :inherit variable-pitch :foreground ,fg-heading-1 :underline t :height ,user-imenu-list-height)))
-      `(imenu-list-entry-subalist-face-1 ((,c :inherit variable-pitch :foreground ,fg-heading-2 :underline t :height ,user-imenu-list-height)))
-      `(imenu-list-entry-subalist-face-2 ((,c :inherit variable-pitch :foreground ,fg-heading-3 :underline t :height ,user-imenu-list-height)))
-      `(imenu-list-entry-subalist-face-3 ((,c :inherit variable-pitch :foreground ,fg-heading-4 :underline t :height ,user-imenu-list-height)))
+       `(imenu-list-entry-face-0 ((,c :inherit variable-pitch :foreground ,fg-heading-1 :height ,user-imenu-list-height)))
+       `(imenu-list-entry-face-1 ((,c :inherit variable-pitch :foreground ,fg-heading-2 :height ,user-imenu-list-height)))
+       `(imenu-list-entry-face-2 ((,c :inherit variable-pitch :foreground ,fg-heading-3 :height ,user-imenu-list-height)))
+       `(imenu-list-entry-face-3 ((,c :inherit variable-pitch :foreground ,fg-heading-4 :height ,user-imenu-list-height)))
+       `(imenu-list-entry-subalist-face-0 ((,c :inherit variable-pitch :foreground ,fg-heading-1 :underline t :height ,user-imenu-list-height)))
+       `(imenu-list-entry-subalist-face-1 ((,c :inherit variable-pitch :foreground ,fg-heading-2 :underline t :height ,user-imenu-list-height)))
+       `(imenu-list-entry-subalist-face-2 ((,c :inherit variable-pitch :foreground ,fg-heading-3 :underline t :height ,user-imenu-list-height)))
+       `(imenu-list-entry-subalist-face-3 ((,c :inherit variable-pitch :foreground ,fg-heading-4 :underline t :height ,user-imenu-list-height)))
 
-      ;; 2024-07-03 spacious-padding
-      ;; `(tab-bar ((,c :background ,bg-tab-bar)))
-      ;; `(tab-bar-tab-group-current ((,c :inherit bold :background ,bg-tab-current :box (:line-width -2 :color ,bg-tab-current) :foreground ,fg-alt)))
-      ;; `(tab-bar-tab-group-inactive ((,c :background ,bg-tab-bar :box (:line-width -2 :color ,bg-tab-bar) :foreground ,fg-alt)))
-      ;; `(tab-bar-tab ((,c :inherit bold :box (:line-width -2 :color ,bg-tab-current) :background ,bg-tab-current)))
-      ;; `(tab-bar-tab-inactive ((,c :box (:line-width -2 :color ,bg-tab-other) :background ,bg-tab-other)))
-      ;; `(tab-bar-tab-ungrouped ((,c :inherit tab-bar-tab-inactive)))
-      `(fringe ((,c :background ,bg-dim)))
+       ;; 2024-07-03 spacious-padding
+       ;; `(tab-bar ((,c :background ,bg-tab-bar)))
+       ;; `(tab-bar-tab-group-current ((,c :inherit bold :background ,bg-tab-current :box (:line-width -2 :color ,bg-tab-current) :foreground ,fg-alt)))
+       ;; `(tab-bar-tab-group-inactive ((,c :background ,bg-tab-bar :box (:line-width -2 :color ,bg-tab-bar) :foreground ,fg-alt)))
+       ;; `(tab-bar-tab ((,c :inherit bold :box (:line-width -2 :color ,bg-tab-current) :background ,bg-tab-current)))
+       ;; `(tab-bar-tab-inactive ((,c :box (:line-width -2 :color ,bg-tab-other) :background ,bg-tab-other)))
+       ;; `(tab-bar-tab-ungrouped ((,c :inherit tab-bar-tab-inactive)))
+       `(fringe ((,c :background ,bg-dim)))
 
-      ;; `(vterm-color-black ((,c :background "gray25" :foreground "gray25")))
-      ;; `(vterm-color-yellow ((,c :background ,yellow-intense :foreground ,yellow-intense)))
-      `(org-mode-line-clock ((,c :inherit bold :foreground ,modeline-info)))
-      `(org-mode-line-clock-overrun ((,c :inherit bold :foreground ,modeline-err)))
-      `(jinx-misspelled ((,c :underline (:style wave :color ,magenta-cooler))))
-      ;; `(ten-id-face ((,c :inherit font-lock-keyword-face :underline (:style double-line :color ,cyan))))
-      ;; `(keycast-command ((,c :inherit default :height 0.9)))
+       ;; `(vterm-color-black ((,c :background "gray25" :foreground "gray25")))
+       ;; `(vterm-color-yellow ((,c :background ,yellow-intense :foreground ,yellow-intense)))
+       `(org-mode-line-clock ((,c :inherit bold :foreground ,modeline-info)))
+       `(org-mode-line-clock-overrun ((,c :inherit bold :foreground ,modeline-err)))
+       `(jinx-misspelled ((,c :underline (:style wave :color ,magenta-cooler))))
+       ;; `(ten-id-face ((,c :inherit font-lock-keyword-face :underline (:style double-line :color ,cyan))))
+       ;; `(keycast-command ((,c :inherit default :height 0.9)))
+       )
       )
-     )
     (when (display-graphic-p) ; gui
       (when (locate-library "spacious-padding")
-        (spacious-padding-mode +1)))
-    )
+        (spacious-padding-mode +1))))
   (add-hook 'modus-themes-post-load-hook #'my/modus-themes-custom-faces)
   )
 
@@ -6471,7 +6461,7 @@ Suitable for `imenu-create-index-function'."
     )
   (add-hook 'ef-themes-post-load-hook #'my/ef-themes-custom-faces))
 
-;;;;; TODO doric-themes
+;;;;; doric-themes
 
 (use-package! doric-themes
   :config
@@ -6485,16 +6475,6 @@ Suitable for `imenu-create-index-function'."
 
 ;; (require 'my-themes)
 ;; (add-hook 'doom-load-theme-hook 'my/load-custom-set-faces 90) ; for doom themes
-
-;;;;; DONT cursory
-
-;; (use-package! cursory
-;;   :if window-system
-;;   :defer 3
-;;   :init
-;;   (cursory-set-preset 'cursory-defaults)
-;;   :config
-;;   (cursory-mode))
 
 ;;;;; spacious-padding
 
@@ -8075,7 +8055,5 @@ function to apply the changes."
 ;;  (global-set-key (kbd "C-c s") 'khoj)
 ;;  (global-set-key (kbd "C-c c") 'khoj-chat)
 ;;  )
-
-(add-hook 'doom-first-input-hook #'modus-themes-toggle)
 
 ;;; left blank on purpose
