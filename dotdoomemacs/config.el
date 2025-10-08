@@ -3913,7 +3913,7 @@ only those in the selected frame."
 
 (after! gptel
   (require 'gptel-prompts)
-  (setq gptel-prompts-directory (concat org-directory "resources"))
+  (setq gptel-prompts-directory (concat org-directory "resources/prompts/"))
 
   (gptel-prompts-update)
   ;; Ensure prompts are updated if prompt files change
