@@ -24,7 +24,8 @@
 
 ;;;; Path
 
-(setq user-dotemacs-dir "~/dotemacs/")
+(setq user-dotemacs-dir "~/repos/gh/emacs-fulllab-config/")
+
 ;; doom-user-dir
 ;; (setq user-dotemacs-dir doom-user-dir)
 (setq emacs-type 'doomemacs)
@@ -250,16 +251,16 @@
  (zig +lsp +tree-sitter)  ; C, but simpler
 
  :email
- ;; (mu4e +org +gmail)
- (notmuch +org)
+ (mu4e +org +gmail)
+ ;; (notmuch +org)
  ;; (wanderlust +gmail)
 
  :app
  calendar
- emms
  (rss +org +youtube)        ; emacs as an RSS reader
  ;; everywhere        ; *leave* Emacs!? You must be joking
  ;;irc               ; how neckbeards socialize
+ emms
 
  :config
  ;;literate

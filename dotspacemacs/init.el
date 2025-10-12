@@ -47,7 +47,7 @@
 
 ;;;; Load paths
 
-(setq user-dotemacs-dir "~/dotemacs/") ;; dotspacemacs-directory
+(setq user-dotemacs-dir "~/repos/gh/emacs-fulllab-config/")
 (setq emacs-type 'spacemacs)
 
 ;; ;; ;; Recommended to have this at the top

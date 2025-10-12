@@ -115,25 +115,26 @@ emacs-fulllab-config/
 
 ```bash
 # 저장소 클론
-git clone https://github.com/junghan0611/emacs-fulllab-config.git ~/dotemacs
+mkdir -p ~/repos/gh/
+git clone https://github.com/junghan0611/emacs-fulllab-config.git ~/repos/gh/
 
 # Doom Emacs의 경우
-# DOOMDIR을 ~/dotemacs/dotdoomemacs로 심볼릭 링크 또는 설정
-export DOOMDIR="$HOME/dotemacs/dotdoomemacs"
+# DOOMDIR을 ~//dotdoomemacs로 심볼릭 링크 또는 설정
+export DOOMDIR="$HOME//dotdoomemacs"
 doom sync
 
 # Spacemacs의 경우
-# ~/dotemacs/dotspacemacs를 ~/.spacemacs.d로 심볼릭 링크
-ln -s ~/dotemacs/dotspacemacs ~/.spacemacs.d
+# ~//dotspacemacs를 ~/.spacemacs.d로 심볼릭 링크
+ln -s ~//dotspacemacs ~/.spacemacs.d
 ```
 
 ### 디렉토리 설정
 
-설정은 `user-dotemacs-dir`이 저장소 루트를 가리키도록 기대합니다:
+설정은 `user--dir`이 저장소 루트를 가리키도록 기대합니다:
 
 ```elisp
 ;; 두 프레임워크 모두 init.el에서 이것을 설정
-(setq user-dotemacs-dir "~/dotemacs/")
+(setq user--dir "~/dotemacs/")
 ```
 
 ---
@@ -146,7 +147,7 @@ ln -s ~/dotemacs/dotspacemacs ~/.spacemacs.d
 
 ```bash
 # Doom Emacs에서 테스트
-DOOMDIR="$HOME/dotemacs/dotdoomemacs" doom run
+DOOMDIR="$HOME//dotdoomemacs" doom run
 
 # Spacemacs에서 테스트
 emacs --with-profile spacemacs
