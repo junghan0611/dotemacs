@@ -1654,9 +1654,9 @@ only those in the selected frame."
   ;; (setq x-gtk-use-native-input nil) ;; 2025-08-10 Important with ibus korean input
 
   ;; kime 환경변수 설정 (기존 코드 유지)
-  (add-to-list 'vterm-environment "GTK_IM_MODULE=ibus")
-  (add-to-list 'vterm-environment "QT_IM_MODULE=ibus")
-  (add-to-list 'vterm-environment "XMODIFIERS=@im=ibus")
+  (add-to-list 'vterm-environment "GTK_IM_MODULE=fcitx5")
+  (add-to-list 'vterm-environment "QT_IM_MODULE=fcitx5")
+  (add-to-list 'vterm-environment "XMODIFIERS=@im=fcitx5")
   (setq vterm-shell "/usr/bin/bash")
 
   (defun my/vterm-setup-gtk-use-native-input ()
