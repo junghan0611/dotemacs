@@ -137,14 +137,6 @@
 
 (setenv "IS_EMACS" "true")
 
-;;;; TODO Native Android Support
-
-;; (when *is-android*
-;;     (message "Loading Android Emacs\n")
-;;     (setenv "PATH" (format "%s:%s" "/data/data/com.termux/files/usr/bin" (getenv "PATH")))
-;;     (setenv "LD_LIBRARY_PATH" (format "%s:%s" "/data/data/com.termux/files/usr/lib" (getenv "LD_LIBRARY_PATH")))
-;;     (push "/data/data/com.termux/files/usr/bin" exec-path))
-
 ;;; Spacemacs Layer
 
 ;;;; 'Start' dotspacemacs/layers
@@ -1262,7 +1254,7 @@
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `rg', `ag', `pt', `ack' and `grep'.
    ;; (default '("rg" "ag" "pt" "ack" "grep"))
-   dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
+   ;; dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
 
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'

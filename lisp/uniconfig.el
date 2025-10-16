@@ -113,6 +113,9 @@
 (setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
 
+;; 멀티바이트 모드 활성화 (필요시)
+(set-buffer-multibyte t)
+
 ;; Treat clipboard input as UTF-8 string first; compound text next, etc.
 (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 
@@ -120,8 +123,6 @@
 
 (setq-default line-spacing 3) ; use fontaine
 
-;; (setenv "LANG" "en_US.UTF-8")
-;; (setenv "LC_ALL" "en_US.UTF-8")
 (setenv "LANG" "ko_KR.UTF-8")
 (setenv "LC_ALL" "ko_KR.UTF-8")
 
@@ -151,17 +152,6 @@
 ;; +------------+------------+
 
 ;;;; Emoji and Fonts with Hangul
-
-;; +------------+------------+
-;; | 일이삼사오 | 일이삼사오 |
-;; +------------+------------+
-;; | ABCDEFGHIJ | ABCDEFGHIJ |
-;; +------------+------------+
-;; | 1234567890 | 1234567890 |
-;; +------------+------------+
-;; | 일이삼사오 | 일이삼사오 |
-;; | abcdefghij | abcdefghij |
-;; +------------+------------+
 
 (unless (string-equal system-type "android")
 ;;;###autoload

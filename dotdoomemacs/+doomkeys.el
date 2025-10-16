@@ -1232,8 +1232,8 @@
       :n "r" #'revert-buffer
 
       :localleader
-      "h" #'dired-omit-mode
-      "H" #'dired-hide-details-mode
+      "h" #'dired-hide-details-mode
+      "H" #'dired-omit-mode
       "p" #'dired-preview-mode
       :desc "sort-modified-date" "o" #'dired-sort-toggle-or-edit
 

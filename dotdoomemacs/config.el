@@ -51,7 +51,6 @@
 ;;;; Load 'user-configs'
 
 ;; (load! "+user-configs")
-
 ;; (message "load +user-configs.el")
 
 ;;;; Doom Common Configuration
@@ -5164,8 +5163,8 @@ Suitable for `imenu-create-index-function'."
               (setq-local truncate-lines t) ; Do not wrap lines
               ;; (visual-line-mode -1)
               (hl-line-mode 1)))
-  (add-hook 'dired-mode-hook 'dired-hide-details-mode)
   (remove-hook 'dired-mode-hook 'dired-omit-mode)
+  ;; (add-hook 'dired-mode-hook 'dired-hide-details-mode)
 
   ;; prot-dired-grep-marked-files
   (require 'prot-dired)
@@ -8033,9 +8032,16 @@ function to apply the changes."
   (require 'shell-maker)
   (require 'acp)
   (require 'agent-shell)
-
   (setq agent-shell-anthropic-authentication
-        (agent-shell-anthropic-make-authentication :login t)))
+        (agent-shell-anthropic-make-authentication :login t))
+
+  (require 'agent-shell-sidebar)
+  (setq agent-shell-sidebar-width "25%"
+        agent-shell-sidebar-minimum-width 80
+        agent-shell-sidebar-maximum-width "50%"
+        agent-shell-sidebar-position 'right
+        agent-shell-sidebar-locked t
+        agent-shell-sidebar-default-config (agent-shell-anthropic-make-claude-code-config)))
 
 ;;; TODO khoj
 
