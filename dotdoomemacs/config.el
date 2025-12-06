@@ -7297,29 +7297,16 @@ function to apply the changes."
   ;;     (setq! side-notes-file daily-note-file)
   ;;     (call-interactively #'side-notes-toggle-notes)))
   )
-;;; IS-DEMO
-
-(when IS-DEMO
-  (after! vertico
-    (setq vertico-count 5)
-    )
-
-  ;; (setq doom-variable-pitch-font (font-spec :family "Hahmlet" :size 14.0))
-  (setq modus-themes-variable-pitch-ui t)
-
-  ;; (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'variable-pitch :family)))
-  ;; (set-fontset-font "fontset-default" 'emoji (font-spec :family "Noto Emoji") nil 'prepend) ; default face
-  )
 
 ;;;; mb-depth
 
 ;; from prot
-(use-package! mb-depth
-  :hook (after-init . minibuffer-depth-indicate-mode)
-  :config
-  (setq read-minibuffer-restore-windows nil) ; doom t
-  ;; (setq enable-recursive-minibuffers t) ; conflict vertico-multiform
-  )
+;; (use-package! mb-depth
+;;   :hook (after-init . minibuffer-depth-indicate-mode)
+;;   :config
+;;   (setq read-minibuffer-restore-windows nil) ; doom t
+;;   ;; (setq enable-recursive-minibuffers t) ; conflict vertico-multiform
+;;   )
 
 ;;;; DONT Emacs Application Framework (EAF)
 
