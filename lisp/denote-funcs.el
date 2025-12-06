@@ -1,5 +1,6 @@
 ;;; lisp/denote-funcs.el -*- lexical-binding: t; -*-
 
+;; 파일 마이그레이션
 
 ;;;; consult my/denote-find-file, my/denote-grep
 ;;;;; my/denote-find-file

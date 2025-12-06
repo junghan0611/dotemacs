@@ -17,8 +17,6 @@
 ;;; Pre-init
 ;;;; Variables
 
-(setq package-enable-at-startup nil)
-
 ;; This is so that I don't accidentally start Emacs as a daemon.
 (when (daemonp) (kill-emacs))
 

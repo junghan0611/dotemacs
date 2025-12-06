@@ -126,8 +126,8 @@
     (read (format "%s" output))))  ; read 함수는 17.0을 실수로 파싱
 
 (when (display-graphic-p) ; gui
-  (setq doom-font (font-spec :family "Monoplex Nerd" :size (get-font-size-from-script))
-        doom-big-font (font-spec :family "Monoplex Nerd" :size 23.0))
+  (setq doom-font (font-spec :family "GLG Nerd Font Mono" :size (get-font-size-from-script))
+        doom-big-font (font-spec :family "GLG Nerd Font Mono" :size 23.0))
   ;; (setq doom-font (font-spec :family "Sarasa Term K Nerd Font" :size 13.6)
   ;;       doom-big-font (font-spec :family "Sarasa Term K Nerd Font" :size 18.0))
   (setq doom-variable-pitch-font (font-spec :family "Pretendard Variable" :size (get-font-size-from-script)))
@@ -736,32 +736,19 @@
 ;; (when (modulep! :completion vertico +childframe)
 ;;   (remove-hook 'vertico-mode-hook #'vertico-posframe-mode))
 
-;;;;; DONT vertico-buffer on TOP
+;;;;; vertico-buffer on TOP
 
 ;; vertico-buffer on-top
-;; (unless (or IS-TERMUX IS-DEMO)
-;;   (progn
-;;     (require 'vertico-buffer)
-;;     (setq vertico-resize 'grow-only) ; doom nil
+(progn
+  (require 'vertico-buffer)
+  (setq vertico-resize 'grow-only) ; doom nil
 
-;;     ;; vertico on Top
-;;     (setq vertico-buffer-display-action
-;;           `(display-buffer-in-side-window
-;;             (window-height . ,(+ 3 vertico-count)) (side . top)))
-;;     (vertico-mode +1)
-;;     (vertico-buffer-mode +1)
-;;     )
-
-;;   ;; (defun my/vertico-posframe-toggle ()
-;;   ;;   (interactive)
-;;   ;;   (if (bound-and-true-p vertico-buffer-mode)
-;;   ;;       (progn
-;;   ;;         ;; (vertico-buffer-mode -1)
-;;   ;;         (vertico-posframe-mode 1))
-;;   ;;     (progn
-;;   ;;       ;; (vertico-buffer-mode 1)
-;;   ;;       (vertico-posframe-mode -1))))
-;;   )
+  ;; vertico on Top
+  (setq vertico-buffer-display-action
+        `(display-buffer-in-side-window
+          (window-height . ,(+ 3 vertico-count)) (side . top)))
+  (vertico-mode +1)
+  (vertico-buffer-mode +1))
 
 ;;;;; vertico-multiform
 
@@ -841,7 +828,7 @@ These annotations are skipped for remote paths."
       (gr/marginalia--annotate-local-file cand)))
 
   ;; M-A 순서를 바꾸면 된다.
-  (add-to-list 'marginalia-annotator-registry
+  (add-to-list 'marginalia-annotators
                '(file gr/marginalia-annotate-file marginalia-annotate-file builtin none))
 
 ;;;;;; vertico sort modified
@@ -1413,7 +1400,7 @@ work computers.")
   (setq imenu-list-focus-after-activation t)
   (setq imenu-list-auto-resize nil)
   (setq imenu-list-auto-update t)
-  (setq imenu-list-idle-update-delay 2.0)
+  (setq imenu-list-idle-update-delay 1.0)
   (add-hook 'imenu-list-major-mode-hook #'my/imenu-list-tuncates-without-tab-line)
   :config
 
@@ -2133,6 +2120,7 @@ only those in the selected frame."
   :init (setq outli-speed-commands nil)
   :hook (prog-mode . outli-mode)
   :config
+  (add-to-list 'outli-heading-config '(c-ts-mode "//" ?\/ t))
   (add-to-list 'outli-heading-config '(tex-mode "%%" ?% t))
   (add-to-list 'outli-heading-config '(bibtex-mode "%%" ?% t))
   (add-to-list 'outli-heading-config '(js2-mode "//" ?\/ t))
@@ -2729,12 +2717,6 @@ only those in the selected frame."
   ;; reduce from the default 30 to make it to become a habit.
   (setq org-drill-maximum-items-per-session 10))
 
-;;;;;; TODO gnosis
-
-;; (use-package! gnosis
-;;   :defer t
-;;   :bind (("C-c g" . gnosis-dashboard)))
-
 ;;;;;; ox-reveal vs. org-re-reveal
 
 (use-package! ox-reveal
@@ -2921,37 +2903,6 @@ only those in the selected frame."
   :defer 5
   :after org
   :bind ("M-g l" . org-marked-text-overview-mode))
-
-;;;;;; DONT org-headline-card
-
-;; (use-package! org-headline-card
-;;   :defer 10
-;;   :after org
-;;   :commands (org-headline-card-at-point)
-;;   :config
-;;   (setq org-headline-card-directory "~/org/temp/card/") ;; set output path
-;;   (setq plantuml-default-exec-mode 'jar)
-;;   ;; (setq plantuml-jar-path "~/Documents/emacs/package/plantuml.jar") ;; to replace your plantuml.jar path with it.
-;;   (setq org-headline-card-base-theme
-;;         '((dpi . "300") (defaultMonospacedFontSize . "26") (padding . "40")
-;;           (roundCorner . "40") (shadowing . "false") (handwritten . "false")
-;;           (lineHeight . "1.4") (rectangleBorderThickness . "1") (titleFontSize . "32")
-;;           (contentFontSize . "26")))
-;;   ;; '((dpi . "300")                     ; Image resolution
-;;   ;;   (padding . "40")                  ; Padding
-;;   ;;   (roundCorner . "40")             ; Corner radius
-;;   ;;   (titleFontSize . "32")           ; Title font size
-;;   ;;   (contentFontSize . "26")))       ; Content font size
-;;   ;; Add a light purple theme
-;;   (setq org-headline-card-current-theme 'purple-light)
-;;   (add-to-list 'org-headline-card-themes
-;;                '(purple-light . ((defaultFontName . "Hahmlet")
-;;                                  (defaultFontSize . "16")
-;;                                  (backgroundColor . "#F8F5FF")
-;;                                  (rectangleBorderColor . "#E6E0F3")
-;;                                  (rectangleFontColor . "#2C2C2C")
-;;                                  (rectangleBackgroundColor . "#FDFAFF"))))
-;;   )
 
 ;;;;;; org-glossary
 
@@ -3591,7 +3542,7 @@ only those in the selected frame."
           :models gptel--openrouter-models))
 
   (setq gptel-backend gptel-openrouter-backend)
-  (setq gptel-model 'deepseek/deepseek-v3.1-terminus)
+  (setq gptel-model 'openai/gpt-5.1)
 
   ;; xAI offers an OpenAI compatible API
   ;; (gptel-make-openai "xAI"
@@ -3946,6 +3897,8 @@ only those in the selected frame."
   :config
   (setq claude-code-ide-terminal-backend 'vterm)
   (setq claude-code-ide-use-ide-diff nil)
+
+  (load! "+claude-code-ide-mcp-tools")
   (claude-code-ide-emacs-tools-setup)
   ) ; Optionally enable Emacs MCP tools
 
@@ -4208,9 +4161,8 @@ only those in the selected frame."
 
 ;;;;; c/c++ clangd with eglot
 
-;; (after! cc-mode
-;;   ;; (set-eglot-client! 'cc-mode '("clangd" "-j=3" "--clang-tidy"))
-;;   )
+(after! cc-mode
+  (set-eglot-client! 'cc-mode '("clangd" "-j=3" "--clang-tidy")))
 
 ;; (setq flycheck-clang-language-standard "c++17")
 ;; (after! lsp-clangd
@@ -4249,6 +4201,11 @@ only those in the selected frame."
 
   ;; (setq eglot-send-changes-idle-time 0.5)
   (setq flymake-no-changes-timeout nil)
+
+  ;; Allow edits without confirmation?
+  (setopt eglot-confirm-server-initiated-edits nil)
+  ;; Show code action indicators?
+  (setopt eglot-code-action-indications nil)
 
   (add-hook! 'eglot-managed-mode-hook
     (eglot-inlay-hints-mode -1))
@@ -4703,7 +4660,7 @@ only those in the selected frame."
       ;; :line-spacing 2
       ;; :default-family "Sarasa Term K Nerd Font"
       ;; :default-height 151
-      :default-family "Monoplex Nerd"
+      :default-family "GLG Nerd Font Mono"
       ;; :default-height (get-font-size-from-script)
 
       ;; :default-family "Sarasa Term K Nerd Font"
@@ -4741,7 +4698,7 @@ only those in the selected frame."
   (defun my/load-font-cjk ()
     (interactive)
     (set-fontset-font "fontset-default" 'hangul (font-spec :family (face-attribute 'default :family))) ; default face
-    ;; (set-fontset-font "fontset-default" 'hangul (font-spec :family "Monoplex Nerd")) ;  "Sarasa Term K"
+    ;; (set-fontset-font "fontset-default" 'hangul (font-spec :family "GLG Nerd Font Mono")) ;  "Sarasa Term K"
     ;; (set-fontset-font "fontset-default" 'cjk-misc (font-spec :family "Sarasa Term SC" )) ; default face
     ;; (set-fontset-font "fontset-default" 'bopomofo (font-spec :family "Sarasa Term SC" )) ; default face
     ;; (set-fontset-font "fontset-default" 'kana (font-spec :family "Sarasa Term J")) ; default face
@@ -4872,28 +4829,6 @@ x×X .,·°;:¡!¿?`'‘’   ÄAÃÀ TODO
 
   (remove-hook 'display-time-mode-hook #'doom-modeline-override-time)
   (remove-hook 'doom-modeline-mode-hook #'doom-modeline-override-time))
-
-;;;;; DONT doom-themes
-
-;; (use-package! doom-themes
-;;   ;; improve integration w/ org-mode
-;;   :hook ((doom-load-theme . doom-themes-org-config)
-;;          (doom-load-theme . doom-themes-visual-bell-config))
-;;   :init
-;;   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-;;         doom-themes-enable-italic nil) ; if nil, italics is universally disabled
-;;   (setq doom-themes-to-toggle
-;;         (let ((hr (nth 2 (decode-time))))
-;;           (if (or (< hr 6) (< 19 hr)) ; between 8 PM and 7 AM
-;;               '(doom-one doom-homage-white) ; load dark theme first
-;;             '(doom-homage-white doom-one))))
-;;   (setq doom-theme (car doom-themes-to-toggle))
-;;   ;; (load-theme doom-theme t)
-
-;;   (defun my/doom-themes-toggle ()
-;;     (interactive) (load-theme doom-theme t))
-;;   (add-hook 'doom-after-reload-hook #'my/doom-themes-toggle)
-;;   )
 
 ;;;;; celestial-mode-line
 
@@ -5164,26 +5099,26 @@ Suitable for `imenu-create-index-function'."
               ;; (visual-line-mode -1)
               (hl-line-mode 1)))
   (remove-hook 'dired-mode-hook 'dired-omit-mode)
-  ;; (add-hook 'dired-mode-hook 'dired-hide-details-mode)
+  (add-hook 'dired-mode-hook 'dired-hide-details-mode)
 
   ;; prot-dired-grep-marked-files
   (require 'prot-dired)
 
 ;;;###autoload
-(defun +default/yank-buffer-absolute-path (&optional root)
-  "Copy the current buffer's absolute path to the kill ring."
-  (interactive)
-  (if-let* ((filename (or (buffer-file-name (buffer-base-buffer))
-                          (bound-and-true-p list-buffers-directory))))
-      (let ((path (expand-file-name  ; abbreviate-file-name 대신 expand-file-name 사용
-                   (if root
-                       (file-relative-name filename root)
-                     filename))))
-        (kill-new path)
-        (if (string= path (car kill-ring))
-            (message "Copied absolute path: %s" path)
-          (user-error "Couldn't copy filename in current buffer")))
-    (error "Couldn't find filename in current buffer")))
+  (defun +default/yank-buffer-absolute-path (&optional root)
+    "Copy the current buffer's absolute path to the kill ring."
+    (interactive)
+    (if-let* ((filename (or (buffer-file-name (buffer-base-buffer))
+                            (bound-and-true-p list-buffers-directory))))
+        (let ((path (expand-file-name  ; abbreviate-file-name 대신 expand-file-name 사용
+                     (if root
+                         (file-relative-name filename root)
+                       filename))))
+          (kill-new path)
+          (if (string= path (car kill-ring))
+              (message "Copied absolute path: %s" path)
+            (user-error "Couldn't copy filename in current buffer")))
+      (error "Couldn't find filename in current buffer")))
   )
 
 ;;;;; dired-preview
@@ -5211,39 +5146,6 @@ Suitable for `imenu-create-index-function'."
 
 ;; (use-package! oneko-macs
 ;;   :if window-system)
-
-;;;;; lin - hl-line
-
-;;  “LIN locally remaps the hl-line face to a style that is optimal
-;;  for major modes where line selection is the primary mode of
-;;  interaction.”  In otherwords, ~lin.el~ improves the highlighted
-;;  line behavior for the competing contexts.
-;; :init (global-hl-line-mode) ; doom default
-
-(use-package! lin
-  :init
-  (global-hl-line-mode +1)
-  :config
-  ;; You can use this to live update the face:
-  ;; (customize-set-variable 'lin-face 'lin-green)
-  ;; Or `setopt' on Emacs 29: (setopt lin-face 'lin-yellow)
-  ;; I still prefer `setq' for consistency.
-  (setq lin-face 'lin-blue)
-  (lin-global-mode 1))
-
-;;;;; my/switch-themes-toggle
-
-;; (defun my/switch-themes-toggle ()
-;;   (interactive)
-;;   ;; (message "my/switch-themes-toggle")
-
-;;   (setq doom-theme (car modus-themes-to-toggle)) ; modus-themes-to-toggle
-;;   (load-theme doom-theme t)
-;;   (my/modus-themes-custom-faces) ;; (my/ef-themes-custom-faces)
-;;   )
-
-;; (add-hook 'doom-after-init-hook #'my/switch-themes-toggle)
-;; (add-hook 'doom-after-reload-hook #'my/switch-themes-toggle)
 
 ;;;;; DONT auto-highlight-symbol
 
@@ -5292,6 +5194,16 @@ Suitable for `imenu-create-index-function'."
 ;;       (mapconcat #'identity x (propertize " : " 'face 'breadcrumb-face)))))
 
 ;;;; :app
+
+
+;;;;; consult-jq
+
+(use-package! consult-jq)
+;; :config
+;; (setq consult-jq-filter-alist
+;;       '(("items" . "keys[]")
+;;         ("types" . "map_values(type)")
+;;         ("count" . "length")))  ;; Added custom shorthand
 
 ;;;;; DONT :app wiki-summary
 
@@ -5969,30 +5881,30 @@ Suitable for `imenu-create-index-function'."
 ;;   )
 ; end-of consult-omni
 
-;;;;; :app wakatime-mode
+;;;;; DONT :app wakatime-mode
 
 ;; python3 -c "$(wget -q -O - https://raw.githubusercontent.com/wakatime/vim-wakatime/master/scripts/install_cli.py)"
 
-(use-package! wakatime-mode
-  ;; :if (and (or
-  ;;              (string= (system-name) "jhnuc")
-  ;;              (string= (system-name) "junghan-laptop")
-  ;;              )
-  ;;         (not my/slow-ssh)
-  ;;         (not my/remote-server))
-  :init
-  (add-hook 'prog-mode-hook 'wakatime-mode)
-  (add-hook 'org-mode-hook 'wakatime-mode)
-  (add-hook 'markdown-mode-hook 'wakatime-mode)
-  :defer 5
-  :config
-  (advice-add 'wakatime-init :after (lambda () (setq wakatime-cli-path (expand-file-name "~/.wakatime/wakatime-cli"))))
+; (use-package! wakatime-mode
+;;   ;; :if (and (or
+;;   ;;              (string= (system-name) "jhnuc")
+;;   ;;              (string= (system-name) "junghan-laptop")
+;;   ;;              )
+;;   ;;         (not my/slow-ssh)
+;;   ;;         (not my/remote-server))
+;;   :init
+;;   (add-hook 'prog-mode-hook 'wakatime-mode)
+;;   (add-hook 'org-mode-hook 'wakatime-mode)
+;;   (add-hook 'markdown-mode-hook 'wakatime-mode)
+;;   :defer 5
+;;   :config
+;;   (advice-add 'wakatime-init :after (lambda () (setq wakatime-cli-path (expand-file-name "~/.wakatime/wakatime-cli"))))
 
-  ;; wakatime-api-key  "your-api-key" in permachine.el
-  (defun my/wakatime-dashboard ()
-    (interactive)
-    (browse-url "https://wakatime.com/dashboard"))
-  )
+;;   ;; wakatime-api-key  "your-api-key" in permachine.el
+;;   (defun my/wakatime-dashboard ()
+;;     (interactive)
+;;     (browse-url "https://wakatime.com/dashboard"))
+;;   )
 
 ;;;; :os tty
 
@@ -6267,7 +6179,7 @@ Suitable for `imenu-create-index-function'."
 (use-package! modus-themes
   :commands (modus-themes-toggle)
   :config
-  (setq modus-themes-to-toggle '(modus-vivendi-tinted modus-operandi)) ; load dark theme first
+  (setq modus-themes-to-toggle '(modus-operandi modus-vivendi-tinted)) ; load dark theme first
   (setq modus-themes-italic-constructs t
         modus-themes-bold-constructs t)
 
@@ -6298,127 +6210,31 @@ Suitable for `imenu-create-index-function'."
     (interactive)
     ;; (message "modus-themes-after-hook : my-modus-themes-custom-faces")
     (modus-themes-with-colors
-      (custom-set-faces
-       ;; `(consult-separator ((,c :inherit default :foreground ,yellow-intense)))
-       ;; `(consult-notes-time ((,c :inherit default :foreground ,cyan-intense)))
-       `(org-list-dt ((,c :foreground ,fg-main :weight bold))) ;; 2025-01-14
-       ;; `(org-tag ((,c :background ,bg-yellow-nuanced :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
-
-       `(diredp-file-name ((,c :foreground ,fg-main)))
-       ;; `(org-agenda-diary ((,c :inherit org-agenda-calendar-sexp :foreground ,fg-main :weight semibold)))
-
-       ;; `(org-link ((,c :inherit link :weight bold)))
-       ;; `(denote-faces-link ((,c :inherit link :weight bold :slant italic)))
-
-       ;; `(org-drawer ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata :height 0.8)))
-       ;; `(org-special-keyword ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata)))
-
-       `(imenu-list-entry-face-0 ((,c :inherit variable-pitch :foreground ,fg-heading-1 :height ,user-imenu-list-height)))
-       `(imenu-list-entry-face-1 ((,c :inherit variable-pitch :foreground ,fg-heading-2 :height ,user-imenu-list-height)))
-       `(imenu-list-entry-face-2 ((,c :inherit variable-pitch :foreground ,fg-heading-3 :height ,user-imenu-list-height)))
-       `(imenu-list-entry-face-3 ((,c :inherit variable-pitch :foreground ,fg-heading-4 :height ,user-imenu-list-height)))
-       `(imenu-list-entry-subalist-face-0 ((,c :inherit variable-pitch :foreground ,fg-heading-1 :underline t :height ,user-imenu-list-height)))
-       `(imenu-list-entry-subalist-face-1 ((,c :inherit variable-pitch :foreground ,fg-heading-2 :underline t :height ,user-imenu-list-height)))
-       `(imenu-list-entry-subalist-face-2 ((,c :inherit variable-pitch :foreground ,fg-heading-3 :underline t :height ,user-imenu-list-height)))
-       `(imenu-list-entry-subalist-face-3 ((,c :inherit variable-pitch :foreground ,fg-heading-4 :underline t :height ,user-imenu-list-height)))
-
-       ;; 2024-07-03 spacious-padding
-       ;; `(tab-bar ((,c :background ,bg-tab-bar)))
-       ;; `(tab-bar-tab-group-current ((,c :inherit bold :background ,bg-tab-current :box (:line-width -2 :color ,bg-tab-current) :foreground ,fg-alt)))
-       ;; `(tab-bar-tab-group-inactive ((,c :background ,bg-tab-bar :box (:line-width -2 :color ,bg-tab-bar) :foreground ,fg-alt)))
-       ;; `(tab-bar-tab ((,c :inherit bold :box (:line-width -2 :color ,bg-tab-current) :background ,bg-tab-current)))
-       ;; `(tab-bar-tab-inactive ((,c :box (:line-width -2 :color ,bg-tab-other) :background ,bg-tab-other)))
-       ;; `(tab-bar-tab-ungrouped ((,c :inherit tab-bar-tab-inactive)))
-       `(fringe ((,c :background ,bg-dim)))
-
-       ;; `(vterm-color-black ((,c :background "gray25" :foreground "gray25")))
-       ;; `(vterm-color-yellow ((,c :background ,yellow-intense :foreground ,yellow-intense)))
-       `(org-mode-line-clock ((,c :inherit bold :foreground ,modeline-info)))
-       `(org-mode-line-clock-overrun ((,c :inherit bold :foreground ,modeline-err)))
-       `(jinx-misspelled ((,c :underline (:style wave :color ,magenta-cooler))))
-       ;; `(ten-id-face ((,c :inherit font-lock-keyword-face :underline (:style double-line :color ,cyan))))
-       ;; `(keycast-command ((,c :inherit default :height 0.9)))
-       )
-      )
-    (when (display-graphic-p) ; gui
-      (when (locate-library "spacious-padding")
-        (spacious-padding-mode +1))))
-  (add-hook 'modus-themes-post-load-hook #'my/modus-themes-custom-faces)
-  )
-
-;;;;; ef-themes
-
-(use-package! ef-themes
-  :defer t
-  :init
-  (setq ef-themes-to-toggle '(ef-owl ef-eagle))
-  (defun ef-themes-load-random-light ()
-    (interactive) (ef-themes-load-random 'light))
-  (defun ef-themes-load-random-dark ()
-    (interactive) (ef-themes-load-random 'dark))
-  :config
-  (setq ef-themes-light-themes
-        '(ef-maris-light ; blue
-          ef-eagle ; yellow
-          ef-kassio ; pink
-          ef-frost ; green
-          ef-reverie))
-  (setq ef-themes-dark-themes
-        '(ef-melissa-dark ;; Like solarized but much nicer colors.
-          ef-dream ; 보라 - 드라큘라
-          ef-rosa ; 자주
-          ef-maris-dark
-          ef-elea-dark
-          ef-owl ; 2024-08-19 new
-          ))
-
-  ;; Read the doc string or manual for this one.  The symbols can be combined in any order.
-  (setq ef-themes-region '(intense no-extend neutral))
-
-  (when (display-graphic-p) ; gui
-    ;; (setq ef-themes-variable-pitch-ui t)
-    (setq ef-themes-headings
-          '(
-            (0                . (bold 1.1)) ;; variable-pitch
-            (1                . (bold  1.1))
-            (2                . (bold 1.05))
-            (3                . (semibold 1.0))
-            (4                . (medium 1.0))
-            (5                . (medium 1.0))
-            (6                . (medium 1.0))
-            (7                . (medium 1.0))
-            (agenda-date      . (semibold 1.0))
-            (agenda-structure . (bold 1.1))
-            (t                . (medium 1.0)))
-          ))
-
-  (defun my/ef-themes-custom-faces ()
-    "Configure `hl-todo-keyword-faces' with Ef themes colors.
-  The exact color values are taken from the active Ef theme."
-    (interactive)
-    ;; (message "ef-themes-post-load-hook : my-ef-themes-custom-faces")
-    (ef-themes-with-colors
      (custom-set-faces
-      `(consult-separator ((,c :inherit default :foreground ,yellow)))
-      `(consult-notes-time ((,c :inherit default :foreground ,cyan)))
+      ;; `(consult-separator ((,c :inherit default :foreground ,yellow-intense)))
+      ;; `(consult-notes-time ((,c :inherit default :foreground ,cyan-intense)))
+      `(org-list-dt ((,c :foreground ,fg-main :weight bold))) ;; 2025-01-14
+      ;; `(org-tag ((,c :background ,bg-yellow-nuanced :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
 
-      `(imenu-list-entry-face-0 ((,c :inherit variable-pitch :foreground ,rainbow-1 :height ,user-imenu-list-height)))
-      `(imenu-list-entry-face-1 ((,c :inherit variable-pitch :foreground ,rainbow-2 :height ,user-imenu-list-height)))
-      `(imenu-list-entry-face-2 ((,c :inherit variable-pitch :foreground ,rainbow-3 :height ,user-imenu-list-height)))
-      `(imenu-list-entry-face-3 ((,c :inherit variable-pitch :foreground ,rainbow-4 :height ,user-imenu-list-height)))
-      `(imenu-list-entry-subalist-face-0 ((,c :inherit variable-pitch :foreground ,rainbow-1 :underline t :height ,user-imenu-list-height)))
-      `(imenu-list-entry-subalist-face-1 ((,c :inherit variable-pitch :foreground ,rainbow-2 :underline t :height ,user-imenu-list-height)))
-      `(imenu-list-entry-subalist-face-2 ((,c :inherit variable-pitch :foreground ,rainbow-3 :underline t :height ,user-imenu-list-height)))
-      `(imenu-list-entry-subalist-face-3 ((,c :inherit variable-pitch :foreground ,rainbow-4 :underline t :height ,user-imenu-list-height)))
+      `(diredp-file-name ((,c :foreground ,fg-main)))
+      ;; `(org-agenda-diary ((,c :inherit org-agenda-calendar-sexp :foreground ,fg-main :weight semibold)))
 
       ;; `(org-link ((,c :inherit link :weight bold)))
       ;; `(denote-faces-link ((,c :inherit link :weight bold :slant italic)))
-      ;; `(org-agenda-diary ((,c :inherit org-agenda-calendar-sexp :foreground ,fg-main :weight semibold)))
 
-      `(org-list-dt ((,c :foreground ,fg-main :weight bold))) ;; 2025-01-14
-      ;; `(org-tag ((,c :background ,bg-yellow-subtle :box (:line-width 1 :color ,fg-dim) :foreground ,fg-main :style nil))) ; prose-tag
-      `(diredp-file-name ((,c :foreground ,fg-main)))
+      ;; `(org-drawer ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata :height 0.8)))
+      ;; `(org-special-keyword ((,c :inherit modus-themes-fixed-pitch :foreground ,prose-metadata)))
 
+      `(imenu-list-entry-face-0 ((,c :inherit variable-pitch :foreground ,fg-heading-1 :height ,user-imenu-list-height)))
+      `(imenu-list-entry-face-1 ((,c :inherit variable-pitch :foreground ,fg-heading-2 :height ,user-imenu-list-height)))
+      `(imenu-list-entry-face-2 ((,c :inherit variable-pitch :foreground ,fg-heading-3 :height ,user-imenu-list-height)))
+      `(imenu-list-entry-face-3 ((,c :inherit variable-pitch :foreground ,fg-heading-4 :height ,user-imenu-list-height)))
+      `(imenu-list-entry-subalist-face-0 ((,c :inherit variable-pitch :foreground ,fg-heading-1 :underline t :height ,user-imenu-list-height)))
+      `(imenu-list-entry-subalist-face-1 ((,c :inherit variable-pitch :foreground ,fg-heading-2 :underline t :height ,user-imenu-list-height)))
+      `(imenu-list-entry-subalist-face-2 ((,c :inherit variable-pitch :foreground ,fg-heading-3 :underline t :height ,user-imenu-list-height)))
+      `(imenu-list-entry-subalist-face-3 ((,c :inherit variable-pitch :foreground ,fg-heading-4 :underline t :height ,user-imenu-list-height)))
+
+      ;; 2024-07-03 spacious-padding
       ;; `(tab-bar ((,c :background ,bg-tab-bar)))
       ;; `(tab-bar-tab-group-current ((,c :inherit bold :background ,bg-tab-current :box (:line-width -2 :color ,bg-tab-current) :foreground ,fg-alt)))
       ;; `(tab-bar-tab-group-inactive ((,c :background ,bg-tab-bar :box (:line-width -2 :color ,bg-tab-bar) :foreground ,fg-alt)))
@@ -6427,53 +6243,39 @@ Suitable for `imenu-create-index-function'."
       ;; `(tab-bar-tab-ungrouped ((,c :inherit tab-bar-tab-inactive)))
       `(fringe ((,c :background ,bg-dim)))
 
-      ;; `(keycast-command ((,c :inherit ef-themes-ui-variable-pitch :background ,bg-main :foreground ,fg-main :weight semibold)))
-      ;; `(keycast-command ((,c :inherit default :height 0.9)))
+      ;; `(vterm-color-black ((,c :background "gray25" :foreground "gray25")))
+      ;; `(vterm-color-yellow ((,c :background ,yellow-intense :foreground ,yellow-intense)))
       `(org-mode-line-clock ((,c :inherit bold :foreground ,modeline-info)))
       `(org-mode-line-clock-overrun ((,c :inherit bold :foreground ,modeline-err)))
       `(jinx-misspelled ((,c :underline (:style wave :color ,magenta-cooler))))
       ;; `(ten-id-face ((,c :inherit font-lock-keyword-face :underline (:style double-line :color ,cyan))))
+      ;; `(keycast-command ((,c :inherit default :height 0.9)))
       )
-     (setq hl-todo-keyword-faces
-           `(("HOLD" . ,yellow)
-             ("TODO" . ,red)
-             ("NEXT" . ,blue)
-             ("THEM" . ,magenta)
-             ("PROG" . ,cyan-warmer)
-             ("OKAY" . ,green-warmer)
-             ("DONT" . ,yellow-warmer)
-             ("FAIL" . ,red-warmer)
-             ("BUG" . ,red-warmer)
-             ("DONE" . ,green)
-             ("NOTE" . ,blue-warmer)
-             ("KLUDGE" . ,cyan)
-             ("HACK" . ,cyan)
-             ("TEMP" . ,red)
-             ("FIXME" . ,red-warmer)
-             ("XXX+" . ,red-warmer)
-             ("REVIEW" . ,red)
-             ("DEPRECATED" . ,yellow))))
-
+     )
     (when (display-graphic-p) ; gui
       (when (locate-library "spacious-padding")
-        (spacious-padding-mode +1)))
-    )
-  (add-hook 'ef-themes-post-load-hook #'my/ef-themes-custom-faces))
-
-;;;;; doric-themes
-
-(use-package! doric-themes
-  :config
-  ;; These are the default values.
-  (setq doric-themes-to-toggle '(doric-light doric-dark))
-  (setq doric-themes-to-rotate doric-themes-collection)
-  (doric-themes-select 'doric-light)
+        (spacious-padding-mode +1))))
+  (add-hook 'modus-themes-post-load-hook #'my/modus-themes-custom-faces)
   )
 
-;;;;; DONT custom themes loader for doom-themes
+;;;;; lin - hl-line
 
-;; (require 'my-themes)
-;; (add-hook 'doom-load-theme-hook 'my/load-custom-set-faces 90) ; for doom themes
+;;  “LIN locally remaps the hl-line face to a style that is optimal
+;;  for major modes where line selection is the primary mode of
+;;  interaction.”  In otherwords, ~lin.el~ improves the highlighted
+;;  line behavior for the competing contexts.
+;; :init (global-hl-line-mode) ; doom default
+
+(use-package! lin
+  :init
+  (global-hl-line-mode +1)
+  :config
+  ;; You can use this to live update the face:
+  ;; (customize-set-variable 'lin-face 'lin-green)
+  ;; Or `setopt' on Emacs 29: (setopt lin-face 'lin-yellow)
+  ;; I still prefer `setq' for consistency.
+  (setq lin-face 'lin-blue)
+  (lin-global-mode 1))
 
 ;;;;; spacious-padding
 
@@ -6493,9 +6295,8 @@ Suitable for `imenu-create-index-function'."
           :scroll-bar-width 8
           :fringe-width 8
           ))
-  ;; (add-hook 'doom-load-theme-hook #'spacious-padding-mode)
+  (add-hook! 'doom-load-theme-hook #'spacious-padding-mode)
   :config
-  ;; (remove-hook 'doom-init-ui-hook #'window-divider-mode)
   ;; (when (fboundp 'tooltip-mode) (tooltip-mode 1))
   ;; (when (fboundp 'tool-bar-mode) (tool-bar-mode 1))
   ;; (when (display-graphic-p) ; gui
@@ -6512,7 +6313,7 @@ Suitable for `imenu-create-index-function'."
     "Pulse the current line."
     (pulse-momentary-highlight-one-line (point)))
   (dolist (command
-           '(scroll-up-command scroll-down-command recenter-top-bottom other-window))
+           '(scroll-up-command scroll-down-command recenter-top-bottom ace-window other-window))
     (advice-add command :after #'pulse-line)))
 
 ;;;;; DONT pulsar - performance issue
@@ -6871,15 +6672,15 @@ Suitable for `imenu-create-index-function'."
   (my/refresh-agenda-files)
   ;; (ash-goto-org-agenda) ; tab-bar
 
-  ;; (setq tab-bar-close-button nil)
-  ;; (tab-bar-new-tab)
-  ;; (bh/switch-to-scratch)
-  ;; (tab-bar-select-tab 1)
+  (setq tab-bar-close-button nil)
+  (tab-bar-new-tab)
+  (bh/switch-to-scratch)
+  (tab-bar-select-tab 1)
+  (modus-themes-toggle)
   )
 
-;; (unless IS-DEMO
-;;   (when (display-graphic-p) ; gui
-;;     (add-hook 'doom-first-input-hook #'my/open-workspaces)))
+(when (display-graphic-p) ; gui
+  (add-hook 'doom-first-input-hook #'my/open-workspaces))
 
 ;;;; tab-line-mode on emacs-30
 
@@ -6898,7 +6699,7 @@ Suitable for `imenu-create-index-function'."
      tab-line-new-button-show nil
      tab-line-close-button-show nil)
 
-    ;; (global-tab-line-mode 1)
+    (global-tab-line-mode 1)
     )
   )
 
@@ -8035,13 +7836,30 @@ function to apply the changes."
   (setq agent-shell-anthropic-authentication
         (agent-shell-anthropic-make-authentication :login t))
 
+  (setq agent-shell-qwen-authentication
+        (agent-shell-qwen-make-authentication :login t))
+
+  ;; (setq agent-shell-google-authentication
+  ;;       (agent-shell-google-make-authentication :login t))
+  ;; (setq agent-shell-openai-authentication
+  ;;       (agent-shell-openai-make-authentication :login t))
+
+  (setq agent-shell--transcript-file-path-function #'agent-shell--default-transcript-file-path)
+  (setq agent-shell-header-style nil)
+
+  (require 'agent-shell-manager)
+  ;; Bind s-b to toggle agent-shell-manager
+  (map! :n "s-;" #'agent-shell-manager-toggle)
+  (setq agent-shell-manager-side 'bottom)  ; Options: 'left, 'right, 'top, 'bottom
+
   (require 'agent-shell-sidebar)
   (setq agent-shell-sidebar-width "25%"
         agent-shell-sidebar-minimum-width 80
         agent-shell-sidebar-maximum-width "50%"
         agent-shell-sidebar-position 'right
         agent-shell-sidebar-locked t
-        agent-shell-sidebar-default-config (agent-shell-anthropic-make-claude-code-config)))
+        agent-shell-sidebar-default-config (agent-shell-anthropic-make-claude-code-config))
+  )
 
 ;;; TODO khoj
 
@@ -8061,5 +7879,89 @@ function to apply the changes."
 ;;  (global-set-key (kbd "C-c s") 'khoj)
 ;;  (global-set-key (kbd "C-c c") 'khoj-chat)
 ;;  )
+
+;;; TODO VTERM
+
+(after! vterm
+  (setq vterm-max-scrollback 10000)
+
+  ;; 빠른 원격 접속 함수
+  (defun my/connect-storage ()
+    "Connect to storage server"
+    (interactive)
+    (vterm)
+    (vterm-send-string "mosh goqual@storage-01")
+    (vterm-send-return))
+
+  ;; 키바인딩
+  (global-set-key (kbd "C-c -") 'my/connect-storage)
+  ;; (setq x-gtk-use-native-input nil) ;; 2025-08-10 Important with ibus korean input
+
+  ;; kime 환경변수 설정 (기존 코드 유지)
+  (add-to-list 'vterm-environment "GTK_IM_MODULE=fcitx5")
+  (add-to-list 'vterm-environment "QT_IM_MODULE=fcitx5")
+  (add-to-list 'vterm-environment "XMODIFIERS=@im=fcitx5")
+
+  (defun my/vterm-setup-gtk-use-native-input ()
+    "Setup native input for vterm buffer"
+    (interactive)
+    (when (eq major-mode 'vterm-mode)
+      (setq-local x-gtk-use-native-input t)))
+  ;; (add-hook 'vterm-mode-hook #'my/vterm-setup-gtk-use-native-input 90)
+
+  (defun my/vterm-setup-terminal-font ()
+    "Setup terminal font for vterm using fontaine"
+    (when (and (eq major-mode 'vterm-mode)
+               (featurep 'fontaine))
+      (setq-local nobreak-char-display nil)
+      (setq-local line-number-mode nil)
+      (setq-local column-number-mode nil)
+      (setq-local scroll-margin 3
+                  line-spacing nil)
+      (setq-local x-gtk-use-native-input t)
+      ;; vterm의 default face에 터미널 폰트 적용
+      (face-remap-add-relative 'default
+                               :family (fontaine--get-preset-property
+                                        fontaine-current-preset :term-family))))
+  (add-hook 'vterm-mode-hook #'my/vterm-setup-terminal-font)
+  )
+
+;;;; efrit
+
+(progn
+  ;; Load path 설정 (서브디렉토리 포함)
+  (let ((efrit-base "~/repos/gh/efrit/lisp"))
+    (add-to-list 'load-path (expand-file-name efrit-base))
+    (add-to-list 'load-path (expand-file-name "core" efrit-base))
+    (add-to-list 'load-path (expand-file-name "interfaces" efrit-base))
+    (add-to-list 'load-path (expand-file-name "support" efrit-base))
+    (add-to-list 'load-path (expand-file-name "tools" efrit-base)))
+
+  ;; 데이터 디렉토리 (로드 전에 설정)
+  (setq efrit-data-directory (expand-file-name "~/efrit-data"))
+
+  ;; 코어 모듈 로드
+  (require 'efrit)
+
+  ;; OpenRouter 지원 (새 파일)
+  (require 'efrit-openrouter)
+
+  ;; OpenRouter 설정
+  (setq efrit-api-backend 'openrouter)
+  (setq efrit-openrouter-model "anthropic/claude-sonnet-4-5")  ;; 변수명 변경!
+  (setq efrit-api-auth-source-host "openrouter.ai")
+  (setq efrit-api-auth-source-user "apikey")
+
+  (message "✅ Efrit with OpenRouter support loaded!"))
+
+;; authinfo.gpg 확인
+;; (auth-source-search :host "openrouter.ai" :max 1)
+
+;; Set data directory before loading to avoid side effects
+;; Optional: disable auto-initialize to control when directories are created
+;; (setq efrit-auto-initialize nil)
+;; Bind a convenient prefix (optional)
+;; (setq efrit-enable-global-keymap t)
+;; (efrit-setup-keybindings)
 
 ;;; left blank on purpose

@@ -4134,6 +4134,7 @@ For instance pass En as source for English."
                                     ;; (setq-local tab-width 8)
                                     (setq-local comment-column 0)
                                     (evil-define-key '(normal visual) emacs-lisp-mode-map (kbd "<tab>") 'evil-jump-item)
+                                  (evil-define-key '(normal visual) emacs-lisp-mode-map (kbd "TAB") 'evil-jump-item) ; for TERMINAL
                                     (define-key emacs-lisp-mode-map (kbd "M-[") 'backward-sexp)
                                     (define-key emacs-lisp-mode-map (kbd "M-]") 'forward-sexp)))
 

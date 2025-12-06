@@ -1230,10 +1230,12 @@
 
 (map! :map dired-mode-map
       :n "r" #'revert-buffer
+      :inv "M-h" #'other-window
 
       :localleader
-      "h" #'dired-hide-details-mode
-      "H" #'dired-omit-mode
+      "h" #'dired-omit-mode
+      "SPC" #'dired-hide-details-mode
+      "H" #'dired-hide-details-mode
       "p" #'dired-preview-mode
       :desc "sort-modified-date" "o" #'dired-sort-toggle-or-edit
 
@@ -1536,8 +1538,16 @@
         :i "M-RET" #'my/vterm-send-alt-return
         :inv "M-y" #'vterm-yank-pop
         :inv "M-h" #'other-window
-        :inv "M-z" #'evil-collection-vterm-toggle-send-escape)
+        :inv "M-z" #'evil-collection-vterm-toggle-send-escape
+        :inv "M-u" 'evil-scroll-up
+        :inv "M-v" 'evil-scroll-down)
   )
+
+;;;; prog-mode-map
+
+(map! :map prog-mode-map
+      :inv "M-h" #'other-window
+      )
 
 ;;;; outli-mode-map / markdown-mode-map
 
@@ -2093,19 +2103,19 @@
 
 ;;; DONT eat
 
-(after! eat
-  (map! :leader
-        :desc "Eat in project" "p SPC" #'eat-project
-        (:prefix ("o" . "open")
-         :desc "Eat terminal" "0" #'eat
-         :desc "Eat in project" ")" #'eat-project)
+;; (after! eat
+;;   (map! :leader
+;;         :desc "Eat in project" "p SPC" #'eat-project
+;;         (:prefix ("o" . "open")
+;;          :desc "Eat terminal" "0" #'eat
+;;          :desc "Eat in project" ")" #'eat-project)
 
-        (:prefix ("o1" . "claude")
-         :desc "Claude Code" "c" #'claude-code
-         :desc "Claude menu" "m" #'claude-code-transient
-         :desc "Continue session" "r" #'claude-code-continue
-         :desc "Kill Claude" "k" #'claude-code-kill)
-        )
-  )
+;;         (:prefix ("o1" . "claude")
+;;          :desc "Claude Code" "c" #'claude-code
+;;          :desc "Claude menu" "m" #'claude-code-transient
+;;          :desc "Continue session" "r" #'claude-code-continue
+;;          :desc "Kill Claude" "k" #'claude-code-kill)
+;;         )
+;;   )
 
 ;;; end-of-func

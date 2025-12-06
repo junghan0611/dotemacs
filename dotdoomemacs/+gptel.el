@@ -200,13 +200,13 @@
      :input-cost 0.55
      :output-cost 2.19)
 
-    ;; https://openrouter.ai/deepseek/deepseek-v3.1-terminus
-    (deepseek/deepseek-v3.1-terminus
-     :capabilities (tool reasoning)
-     :context-window 131
-     :input-cost 0.27
-     :output-cost 1
-     :cutoff-date "2025-09")
+    (google/gemini-3-pro-preview
+     :capabilities (media tool-use cache reasoning)
+     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+     :context-window 1048
+     :input-cost 2
+     :output-cost 12
+     :cutoff-date "2025-11")
 
     ;; https://openrouter.ai/google/gemini-2.5-pro
     (google/gemini-2.5-pro
@@ -223,41 +223,33 @@
      :input-cost 0.30
      :output-cost 2.5)
 
-    (openai/gpt-oss-120b
-     :description "gpt-oss-120b is an open-weight, 117B-parameter Mixture-of-Experts (MoE) language model from OpenAI designed for high-reasoning, agentic, and general-purpose production use cases."
-     :capabilities (media tool-use json url)
-     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
-     :context-window 131
-     :input-cost 0.04
-     :output-cost 0.4
-     :cutoff-date "2025-08")
-
-    (openai/gpt-5-chat
-     :description "Flagship model for coding, reasoning, and agentic tasks across domains"
+    (openai/gpt-5.1
+     :description
+     "GPT-5.1 is the latest frontier-grade model in the GPT-5 series, offering stronger general-purpose reasoning, improved instruction adherence, and a more natural conversational style compared to GPT-5. It uses adaptive reasoning to allocate computation dynamically, responding quickly to simple queries while spending more depth on complex tasks. The model produces clearer, more grounded explanations with reduced jargon, making it easier to follow even on technical or multi-step problems. "
      :capabilities (media json url)
      :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
      :context-window 400
      :input-cost 1.25
      :output-cost 10
-     :cutoff-date "2025-08")
+     :cutoff-date "2025-11")
 
-    (openai/gpt-5-mini
-     :description "Faster, more cost-efficient version of GPT-5"
-     :capabilities (media json url)
-     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
-     :context-window 400
-     :input-cost 0.25
-     :output-cost 2.0
-     :cutoff-date "2025-08")
+    ;; (openai/gpt-5-mini
+    ;;  :description "Faster, more cost-efficient version of GPT-5"
+    ;;  :capabilities (media json url)
+    ;;  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
+    ;;  :context-window 400
+    ;;  :input-cost 0.25
+    ;;  :output-cost 2.0
+    ;;  :cutoff-date "2025-08")
 
-    (openai/gpt-5-nano
-     :description "GPT-5-Nano is the smallest and fastest variant in the GPT-5 system, optimized for developer tools, rapid interactions, and ultra-low latency environments."
-     :capabilities (media json url)
-     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
-     :context-window 400
-     :input-cost 0.05
-     :output-cost 0.4
-     :cutoff-date "2025-08")
+    ;; (openai/gpt-oss-120b
+    ;;  :description "gpt-oss-120b is an open-weight, 117B-parameter Mixture-of-Experts (MoE) language model from OpenAI designed for high-reasoning, agentic, and general-purpose production use cases."
+    ;;  :capabilities (media tool-use json url)
+    ;;  :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
+    ;;  :context-window 131
+    ;;  :input-cost 0.04
+    ;;  :output-cost 0.4
+    ;;  :cutoff-date "2025-08")
 
     ;; https://openrouter.ai/anthropic/claude-sonnet-4
     ;; (anthropic/claude-sonnet-4

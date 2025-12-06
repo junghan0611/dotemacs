@@ -101,7 +101,7 @@
 
 ;;;; :os tty
 
-;; (package! term-keys :recipe (:host github :repo "junghan0611/term-keys"))
+(package! term-keys :recipe (:host github :repo "junghan0611/term-keys"))
 
 ;;;; :ui - visual
 
@@ -111,9 +111,9 @@
 (package! pretty-hydra)
 (package! major-mode-hydra)
 
-(package! ef-themes)
 (package! modus-themes)
-(package! doric-themes)
+;; (package! ef-themes)
+;; (package! doric-themes)
 
 (package! show-font)
 (package! hammy) ; cutte timmer
@@ -322,20 +322,21 @@
 (package! monet :recipe (:host github :repo "stevemolitor/monet" ))
 
 (package! eshell-atuin)
-;; (package! eat :recipe
-;;   (:host codeberg
-;;    :repo "akib/emacs-eat"
-;;    :files ("*.el" ("term" "term/*.el") "*.texi"
-;;            "*.ti" ("terminfo/e" "terminfo/e/*")
-;;            ("terminfo/65" "terminfo/65/*")
-;;            ("integration" "integration/*")
-;;            (:exclude ".dir-locals.el" "*-tests.el"))))
+(package! eat :recipe
+  (:host codeberg
+   :repo "akib/emacs-eat"
+   :files ("*.el" ("term" "term/*.el") "*.texi"
+           "*.ti" ("terminfo/e" "terminfo/e/*")
+           ("terminfo/65" "terminfo/65/*")
+           ("integration" "integration/*")
+           (:exclude ".dir-locals.el" "*-tests.el"))))
 
 ;;;; ACP (Agent Client Protocol)
 
 (package! shell-maker)
 (package! acp :recipe (:host github :repo "xenodium/acp.el"))
 (package! agent-shell :recipe (:host github :repo "xenodium/agent-shell"))
+(package! agent-shell-manager :recipe (:host github :repo "ElleNajt/agent-shell-manager"))
 (package! agent-shell-sidebar :recipe (:host github :repo "cmacrae/agent-shell-sidebar"))
 
 ;;;;; extra packages
@@ -374,8 +375,8 @@
 
 ;; (package! eglot-booster :recipe (:type git :host github :repo "jdtsmith/eglot-booster"))
 
-(package! auto-highlight-symbol)
-(package! symbol-overlay)
+;; (package! auto-highlight-symbol)
+;; (package! symbol-overlay)
 
 ;; (when (modulep! :lang clojure)
 ;;   (package! clojure-mode-extra-font-locking) ;; better looks
@@ -421,10 +422,6 @@
 
 ;; (package! mise :recipe (:host github :repo "eki3z/mise.el"))
 
-;;;;; treesit
-
-(package! combobulate)
-
 ;;;; Git
 
 (package! git-link :recipe (:host github :repo "sshaw/git-link"))
@@ -433,6 +430,7 @@
 (package! consult-git-log-grep)
 (package! magit-todos)
 (package! magit-blame-color-by-age :recipe (:host github :repo "jdtsmith/magit-blame-color-by-age"))
+
 
 ;;;; Reading
 
@@ -563,15 +561,22 @@
 ;; (package! google-this)
 (package! webpaste)
 
+;;;; MCP (Model Context Protocol)
+
+(package! mcp-server-lib :recipe (:host github :repo "laurynas-biveinis/mcp-server-lib.el"))
+(package! elisp-dev-mcp :recipe (:host github :repo "laurynas-biveinis/elisp-dev-mcp"))
+(package! org-mcp :recipe (:host github :repo "laurynas-biveinis/org-mcp"))
+
 ;;;;; misc
 
+(package! consult-jq :recipe (:host github :repo "elken/consult-jq"))
 (package! fireplace)
 (package! snow)
 ;; (package! oneko-macs :recipe (:host github :repo "ElleNajt/oneko-macs")) ; sudo apt-get install oneko
 ;; (package! selectric-mode)
 
 ;; (package! wiki-summary :recipe (:host github :repo "rnkn/wiki-summary.el"))
-(package! wakatime-mode)
+;; (package! wakatime-mode)
 
 ;;;; DONT Emacs Application Framework (EAF)
 
@@ -629,5 +634,6 @@
 ;;              (+eaf-install-deps-for-app
 ;;               (concat straight-base-dir "/straight/" straight-build-dir "/eaf-mind-elixir"))))
 ;;   )
+
 
 ;;; end-of file
